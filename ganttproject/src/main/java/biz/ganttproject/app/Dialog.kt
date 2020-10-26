@@ -46,9 +46,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
+import net.projectagain.ganttplanner.app.App
 import net.sourceforge.ganttproject.DialogBuilder
 import net.sourceforge.ganttproject.gui.UIFacade
-import net.sourceforge.ganttproject.mainWindow
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 import javax.swing.SwingUtilities
@@ -103,7 +103,7 @@ fun dialog(title: LocalizedString? = null,  contentBuilder: (DialogController) -
     contentBuilder(dialogController)
     jfxPanel.scene = Scene(dialogController.build())
     SwingUtilities.invokeLater {
-      val dialogBuilder = DialogBuilder(mainWindow.get())
+      val dialogBuilder = DialogBuilder(App.getMainWindow().get())
       dialogBuilder.createDialog(jfxPanel, arrayOf(), title?.value ?: "", null).also {
         swingDialogController.set(it)
         dialogController.setDialogFrame(it)

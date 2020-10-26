@@ -11,7 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.document.DocumentCreator;
 import net.sourceforge.ganttproject.language.GanttLanguage;
@@ -32,8 +31,8 @@ import static biz.ganttproject.app.SplashKt.SPLASH_WIDTH;
 @Service
 @DependsOn("pluginManager")
 public class UiLauncher {
-  public static AtomicReference<GanttProject> mainWindow = new AtomicReference<>();
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  final AtomicReference<GanttProject> mainWindow = new AtomicReference<>();
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   public void startUiApp(Function<GanttProject, GanttProject> configure) {
     configureApp();
@@ -60,9 +59,9 @@ public class UiLauncher {
 //            }
 //          });
         } catch (Exception e) {
-          logger.error("Failure when launching application", new Object[0], new HashMap<>(), e);
+          log.error("Failure when launching application: {}, {}", new Object[0], new HashMap<>(), e);
         } finally {
-          Thread.currentThread().setUncaughtExceptionHandler((t, e) -> GPLogger.log(e));
+          Thread.currentThread().setUncaughtExceptionHandler((t, e) -> log.error("Uncaught Exception:", e));
         }
       }
     );
