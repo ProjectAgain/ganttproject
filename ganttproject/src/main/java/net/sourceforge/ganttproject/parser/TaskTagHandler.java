@@ -24,11 +24,12 @@ import com.google.common.base.Charsets;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.gui.TaskTreeUIFacade;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.TaskManager.TaskBuilder;
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
 import java.awt.*;
@@ -38,7 +39,11 @@ import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class TaskTagHandler extends AbstractTagHandler implements ParsingListener {
+  private final Logger log = getLogger(getClass());
+
   private final ParsingContext myContext;
   private final TaskManager myManager;
   private final TaskTreeUIFacade myTreeFacade;
@@ -164,9 +169,7 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
       try {
         webLink = URLDecoder.decode(webLink_enc, Charsets.UTF_8.name());
       } catch (UnsupportedEncodingException e) {
-        if (!GPLogger.log(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
       }
     if (webLink != null) {
       task.setWebLink(webLink);

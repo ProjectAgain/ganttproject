@@ -21,7 +21,7 @@ package net.sourceforge.ganttproject.chart.gantt;
 import biz.ganttproject.core.option.StringOption;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.task.ResourceAssignment;
 import net.sourceforge.ganttproject.task.Task;
@@ -31,10 +31,13 @@ import net.sourceforge.ganttproject.task.TaskManager.TaskBuilder;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import org.slf4j.Logger;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Implements procedures for clipboard operations with tasks.
@@ -42,6 +45,8 @@ import java.util.Map;
  * @author dbarashev (Dmitry Barashev)
  */
 public class ClipboardTaskProcessor {
+  private final Logger log = getLogger(getClass());
+
   private final TaskManager myTaskManager;
   private boolean myTruncateExternalDeps;
   private boolean myTruncateAssignments;
@@ -113,7 +118,7 @@ public class ClipboardTaskProcessor {
         dep.setDifference(td.getDifference());
         dep.setHardness(td.getHardness());
       } catch (TaskDependencyException e) {
-        GPLogger.log(e);
+        log.error("Exception", e);
       }
     }
 

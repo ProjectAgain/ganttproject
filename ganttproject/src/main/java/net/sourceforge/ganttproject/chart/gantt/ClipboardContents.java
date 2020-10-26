@@ -23,7 +23,6 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.resource.HumanResource;
 import net.sourceforge.ganttproject.task.ResourceAssignment;
 import net.sourceforge.ganttproject.task.Task;
@@ -31,6 +30,7 @@ import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,6 +38,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Represents all objects which are involved into a clipboard transaction on Gantt chart: tasks, dependencies
@@ -47,6 +49,8 @@ import java.util.Set;
  * @author dbarashev (Dmitry Barashev)
  */
 public class ClipboardContents {
+  private final Logger log = getLogger(getClass());
+
   private static final Comparator<? super Task> IN_DOCUMENT_ORDER = new Comparator<Task>() {
     @Override
     public int compare(Task left, Task right) {
@@ -121,7 +125,7 @@ public class ClipboardContents {
       }
     }
     myIntraDeps.addAll(intraDeps);
-    GPLogger.getLogger("Clipboard").fine(String.format(
+    log.debug(String.format(
         "Clipboard task (only roots): %s\ninternal-dependencies: %s\nincoming dependencies:%s\noutgoing dependencies:%s",
         myTasks, myIntraDeps, myIncomingDeps, myOutgoingDeps));
   }

@@ -24,23 +24,20 @@ import com.google.common.collect.Lists;
 import com.itextpdf.awt.FontMapper;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
-import net.sourceforge.ganttproject.GPLogger;
-import net.sourceforge.ganttproject.language.GanttLanguage;
-import org.eclipse.core.runtime.Platform;
 import net.sourceforge.ganttproject.impex.htmlpdf.itext.FontSubstitutionModel;
 import net.sourceforge.ganttproject.impex.htmlpdf.itext.FontSubstitutionModel.FontSubstitution;
+import net.sourceforge.ganttproject.language.GanttLanguage;
+import org.eclipse.core.runtime.Platform;
+import org.slf4j.Logger;
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
-import java.util.logging.Level;
+import java.util.*;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This class collects True Type fonts from .ttf files in the registered
@@ -50,6 +47,8 @@ import java.util.logging.Level;
  * @author dbarashev
  */
 public class TTFontCache {
+  private static final Logger log = getLogger(TTFontCache.class);
+
   private static String FALLBACK_FONT_PATH = "/fonts/LiberationSans-Regular.ttf";
   private Map<String, AwtFontSupplier> myMap_Family_RegularFont = new TreeMap<String, AwtFontSupplier>();
   private final Map<FontKey, com.itextpdf.text.Font> myFontCache = new HashMap<FontKey, com.itextpdf.text.Font>();
@@ -58,12 +57,12 @@ public class TTFontCache {
   private BaseFont myFallbackFont;
 
   public void registerDirectory(String path) {
-    GPLogger.getLogger(getClass()).info("scanning directory=" + path);
+    log.info("scanning directory=" + path);
     File dir = new File(path);
     if (dir.exists() && dir.isDirectory()) {
       registerFonts(dir);
     } else {
-      GPLogger.getLogger(getClass()).info("directory " + path + " is not readable");
+      log.info("directory " + path + " is not readable");
     }
   }
 
@@ -93,7 +92,7 @@ public class TTFontCache {
       try {
         registerFontFile(f);
       } catch (Throwable e) {
-        GPLogger.getLogger(TTFontCache.class).log(Level.FINE, "Failed to register font from " + f.getAbsolutePath(), e);
+        log.info("Failed to register font from " + f.getAbsolutePath(), e);
       }
     }
   }
@@ -134,10 +133,8 @@ public class TTFontCache {
     private Font createFont(File fontFile) {
       try {
         return createAwtFont(fontFile);
-      } catch (IOException e) {
-        GPLogger.log(e);
-      } catch (FontFormatException e) {
-        GPLogger.log(e);
+      } catch (IOException | FontFormatException e) {
+        log.error("Exception", e);
       }
       return null;
     }
@@ -147,7 +144,7 @@ public class TTFontCache {
       IOException {
     // FontFactory.register(fontFile.getAbsolutePath());
     Font awtFont = createAwtFont(fontFile);
-    GPLogger.getLogger(getClass()).fine("Trying font file: " + fontFile.getAbsolutePath());
+    log.debug("Trying font file: " + fontFile.getAbsolutePath());
 
     final String family = awtFont.getFontName().toLowerCase();
     AwtFontSupplier awtSupplier = myMap_Family_RegularFont.get(family);
@@ -156,17 +153,17 @@ public class TTFontCache {
       myMap_Family_ItextFont.put(family, createFontSupplier(fontFile, BaseFont.EMBEDDED));
     } catch (DocumentException e) {
       if (e.getMessage().indexOf("cannot be embedded") < 0) {
-        GPLogger.logToLogger(e);
+        log.error("Exception", e);
         return;
       }
     }
     try {
       myMap_Family_ItextFont.put(family, createFontSupplier(fontFile, BaseFont.NOT_EMBEDDED));
     } catch (DocumentException e) {
-      GPLogger.logToLogger(e);
+      log.error("Exception", e);
       return;
     }
-    GPLogger.getLogger(getClass()).fine("registering font: " + family);
+    log.debug("registering font: " + family);
     if (awtSupplier == null) {
       awtSupplier = new AwtFontSupplier();
       myMap_Family_RegularFont.put(family, awtSupplier);
@@ -195,10 +192,8 @@ public class TTFontCache {
           } else {
             return BaseFont.createFont(fontFile.getAbsolutePath(), charset, isEmbedded);
           }
-        } catch (DocumentException e) {
-          GPLogger.log(e);
-        } catch (IOException e) {
-          GPLogger.log(e);
+        } catch (DocumentException | IOException e) {
+          log.error("Exception", e);
         }
         return null;
       }
@@ -266,7 +261,7 @@ public class TTFontCache {
         result = new com.itextpdf.text.Font(bf, size, style);
         myFontCache.put(key, result);
       } else {
-        GPLogger.log(new RuntimeException("Font with family=" + family + " not found. Also tried fallback font"));
+        log.error("Font with family={} not found. Also tried fallback font", family);
       }
     }
     return result;
@@ -307,8 +302,7 @@ public class TTFontCache {
         }
         BaseFont result = getFallbackFont(charset);
         if (result == null) {
-          GPLogger.log(new RuntimeException("Font with family=" + awtFont.getFamily()
-              + " not found. Also tried family=" + family + " and fallback font"));
+          log.error("Font with family={} not found. Also tried family={} and fallback font", awtFont.getFamily(), family );
         }
         return result;
       }
@@ -326,10 +320,8 @@ public class TTFontCache {
       try {
         myFallbackFont = BaseFont.createFont(Platform.resolve(getClass().getResource(FALLBACK_FONT_PATH)).getPath(),
             charset, BaseFont.EMBEDDED);
-      } catch (DocumentException e) {
-        GPLogger.logToLogger(e);
-      } catch (IOException e) {
-        GPLogger.logToLogger(e);
+      } catch (DocumentException | IOException e) {
+        log.error("Exception", e);
       }
     }
     return myFallbackFont;

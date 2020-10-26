@@ -20,14 +20,16 @@ package net.sourceforge.ganttproject.gui;
 
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.action.CancelAction;
 import net.sourceforge.ganttproject.font.Fonts;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Status bar (located below the main frame)
@@ -172,6 +174,7 @@ public class GanttStatusBar extends JPanel {
   }
 
   private class ProgressMonitorImpl implements IProgressMonitor {
+    private final Logger log = getLogger(getClass());
     private int myWorked;
     ProgressBarDialog myProgressDialog;
     private boolean isCanceled;
@@ -184,13 +187,13 @@ public class GanttStatusBar extends JPanel {
     public void beginTask(final String name, final int totalWork) {
       isCanceled = false;
       myWorked = 0;
-      GPLogger.log("[ProgressMonitorImpl] begin Task: name=" + name);
+      log.trace("[ProgressMonitorImpl] begin Task: name={}", name);
       SwingUtilities.invokeLater(() -> myProgressDialog.start(name, totalWork));
     }
 
     @Override
     public void done() {
-      GPLogger.log("[ProgressMonitorImpl] finished Task");
+      log.trace("[ProgressMonitorImpl] finished Task");
       SwingUtilities.invokeLater(() -> myProgressDialog.done());
     }
 
@@ -216,9 +219,9 @@ public class GanttStatusBar extends JPanel {
     @Override
     public void subTask(final String name) {
       if (name == null) {
-        GPLogger.log("[ProgressMonitorImpl] finished subTask");
+        log.trace("[ProgressMonitorImpl] finished subTask");
       } else {
-        GPLogger.log("[ProgressMonitorImpl] begin subTask: name=" + name);
+        log.trace("[ProgressMonitorImpl] begin subTask: name={}", name);
       }
       SwingUtilities.invokeLater(() -> myProgressDialog.setSubTask(name));
     }

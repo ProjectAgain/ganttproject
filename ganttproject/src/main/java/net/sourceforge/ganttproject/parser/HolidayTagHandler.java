@@ -25,21 +25,22 @@ import biz.ganttproject.core.time.CalendarFactory;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.GPLogger;
-import net.sourceforge.ganttproject.io.GanttXMLOpen;
 import net.sourceforge.ganttproject.util.ColorConvertion;
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
 import java.awt.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author nbohn
  */
 public class HolidayTagHandler extends AbstractTagHandler {
+  private final Logger log = getLogger(getClass());
   private static final Set<String> TAGS = ImmutableSet.of("date", "calendars");
   private final GPCalendar myCalendar;
   private final List<CalendarEvent> myEvents = Lists.newArrayList();
@@ -150,9 +151,8 @@ public class HolidayTagHandler extends AbstractTagHandler {
       }
       clearCdata();
     } catch (IllegalArgumentException e) {
-      GPLogger.getLogger(GanttXMLOpen.class).log(Level.WARNING, String.format("Error when parsing calendar data. Raw data: %s", atts.toString()), e);
-      String message = String.format("Cannot parse a part of project file: %s", atts.toString());
-      GPLogger.log(new Exception(message, e));
+      log.warn(String.format("Error when parsing calendar data. Raw data: %s", atts.toString()), e);
+      log.error(String.format("Cannot parse a part of project file: %s", atts.toString()), e);
     }
   }
 

@@ -21,14 +21,17 @@ package biz.ganttproject.impex.csv;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Record group is a set of homogeneous CSV records. CSV file consists of a few
@@ -38,6 +41,8 @@ import java.util.logging.Level;
  * @author dbarashev (Dmitry Barashev)
  */
 public abstract class RecordGroup {
+  private final Logger log = getLogger(getClass());
+
   private final Set<String> myFields;
   private final Set<String> myMandatoryFields;
   private SetView<String> myCustomFields;
@@ -80,7 +85,7 @@ public abstract class RecordGroup {
     try {
       return doProcess(record);
     } catch (Throwable e) {
-      GPLogger.getLogger(GanttCSVOpen.class).log(Level.WARNING, String.format("Failed to process record:\n%s", record), e);
+      log.warn(String.format("Failed to process record:\n%s", record), e);
       return false;
     }
   }

@@ -19,7 +19,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.io;
 
 import biz.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.GPVersion;
 import net.sourceforge.ganttproject.GanttGraphicArea;
 import net.sourceforge.ganttproject.GanttPreviousState;
@@ -31,6 +31,7 @@ import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.roles.Role;
 import net.sourceforge.ganttproject.roles.RoleManager;
 import net.sourceforge.ganttproject.roles.RoleSet;
+import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -41,7 +42,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class GanttXMLSaver extends SaverBase implements GPSaver {
+  private final Logger log = getLogger(getClass());
 
   private static final String VERSION = GPVersion.getCurrentVersionNumber();
 
@@ -106,9 +110,7 @@ public class GanttXMLSaver extends SaverBase implements GPSaver {
 
       stream.close();
     } catch (Throwable e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
       IOException propagatedException = new IOException("Failed to save the project file");
       propagatedException.initCause(e);
       throw propagatedException;

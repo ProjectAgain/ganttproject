@@ -24,12 +24,12 @@ import biz.ganttproject.core.option.GPOptionGroup;
 import biz.ganttproject.impex.csv.GanttCSVExport;
 import biz.ganttproject.impex.csv.SpreadsheetFormat;
 import biz.ganttproject.impex.csv.SpreadsheetWriter;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.io.CSVOptions;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.slf4j.Logger;
 
 import java.awt.*;
 import java.io.BufferedOutputStream;
@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class ExporterToCSV extends ExporterBase {
   static class FormatOption extends DefaultEnumerationOption<SpreadsheetFormat> {
@@ -92,6 +94,7 @@ public class ExporterToCSV extends ExporterBase {
 
   private ExporterJob createCVSExportJob(final File outputFile) {
     ExporterJob result = new ExporterJob("Export project") {
+      private final Logger log = getLogger(getClass());
       @Override
       protected IStatus run() {
         OutputStream outputStream = null;
@@ -113,7 +116,7 @@ public class ExporterToCSV extends ExporterBase {
             try {
               outputStream.close();
             } catch (IOException e) {
-              GPLogger.logToLogger(e);
+              log.error("Exception", e);
             }
           }
         }

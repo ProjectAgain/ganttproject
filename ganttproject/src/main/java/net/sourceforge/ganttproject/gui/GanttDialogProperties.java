@@ -18,20 +18,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui;
 
-import java.awt.event.ActionEvent;
-import java.text.MessageFormat;
-
-import javax.swing.Action;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttTask;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.action.CancelAction;
 import net.sourceforge.ganttproject.action.OkAction;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import org.slf4j.Logger;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.text.MessageFormat;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class GanttDialogProperties {
+  private static final Logger log = getLogger(GanttDialogProperties.class);
+
   private final GanttTask[] myTasks;
 
   public GanttDialogProperties(GanttTask[] tasks) {
@@ -51,9 +54,7 @@ public class GanttDialogProperties {
             try {
               project.getTaskManager().getAlgorithmCollection().getRecalculateTaskScheduleAlgorithm().run();
             } catch (TaskDependencyException e) {
-              if (!GPLogger.log(e)) {
-                e.printStackTrace();
-              }
+              log.error("Exception", e);
             }
             uiFacade.refresh();
           }

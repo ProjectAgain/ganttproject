@@ -26,7 +26,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import net.sourceforge.ganttproject.CustomPropertyClass;
 import net.sourceforge.ganttproject.CustomPropertyManager;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.io.CSVOptions;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.resource.HumanResourceManager;
@@ -34,6 +34,7 @@ import net.sourceforge.ganttproject.roles.RoleManager;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.util.collect.Pair;
 import org.apache.commons.csv.CSVFormat;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,15 +46,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static net.sourceforge.ganttproject.GPLogger.debug;
 import static net.sourceforge.ganttproject.util.FileUtil.getExtension;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Handles opening CSV and XLS files.
  */
 public class GanttCSVOpen {
+  private static final Logger log = getLogger(GanttCSVOpen.class);
+
   static Collection<String> getFieldNames(Enum... fieldsEnum) {
     return Collections2.transform(Arrays.asList(fieldsEnum), new Function<Enum, String>() {
       @Override
@@ -131,14 +133,14 @@ public class GanttCSVOpen {
   }
 
   private int doLoad(SpreadsheetReader reader, int numGroup, int linesToSkip) {
-    final Logger logger = GPLogger.getLogger(GanttCSVOpen.class);
+
     int lineCounter = 0;
     RecordGroup currentGroup = myRecordGroups.get(numGroup);
     boolean searchHeader = currentGroup.getHeader() == null;
     if (searchHeader) {
-      debug(logger, "[CSV] Searching for a header of %s", currentGroup);
+      log.debug("[CSV] Searching for a header of {}", currentGroup);
     } else {
-      debug(logger, "[CSV] Expecting to read records of group %s", currentGroup);
+      log.debug("[CSV] Expecting to read records of group {}", currentGroup);
       numGroup++;
     }
 
@@ -156,11 +158,11 @@ public class GanttCSVOpen {
       }
       if (searchHeader) {
         if (numGroup < myRecordGroups.size()) {
-          debug(logger, "%s\n", record);
+          log.debug("{}", record);
           RecordGroup nextGroup = myRecordGroups.get(numGroup);
           // Record is not empty and we're searching for header.
           if (nextGroup.isHeader(record)) {
-            debug(logger, "[CSV] ^^^ This seems to be a header");
+            log.debug("[CSV] ^^^ This seems to be a header");
 
             List<String> headerCells = Lists.newArrayList(record.iterator());
             for (int i = headerCells.size() - 1; i >= 0; i--) {

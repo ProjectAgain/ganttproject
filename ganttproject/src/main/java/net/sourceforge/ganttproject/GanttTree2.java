@@ -31,11 +31,7 @@ import net.sourceforge.ganttproject.chart.overview.ToolbarBuilder;
 import net.sourceforge.ganttproject.gui.TaskTreeUIFacade;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.task.ResourceAssignment;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.TaskNode;
-import net.sourceforge.ganttproject.task.TaskSelectionManager;
+import net.sourceforge.ganttproject.task.*;
 import net.sourceforge.ganttproject.task.TaskSelectionManager.Listener;
 import net.sourceforge.ganttproject.task.event.TaskHierarchyEvent;
 import net.sourceforge.ganttproject.task.event.TaskListenerAdapter;
@@ -49,9 +45,10 @@ import org.jdesktop.swingx.decorator.Highlighter;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableNode;
+import org.slf4j.Logger;
 
-import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -61,15 +58,17 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.event.*;
-import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.*;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Class that generate the JTree
  */
 public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTreeTableModel> implements
     /*DragSourceListener, DragGestureListener,*/ TaskTreeUIFacade {
+      private final Logger log = getLogger(getClass());
   private GanttProjectBase.RowHeightAligner myRowHeightAligner;
   private UIFacade myUIFacade;
 
@@ -418,8 +417,7 @@ public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTr
     List<TreePath> paths = new ArrayList<TreePath>();
     for (Task t : tasks) {
       if (t == null) {
-        GPLogger.getLogger(getClass()).log(Level.SEVERE, "Found null task in the selection. Full selection=" + tasks,
-            new NullPointerException());
+        log.error("Found 0 task in the selection. Full selection={}", tasks);
         continue;
       }
       MutableTreeTableNode treeNode = getNode(t);

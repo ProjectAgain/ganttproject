@@ -19,7 +19,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.gui.taskproperties;
 
 import com.google.common.base.Objects;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
@@ -29,6 +29,7 @@ import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
 import net.sourceforge.ganttproject.task.dependency.constraint.ConstraintImpl;
 import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -38,10 +39,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * @author dbarashev (Dmitry Barashev)
  */
 public class DependencyTableModel extends AbstractTableModel {
+  private final Logger log = getLogger(getClass());
+
   private static final boolean EDITABLE = true;
   private static final boolean NOT_EDITABLE = false;
 
@@ -157,9 +162,7 @@ public class DependencyTableModel extends AbstractTableModel {
         updateDependency(value, row, col);
       }
     } catch (TaskDependencyException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
     }
     fireTableCellUpdated(row, col);
   }

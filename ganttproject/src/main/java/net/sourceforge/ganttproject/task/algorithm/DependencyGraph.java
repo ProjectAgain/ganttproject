@@ -25,31 +25,16 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
-import com.google.common.collect.BoundType;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Range;
-import com.google.common.collect.Sets;
-import com.google.common.collect.TreeMultimap;
-import net.sourceforge.ganttproject.GPLogger;
+import com.google.common.collect.*;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency.Hardness;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A graph of dependencies between tasks which is used for scheduling algorithm.
@@ -61,6 +46,8 @@ import java.util.Set;
  * @author dbarashev
  */
 public class DependencyGraph {
+  private final org.slf4j.Logger log = LoggerFactory.getLogger(getClass());
+
   public static interface Listener {
     void onChange();
   }
@@ -636,9 +623,10 @@ public class DependencyGraph {
 
   public DependencyGraph(Supplier<TaskContainmentHierarchyFacade> taskHierarchy) {
     this(taskHierarchy, new Logger() {
+      private final org.slf4j.Logger log = LoggerFactory.getLogger(getClass());
       @Override
       public void logDependencyLoop(String title, String message) {
-        GPLogger.log(title + "\n" + message);
+        log.warn(title + "\n" + message);
       }
     });
   }

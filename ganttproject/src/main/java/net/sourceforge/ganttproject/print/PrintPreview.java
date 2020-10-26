@@ -18,57 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.print;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.JobName;
-import javax.print.attribute.standard.MediaSize;
-import javax.print.attribute.standard.MediaSizeName;
-import javax.print.attribute.standard.OrientationRequested;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.MatteBorder;
-
 import biz.ganttproject.core.option.DateOption;
 import biz.ganttproject.core.option.DefaultDateOption;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttExportSettings;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.IGanttProject;
@@ -79,8 +30,33 @@ import net.sourceforge.ganttproject.gui.TestGanttRolloverButton;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.OptionsPageBuilder;
 import net.sourceforge.ganttproject.language.GanttLanguage;
+import org.slf4j.Logger;
+
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.JobName;
+import javax.print.attribute.standard.MediaSize;
+import javax.print.attribute.standard.MediaSizeName;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.awt.print.*;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.List;
+import java.util.*;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class PrintPreview extends JDialog {
+  private final Logger log = getLogger(getClass());
 
   private final static MediaSizeName DEFAULT_MEDIA_SIZE_NAME = MediaSizeName.ISO_A4;
 
@@ -280,7 +256,7 @@ public class PrintPreview extends JDialog {
        * GanttCalendar(myStartDate) .toString());
        * myExportSettings.setStartDate(myStartDate);
        * updateSourceImage(myChart.getChart(myExportSettings)); } } });
-       * 
+       *
        * myEndDateButton = new JButton(new GanttCalendar(myEndDate) .toString(),
        * icon); myEndDateButton.setHorizontalTextPosition(SwingConstants.RIGHT);
        * myEndDateButton.addActionListener(new ActionListener() { public void
@@ -302,7 +278,7 @@ public class PrintPreview extends JDialog {
            * myStartDate = myChart.getStartDate(); myEndDate =
            * myChart.getEndDate(); myExportSettings.setStartDate(myStartDate);
            * myExportSettings.setEndDate(myEndDate);
-           * 
+           *
            * myEndDateButton.setText(new GanttCalendar(myExportSettings
            * .getEndDate()).toString()); myStartDateButton.setText(new
            * GanttCalendar( myExportSettings.getStartDate()).toString());
@@ -549,7 +525,7 @@ public class PrintPreview extends JDialog {
       setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       runnable.run();
     } catch (Exception e) {
-      GPLogger.log(e);
+      log.error("Exception", e);
     } finally {
       setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
@@ -684,6 +660,7 @@ public class PrintPreview extends JDialog {
   }
 
   static class PagePreview extends JPanel {
+    private final Logger log = getLogger(getClass());
     static SortedMap<Integer, Image> ourImageCache = new TreeMap<Integer, Image>();
     private final int myPageIndex;
     private final PageFormat myPageFormat;
@@ -745,9 +722,7 @@ public class PrintPreview extends JDialog {
           try {
             myPrintableChart.print(bufferGraphics, myPageFormat, myPageIndex);
           } catch (PrinterException e) {
-            if (!GPLogger.log(e)) {
-              e.printStackTrace(System.err);
-            }
+            log.error("Exception", e);
           }
         }
         scaledImage = bufferImage.getScaledInstance(getScaledWidth(), getScaledHeight(), Image.SCALE_SMOOTH);

@@ -19,16 +19,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.plugins;
 
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.export.Exporter;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Very basic Plugin Manager
@@ -36,21 +39,21 @@ import java.util.List;
  * @author bbaranne
  */
 public class PluginManager {
+  private static final Logger log = getLogger(PluginManager.class);
+
   public static <T> List<T> getExtensions(String extensionPointID, Class<T> extensionPointInterface) {
     IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
-    GPLogger.log("extensionregistry: " + extensionRegistry);
+    log.info("extensionregistry: {}", extensionRegistry);
     ArrayList<T> extensions = new ArrayList<T>();
     IConfigurationElement[] elements = extensionRegistry.getConfigurationElementsFor(extensionPointID);
-    GPLogger.log("Elements: " + elements);
+    log.info("Elements: {}", (Object[]) elements);
     for (IConfigurationElement configElement : elements) {
       try {
         Object nextExtension = configElement.createExecutableExtension("class");
         assert nextExtension != null && extensionPointInterface.isAssignableFrom(nextExtension.getClass());
         extensions.add((T) nextExtension);
       } catch (CoreException e) {
-        if (!GPLogger.logToLogger(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
       }
     }
     return extensions;

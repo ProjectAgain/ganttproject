@@ -3,18 +3,18 @@
  */
 package net.sourceforge.ganttproject.application;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttProject;
-
 import org.eclipse.core.runtime.IPlatformRunnable;
+import org.slf4j.Logger;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author bard
  */
 public class MainApplication implements IPlatformRunnable {
+  private static final Logger log = getLogger(MainApplication.class);
+
   private Object myLock = new Object();
 
   // The hack with waiting is necessary because when you
@@ -36,13 +36,12 @@ public class MainApplication implements IPlatformRunnable {
     GanttProject.setApplicationQuitCallback(onApplicationQuit);
     if (GanttProject.main(cmdLine)) {
       synchronized (myLock) {
-        GPLogger.log("Waiting until main window closes");
+        log.trace("Waiting until main window closes");
         myLock.wait();
-        GPLogger.log("Main window has closed");
+        log.trace("Main window has closed");
       }
     }
-    GPLogger.log("Program terminated");
-    GPLogger.close();
+    log.info("Program terminated");
     System.exit(0);
     return null;
   }

@@ -18,22 +18,16 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.chart;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.util.logging.Level;
-
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.action.CancelAction;
 import net.sourceforge.ganttproject.action.GPAction;
 import net.sourceforge.ganttproject.action.OkAction;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.ProjectCalendarOptionPageProvider;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * This action shows a project calendar settings page.

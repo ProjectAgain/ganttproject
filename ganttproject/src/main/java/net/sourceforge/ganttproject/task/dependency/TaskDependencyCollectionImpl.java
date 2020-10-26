@@ -18,29 +18,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.task.dependency;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency.Hardness;
 import net.sourceforge.ganttproject.task.dependency.constraint.FinishFinishConstraintImpl;
 import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
+import org.slf4j.Logger;
+
+import java.util.*;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Created by IntelliJ IDEA. User: bard Date: 14.02.2004 Time: 16:02:48 To
  * change this template use File | Settings | File Templates.
  */
 public class TaskDependencyCollectionImpl implements TaskDependencyCollection {
+  private final Logger log = getLogger(getClass());
+
   private Set<TaskDependency> myDependencies = new HashSet<TaskDependency>();
 
   private SortedMap<SearchKey, TaskDependency> mySearchKey2dependency = new TreeMap<SearchKey, TaskDependency>();
@@ -163,9 +158,7 @@ public class TaskDependencyCollectionImpl implements TaskDependencyCollection {
           try {
             addDependency(next.myDependency);
           } catch (TaskDependencyException e) {
-            if (!GPLogger.log(e)) {
-              e.printStackTrace(System.err);
-            }
+            log.error("Exception", e);
           }
           break;
         }

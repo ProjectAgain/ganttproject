@@ -18,9 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.print;
 
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.GanttExportSettings;
 import net.sourceforge.ganttproject.chart.Chart;
+import org.slf4j.Logger;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
@@ -30,7 +31,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.awt.print.PrinterJob;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class PrintManager {
+  private static final Logger log = getLogger(PrintManager.class);
 
   public static void printChart(Chart chart, GanttExportSettings settings) {
     RenderedImage image = chart.getRenderedImage(settings);
@@ -49,9 +53,7 @@ public class PrintManager {
       try {
         printJob.print(attr);
       } catch (Exception e) {
-        if (!GPLogger.log(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
       }
     }
   }

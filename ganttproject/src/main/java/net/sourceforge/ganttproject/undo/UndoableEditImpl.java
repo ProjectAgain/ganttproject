@@ -18,21 +18,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.undo;
 
-import java.io.IOException;
+import net.sourceforge.ganttproject.document.Document;
+import net.sourceforge.ganttproject.document.Document.DocumentException;
+import net.sourceforge.ganttproject.task.algorithm.AlgorithmCollection;
+import org.slf4j.Logger;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import java.io.IOException;
 
-import net.sourceforge.ganttproject.GPLogger;
-import net.sourceforge.ganttproject.document.Document;
-import net.sourceforge.ganttproject.document.Document.DocumentException;
-import net.sourceforge.ganttproject.task.algorithm.AlgorithmCollection;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author bard
  */
 class UndoableEditImpl extends AbstractUndoableEdit {
+  private final Logger log = getLogger(getClass());
+
   private String myPresentationName;
 
   private Document myDocumentBefore;
@@ -111,9 +114,7 @@ class UndoableEditImpl extends AbstractUndoableEdit {
   }
 
   private void undoRedoExceptionHandler(Exception e) {
-    if (!GPLogger.log(e)) {
-      e.printStackTrace(System.err);
-    }
+    log.error("Exception", e);
     throw new CannotRedoException();
   }
 }

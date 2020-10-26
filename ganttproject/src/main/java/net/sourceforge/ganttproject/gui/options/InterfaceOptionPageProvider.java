@@ -24,13 +24,14 @@ import biz.ganttproject.core.option.GPOptionGroup;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.NotificationManager;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.UIUtil;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class InterfaceOptionPageProvider extends OptionPageProviderBase {
+  private static final Logger log = getLogger(InterfaceOptionPageProvider.class);
+
   public static final String ID = "ui.general";
   private JEditorPane myLabel;
 
@@ -114,27 +119,25 @@ public class InterfaceOptionPageProvider extends OptionPageProviderBase {
       return Pair.create(Boolean.FALSE, null);
     }
     if (extDir.canWrite()) {
-      GPLogger.logToLogger("Java extensions directory " + extDir + " is writable");
+      log.info("Java extensions directory " + extDir + " is writable");
       URL libUrl = InterfaceOptionPageProvider.class.getResource("lib");
       if (libUrl != null) {
         try {
           File galicianLocaleJar = new File(new File(libUrl.toURI()), "javagalician.jar");
           File targetJar = new File(extDir, galicianLocaleJar.getName());
-          GPLogger.logToLogger("Locale extension " + galicianLocaleJar);
+          log.info("Locale extension " + galicianLocaleJar);
           if (galicianLocaleJar.exists() && !targetJar.exists()) {
-            GPLogger.logToLogger("Exists. Installing now");
+            log.info("Exists. Installing now");
             Files.copy(galicianLocaleJar.toPath(), extDir.toPath());
             return Pair.create(Boolean.TRUE, extDir);
           }
-        } catch (IOException e) {
-          GPLogger.log(e);
-        } catch (URISyntaxException e) {
-          GPLogger.log(e);
+        } catch (IOException | URISyntaxException e) {
+          log.error("Exception", e);
         }
       }
       return Pair.create(Boolean.FALSE, extDir);
     } else {
-      GPLogger.logToLogger("Java extensions directory " + extDir + " is not writable");
+      log.info("Java extensions directory " + extDir + " is not writable");
     }
     return Pair.create(Boolean.FALSE, extDir);
   }

@@ -20,13 +20,15 @@ package net.sourceforge.ganttproject.gui.options;
 
 import biz.ganttproject.core.calendar.GPCalendarCalc;
 import biz.ganttproject.core.calendar.WeekendCalendarImpl;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.projectwizard.I18N;
 import net.sourceforge.ganttproject.gui.projectwizard.WeekendConfigurationPage;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import org.slf4j.Logger;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Panel to edit the weekend settings
@@ -34,6 +36,7 @@ import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
  * @author Maarten Bezemer
  */
 public class WeekendsSettingsPanel extends GeneralOptionPanel {
+  private final Logger log = getLogger(getClass());
 
   private final IGanttProject project;
 
@@ -72,7 +75,7 @@ public class WeekendsSettingsPanel extends GeneralOptionPanel {
         taskManager.getAlgorithmCollection().getRecalculateTaskScheduleAlgorithm().run();
         taskManager.getAlgorithmCollection().getAdjustTaskBoundsAlgorithm().adjustNestedTasks(taskManager.getRootTask());
       } catch (TaskDependencyException e) {
-        GPLogger.log(e);
+        log.error("Exception", e);
       }
     }
     return hasChange;

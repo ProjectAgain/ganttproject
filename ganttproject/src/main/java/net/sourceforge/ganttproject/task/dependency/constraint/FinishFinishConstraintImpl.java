@@ -18,18 +18,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.task.dependency.constraint;
 
-import java.util.Date;
-import java.util.List;
-
-import net.sourceforge.ganttproject.GPLogger;
+import biz.ganttproject.core.time.CalendarFactory;
+import biz.ganttproject.core.time.GanttCalendar;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskActivity;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency.ActivityBinding;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.GanttCalendar;
+import org.slf4j.Logger;
+
+import java.util.Date;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Dependent task finishes not earlier than dependee finishes
@@ -37,6 +39,8 @@ import biz.ganttproject.core.time.GanttCalendar;
  * @author bard
  */
 public class FinishFinishConstraintImpl extends ConstraintImpl implements TaskDependencyConstraint {
+  private final Logger log = getLogger(getClass());
+
   public FinishFinishConstraintImpl() {
     super(TaskDependencyConstraint.Type.finishfinish, GanttLanguage.getInstance().getText("finishfinish"));
   }
@@ -79,11 +83,11 @@ public class FinishFinishConstraintImpl extends ConstraintImpl implements TaskDe
     List<TaskActivity> dependantActivities = getDependency().getDependant().getActivities();
     List<TaskActivity> dependeeActivities = getDependency().getDependee().getActivities();
     if (dependantActivities.isEmpty()) {
-      GPLogger.logToLogger("Task " + getDependency().getDependant() + " has no activities");
+      log.info("Task {} has no activities", getDependency().getDependant());
       return null;
     }
     if (dependeeActivities.isEmpty()) {
-      GPLogger.logToLogger("Task " + getDependency().getDependee() + " has no activities");
+      log.info("Task {} has no activities", getDependency().getDependee());
       return null;
     }
     TaskActivity theDependant = dependantActivities.get(dependantActivities.size() - 1);

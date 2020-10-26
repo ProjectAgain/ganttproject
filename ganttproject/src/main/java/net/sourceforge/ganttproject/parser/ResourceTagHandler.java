@@ -18,30 +18,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
+import com.google.common.collect.ImmutableSet;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.CustomPropertyManager;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.resource.HumanResource;
 import net.sourceforge.ganttproject.resource.HumanResourceManager;
 import net.sourceforge.ganttproject.roles.Role;
 import net.sourceforge.ganttproject.roles.RoleManager;
 import net.sourceforge.ganttproject.roles.RolePersistentID;
 import net.sourceforge.ganttproject.roles.RoleSet;
-
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
-import com.google.common.collect.ImmutableSet;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.Map.Entry;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /** Class to parse the attribute of resources handler */
 public class ResourceTagHandler extends AbstractTagHandler implements ParsingListener {
+  private final Logger log = getLogger(getClass());
+
   private final Set<String> TAGS = ImmutableSet.of("resource", "custom-property", "custom-property-definition", "rate");
   private final CustomPropertyManager myCustomPropertyManager;
 
@@ -109,7 +107,7 @@ public class ResourceTagHandler extends AbstractTagHandler implements ParsingLis
       BigDecimal value = new BigDecimal(attrs.getValue("value"));
       myCurrentResource.setStandardPayRate(value);
     } catch (NumberFormatException e) {
-      GPLogger.log(e);
+      log.error("Exception", e);
     }
   }
 

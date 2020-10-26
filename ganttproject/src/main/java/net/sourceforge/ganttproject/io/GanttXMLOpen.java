@@ -21,7 +21,7 @@ package net.sourceforge.ganttproject.io;
 import biz.ganttproject.core.time.GanttCalendar;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.PrjInfos;
 import net.sourceforge.ganttproject.gui.UIConfiguration;
 import net.sourceforge.ganttproject.gui.UIFacade;
@@ -32,6 +32,7 @@ import net.sourceforge.ganttproject.parser.ParsingListener;
 import net.sourceforge.ganttproject.parser.TagHandler;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
 import java.io.BufferedInputStream;
@@ -42,6 +43,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Allows to load a gantt file from xml format, using SAX parser
@@ -223,6 +226,8 @@ public class GanttXMLOpen implements GPParser {
   }
 
   class TimelineTagHandler extends AbstractTagHandler implements ParsingListener {
+    private final Logger log = getLogger(getClass());
+
     private final List<Integer> myIds = Lists.newArrayList();
 
     public TimelineTagHandler() {
@@ -257,7 +262,7 @@ public class GanttXMLOpen implements GPParser {
         try {
           myIds.add(Integer.valueOf(id.trim()));
         } catch (NumberFormatException e) {
-          GPLogger.logToLogger(e);
+          log.error("Exception", e);
         }
       }
       clearCdata();

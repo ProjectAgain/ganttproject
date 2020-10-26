@@ -18,22 +18,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.undo;
 
-import java.io.IOException;
-
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEditSupport;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.document.DocumentManager;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.language.GanttLanguage.Event;
 import net.sourceforge.ganttproject.parser.ParserFactory;
+import org.slf4j.Logger;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEditSupport;
+import java.io.IOException;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * UndoManager implementation, it manages the undoable edits in GanttProject
@@ -41,6 +41,7 @@ import net.sourceforge.ganttproject.parser.ParserFactory;
  * @author bard
  */
 public class UndoManagerImpl implements GPUndoManager {
+  private final Logger log = getLogger(getClass());
   private UndoableEditSupport myUndoEventDispatcher;
 
   private UndoManager mySwingUndoManager;
@@ -75,9 +76,7 @@ public class UndoManagerImpl implements GPUndoManager {
       mySwingUndoManager.addEdit(swingEditImpl);
       fireUndoableEditHappened(swingEditImpl);
     } catch (IOException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
     }
   }
 

@@ -30,6 +30,7 @@ import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.undo.GPUndoManager;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -37,12 +38,16 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * TransferHandler implementation which creates and consumes ClipboardContents objects
  *
  * @author dbarashev (Dmitry Barashev)
  */
 class GPTreeTransferHandler extends TransferHandler {
+  private final Logger log = getLogger(getClass());
+
   private final GPTreeTableBase myTreeTable;
   private final TaskManager myTaskManager;
   private final Supplier<GanttChart> myGanttChart;
@@ -120,7 +125,7 @@ class GPTreeTransferHandler extends TransferHandler {
         return true;
       }
     } catch (UnsupportedFlavorException | IOException | RuntimeException e) {
-      GPLogger.logToLogger(e);
+      log.error("Exception", e);
     }
     return false;
   }

@@ -20,6 +20,7 @@ package net.sourceforge.ganttproject;
 
 import biz.ganttproject.core.option.ValidationException;
 import net.sourceforge.ganttproject.gui.UIUtil;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -32,7 +33,10 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 class TreeTableCellEditorImpl implements TableCellEditor {
+  private final Logger log = getLogger(getClass());
   private final DefaultCellEditor myProxiedEditor;
   private final JTable myTable;
 
@@ -83,7 +87,7 @@ class TreeTableCellEditorImpl implements TableCellEditor {
     try {
       return myProxiedEditor.stopCellEditing();
     } catch (ValidationException e) {
-      GPLogger.log(e.getMessage());
+      log.error("Exception", e);
       myProxiedEditor.getComponent().setBackground(UIUtil.INVALID_VALUE_BACKGROUND);
       return false;
     }

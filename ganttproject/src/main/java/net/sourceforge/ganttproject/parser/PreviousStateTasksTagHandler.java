@@ -18,23 +18,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
+import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.GanttPreviousState;
+import net.sourceforge.ganttproject.GanttPreviousStateTask;
+import org.slf4j.Logger;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.ganttproject.GPLogger;
-import net.sourceforge.ganttproject.GanttPreviousState;
-import net.sourceforge.ganttproject.GanttPreviousStateTask;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
-
-import biz.ganttproject.core.time.GanttCalendar;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author nbohn
  */
 public class PreviousStateTasksTagHandler extends DefaultHandler implements TagHandler {
+  private final Logger log = getLogger(getClass());
+
   private String myName = "";
 
   private GanttPreviousState previousState;
@@ -70,9 +72,7 @@ public class PreviousStateTasksTagHandler extends DefaultHandler implements TagH
         previousState.saveFile();
         myPreviousStates.add(previousState);
       } catch (IOException e) {
-        if (!GPLogger.log(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
       }
     }
   }

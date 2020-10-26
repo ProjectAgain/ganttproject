@@ -18,19 +18,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui;
 
-import java.awt.GridLayout;
+import net.sourceforge.ganttproject.action.ShowChannelAction;
+import net.sourceforge.ganttproject.gui.NotificationComponent.AnimationView;
+import org.slf4j.Logger;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.Collection;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import net.sourceforge.ganttproject.action.ShowChannelAction;
-import net.sourceforge.ganttproject.gui.NotificationComponent.AnimationView;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class NotificationManagerImpl implements NotificationManager {
+
+  private final Logger log = getLogger(getClass());
+
   private AnimationView myAnimationView;
   private NotificationChannel myFirstChannel;
 

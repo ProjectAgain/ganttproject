@@ -108,7 +108,6 @@ abstract class GanttProjectBase extends JFrame implements IGanttProject, UIFacad
     myTimeUnitStack = new GPTimeUnitStack();
     NotificationManagerImpl notificationManager = new NotificationManagerImpl(myContentPaneBuilder.getAnimationHost());
     myUIFacade = new UIFacadeImpl(this, statusBar, notificationManager, getProject(), this);
-    GPLogger.setUIFacade(myUIFacade);
     myDocumentManager = new DocumentCreator(this, getUIFacade(), null) {
       @Override
       protected ParserFactory getParserFactory() {

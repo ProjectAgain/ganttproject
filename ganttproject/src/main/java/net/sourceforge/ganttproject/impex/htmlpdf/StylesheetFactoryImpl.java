@@ -18,17 +18,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.impex.htmlpdf;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+import org.slf4j.Logger;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.ganttproject.GPLogger;
-
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public abstract class StylesheetFactoryImpl {
+  private final Logger log = getLogger(getClass());
+
   public List<Stylesheet> createStylesheets(Class<? extends Stylesheet> stylesheetInterface) {
     IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
     IConfigurationElement[] configElements = extensionRegistry.getConfigurationElementsFor(stylesheetInterface.getName());
@@ -49,9 +52,7 @@ public abstract class StylesheetFactoryImpl {
         assert resolvedUrl != null : "Failed to resolve URL=" + stylesheetUrl;
         result.add(newStylesheet(resolvedUrl, localizedName));
       } catch (Exception e) {
-        if (!GPLogger.log(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
       }
     }
     return result;

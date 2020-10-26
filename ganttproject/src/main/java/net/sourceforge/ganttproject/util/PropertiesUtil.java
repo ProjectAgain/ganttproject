@@ -18,13 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.util;
 
-import net.sourceforge.ganttproject.GPLogger;
+
+
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class PropertiesUtil {
+  private static final Logger log = getLogger(PropertiesUtil.class);
+
   public static void loadProperties(Properties result, String resource) {
     URL url = PropertiesUtil.class.getResource(resource);
     if (url == null) {
@@ -33,9 +39,7 @@ public class PropertiesUtil {
     try {
       result.load(url.openStream());
     } catch (IOException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
     }
   }
 

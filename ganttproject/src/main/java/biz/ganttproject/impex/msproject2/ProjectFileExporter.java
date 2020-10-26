@@ -45,7 +45,7 @@ import net.sourceforge.ganttproject.CustomProperty;
 import net.sourceforge.ganttproject.CustomPropertyClass;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.CustomPropertyHolder;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.GanttTask;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.resource.HumanResource;
@@ -56,6 +56,7 @@ import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencySlice;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -65,12 +66,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Creates MPXJ ProjectFile from GanttProject's IGanttProject.
  *
  * @author dbarashev (Dmitry Barashev)
  */
 class ProjectFileExporter {
+  private final Logger log = getLogger(getClass());
+
   private IGanttProject myNativeProject;
   private ProjectFile myOutputProject;
 
@@ -230,7 +235,7 @@ class ProjectFileExporter {
   private Date convertStartTime(Date gpStartDate) {
     Date startTime = myOutputProject.getDefaultCalendar().getStartTime(gpStartDate);
     if (startTime == null) {
-      GPLogger.getLogger(getClass()).warning(String.format("Failed to convert start date=%s to start time in MPXJ project, got null. " +
+      log.warn(String.format("Failed to convert start date=%s to start time in MPXJ project, got null. " +
           "Chances are that task start date is non-working day in MPXJ project calendar. Let's take the start date as is", gpStartDate.toString()));
       startTime = gpStartDate;
     }

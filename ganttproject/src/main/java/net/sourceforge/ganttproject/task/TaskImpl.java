@@ -30,7 +30,6 @@ import biz.ganttproject.core.time.TimeDuration;
 import biz.ganttproject.core.time.TimeDurationImpl;
 import biz.ganttproject.core.time.impl.GPTimeUnitStack;
 import com.google.common.collect.ImmutableList;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.chart.MilestoneTaskFakeActivity;
 import net.sourceforge.ganttproject.document.AbstractURLDocument;
 import net.sourceforge.ganttproject.document.Document;
@@ -47,6 +46,7 @@ import net.sourceforge.ganttproject.task.hierarchy.TaskHierarchyItem;
 import net.sourceforge.ganttproject.util.collect.Pair;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.slf4j.Logger;
 
 import java.awt.*;
 import java.io.File;
@@ -66,10 +66,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * @author bard
  */
 public class TaskImpl implements Task {
+  private final Logger log = getLogger(getClass());
+
   private final int myID;
 
   private final TaskManagerImpl myManager;
@@ -382,7 +386,7 @@ public class TaskImpl implements Task {
         }
       }
       if (!allMilestones) {
-        GPLogger.getLogger(Task.class).warning(String.format(
+        log.warn(String.format(
             "This is probably a bug. Task #%d (%s) has end date=%s equal to start date." +
             "It could be possible if all child tasks were milestones, however they are not. Child tasks: %s",
             getTaskID(), getName(), modelEnd, Arrays.asList(deepNestedTasks)));
@@ -914,7 +918,7 @@ public class TaskImpl implements Task {
       try {
         shiftAlgorithm.run(TaskImpl.this, shift, ShiftTaskTreeAlgorithm.DEEP);
       } catch (AlgorithmException e) {
-        GPLogger.log(e);
+        log.error("Exception", e);
       }
     }
 
@@ -978,9 +982,7 @@ public class TaskImpl implements Task {
         algorithmCollection.getAdjustTaskBoundsAlgorithm().adjustNestedTasks(this);
       }
     } catch (TaskDependencyException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
     }
   }
 

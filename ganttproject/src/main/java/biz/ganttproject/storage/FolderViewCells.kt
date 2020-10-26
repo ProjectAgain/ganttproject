@@ -33,7 +33,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import org.slf4j.LoggerFactory
 
-open class FolderViewCell<T: FolderItem> : ListCell<ListViewItem<T>>() {
+open class FolderViewCell<T : FolderItem> : ListCell<ListViewItem<T>>() {
   protected fun whenNotEmpty(item: ListViewItem<T>?, empty: Boolean, code: FolderViewCell<T>.(item: ListViewItem<T>) -> Unit) {
     if (item == null) {
       text = ""
@@ -49,15 +49,16 @@ open class FolderViewCell<T: FolderItem> : ListCell<ListViewItem<T>>() {
     code(this, item)
   }
 }
+
 /**
  * Creates a list cell with the folder item name in bigger font, folder item base path above in smaller font
  * and folder item tags in the bottom right corner.
  *
  * @author dbarashev@bardsoftware.com
  */
-class CellWithBasePath<T: FolderItem> : FolderViewCell<T>() {
+class CellWithBasePath<T : FolderItem> : FolderViewCell<T>() {
   override fun updateItem(listViewItem: ListViewItem<T>?, empty: Boolean) {
-    whenNotEmpty(listViewItem, empty) {item ->
+    whenNotEmpty(listViewItem, empty) { item ->
       val pane = StackPane()
       pane.minWidth = 0.0
       pane.prefWidth = 1.0
@@ -65,21 +66,21 @@ class CellWithBasePath<T: FolderItem> : FolderViewCell<T>() {
       pane.children.add(VBox().also { vbox ->
         vbox.isFillWidth = true
         vbox.children.add(
-            Label(item.resource.get().basePath).apply {
-              styleClass.add("list-item-path")
-            }
+          Label(item.resource.get().basePath).apply {
+            styleClass.add("list-item-path")
+          }
         )
         vbox.children.add(
-            Label(item.resource.get().name).apply {
-              styleClass.add("list-item-filename")
-            }
+          Label(item.resource.get().name).apply {
+            styleClass.add("list-item-filename")
+          }
         )
         item.resource.value.tags.let {
           if (it.isNotEmpty()) {
             vbox.children.add(
-                HBox(Label(it.joinToString(", "))).apply {
-                  styleClass.add("list-item-tags")
-                }
+              HBox(Label(it.joinToString(", "))).apply {
+                styleClass.add("list-item-tags")
+              }
             )
           }
         }
@@ -91,20 +92,23 @@ class CellWithBasePath<T: FolderItem> : FolderViewCell<T>() {
   }
 }
 
-class CellWithButtons<T: FolderItem>(
-    private val exceptionUi: ExceptionUi,
-    private val onDeleteResource: OnItemAction<T>,
-    private val onToggleLockResource: OnItemAction<T>,
-    private val isLockingSupported: BooleanProperty,
-    private val isDeleteSupported: ReadOnlyBooleanProperty,
-    private val itemActionFactory: ItemActionFactory<T>
+class CellWithButtons<T : FolderItem>(
+  private val exceptionUi: ExceptionUi,
+  private val onDeleteResource: OnItemAction<T>,
+  private val onToggleLockResource: OnItemAction<T>,
+  private val isLockingSupported: BooleanProperty,
+  private val isDeleteSupported: ReadOnlyBooleanProperty,
+  private val itemActionFactory: ItemActionFactory<T>
 ) : FolderViewCell<T>() {
+
+  private val log = LoggerFactory.getLogger(javaClass)
+
 
   override fun updateItem(item: ListViewItem<T>?, empty: Boolean) {
     try {
       doUpdateItem(item, empty)
     } catch (e: Exception) {
-      println(e)
+      log.error("Exception", e)
     }
 
   }

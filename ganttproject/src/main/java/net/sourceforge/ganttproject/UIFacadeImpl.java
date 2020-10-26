@@ -48,6 +48,7 @@ import net.sourceforge.ganttproject.undo.GPUndoManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.ProgressProvider;
+import org.slf4j.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -62,9 +63,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.*;
-import java.util.logging.Level;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 class UIFacadeImpl extends ProgressProvider implements UIFacade {
+  private final Logger log = getLogger(getClass());
+
   private final JFrame myMainFrame;
   private final ScrollingManager myScrollingManager;
   private final ZoomManager myZoomManager;
@@ -354,7 +358,7 @@ class UIFacadeImpl extends ProgressProvider implements UIFacade {
    */
   @Override
   public void showErrorDialog(Throwable e) {
-    GPLogger.logToLogger(e);
+    log.error("Exception", e);
     showNotificationDialog(NotificationChannel.ERROR, buildMessage(e));
   }
 
@@ -373,7 +377,7 @@ class UIFacadeImpl extends ProgressProvider implements UIFacade {
 
   @Override
   public void showErrorDialog(String errorMessage) {
-    GPLogger.log(errorMessage);
+    log.error(errorMessage);
     showNotificationDialog(NotificationChannel.ERROR, errorMessage);
   }
 
@@ -584,8 +588,7 @@ class UIFacadeImpl extends ProgressProvider implements UIFacade {
       updateComponentTreeUI();
       return true;
     } catch (Exception e) {
-      GPLogger.getLogger(UIFacade.class).log(Level.SEVERE,
-          "Can't find the LookAndFeel\n" + laf.getClassName() + "\n" + laf.getName(), e);
+      log.error("Can't find the LookAndFeel\n" + laf.getClassName() + "\n" + laf.getName(), e);
       return false;
     }
   }
@@ -701,10 +704,10 @@ class UIFacadeImpl extends ProgressProvider implements UIFacade {
       if (imageFile.exists() && imageFile.canRead()) {
         return MoreObjects.firstNonNull(ImageIO.read(imageFile), DEFAULT_LOGO.getImage());
       }
-      GPLogger.logToLogger("File=" + myLogoOption.getValue() + " does not exist or is not readable");
+      log.error("File=" + myLogoOption.getValue() + " does not exist or is not readable");
     } catch (IOException e) {
-      GPLogger.logToLogger(String.format("Failed to create image from file %s", imageFile));
-      GPLogger.logToLogger(e);
+      log.error(String.format("Failed to create image from file %s", imageFile));
+      log.error("Exception", e);
     }
     return DEFAULT_LOGO.getImage();
   }

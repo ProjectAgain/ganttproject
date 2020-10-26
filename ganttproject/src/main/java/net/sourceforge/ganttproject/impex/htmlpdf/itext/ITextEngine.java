@@ -18,45 +18,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.impex.htmlpdf.itext;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-
-import net.sourceforge.ganttproject.GPLogger;
+import biz.ganttproject.core.option.GPOptionGroup;
 import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.export.ExporterBase;
 import net.sourceforge.ganttproject.export.ExportException;
+import net.sourceforge.ganttproject.export.ExporterBase;
 import net.sourceforge.ganttproject.export.ExporterBase.ExporterJob;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.OptionsPageBuilder;
-
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import net.sourceforge.ganttproject.impex.htmlpdf.AbstractEngine;
 import net.sourceforge.ganttproject.impex.htmlpdf.ExporterToPDF;
 import net.sourceforge.ganttproject.impex.htmlpdf.Stylesheet;
 import net.sourceforge.ganttproject.impex.htmlpdf.StylesheetFactoryImpl;
 import net.sourceforge.ganttproject.impex.htmlpdf.fonts.TTFontCache;
+import org.eclipse.core.runtime.*;
 import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
 
-import biz.ganttproject.core.option.GPOptionGroup;
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class ITextEngine extends AbstractEngine {
+  private static final Logger log = getLogger(ITextEngine.class);
+
   private ITextStylesheet myStylesheet;
   private final TTFontCache myFontCache;
   private FontSubstitutionModel mySubstitutionModel;
@@ -143,17 +133,16 @@ public class ITextEngine extends AbstractEngine {
           // FIXME Add some better way of determining whether the fonts can be
           // read already
           Thread.sleep(10000);
-          GPLogger.getLogger(TTFontCache.class).info("Scanning font directories...");
+          log.info("Scanning font directories...");
         } catch (InterruptedException e) {
-          // TODO Auto-generated catch block
-          GPLogger.logToLogger(e);
+          log.error("Exception", e);
         }
         registerFontDirectories();
         synchronized (ITextEngine.this.myFontsMutex) {
           myFontsReady = true;
           myFontsMutex.notifyAll();
         }
-        GPLogger.getLogger(TTFontCache.class).info("Scanning font directories completed");
+        log.info("Scanning font directories completed");
       }
     });
     fontReadingThread.setPriority(Thread.MIN_PRIORITY);
@@ -169,7 +158,7 @@ public class ITextEngine extends AbstractEngine {
         try {
           myFontsMutex.wait();
         } catch (InterruptedException e) {
-          GPLogger.log(e);
+          log.error("Exception", e);
           break;
         }
       }
@@ -188,15 +177,14 @@ public class ITextEngine extends AbstractEngine {
         String namespace = configElements[i].getDeclaringExtension().getNamespaceIdentifier();
         URL dirUrl = Platform.getBundle(namespace).getResource(dirName);
         if (dirUrl == null) {
-          GPLogger.getLogger(ITextEngine.class).warning(
-              "Failed to find directory " + dirName + " in plugin " + namespace);
+          log.warn("Failed to find directory " + dirName + " in plugin " + namespace);
           continue;
         }
         try {
           URL resolvedDir = Platform.resolve(dirUrl);
           myFontCache.registerDirectory(resolvedDir.getPath());
         } catch (IOException e) {
-          GPLogger.getLogger(ITextEngine.class).log(Level.WARNING, e.getMessage(), e);
+          log.warn(e.getMessage(), e);
           continue;
         }
       }

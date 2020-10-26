@@ -29,7 +29,6 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;
 import net.sourceforge.ganttproject.task.TaskImpl;
@@ -44,7 +43,8 @@ import net.sourceforge.ganttproject.task.event.TaskListenerAdapter;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This class walk the dependency graph and updates start and end dates of tasks
@@ -57,6 +57,7 @@ public class SchedulerImpl extends AlgorithmBase {
   private boolean isRunning;
   private final Supplier<TaskContainmentHierarchyFacade> myTaskHierarchy;
   private final TaskListener myTaskListener;
+  private final org.slf4j.Logger log = getLogger(getClass());
 
   public SchedulerImpl(DependencyGraph graph, Supplier<TaskContainmentHierarchyFacade> taskHierarchy) {
     myGraph = graph;
@@ -108,15 +109,14 @@ public class SchedulerImpl extends AlgorithmBase {
         try {
           schedule(node);
         } catch (IllegalArgumentException e) {
-          GPLogger.log(e);
+          log.error("{}", e);
         }
       }
     }
   }
 
   private void schedule(Node node) {
-    Logger logger = GPLogger.getLogger(this);
-    GPLogger.debug(logger, "Scheduling node %s", node);
+    log.debug("Scheduling node {}", node);
     Range<Date> startRange = Range.all();
     Range<Date> endRange = Range.all();
 
@@ -125,7 +125,7 @@ public class SchedulerImpl extends AlgorithmBase {
 
     List<Date> subtaskRanges = Lists.newArrayList();
     List<DependencyEdge> incoming = node.getIncoming();
-    GPLogger.debug(logger, ".. #incoming edges=%d", incoming.size());
+    log.debug(".. #incoming edges={}", incoming.size());
     for (DependencyEdge edge : incoming) {
       if (!edge.refresh()) {
         continue;
@@ -143,16 +143,16 @@ public class SchedulerImpl extends AlgorithmBase {
         }
       }
       if (startRange.isEmpty() || endRange.isEmpty()) {
-        GPLogger.logToLogger("both start and end ranges were calculated as empty for task=" + node.getTask() + ". Skipping it");
+        log.info("both start and end ranges were calculated as empty for task={}. Skipping it.", node.getTask());
       }
     }
-    GPLogger.debug(logger, "..Ranges: start=%s end=%s weakStart=%s weakEnd=%s", startRange, endRange, weakStartRange, weakEndRange);
+    log.debug("..Ranges: start={} end={} weakStart={} weakEnd={}", startRange, endRange, weakStartRange, weakEndRange);
 
     Range<Date> subtasksSpan = subtaskRanges.isEmpty() ?
-        Range.closed(node.getTask().getStart().getTime(), node.getTask().getEnd().getTime()) : Range.encloseAll(subtaskRanges);
+      Range.closed(node.getTask().getStart().getTime(), node.getTask().getEnd().getTime()) : Range.encloseAll(subtaskRanges);
     Range<Date> subtreeStartUpwards = subtasksSpan.span(Range.downTo(node.getTask().getStart().getTime(), BoundType.CLOSED));
     Range<Date> subtreeEndDownwards = subtasksSpan.span(Range.upTo(node.getTask().getEnd().getTime(), BoundType.CLOSED));
-    GPLogger.debug(logger, "..Subtasks span=%s", subtasksSpan);
+    log.debug("..Subtasks span={}", subtasksSpan);
 
     if (!startRange.equals(Range.all())) {
       startRange = startRange.intersection(weakStartRange);
@@ -166,13 +166,13 @@ public class SchedulerImpl extends AlgorithmBase {
     }
     if (node.getTask().getThirdDateConstraint() == TaskImpl.EARLIESTBEGIN && node.getTask().getThird() != null) {
       startRange = startRange.intersection(Range.downTo(node.getTask().getThird().getTime(), BoundType.CLOSED));
-      GPLogger.debug(logger, ".. applying earliest start=%s. Now start range=%s", node.getTask().getThird(), startRange);
+      log.debug(".. applying earliest start={}. Now start range={}", node.getTask().getThird(), startRange);
     }
     if (!subtaskRanges.isEmpty()) {
       startRange = startRange.intersection(subtasksSpan);
       endRange = endRange.intersection(subtasksSpan);
     }
-    GPLogger.debug(logger, ".. finally, start range=%s", startRange);
+    log.debug(".. finally, start range={}", startRange);
     if (startRange.hasLowerBound()) {
       modifyTaskStart(node.getTask(), startRange.lowerEndpoint());
     }
@@ -186,9 +186,9 @@ public class SchedulerImpl extends AlgorithmBase {
         // If we don't do this, it will be done automatically the next time task activities are recalculated,
         // and thus task end date will keep changing
         Date closestWorkingEndDate = cal.findClosest(
-            endDate, timeUnit, GPCalendarCalc.MoveDirection.BACKWARD, GPCalendar.DayType.WORKING);
+          endDate, timeUnit, GPCalendarCalc.MoveDirection.BACKWARD, GPCalendar.DayType.WORKING);
         Date closestNonWorkingEndDate = cal.findClosest(
-            endDate, timeUnit, GPCalendarCalc.MoveDirection.BACKWARD, GPCalendar.DayType.NON_WORKING, closestWorkingEndDate);
+          endDate, timeUnit, GPCalendarCalc.MoveDirection.BACKWARD, GPCalendar.DayType.NON_WORKING, closestWorkingEndDate);
         // If there is a non-working date between current task end and closest working date
         // then we're really just after holidays
         if (closestNonWorkingEndDate != null && closestWorkingEndDate.before(closestNonWorkingEndDate)) {

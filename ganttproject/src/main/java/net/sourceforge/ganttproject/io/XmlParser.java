@@ -19,10 +19,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.io;
 
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.parser.FileFormatException;
 import net.sourceforge.ganttproject.parser.ParsingListener;
 import net.sourceforge.ganttproject.parser.TagHandler;
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -35,12 +36,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * SAX parser which delegates parsing semantics to TagHandler instances.
  *
  * @author dbarashev (Dmitry Barashev)
  */
 public class XmlParser extends DefaultHandler2 {
+  private final Logger log = getLogger(getClass());
   private final List<TagHandler> myTagHandlers;
   private final List<ParsingListener> myListeners;
   private boolean myCdataStarted;
@@ -118,14 +122,10 @@ public class XmlParser extends DefaultHandler2 {
           this);
       saxParser.parse(inStream, this);
     } catch (ParserConfigurationException | SAXException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
       throw new IOException(e.getMessage());
     } catch (RuntimeException e) {
-      if (!GPLogger.logToLogger(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
       throw new IOException(e.getMessage());
     }
   }

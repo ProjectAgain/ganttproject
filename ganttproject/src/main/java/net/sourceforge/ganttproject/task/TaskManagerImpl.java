@@ -32,7 +32,6 @@ import com.google.common.collect.Queues;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.CustomPropertyListener;
 import net.sourceforge.ganttproject.CustomPropertyManager;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttTask;
 import net.sourceforge.ganttproject.ProjectEventListener;
 import net.sourceforge.ganttproject.gui.NotificationChannel;
@@ -70,6 +69,7 @@ import net.sourceforge.ganttproject.task.event.TaskPropertyEvent;
 import net.sourceforge.ganttproject.task.event.TaskScheduleEvent;
 import net.sourceforge.ganttproject.task.hierarchy.TaskHierarchyManagerImpl;
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -85,10 +85,14 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * @author bard
  */
 public class TaskManagerImpl implements TaskManager {
+  private final Logger log = getLogger(getClass());
+
   private static final GPCalendarCalc RESTLESS_CALENDAR = new AlwaysWorkingTimeCalendarImpl();
 
   private final TaskHierarchyManagerImpl myHierarchyManager;
@@ -131,7 +135,7 @@ public class TaskManagerImpl implements TaskManager {
         myConfig.getNotificationManager().addNotifications(NotificationChannel.WARNING,
             ImmutableList.of(new NotificationItem("Dependency loop detected", message, NotificationManager.DEFAULT_HYPERLINK_LISTENER)));
       }
-      GPLogger.log(title + "\n" + message);
+      log.info(title + "\n" + message);
     }
   });
 
@@ -1062,9 +1066,7 @@ public class TaskManagerImpl implements TaskManager {
         dependency.setDifference(deps[i].getDifference());
         dependency.setHardness(deps[i].getHardness());
       } catch (TaskDependencyException e) {
-        if (!GPLogger.log(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
       }
     }
     return original2imported;
@@ -1108,9 +1110,7 @@ public class TaskManagerImpl implements TaskManager {
           try {
             nextImported.getCustomValues().setValue(thisDef, value);
           } catch (CustomColumnsException e) {
-            if (!GPLogger.log(e)) {
-              e.printStackTrace(System.err);
-            }
+            log.error("Exception", e);
           }
         }
       }
@@ -1128,9 +1128,7 @@ public class TaskManagerImpl implements TaskManager {
     try {
       myAlgorithmCollection.getRecalculateTaskScheduleAlgorithm().run();
     } catch (TaskDependencyException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
     }
     Task[] tasks = myAlgorithmCollection.getCriticalPathAlgorithm().getCriticalTasks();
     resetCriticalPath();
@@ -1244,7 +1242,7 @@ public class TaskManagerImpl implements TaskManager {
       try {
         getAlgorithmCollection().getRecalculateTaskScheduleAlgorithm().run(milestones);
       } catch (TaskDependencyException e) {
-        GPLogger.log(e);
+        log.error("Exception", e);
       }
     }
   }

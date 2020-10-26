@@ -29,7 +29,7 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.resource.HumanResource;
 import net.sourceforge.ganttproject.resource.HumanResourceManager;
@@ -41,6 +41,7 @@ import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
 import net.sourceforge.ganttproject.util.ColorConvertion;
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -53,12 +54,16 @@ import java.util.Scanner;
 import java.util.SortedMap;
 import java.util.logging.Level;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Class responsible for processing task records in CSV import
  *
  * @author dbarashev (Dmitry Barashev)
  */
 class TaskRecords extends RecordGroup {
+  private final Logger log = getLogger(getClass());
+
   static final Comparator<String> OUTLINE_NUMBER_COMPARATOR = new Comparator<String>() {
     @Override
     public int compare(String s1, String s2) {
@@ -200,8 +205,8 @@ class TaskRecords extends RecordGroup {
           builder = builder.withCost(new BigDecimal(cost));
         }
       } catch (NumberFormatException e) {
-        GPLogger.logToLogger(e);
-        GPLogger.log(String.format("Failed to parse %s as cost value", record.get(TaskDefaultColumn.COST.getName())));
+        log.error("Exception", e);
+        log.error(String.format("Failed to parse %s as cost value", record.get(TaskDefaultColumn.COST.getName())));
       }
     }
     Task task = builder.build();
@@ -222,7 +227,7 @@ class TaskRecords extends RecordGroup {
       }
       CustomPropertyDefinition def = taskManager.getCustomPropertyManager().getCustomPropertyDefinition(customField);
       if (def == null) {
-        GPLogger.logToLogger("Can't find custom field with name=" + customField + " value=" + value);
+        log.warn("Can't find custom field with name=" + customField + " value=" + value);
         continue;
       }
       task.getCustomValues().addCustomProperty(def, value);
@@ -379,10 +384,10 @@ class TaskRecords extends RecordGroup {
           constructor.get();
         }
       } catch (IllegalArgumentException e) {
-        GPLogger.logToLogger(String.format("%s\nwhen parsing predecessor specification %s of task %s",
+        log.error(String.format("%s\nwhen parsing predecessor specification %s of task %s",
             e.getMessage(), entry.getValue(), successor));
       } catch (TaskDependencyException e) {
-        GPLogger.logToLogger(e);
+        log.error("Exception", e);
       }
     }
   }

@@ -55,7 +55,7 @@ import net.sf.mpxj.mspdi.MSPDIReader;
 import net.sf.mpxj.reader.ProjectReader;
 import net.sourceforge.ganttproject.CustomPropertyClass;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.GanttTask;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.TaskTreeUIFacade;
@@ -72,6 +72,7 @@ import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstr
 import net.sourceforge.ganttproject.task.dependency.constraint.StartFinishConstraintImpl;
 import net.sourceforge.ganttproject.task.dependency.constraint.StartStartConstraintImpl;
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -99,7 +100,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 class ProjectFileImporter {
+  private static final Logger log = getLogger(ProjectFileImporter.class);
+
   private final IGanttProject myNativeProject;
   private final ProjectReader myReader;
   private final File myForeignFile;
@@ -160,7 +165,7 @@ class ProjectFileImporter {
     try {
       transformer.transform(new StreamSource(inputFile), new StreamResult(transformationOut));
     } catch (TransformerException e) {
-      GPLogger.log(new RuntimeException("Failed to transform file=" + inputFile.getAbsolutePath(), e));
+      log.error("Failed to transform file=" + inputFile.getAbsolutePath(), e);
     }
 
     return new ByteArrayInputStream(transformationOut.toByteArray());
@@ -708,7 +713,7 @@ class ProjectFileImporter {
             }
             dependency.setHardness(TaskDependency.Hardness.parse(getTaskManager().getDependencyHardnessOption().getValue()));
           } catch (TaskDependencyException e) {
-            GPLogger.getLogger("MSProject").log(Level.SEVERE, "Failed to import relation=" + r, e);
+            log.error("Failed to import relation=" + r, e);
             myErrors.add(Pair.create(Level.SEVERE, String.format("Failed to import relation=%s: %s", r, e.getMessage())));
           }
         }

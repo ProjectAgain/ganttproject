@@ -18,32 +18,31 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.calendar;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.eclipse.core.runtime.Platform;
-import org.xml.sax.Attributes;
-
+import biz.ganttproject.core.calendar.GPCalendar;
+import biz.ganttproject.core.calendar.GPCalendarCalc;
+import biz.ganttproject.core.calendar.WeekendCalendarImpl;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.io.XmlParser;
 import net.sourceforge.ganttproject.parser.AbstractTagHandler;
 import net.sourceforge.ganttproject.parser.HolidayTagHandler;
 import net.sourceforge.ganttproject.parser.ParsingListener;
 import net.sourceforge.ganttproject.parser.TagHandler;
 import net.sourceforge.ganttproject.util.FileUtil;
-import biz.ganttproject.core.calendar.GPCalendar;
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.calendar.WeekendCalendarImpl;
+import org.eclipse.core.runtime.Platform;
+import org.slf4j.Logger;
+import org.xml.sax.Attributes;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Reads calendars in XML format from GanttProject's installation directory.
@@ -51,6 +50,8 @@ import biz.ganttproject.core.calendar.WeekendCalendarImpl;
  * @author dbarashev (Dmitry Barashev)
  */
 public class GPCalendarProvider {
+  private static final Logger log = getLogger(GPCalendarProvider.class);
+
   private static class CalendarTagHandler extends AbstractTagHandler {
     private final GPCalendarCalc myCalendar;
     private final HolidayTagHandler myHolidayHandler;
@@ -89,7 +90,7 @@ public class GPCalendarProvider {
       parser.parse(new BufferedInputStream(new FileInputStream(resource)));
       return calendar;
     } catch (IOException e) {
-      GPLogger.logToLogger(e);
+      log.error("Exception", e);
       return null;
     }
   }
@@ -111,15 +112,15 @@ public class GPCalendarProvider {
                 calendars.add(calendar);
               }
             } catch (Throwable e) {
-              GPLogger.logToLogger(String.format("Failure when reading calendar file %s", f.getAbsolutePath()));
-              GPLogger.logToLogger(e);
+              log.error("Failure when reading calendar file {}", f.getAbsolutePath());
+              log.error("Exception", e);
             }
           }
         }
         return calendars;
       }
     } catch (IOException e) {
-      GPLogger.logToLogger(e);
+      log.error("Exception", e);
     }
     return Collections.emptyList();
   }

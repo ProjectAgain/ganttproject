@@ -20,13 +20,14 @@ package net.sourceforge.ganttproject.export;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.PluginPreferencesImpl;
 import net.sourceforge.ganttproject.plugins.PluginManager;
 import net.sourceforge.ganttproject.task.Task;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
 import org.w3c.util.DateParser;
 
 import java.io.File;
@@ -37,7 +38,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class CommandLineExportApplication {
+  private final Logger log = getLogger(getClass());
+
   public static class Args {
     @Parameter(names = "-export", description = "Export format")
     public String exporter;
@@ -88,7 +93,7 @@ public class CommandLineExportApplication {
       return false;
     }
     Exporter exporter = myFlag2exporter.get(myArgs.exporter);
-    GPLogger.log("Using exporter=" + exporter);
+    log.info("Using exporter={}", exporter);
     if (exporter == null) {
       return false;
     }

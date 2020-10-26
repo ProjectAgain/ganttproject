@@ -18,27 +18,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
+import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.task.CustomColumnsException;
+import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.task.TaskManager;
+import org.slf4j.Logger;
+import org.w3c.util.DateParser;
+import org.w3c.util.InvalidDateException;
+import org.xml.sax.Attributes;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.GPLogger;
-import net.sourceforge.ganttproject.task.CustomColumnsException;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
-
-import org.w3c.util.DateParser;
-import org.w3c.util.InvalidDateException;
-import org.xml.sax.Attributes;
-
-import biz.ganttproject.core.time.CalendarFactory;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author bbaranne Mar 10, 2005
  */
 public class CustomPropertiesTagHandler extends AbstractTagHandler implements ParsingListener {
+  private final Logger log = getLogger(getClass());
+
   private TaskManager taskManager = null;
 
   private ParsingContext parsingContext = null;
@@ -95,9 +97,7 @@ public class CustomPropertiesTagHandler extends AbstractTagHandler implements Pa
           try {
             value = CalendarFactory.createGanttCalendar(DateParser.parse(valueStr));
           } catch (InvalidDateException e) {
-            if (!GPLogger.log(e)) {
-              e.printStackTrace(System.err);
-            }
+            log.error("Exception", e);
           }
         }
       }
@@ -105,9 +105,7 @@ public class CustomPropertiesTagHandler extends AbstractTagHandler implements Pa
         // System.out.println(task.getName());
         task.getCustomValues().setValue(cc, value);
       } catch (CustomColumnsException e) {
-        if (!GPLogger.log(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
       }
     }
   }

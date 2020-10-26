@@ -18,16 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.MessageFormat;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.document.DocumentManager;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -36,10 +28,22 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
+import org.slf4j.Logger;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.MessageFormat;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class WebPublisher {
+  private static final Logger log = getLogger(WebPublisher.class);
 
   public static class Ftp {
+    private final Logger log = getLogger(getClass());
+
     private final FTPClient ftpClient = new FTPClient();
     private boolean isLoggedIn;
     private boolean isConnected;
@@ -64,7 +68,7 @@ public class WebPublisher {
       isLoggedIn = true;
       ftpClient.enterLocalPassiveMode();
       if (!FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
-        GPLogger.getLogger(WebPublisher.class).warning(
+        log.warn(
             "Failed to enter passive mode on FTP server=" + options.getServerName() + " Reply message:"
                 + ftpClient.getReplyString());
         ftpClient.enterLocalActiveMode();
@@ -121,7 +125,7 @@ public class WebPublisher {
           final Ftp ftp = new Ftp();
           IStatus status = ftp.loginAndChangedir(options);
           if (!status.isOK()) {
-            GPLogger.log(status.getMessage());
+            log.error(status.getMessage());
             return status;
           }
           for (int i = 0; i < exportFiles.length; i++) {
@@ -138,7 +142,7 @@ public class WebPublisher {
                 ftp.detach();
                 return Status.OK_STATUS;
               } catch (IOException e) {
-                GPLogger.log(e);
+                log.error("Exception", e);
                 return Status.CANCEL_STATUS;
               }
             }
@@ -147,13 +151,9 @@ public class WebPublisher {
           finishingJob.schedule();
           finishingJob.join();
         } catch (IOException e) {
-          if (!GPLogger.log(e)) {
-            e.printStackTrace(System.err);
-          }
+          log.error("Exception", e);
         } catch (InterruptedException e) {
-          if (!GPLogger.log(e)) {
-            e.printStackTrace(System.err);
-          }
+          log.error("Exception", e);
         }
         return Status.OK_STATUS;
       }
@@ -169,17 +169,14 @@ public class WebPublisher {
         try {
           IStatus ftpStatus = ftp.put(file);
           if (!ftpStatus.isOK()) {
-            GPLogger.getLogger(WebPublisher.class).warning(ftpStatus.getMessage());
+            log.warn(ftpStatus.getMessage());
             return ftpStatus;
           }
           monitor.worked(1);
           return Status.OK_STATUS;
         } catch (IOException e) {
-          if (!GPLogger.log(e)) {
-            e.printStackTrace(System.err);
-          }
+          log.error("Exception", e);
           return Status.CANCEL_STATUS;
-        } finally {
         }
       }
     };

@@ -32,7 +32,6 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.gui.AbstractTableAndActionsComponent;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.UIUtil;
@@ -42,6 +41,7 @@ import net.sourceforge.ganttproject.gui.options.OptionsPageBuilder.ValueValidato
 import net.sourceforge.ganttproject.gui.taskproperties.CommonPanel;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -59,6 +59,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Implements a calendar editor component which consists of a table with calendar events (three columns: date, title, type)
  * and Add/Delete buttons
@@ -66,6 +68,7 @@ import java.util.List;
  * @author dbarashev (Dmitry Barashev)
  */
 public class CalendarEditorPanel {
+  private final Logger log = getLogger(getClass());
   private static String getI18NedEventType(CalendarEvent.Type type) {
     return GanttLanguage.getInstance().getText(
         "calendar.editor.column." + TableModelImpl.Column.TYPE.name().toLowerCase() + ".value." + type.name().toLowerCase());
@@ -377,6 +380,7 @@ public class CalendarEditorPanel {
   }
 
   private static class TableModelImpl extends AbstractTableModel {
+    private final Logger log = getLogger(getClass());
     private static enum Column {
       DATES(CalendarEvent.class, null), SUMMARY(String.class, ""), TYPE(String.class, ""), COLOR(Color.class, Color.GRAY);
 
@@ -493,7 +497,7 @@ public class CalendarEditorPanel {
           Date date = GanttLanguage.getInstance().getShortDateFormat().parse(value);
           newEvent = CalendarEvent.newEvent(date, e.isRecurring, e.getType(), e.getTitle(), e.getColor());
         } catch (ParseException e1) {
-          GPLogger.log(e1);
+          log.error("Exception", e1);
         }
         break;
       case SUMMARY:

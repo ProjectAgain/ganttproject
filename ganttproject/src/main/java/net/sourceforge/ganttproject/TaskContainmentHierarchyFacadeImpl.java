@@ -32,6 +32,7 @@ import net.sourceforge.ganttproject.util.collect.Pair;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableNode;
+import org.slf4j.Logger;
 
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -44,7 +45,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 class TaskContainmentHierarchyFacadeImpl implements TaskContainmentHierarchyFacade {
+  private final Logger log = getLogger(getClass());
+
   private Map<Task, MutableTreeTableNode> myTask2treeNode = new HashMap<Task, MutableTreeTableNode>();
   private Map<Task, Integer> myTask2index = new LinkedHashMap<Task, Integer>();
   private Task myRootTask;
@@ -226,7 +231,7 @@ class TaskContainmentHierarchyFacadeImpl implements TaskContainmentHierarchyFaca
   public void move(Task whatMove, Task whereMove) {
     MutableTreeTableNode targetNode = myTask2treeNode.get(whereMove);
     if (targetNode == null) {
-      GPLogger.log("Failed to find tree node for task=" + whereMove);
+      log.error("Failed to find tree node for task={}", whereMove);
       return;
     }
     MutableTreeTableNode currentNode = myTask2treeNode.get(whatMove);

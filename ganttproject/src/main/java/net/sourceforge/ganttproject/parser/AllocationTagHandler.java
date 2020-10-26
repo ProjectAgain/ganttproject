@@ -18,12 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.resource.HumanResource;
 import net.sourceforge.ganttproject.resource.HumanResourceManager;
 import net.sourceforge.ganttproject.roles.Role;
@@ -33,13 +27,22 @@ import net.sourceforge.ganttproject.roles.RoleSet;
 import net.sourceforge.ganttproject.task.ResourceAssignment;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
-
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author bard
  */
 public class AllocationTagHandler extends AbstractTagHandler implements  ParsingListener {
+  private final Logger log = getLogger(getClass());
+
   private HumanResourceManager myResourceManager;
 
   private TaskManager myTaskManager;
@@ -62,7 +65,7 @@ public class AllocationTagHandler extends AbstractTagHandler implements  Parsing
       loadAllocation(attrs);
       return true;
     } catch (FileFormatException e) {
-      GPLogger.log(e);
+      log.error("Exception", e);
       return false;
     }
   }

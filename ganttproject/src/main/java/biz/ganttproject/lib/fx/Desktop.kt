@@ -1,6 +1,6 @@
 package biz.ganttproject.lib.fx
 
-import net.sourceforge.ganttproject.GPLogger
+import org.slf4j.LoggerFactory
 import java.awt.Desktop
 import java.io.IOException
 import java.net.URI
@@ -15,9 +15,9 @@ fun openInBrowser(url: String) {
     try {
       Desktop.getDesktop().browse(URI(url))
     } catch (e: IOException) {
-      GPLogger.log(e)
+      LoggerFactory.getLogger("biz.ganttproject.lib.fx.openInBrowser").error("{}", e)
     } catch (e: URISyntaxException) {
-      GPLogger.log(e)
+      LoggerFactory.getLogger("biz.ganttproject.lib.fx.openInBrowser").error("{}", e)
     }
   }
 }

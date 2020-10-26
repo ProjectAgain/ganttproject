@@ -3,7 +3,7 @@ Copyright 2003-2012 Dmitry Barashev, GanttProject Team
 
 This file is part of GanttProject, an opensource project management tool.
 
-GanttProject is free software: you can redistribute it and/or modify 
+GanttProject is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
@@ -18,6 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.document;
 
+import biz.ganttproject.core.option.StringOption;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.slf4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,14 +30,12 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import static org.slf4j.LoggerFactory.getLogger;
 
-import biz.ganttproject.core.option.StringOption;
-
-import net.sourceforge.ganttproject.GPLogger;
 
 public class FtpDocument extends AbstractURLDocument {
+  private final Logger log = getLogger(getClass());
+
   private static final Object EMPTY_STRING = "";
   private final URI myURI;
 
@@ -57,19 +60,13 @@ public class FtpDocument extends AbstractURLDocument {
       urlAsString = myURI.toString();
       myURI.toURL().openConnection().connect();
     } catch (URISyntaxException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
       throw new RuntimeException("Failed to create FTP document addressed by URL=" + urlAsString, e);
     } catch (MalformedURLException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace();
-      }
+      log.error("Exception", e);
       throw new RuntimeException("Failed to create FTP document addressed by URL=" + urlAsString, e);
     } catch (IOException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace();
-      }
+      log.error("Exception", e);
       throw new RuntimeException("Failed to create FTP document addressed by URL=" + urlAsString, e);
     }
   }

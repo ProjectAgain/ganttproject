@@ -18,22 +18,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui;
 
-import javax.swing.Action;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.action.CancelAction;
 import net.sourceforge.ganttproject.gui.UIFacade.Dialog;
 
+import javax.swing.*;
+
 /**
  * Small utility to show logs in a dialog.
- * 
+ *
  * @author dbarashev (Dmitry Barashev)
  */
 public class ViewLogDialog {
   public static void show(UIFacade uiFacade) {
-    JTextArea textArea = new JTextArea(GPLogger.readLog(), 20, 80);
+    JTextArea textArea = new JTextArea("TODO: show log", 20, 80); // FIXME show log entries
     JScrollPane scrollPane = new JScrollPane(textArea);
     Dialog dlg = uiFacade.createDialog(scrollPane, new Action[] { CancelAction.CLOSE }, "");
     dlg.show();

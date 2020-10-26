@@ -43,6 +43,7 @@ import net.sourceforge.ganttproject.roles.RoleSet;
 import net.sourceforge.ganttproject.util.ColorConvertion;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -71,10 +72,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * This class is able to load and save options on the file
  */
 public class GanttOptions extends SaverBase {
+  private final Logger log = getLogger(getClass());
 
   private int x = 0, y = 0, width = 800, height = 600;
   private boolean isMaximized;
@@ -229,7 +233,7 @@ public class GanttOptions extends SaverBase {
       outFile.flush();
       outFile.close();
     } catch (Throwable e) {
-      GPLogger.log(e);
+      log.error("Exception", e);
     }
   }
 
@@ -379,7 +383,7 @@ public class GanttOptions extends SaverBase {
     savePreferences(myPluginPreferencesRootNode.node("/instance"), handler);
     endElement("ganttproject-options", handler);
 
-    GPLogger.log("[GanttOptions] save(): finished!!");
+    log.info("[GanttOptions] save(): finished!!");
     handler.endDocument();
   }
 
@@ -471,9 +475,7 @@ public class GanttOptions extends SaverBase {
       loadRoleSets(file);
 
     } catch (Exception e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
       return false;
     }
 

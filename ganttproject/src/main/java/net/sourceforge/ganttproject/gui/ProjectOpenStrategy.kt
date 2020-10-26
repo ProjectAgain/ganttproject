@@ -38,7 +38,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import net.sourceforge.ganttproject.GPLogger
 import net.sourceforge.ganttproject.IGanttProject
 import net.sourceforge.ganttproject.action.GPAction
 import net.sourceforge.ganttproject.action.OkAction
@@ -48,6 +47,7 @@ import net.sourceforge.ganttproject.task.TaskImpl
 import net.sourceforge.ganttproject.task.TaskManager
 import net.sourceforge.ganttproject.task.algorithm.AlgorithmCollection
 import org.jdesktop.swingx.JXRadioGroup
+import org.slf4j.LoggerFactory
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
 import javax.swing.*
@@ -78,6 +78,8 @@ internal class ProjectOpenStrategy(project: IGanttProject, uiFacade: UIFacade) :
     UNKNOWN, TRUE, FALSE
   }
 
+  private val log = LoggerFactory.getLogger(javaClass)
+
   init {
     myDiagnostics = ProjectOpenDiagnosticImpl(myUiFacade)
     myAlgs = myProject.taskManager.algorithmCollection
@@ -93,7 +95,7 @@ internal class ProjectOpenStrategy(project: IGanttProject, uiFacade: UIFacade) :
       try {
         c.close()
       } catch (e: Exception) {
-        GPLogger.log(e)
+        log.error("exception",e)
       }
 
     }
@@ -216,11 +218,6 @@ internal class ProjectOpenStrategy(project: IGanttProject, uiFacade: UIFacade) :
     }
   }
 
-  private fun handleDocumentException(ex: Document.DocumentException) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
-
   // First we open file "as is", that is, without running any algorithms which
   // change task dates.
   @Throws(Exception::class)
@@ -327,7 +324,7 @@ internal class ProjectOpenStrategy(project: IGanttProject, uiFacade: UIFacade) :
       try {
         taskManager.algorithmCollection.scheduler.run()
       } catch (e: Exception) {
-        GPLogger.logToLogger(e)
+        log.error("exception",e)
       }
 
     }
@@ -386,7 +383,7 @@ internal class ProjectOpenStrategy(project: IGanttProject, uiFacade: UIFacade) :
         try {
           this@ProjectOpenStrategy.close()
         } catch (e: Exception) {
-          GPLogger.log(e)
+          log.error("exception",e)
         }
       })
       processTasks(myTasks)

@@ -18,7 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package biz.ganttproject.impex.ical;
 
-import biz.ganttproject.LoggerApi;
 import biz.ganttproject.app.DefaultLocalizer;
 import biz.ganttproject.app.InternationalizationKt;
 import biz.ganttproject.core.calendar.CalendarEvent;
@@ -29,20 +28,16 @@ import com.google.common.collect.Lists;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.data.UnfoldingReader;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.Recur;
+import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.RRule;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.util.CompatibilityHints;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.calendar.CalendarEditorPanel;
 import net.sourceforge.ganttproject.importer.ImporterBase;
 import net.sourceforge.ganttproject.wizard.AbstractWizard;
 import net.sourceforge.ganttproject.wizard.WizardPage;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.io.File;
@@ -51,6 +46,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Implements an import wizard plugin responsible for importing ICS files.
  * This plugin adds file chooser page (2nd in the wizard) and calendar editor page (3rd in the wizard)
@@ -58,7 +55,8 @@ import java.util.List;
  * @author dbarashev
  */
 public class IcsFileImporter extends ImporterBase {
-  private static final LoggerApi LOGGER = GPLogger.create("Import.Ics");
+  private static final Logger log = getLogger(IcsFileImporter.class);
+
   private static DefaultLocalizer ourLocalizer = InternationalizationKt.getRootLocalizer();
   private final CalendarEditorPage myEditorPage;
 
@@ -137,10 +135,10 @@ public class IcsFileImporter extends ImporterBase {
             myPanel.add(new CalendarEditorPanel(wizard.getUIFacade(), myEvents, null).createComponent());
             return;
           } else {
-            LOGGER.error("No events found in file {}", new Object[]{myFile}, Collections.emptyMap(), null);
+            log.error("No events found in file {}", new Object[]{myFile}, Collections.emptyMap(), null);
           }
         } else {
-          LOGGER.error("File {} is NOT readable", new Object[]{myFile}, Collections.emptyMap(), null);
+          log.error("File {} is NOT readable", new Object[]{myFile}, Collections.emptyMap(), null);
         }
         myPanel.add(new JLabel(ourLocalizer.formatText("impex.ics.filePage.error.noEvents", myFile.getAbsolutePath())));
       }
@@ -161,12 +159,12 @@ public class IcsFileImporter extends ImporterBase {
         if (comp instanceof VEvent) {
           VEvent event = (VEvent) comp;
           if (event.getStartDate() == null) {
-            LOGGER.debug("No start date found, ignoring. Event={}", new Object[] {event}, Collections.emptyMap());
+            log.debug("No start date found, ignoring. Event={}", event);
             continue;
           }
           Date eventStartDate = event.getStartDate().getDate();
           if (event.getEndDate() == null) {
-            LOGGER.debug("No end date found, using start date instead. Event={}", new Object[] {event}, Collections.emptyMap());
+            log.debug("No end date found, using start date instead. Event={}", event);
           }
           Date eventEndDate = event.getEndDate() == null ? eventStartDate : event.getEndDate().getDate();
           TimeDuration oneDay = GPTimeUnitStack.createLength(GPTimeUnitStack.DAY, 1);
@@ -191,7 +189,7 @@ public class IcsFileImporter extends ImporterBase {
       }
       return gpEvents;
     } catch (IOException | ParserException e) {
-      GPLogger.log(e);
+      log.error("Exception", e);
       return null;
     }
   }

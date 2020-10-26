@@ -18,13 +18,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject;
 
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
+
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class PluginPreferencesImpl implements Preferences {
+  private final Logger log = getLogger(getClass());
 
   private final String myName;
   private final Preferences myParent;
@@ -101,7 +105,7 @@ public class PluginPreferencesImpl implements Preferences {
     try {
       return Boolean.parseBoolean(value);
     } catch (Exception e) {
-      GPLogger.log(new RuntimeException("Failed to parse value=" + value + " as boolean", e));
+      log.error("Failed to parse value=" + value + " as boolean", e);
       return false;
     }
   }

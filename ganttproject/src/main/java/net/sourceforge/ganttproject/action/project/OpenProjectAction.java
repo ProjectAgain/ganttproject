@@ -18,15 +18,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.action.project;
 
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.action.GPAction;
 import net.sourceforge.ganttproject.gui.ProjectUIFacade;
 import net.sourceforge.ganttproject.gui.UIUtil;
+import org.slf4j.Logger;
 
 import java.awt.event.ActionEvent;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class OpenProjectAction extends GPAction {
+  private final Logger log = getLogger(getClass());
   private ProjectUIFacade myProjectUiFacade;
   private IGanttProject myProject;
 
@@ -60,7 +64,7 @@ public class OpenProjectAction extends GPAction {
     try {
       myProjectUiFacade.openProject(myProject);
     } catch (Exception ex) {
-      GPLogger.log(ex);
+      log.error("Exception", ex);
     }
   }
 

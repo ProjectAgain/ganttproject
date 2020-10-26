@@ -18,24 +18,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import java.io.File;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.List;
-
-import javax.swing.SwingUtilities;
-
-import org.osgi.service.prefs.Preferences;
-
 import biz.ganttproject.core.option.BooleanOption;
 import biz.ganttproject.core.option.ChangeValueEvent;
 import biz.ganttproject.core.option.ChangeValueListener;
 import biz.ganttproject.core.option.DefaultBooleanOption;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.projectwizard.WizardImpl;
 import net.sourceforge.ganttproject.plugins.PluginManager;
+import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
+
+import javax.swing.*;
+import java.io.File;
+import java.net.URL;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author bard
@@ -81,6 +80,7 @@ public class ExportFileWizardImpl extends WizardImpl {
   protected void onOkPressed() {
     super.onOkPressed();
     SwingUtilities.invokeLater(new Runnable() {
+      private final Logger log = getLogger(getClass());
       @Override
       public void run() {
         try {
@@ -89,7 +89,7 @@ public class ExportFileWizardImpl extends WizardImpl {
             myState.getExporter().run(new File(myState.getUrl().toURI()), finalizationJob);
           }
         } catch (Exception e) {
-          GPLogger.log(e);
+          log.error("Exception", e);
         }
       }
     });

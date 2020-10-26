@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.mouse;
 
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.chart.TaskInteractionHintRenderer;
 import net.sourceforge.ganttproject.chart.mouse.MouseInteraction.TimelineFacade;
 import net.sourceforge.ganttproject.gui.UIFacade;
@@ -26,12 +26,17 @@ import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskMutator;
 import net.sourceforge.ganttproject.task.algorithm.RecalculateTaskScheduleAlgorithm;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import org.slf4j.Logger;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public abstract class ChangeTaskBoundaryInteraction extends MouseInteractionBase {
+  private final Logger log = getLogger(getClass());
+
   private TaskInteractionHintRenderer myLastNotes;
 
   private final Task myTask;
@@ -76,9 +81,7 @@ public abstract class ChangeTaskBoundaryInteraction extends MouseInteractionBase
     try {
       myTaskScheduleAlgorithm.run();
     } catch (TaskDependencyException e) {
-      if (!GPLogger.log(e)) {
-        e.printStackTrace(System.err);
-      }
+      log.error("Exception", e);
       myUiFacade.showErrorDialog(e);
     }
     myUiFacade.getActiveChart().reset();

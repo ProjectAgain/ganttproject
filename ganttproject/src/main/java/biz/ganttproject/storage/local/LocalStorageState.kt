@@ -22,10 +22,10 @@ import biz.ganttproject.app.RootLocalizer
 import biz.ganttproject.storage.*
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
-import net.sourceforge.ganttproject.GPLogger
 import net.sourceforge.ganttproject.document.Document
 import net.sourceforge.ganttproject.document.FileDocument
 import org.controlsfx.validation.ValidationResult
+import org.slf4j.LoggerFactory
 import java.io.File
 
 /**
@@ -127,4 +127,4 @@ class LocalStorageState(val currentDocument: Document,
 }
 
 private val i18n = RootLocalizer.createWithRootKey("storageService.local", BROWSE_PANE_LOCALIZER)
-private val LOG = GPLogger.create("LocalStorage")
+private val LOG = LoggerFactory.getLogger("LocalStorage")

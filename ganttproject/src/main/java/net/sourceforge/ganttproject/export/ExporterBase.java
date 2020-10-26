@@ -18,33 +18,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobManager;
-import org.eclipse.core.runtime.jobs.Job;
-import org.osgi.service.prefs.Preferences;
-import org.w3c.util.DateParser;
-import org.w3c.util.InvalidDateException;
-
 import biz.ganttproject.core.option.DefaultDateOption;
 import biz.ganttproject.core.option.GPOption;
 import biz.ganttproject.core.option.GPOptionGroup;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttExportSettings;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.zoom.ZoomManager.ZoomState;
 import net.sourceforge.ganttproject.language.GanttLanguage;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
+import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
+import org.w3c.util.DateParser;
+import org.w3c.util.InvalidDateException;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public abstract class ExporterBase implements Exporter {
+  private final Logger log = getLogger(getClass());
+
   private IGanttProject myProject;
   private Chart myGanttChart;
   private Chart myResourceChart;
@@ -125,7 +127,7 @@ public abstract class ExporterBase implements Exporter {
           result.setStartDate(DateParser.parse(rangeBounds[0]));
           result.setEndDate(DateParser.parse(rangeBounds[1]));
         } catch (InvalidDateException e) {
-          GPLogger.log(e);
+          log.error("Exception", e);
         }
         result.setWidth(-1);
       }
@@ -164,13 +166,13 @@ public abstract class ExporterBase implements Exporter {
           try {
             state = job.run();
           } catch (Throwable e) {
-            GPLogger.log(new RuntimeException("Export failure. Failed subtask: " + job.getName(), e));
+            log.error("Export failure. Failed subtask: " + job.getName(), e);
             monitor.setCanceled(true);
             continue;
           }
 
           if (state.isOK() == false) {
-            GPLogger.log(new RuntimeException("Export failure. Failed subtask: " + job.getName(), state.getException()));
+            log.error("Export failure. Failed subtask: " + job.getName(), state.getException());
             monitor.setCanceled(true);
             continue;
           }

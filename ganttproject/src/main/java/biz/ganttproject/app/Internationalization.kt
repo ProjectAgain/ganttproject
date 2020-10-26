@@ -20,8 +20,8 @@ package biz.ganttproject.app
 
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ObservableValue
-import net.sourceforge.ganttproject.GPLogger
 import net.sourceforge.ganttproject.util.PropertiesUtil
+import org.slf4j.LoggerFactory
 import java.text.MessageFormat
 import java.util.*
 
@@ -43,6 +43,8 @@ class LocalizedString(
   private val observable: SimpleStringProperty = SimpleStringProperty(),
   private var args: List<String> = emptyList()
 ) : ObservableValue<String> by observable {
+  private val log = LoggerFactory.getLogger(javaClass)
+
   init {
     observable.value = build()
   }
@@ -172,7 +174,7 @@ private fun getResourceBundle(locale: Locale, withFallback: Boolean): ResourceBu
       null
     }
   } catch (ex: MissingResourceException) {
-    GPLogger.logToLogger(String.format("Can't find bundle: path=%s locale=i18n plugin", locale))
+    LoggerFactory.getLogger("biz.ganttproject.app").error(String.format("Can't find bundle: path=%s locale=i18n plugin", locale))
     null
   }
 }

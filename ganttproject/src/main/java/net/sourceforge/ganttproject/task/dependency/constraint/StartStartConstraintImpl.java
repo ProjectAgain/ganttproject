@@ -18,20 +18,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.task.dependency.constraint;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import biz.ganttproject.core.time.CalendarFactory;
 import biz.ganttproject.core.time.GanttCalendar;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskActivity;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency.ActivityBinding;
+import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
+import org.slf4j.Logger;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Dependent task starts not earlier than dependee starts
@@ -39,6 +40,8 @@ import net.sourceforge.ganttproject.task.dependency.TaskDependency.ActivityBindi
  * @author bard
  */
 public class StartStartConstraintImpl extends ConstraintImpl implements TaskDependencyConstraint {
+  private final Logger log = getLogger(getClass());
+
   public StartStartConstraintImpl() {
     super(TaskDependencyConstraint.Type.startstart, GanttLanguage.getInstance().getText("startstart"));
   }
@@ -84,11 +87,11 @@ public class StartStartConstraintImpl extends ConstraintImpl implements TaskDepe
     List<TaskActivity> dependantActivities = getDependency().getDependant().getActivities();
     List<TaskActivity> dependeeActivities = getDependency().getDependee().getActivities();
     if (dependantActivities.isEmpty()) {
-      GPLogger.logToLogger("Task " + getDependency().getDependant() + " has no activities");
+      log.info("Task {} has no activities", getDependency().getDependant());
       return null;
     }
     if (dependeeActivities.isEmpty()) {
-      GPLogger.logToLogger("Task " + getDependency().getDependee() + " has no activities");
+      log.info("Task {} has no activities", getDependency().getDependee());
       return null;
     }
     TaskActivity theDependant = dependantActivities.get(0);

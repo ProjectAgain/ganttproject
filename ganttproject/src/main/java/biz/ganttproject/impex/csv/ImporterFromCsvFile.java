@@ -19,18 +19,21 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package biz.ganttproject.impex.csv;
 
 import biz.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.importer.BufferProject;
 import net.sourceforge.ganttproject.importer.ImporterBase;
 import net.sourceforge.ganttproject.importer.ImporterFromGanttFile;
 import net.sourceforge.ganttproject.resource.HumanResourceMerger;
 import net.sourceforge.ganttproject.util.collect.Pair;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Controls the process of importing CSV file.
@@ -38,6 +41,8 @@ import java.util.logging.Level;
  * @author dbarashev (Dmitry Barashev)
  */
 public class ImporterFromCsvFile extends ImporterBase {
+  private final Logger log = getLogger(getClass());
+
   private final HumanResourceMerger.MergeResourcesOption myMergeResourcesOption = new HumanResourceMerger.MergeResourcesOption();
   private final GPOption[] myOptions = new GPOption[] { myMergeResourcesOption };
 
@@ -74,7 +79,7 @@ public class ImporterFromCsvFile extends ImporterBase {
       ImporterFromGanttFile.importBufferProject(getProject(), bufferProject, getUiFacade(), myMergeResourcesOption, null);
       reportErrors(errors, "CSV");
     } catch (IOException e) {
-      GPLogger.log(e);
+      log.error("Exception", e);
     }
   }
 }

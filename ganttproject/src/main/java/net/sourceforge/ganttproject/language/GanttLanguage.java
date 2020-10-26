@@ -22,8 +22,8 @@ package net.sourceforge.ganttproject.language;
 import biz.ganttproject.app.InternationalizationKt;
 import biz.ganttproject.core.option.GPAbstractOption;
 import biz.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.util.PropertiesUtil;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,10 +42,14 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Class for the language
  */
 public class GanttLanguage {
+  private final Logger log = getLogger(getClass());
+
   public class Event extends EventObject {
     public Event(GanttLanguage language) {
       super(language);
@@ -264,7 +268,7 @@ public class GanttLanguage {
         return parsed;
       }
     } catch (ParseException e) {
-      GPLogger.logToLogger(e);
+      log.error("Exception", e);
     }
     return null;
   }

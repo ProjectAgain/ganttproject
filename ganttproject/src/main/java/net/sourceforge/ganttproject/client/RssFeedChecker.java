@@ -27,7 +27,6 @@ import biz.ganttproject.core.option.DefaultEnumerationOption;
 import biz.ganttproject.core.option.GPOptionGroup;
 import biz.ganttproject.core.time.impl.GPTimeUnitStack;
 import com.bardsoftware.eclipsito.update.Updater;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GPVersion;
 import net.sourceforge.ganttproject.gui.NotificationChannel;
 import net.sourceforge.ganttproject.gui.NotificationItem;
@@ -39,6 +38,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Checks GanttProject RSS news feeds once per day
@@ -177,9 +179,10 @@ public class RssFeedChecker {
 
   private Runnable createRssReadCommand() {
     return new Runnable() {
+      private final Logger log = getLogger(getClass());
       @Override
       public void run() {
-        GPLogger.log("Starting RSS check...");
+        log.info("Starting RSS check...");
         HttpClient httpClient = new DefaultHttpClient();
         String url = RSS_URL;
         HttpGet getRssUrl = new HttpGet(url);
@@ -200,7 +203,7 @@ public class RssFeedChecker {
         } finally {
           getRssUrl.releaseConnection();
           httpClient.getConnectionManager().shutdown();
-          GPLogger.log("RSS check finished");
+          log.info("RSS check finished");
         }
       }
 

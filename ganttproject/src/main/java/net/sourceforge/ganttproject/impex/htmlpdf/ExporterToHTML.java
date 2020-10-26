@@ -18,6 +18,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.impex.htmlpdf;
 
+import biz.ganttproject.core.option.GPOptionGroup;
+
+import net.sourceforge.ganttproject.export.ExportException;
+import net.sourceforge.ganttproject.util.FileUtil;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.pf4j.Extension;
+import org.slf4j.Logger;
+import org.xml.sax.SAXException;
+
+import javax.imageio.ImageIO;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,22 +41,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
+import static org.slf4j.LoggerFactory.getLogger;
 
-import net.sourceforge.ganttproject.GPLogger;
-import net.sourceforge.ganttproject.export.ExportException;
-import net.sourceforge.ganttproject.util.FileUtil;
-
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.xml.sax.SAXException;
-
-import biz.ganttproject.core.option.GPOptionGroup;
-
+@Extension
 public class ExporterToHTML extends StylesheetExporterBase {
+  private final Logger log = getLogger(getClass());
+
   static final String GANTT_CHART_FILE_EXTENSION = "png";
   static final String RESOURCE_CHART_FILE_EXTENSION = "res.png";
   private static final String PNG_FORMAT_NAME = "png";
@@ -298,9 +302,7 @@ public class ExporterToHTML extends StylesheetExporterBase {
         URL tasksUrl = new URL(getUrl(), "gantt-resources.xsl");
         TransformerHandler result = mySerializer.createHandler(tasksUrl.toString());
         return result;
-      } catch (MalformedURLException e) {
-        throw new RuntimeException(e);
-      } catch (TransformerConfigurationException e) {
+      } catch (MalformedURLException | TransformerConfigurationException e) {
         throw new RuntimeException(e);
       }
     }
@@ -312,9 +314,7 @@ public class ExporterToHTML extends StylesheetExporterBase {
         File result = new File(imagesUrl.getPath());
         return result;
       } catch (MalformedURLException e) {
-        if (!GPLogger.log(e)) {
-          e.printStackTrace(System.err);
-        }
+        log.error("Exception", e);
         throw new RuntimeException(e);
       }
     }

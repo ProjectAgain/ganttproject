@@ -18,22 +18,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.task.dependency.TaskDependency.Hardness;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency.Hardness;
 import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
-
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class DependencyTagHandler extends AbstractTagHandler implements ParsingListener {
+  private final Logger log = getLogger(getClass());
   private final TaskManager myTaskManager;
 
   private final UIFacade myUIFacade;
@@ -76,7 +78,7 @@ public class DependencyTagHandler extends AbstractTagHandler implements ParsingL
           dep.setHardness(ds.myHardness);
         }
       } catch (TaskDependencyException e) {
-        GPLogger.log(e);
+        log.error("Exception", e);
       }
     }
   }

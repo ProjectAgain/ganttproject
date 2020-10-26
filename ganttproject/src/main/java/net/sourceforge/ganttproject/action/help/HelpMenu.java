@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.action.help;
 
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.action.CancelAction;
 import net.sourceforge.ganttproject.action.GPAction;
@@ -31,6 +31,7 @@ import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.UIUtil;
 import net.sourceforge.ganttproject.gui.ViewLogDialog;
 import net.sourceforge.ganttproject.language.GanttLanguage;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import static biz.ganttproject.app.AboutKt.showAboutDialog;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Collection of actions from Help menu.
@@ -46,6 +48,8 @@ import static biz.ganttproject.app.AboutKt.showAboutDialog;
  * @author dbarashev (Dmitry Barashev)
  */
 public class HelpMenu {
+
+  private final Logger log = getLogger(getClass());
 
   private final AboutAction myAboutAction;
   private final ViewLogAction myViewLogAction;
@@ -94,6 +98,7 @@ public class HelpMenu {
   }
 
   private static class RecoverLastProjectAction extends GPAction {
+    private final Logger log = getLogger(getClass());
     private final UIFacade myUiFacade;
     private final DocumentManager myDocumentManager;
     private final IGanttProject myProject;
@@ -115,7 +120,7 @@ public class HelpMenu {
           runAction(lastAutosaveDocument);
         }
       } catch (IOException e) {
-        GPLogger.log(new RuntimeException("Failed to read autosave documents", e));
+        log.error("Failed to read autosave documents", e);
       }
     }
 
@@ -136,7 +141,7 @@ public class HelpMenu {
               try {
                 prevAutosaveDocument = myDocumentManager.getLastAutosaveDocument(autosaveDocument);
               } catch (IOException e) {
-                GPLogger.log(new RuntimeException("Failed to read autosave documents", e));
+                log.error("Failed to read autosave documents", e);
               }
               if (prevAutosaveDocument != null) {
                 runAction(prevAutosaveDocument);
@@ -156,7 +161,7 @@ public class HelpMenu {
       try {
         myProjectUiFacade.openProject(new ReadOnlyProxyDocument(recoverDocument), myProject, null);
       } catch (Throwable e) {
-        GPLogger.log(new RuntimeException("Failed to recover file " + recoverDocument.getFileName(), e));
+        log.error("Failed to recover file " + recoverDocument.getFileName(), e);
       }
     }
   }

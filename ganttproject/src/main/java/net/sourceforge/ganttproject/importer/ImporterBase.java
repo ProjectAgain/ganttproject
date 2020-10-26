@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.importer;
 
 import biz.ganttproject.core.option.GPOption;
 import biz.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.GPLogger;
+
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.NotificationChannel;
 import net.sourceforge.ganttproject.gui.UIFacade;
@@ -28,6 +28,8 @@ import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.util.collect.Pair;
 import net.sourceforge.ganttproject.wizard.WizardPage;
 import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
@@ -130,7 +132,18 @@ public abstract class ImporterBase implements Importer {
     if (!errors.isEmpty()) {
       StringBuilder builder = new StringBuilder("<table><tr><th>Severity</th><th>Message</th></tr>");
       for (Pair<Level, String> message : errors) {
-        GPLogger.getLogger(loggerName).log(message.first(), message.second());
+        Logger log = LoggerFactory.getLogger(loggerName);
+        if (message.first().equals(Level.SEVERE)) {
+          log.error(message.second());
+        } else if (message.first().equals(Level.WARNING)) {
+          log.warn(message.second());
+        } else if (message.first().equals(Level.INFO)) {
+          log.info(message.second());
+        } else if (message.first().equals(Level.FINE)) {
+          log.debug(message.second());
+        } else if (message.first().equals(Level.FINER) || message.first().equals(Level.FINEST)) {
+          log.trace(message.second());
+        }
         builder.append(String.format("<tr><td valign=top><b>%s</b></td><td valign=top>%s</td></tr>", message.first().getName(), message.second()));
       }
       builder.append("</table>");

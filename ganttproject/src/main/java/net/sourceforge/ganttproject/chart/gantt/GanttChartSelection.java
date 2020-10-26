@@ -20,17 +20,14 @@ package net.sourceforge.ganttproject.chart.gantt;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import net.projectagain.ganttplanner.app.LogMarker;
 import net.sourceforge.ganttproject.AbstractChartImplementation.ChartSelectionImpl;
-import net.sourceforge.ganttproject.GPLogger;
-import net.sourceforge.ganttproject.GPTransferable;
-import net.sourceforge.ganttproject.GanttTreeTable;
-import net.sourceforge.ganttproject.GanttTreeTableModel;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.TreeTableContainer;
+import net.sourceforge.ganttproject.*;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.algorithm.RetainRootsAlgorithm;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.slf4j.Logger;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -40,12 +37,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Implementation of ChartSelection on Gantt chart.
  *
  * @author dbarashev (Dmitry Barashev)
  */
 public class GanttChartSelection extends ChartSelectionImpl implements ClipboardOwner {
+  private final Logger log = getLogger(getClass());
+
   private static final Function<DefaultMutableTreeTableNode, DefaultMutableTreeTableNode> getParentNode = new Function<DefaultMutableTreeTableNode, DefaultMutableTreeTableNode>() {
     @Override
     public DefaultMutableTreeTableNode apply(DefaultMutableTreeTableNode node) {
@@ -102,10 +103,10 @@ public class GanttChartSelection extends ChartSelectionImpl implements Clipboard
 
   public ClipboardContents buildClipboardContents() {
     DefaultMutableTreeTableNode[] selectedNodes = myTree.getSelectedNodes();
-    GPLogger.getLogger("Clipboard").fine(String.format("Selected nodes: %s", Arrays.asList(selectedNodes)));
+    log.debug(LogMarker.CLIPBOARD, String.format("Selected nodes: %s", Arrays.asList(selectedNodes)));
     List<DefaultMutableTreeTableNode> selectedRoots = Lists.newArrayList();
     myRetainRootsAlgorithm.run(selectedNodes, getParentNode, selectedRoots);
-    GPLogger.getLogger("Clipboard").fine(String.format("Roots: %s", selectedRoots));
+    log.debug(LogMarker.CLIPBOARD, String.format("Roots: %s", selectedRoots));
     ClipboardContents result = new ClipboardContents(myTaskManager);
     result.addTasks(Lists.transform(selectedRoots, getTaskFromNode));
     return result;

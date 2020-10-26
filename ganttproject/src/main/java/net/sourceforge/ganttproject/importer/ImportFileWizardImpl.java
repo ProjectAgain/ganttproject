@@ -18,21 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.importer;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.List;
-
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttOptions;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.projectwizard.WizardImpl;
-import net.sourceforge.ganttproject.gui.projectwizard.WizardPage;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.plugins.PluginManager;
 import net.sourceforge.ganttproject.wizard.AbstractWizard;
+
+import java.util.List;
 
 /**
  * @author bard
