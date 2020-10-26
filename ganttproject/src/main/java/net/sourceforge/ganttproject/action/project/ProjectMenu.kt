@@ -24,9 +24,6 @@ import biz.ganttproject.storage.StorageDialogAction
 import biz.ganttproject.storage.StorageDialogBuilder
 import net.sourceforge.ganttproject.GanttProject
 import net.sourceforge.ganttproject.action.GPAction
-import net.sourceforge.ganttproject.document.webdav.WebDavStorageImpl
-import java.util.*
-import javax.swing.AbstractAction
 import javax.swing.Action
 import javax.swing.JMenu
 import javax.swing.JMenuItem
@@ -35,24 +32,22 @@ import javax.swing.JMenuItem
  * Collection of actions present in the project menu
  */
 class ProjectMenu(project: GanttProject, key: String) : JMenu(GPAction.createVoidAction(key)) {
-  private val webdavStorage = project.documentManager.webDavStorageUi as WebDavStorageImpl
 
   private val newProjectAction = NewProjectAction(project)
   val openProjectAction = StorageDialogAction(
-      project.project, project.projectUIFacade, project.documentManager, webdavStorage.serversOption,
-      StorageDialogBuilder.Mode.OPEN, "project.open"
+    project.project, project.projectUIFacade, project.documentManager, StorageDialogBuilder.Mode.OPEN, "project.open"
   )
   val saveProjectAction = SaveProjectAction(project, project.projectUIFacade)
 
   private val saveAsProjectAction = StorageDialogAction(
-      project.project, project.projectUIFacade, project.documentManager, webdavStorage.serversOption,
-      StorageDialogBuilder.Mode.SAVE, "project.saveas"
+    project.project, project.projectUIFacade, project.documentManager,
+    StorageDialogBuilder.Mode.SAVE, "project.saveas"
   )
 
   private val projectSettingsAction = ProjectPropertiesAction(project)
   private val importAction = ProjectImportAction(project.uiFacade, project)
   private val exportAction = ProjectExportAction(
-      project.uiFacade, project, project.ganttOptions.pluginPreferences)
+    project.uiFacade, project, project.ganttOptions.pluginPreferences)
   private val printAction = PrintAction(project)
   private val printPreviewAction = ProjectPreviewAction(project)
   private val exitAction = ExitAction(project)
@@ -64,11 +59,11 @@ class ProjectMenu(project: GanttProject, key: String) : JMenu(GPAction.createVoi
 
   init {
     listOf(
-        newProjectAction, openProjectAction, saveProjectAction, saveAsProjectAction, projectSettingsAction,
-        null,
-        importAction, exportAction, printAction, printPreviewAction,
-        null,
-        exitAction
+      newProjectAction, openProjectAction, saveProjectAction, saveAsProjectAction, projectSettingsAction,
+      null,
+      importAction, exportAction, printAction, printPreviewAction,
+      null,
+      exitAction
     ).forEach { if (it == null) addSeparator() else add(it) }
     toolTipText = null
   }

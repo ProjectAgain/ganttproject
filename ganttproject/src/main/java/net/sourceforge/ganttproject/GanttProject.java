@@ -29,14 +29,10 @@ import biz.ganttproject.core.option.ChangeValueListener;
 import biz.ganttproject.core.option.ColorOption;
 import biz.ganttproject.core.option.DefaultColorOption;
 import biz.ganttproject.core.time.TimeUnitStack;
-import biz.ganttproject.storage.cloud.GPCloudOptions;
-import biz.ganttproject.storage.cloud.GPCloudStatusBar;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.google.common.collect.Lists;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.Scene;
 import net.sourceforge.ganttproject.action.*;
 import net.sourceforge.ganttproject.action.edit.EditMenu;
 import net.sourceforge.ganttproject.action.help.HelpMenu;
@@ -258,7 +254,6 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     options.addOptionGroups(getUIFacade().getResourceChart().getOptionGroups());
     options.addOptionGroups(getProjectUIFacade().getOptionGroups());
     options.addOptionGroups(getDocumentManager().getNetworkOptionGroups());
-    options.addOptions(GPCloudOptions.INSTANCE.getOptionGroup());
     options.addOptions(getRssFeedChecker().getOptions());
 
     System.err.println("2. loading options");
@@ -351,12 +346,12 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     System.err.println("5. calculating size and packing...");
 
     FXToolbar fxToolbar = createToolbar();
-    Platform.runLater(() -> {
-      GPCloudStatusBar cloudStatusBar = new GPCloudStatusBar(myObservableDocument, getUIFacade());
-      Scene statusBarScene = new Scene(cloudStatusBar.getLockPanel(), javafx.scene.paint.Color.TRANSPARENT);
-      statusBarScene.getStylesheets().add("biz/ganttproject/app/StatusBar.css");
-      getStatusBar().setLeftScene(statusBarScene);
-    });
+//    Platform.runLater(() -> {
+//      GPCloudStatusBar cloudStatusBar = new GPCloudStatusBar(myObservableDocument, getUIFacade());
+//      Scene statusBarScene = new Scene(cloudStatusBar.getLockPanel(), javafx.scene.paint.Color.TRANSPARENT);
+//      statusBarScene.getStylesheets().add("biz/ganttproject/app/StatusBar.css");
+//      getStatusBar().setLeftScene(statusBarScene);
+//    });
 
     createContentPane(fxToolbar.getComponent());
     //final FXToolbar toolbar = fxToolbar;
@@ -381,7 +376,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
       @Override
       public void windowOpened(WindowEvent e) {
         System.err.println("Resizing window...");
-        GPLogger.log(String.format("Bounds after opening: %s", GanttProject.this.getBounds()));
+        log.debug(String.format("Bounds after opening: %s", GanttProject.this.getBounds()));
         restoreBounds();
         // It is important to run aligners after look and feel is set and font sizes
         // in the UI manager updated.
@@ -439,7 +434,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
         setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
       }
       Rectangle bounds = new Rectangle(options.getX(), options.getY(), options.getWidth(), options.getHeight());
-      GPLogger.log(String.format("Bounds stored in the  options: %s", bounds));
+      log.debug(String.format("Bounds stored in the  options: %s", bounds));
 
       UIUtil.MultiscreenFitResult fit = UIUtil.multiscreenFit(bounds);
       // If more than 1/4 of the rectangle is visible on screen devices then leave it where it is
@@ -453,7 +448,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
             // If there are no devices where rectangle is visible, fit it on the current device
             bounds = fitBounds(currentFit.argmaxVisibleArea, bounds);
           } else {
-            GPLogger.log(String.format("We have not found the display corresponding to bounds %s. Leaving the window where it is", bounds));
+            log.warn(String.format("We have not found the display corresponding to bounds %s. Leaving the window where it is", bounds));
             return;
           }
         }
@@ -640,7 +635,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
 
   public void doShow() {
     setVisible(true);
-    GPLogger.log(String.format("Bounds after setVisible: %s", getBounds()));
+    log.debug(String.format("Bounds after setVisible: %s", getBounds()));
     DesktopIntegration.setup(GanttProject.this);
     getActiveChart().reset();
     getRssFeedChecker().setOptionsVersion(getGanttOptions().getVersion());
@@ -748,9 +743,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
           success = true;
           break;
         } catch (Throwable e) {
-          if (!GPLogger.log(e)) {
-            e.printStackTrace(System.err);
-          }
+          log.error("Exception", e);
         } finally {
           ((TaskManagerImpl) getTaskManager()).setEventsEnabled(true);
         }
@@ -890,7 +883,6 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
    * The main
    */
   public static boolean main(String[] arg) throws InvocationTargetException, InterruptedException {
-    GPLogger.init();
     CommandLineExportApplication cmdlineApplication = new CommandLineExportApplication();
     final Args mainArgs = new Args();
     try {
@@ -912,7 +904,6 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     }
     if (mainArgs.log && !mainArgs.logFile.trim().isEmpty()) {
       try {
-        GPLogger.setLogFile(mainArgs.logFile);
         File logFile = new File(mainArgs.logFile);
         System.setErr(new PrintStream(new FileOutputStream(logFile)));
         System.out.println("Writing log to " + logFile.getAbsolutePath());
@@ -922,7 +913,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
       }
     }
 
-    GPLogger.logSystemInformation();
+//    GPLogger.logSystemInformation();
     // Check if an export was requested from the command line
     if (cmdlineApplication.export(mainArgs)) {
       // Export succeeded so exit application
@@ -930,7 +921,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     }
 
 
-    AppKt.startUiApp(mainArgs, ganttProject -> null);
+//    AppKt.startUiApp(mainArgs, ganttProject -> null);
     return true;
   }
 

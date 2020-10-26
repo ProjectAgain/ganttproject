@@ -51,8 +51,6 @@ public interface DocumentManager {
 
   GPOptionGroup[] getNetworkOptionGroups();
 
-  DocumentStorageUi getWebDavStorageUi();
-
   abstract class FTPOptions extends GPOptionGroup {
     public FTPOptions(String id, GPOption<?>[] options) {
       super(id, options);

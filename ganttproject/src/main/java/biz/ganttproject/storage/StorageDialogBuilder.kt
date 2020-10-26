@@ -22,7 +22,6 @@ import biz.ganttproject.FXUtil
 import biz.ganttproject.app.DialogController
 import biz.ganttproject.app.RootLocalizer
 import biz.ganttproject.app.createAlertBody
-import biz.ganttproject.storage.cloud.GPCloudStorageOptions
 import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.control.Button
@@ -34,7 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import net.sourceforge.ganttproject.GPLogger
 import net.sourceforge.ganttproject.IGanttProject
 import net.sourceforge.ganttproject.document.Document
 import net.sourceforge.ganttproject.document.DocumentManager
@@ -42,6 +40,7 @@ import net.sourceforge.ganttproject.document.ReadOnlyProxyDocument
 import net.sourceforge.ganttproject.gui.ProjectUIFacade
 import net.sourceforge.ganttproject.language.GanttLanguage
 import org.controlsfx.control.NotificationPane
+import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.util.*
 import java.util.function.Consumer
@@ -57,7 +56,6 @@ class StorageDialogBuilder(
     private val myProject: IGanttProject,
     projectUi: ProjectUIFacade,
     documentManager: DocumentManager,
-    private val cloudStorageOptions: GPCloudStorageOptions,
     private val dialogBuildApi: DialogController) {
   private val myDocumentReceiver: Consumer<Document>
   private val myDocumentUpdater: Consumer<Document>
@@ -81,11 +79,11 @@ class StorageDialogBuilder(
         } catch (e: IOException) {
           killProgress()
           myDialogUi.error(e.message ?: "")
-          LOG.error("Failed to open document {}", document.uri, exception = e)
+          LOG.error("Failed to open document {}: {}", document.uri, e)
         } catch (e: Document.DocumentException) {
           killProgress()
           myDialogUi.error(e.message ?: "")
-          LOG.error("Failed to open document {}", document.uri, exception = e)
+          LOG.error("Failed to open document {}: {}", document.uri, e)
         }
       }
     }
@@ -110,7 +108,7 @@ class StorageDialogBuilder(
         } catch (e: Exception) {
           killProgress()
           myDialogUi.error(e.message ?: "")
-          LOG.error("Failed to save document {}", document.uri, exception = e)
+          LOG.error("Failed to save document {}: {}", document.uri, e)
         }
       }
     }
@@ -214,7 +212,7 @@ class StorageDialogBuilder(
 
   private fun buildStoragePane(mode: Mode): Pane {
     if (myProject.document != null) {
-      val storagePane = StoragePane(cloudStorageOptions, myProject.documentManager, ReadOnlyProxyDocument(myProject.document), myDocumentReceiver, myDocumentUpdater, myDialogUi)
+      val storagePane = StoragePane(myProject.documentManager, ReadOnlyProxyDocument(myProject.document), myDocumentReceiver, myDocumentUpdater, myDialogUi)
       return storagePane.buildStoragePane(mode)
     } else {
       return Pane(Label("No document!"))
@@ -280,4 +278,4 @@ interface StorageUi {
 private var contentPaneWidth = 0.0
 private var contentPaneHeight = 0.0
 
-private val LOG = GPLogger.create("FileDialog")
+private val LOG = LoggerFactory.getLogger("FileDialog")

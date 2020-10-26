@@ -31,7 +31,7 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import net.sourceforge.ganttproject.document.webdav.WebDavResource
+import org.slf4j.LoggerFactory
 
 open class FolderViewCell<T: FolderItem> : ListCell<ListViewItem<T>>() {
   protected fun whenNotEmpty(item: ListViewItem<T>?, empty: Boolean, code: FolderViewCell<T>.(item: ListViewItem<T>) -> Unit) {
@@ -103,15 +103,12 @@ class CellWithButtons<T: FolderItem>(
   override fun updateItem(item: ListViewItem<T>?, empty: Boolean) {
     try {
       doUpdateItem(item, empty)
-    } catch (e: WebDavResource.WebDavException) {
-      exceptionUi(e)
     } catch (e: Exception) {
       println(e)
     }
 
   }
 
-  @Throws(WebDavResource.WebDavException::class)
   private fun doUpdateItem(listViewItem: ListViewItem<T>?, empty: Boolean) {
     whenNotEmpty(listViewItem, empty) { item ->
 
@@ -148,26 +145,26 @@ class CellWithButtons<T: FolderItem>(
     btnBox.styleClass.add("webdav-list-cell-button-pane")
     if (item.isSelected.value && !item.resource.value.isDirectory) {
       val btnDelete =
-          if (isDeleteSupported.get()) {
-            Button("", FontAwesomeIconView(FontAwesomeIcon.TRASH))
-          } else null
+        if (isDeleteSupported.get()) {
+          Button("", FontAwesomeIconView(FontAwesomeIcon.TRASH))
+        } else null
 
       val btnLock =
-          when {
-            isLocked -> Label("unlock", FontAwesomeIconView(FontAwesomeIcon.LOCK)).also {
-              //.also {
-              it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
-              it.tooltip = Tooltip("Click to release lock")
-              it.styleClass.add("item-action")
-            }
-            isLockable -> Label("lock", FontAwesomeIconView(FontAwesomeIcon.UNLOCK)).also {
-              //.also {
-              it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
-              it.tooltip = Tooltip("Click to lock ${item.resource.value.name}")
-              it.styleClass.add("item-action")
-            }
-            else -> null
+        when {
+          isLocked -> Label("unlock", FontAwesomeIconView(FontAwesomeIcon.LOCK)).also {
+            //.also {
+            it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
+            it.tooltip = Tooltip("Click to release lock")
+            it.styleClass.add("item-action")
           }
+          isLockable -> Label("lock", FontAwesomeIconView(FontAwesomeIcon.UNLOCK)).also {
+            //.also {
+            it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
+            it.tooltip = Tooltip("Click to lock ${item.resource.value.name}")
+            it.styleClass.add("item-action")
+          }
+          else -> null
+        }
 
       if (btnLock != null) {
         btnLock.addEventHandler(MouseEvent.MOUSE_CLICKED) { onToggleLockResource(item.resource.value) }

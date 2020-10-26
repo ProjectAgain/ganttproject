@@ -20,18 +20,15 @@ package biz.ganttproject.storage
 
 //import biz.ganttproject.storage.local.setupErrorLabel
 import biz.ganttproject.app.RootLocalizer
-import biz.ganttproject.storage.cloud.GPCloudDocument
-import biz.ganttproject.storage.cloud.onboard
-import biz.ganttproject.storage.cloud.webSocket
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.scene.layout.Pane
 import kotlinx.coroutines.*
-import net.sourceforge.ganttproject.GPLogger
 import net.sourceforge.ganttproject.document.Document
 import net.sourceforge.ganttproject.document.DocumentManager
 import net.sourceforge.ganttproject.document.FileDocument
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
@@ -44,10 +41,12 @@ import java.util.function.Consumer
  * @author dbarashev@bardsoftware.com
  */
 class RecentProjects(
-    private val mode: StorageDialogBuilder.Mode,
-    private val documentManager: DocumentManager,
-    private val currentDocument: Document,
-    private val documentReceiver: (Document) -> Unit) : StorageUi {
+  private val mode: StorageDialogBuilder.Mode,
+  private val documentManager: DocumentManager,
+  private val currentDocument: Document,
+  private val documentReceiver: (Document) -> Unit) : StorageUi {
+
+  private val log = LoggerFactory.getLogger(javaClass)
 
   override val name = i18n.formatText("listLabel")
   override val category = "desktop"
@@ -58,7 +57,7 @@ class RecentProjects(
   }
 
   override fun createUi(): Pane {
-    val builder = BrowserPaneBuilder<RecentDocAsFolderItem>(mode, { ex -> GPLogger.log(ex) }) { _, success, _ ->
+    val builder = BrowserPaneBuilder<RecentDocAsFolderItem>(mode, { ex -> log.error("{}", ex) }) { _, success, _ ->
       loadRecentDocs(success)
     }
 
@@ -67,9 +66,9 @@ class RecentProjects(
 
       fun onSelectionChange(item: FolderItem) {
         if (item is RecentDocAsFolderItem) {
-            selectedItem = item
-          }
+          selectedItem = item
         }
+      }
 
 
       fun onAction() {
@@ -82,14 +81,14 @@ class RecentProjects(
 
     val paneElements = builder.apply {
       withI18N(i18n)
-      withActionButton { btn -> btn.addEventHandler(ActionEvent.ACTION) { actionButtonHandler.onAction() }}
+      withActionButton { btn -> btn.addEventHandler(ActionEvent.ACTION) { actionButtonHandler.onAction() } }
       withListView(
-          onSelectionChange = actionButtonHandler::onSelectionChange,
-          onLaunch = { actionButtonHandler.onAction() },
-          itemActionFactory = {
-            Collections.emptyMap()
-          },
-          cellFactory = { CellWithBasePath() }
+        onSelectionChange = actionButtonHandler::onSelectionChange,
+        onLaunch = { actionButtonHandler.onAction() },
+        itemActionFactory = {
+          Collections.emptyMap()
+        },
+        cellFactory = { CellWithBasePath() }
       )
     }.build()
     paneElements.breadcrumbView?.show()
@@ -127,9 +126,10 @@ class RecentProjects(
 class RecentDocAsFolderItem(urlString: String, private val documentManager: DocumentManager) : FolderItem, Comparable<RecentDocAsFolderItem> {
   private val url: URL
   private val scheme: String
+
   init {
     val (url, scheme) = try {
-      URL(urlString).let {it to it.protocol }
+      URL(urlString).let { it to it.protocol }
     } catch (ex: MalformedURLException) {
       if (File(urlString).exists()) {
         URL("file:$urlString") to "file"
@@ -165,10 +165,11 @@ class RecentDocAsFolderItem(urlString: String, private val documentManager: Docu
           when {
             it.isFile && it.canWrite() -> this.tags.add(i18n.formatText("tag.local"))
             it.isFile && it.canRead() -> this.tags.addAll(listOf(
-                i18n.formatText("tag.local"),
-                i18n.formatText("tag.readonly")
+              i18n.formatText("tag.local"),
+              i18n.formatText("tag.readonly")
             ))
-            else -> {}
+            else -> {
+            }
           }
         }
       }
@@ -183,15 +184,6 @@ class RecentDocAsFolderItem(urlString: String, private val documentManager: Docu
   fun asDocument(): Document? =
     when (scheme) {
       "file" -> File(this.url.path).let { if (it.exists()) FileDocument(it) else null }
-      "cloud" -> GPCloudDocument(
-          teamRefid = null,
-          teamName = DocumentUri.createPath(this.fullPath).getParent().getFileName(),
-          projectRefid = this.url.host,
-          projectName = this.name,
-          projectJson = null
-      ).also {
-        it.onboard(documentManager, webSocket)
-      }
       else -> null
     }
 
@@ -214,4 +206,4 @@ class RecentDocAsFolderItem(urlString: String, private val documentManager: Docu
 }
 
 private val i18n = RootLocalizer.createWithRootKey("storageService.recent", BROWSE_PANE_LOCALIZER)
-private val LOG = GPLogger.create("RecentProjects")
+private val LOG = LoggerFactory.getLogger("RecentProjects")

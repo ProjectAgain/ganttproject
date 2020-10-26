@@ -22,17 +22,11 @@ import biz.ganttproject.FXUtil
 import biz.ganttproject.app.RootLocalizer
 import biz.ganttproject.lib.fx.ListItemBuilder
 import biz.ganttproject.lib.fx.buildFontAwesomeButton
-import biz.ganttproject.storage.cloud.GPCloudStorage
-import biz.ganttproject.storage.cloud.GPCloudStorageOptions
 import biz.ganttproject.storage.local.LocalStorage
-import biz.ganttproject.storage.webdav.WebdavServerSetupPane
-import biz.ganttproject.storage.webdav.WebdavStorage
 import com.google.common.base.Supplier
 import com.google.common.base.Suppliers
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
-import javafx.collections.ListChangeListener
-import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Button
@@ -43,7 +37,6 @@ import javafx.scene.layout.VBox
 import net.sourceforge.ganttproject.document.Document
 import net.sourceforge.ganttproject.document.DocumentManager
 import net.sourceforge.ganttproject.document.ReadOnlyProxyDocument
-import net.sourceforge.ganttproject.document.webdav.WebDavServerDescriptor
 import java.io.File
 import java.util.function.Consumer
 
@@ -95,7 +88,6 @@ sealed class StorageMode(val name: String) {
  * @author dbarashev@bardsoftware.com
  */
 class StoragePane internal constructor(
-    private val cloudStorageOptions: GPCloudStorageOptions,
     private val documentManager: DocumentManager,
     private val currentDocument: ReadOnlyProxyDocument,
     private val documentReceiver: Consumer<Document>,
@@ -122,7 +114,6 @@ class StoragePane internal constructor(
       center = storageButtons
       top = HBox(Button(i18n.formatText("btnNewStorage"), FontAwesomeIconView(FontAwesomeIcon.PLUS)).apply {
         styleClass.add("btn-create")
-        addEventHandler(ActionEvent.ACTION) { onNewWebdavServer(storageUiPane) }
       })
     }
 
@@ -131,9 +122,6 @@ class StoragePane internal constructor(
 
     borderPane.center = storageUiPane
     reloadStorages(storageButtons, mode)
-    cloudStorageOptions.list.addListener(ListChangeListener {
-      reloadStorages(storageButtons, mode, activeStorageLabel?.id)
-    })
 
     if (storageUiList.size > 1) {
       borderPane.left = storagePane
@@ -161,10 +149,6 @@ class StoragePane internal constructor(
         documentManager,
         currentDocument,
         openDocument).also{ storageUiList.add(it) }
-    storageUiList.add(GPCloudStorage(dialogUi, mode, currentDocument, openDocument, documentManager))
-    cloudStorageOptions.webdavServers.mapTo(storageUiList) {
-      WebdavStorage(it, mode, openDocument, dialogUi, cloudStorageOptions)
-    }
 
     val initialStorageId = selectedId ?: if (mode == StorageDialogBuilder.Mode.OPEN) recentProjects.id else localStorage.id
 
@@ -217,16 +201,6 @@ class StoragePane internal constructor(
   private fun onStorageChange(borderPane: BorderPane, storageId: String) {
     val ui = storageUiMap[storageId]?.get() ?: return
     FXUtil.transitionCenterPane(borderPane, ui) { dialogUi.resize() }
-  }
-
-  private fun onNewWebdavServer(borderPane: BorderPane) {
-    val newServer = WebDavServerDescriptor()
-    val setupPane = WebdavServerSetupPane(newServer, Consumer<WebDavServerDescriptor?> {
-      if (it != null) {
-        cloudStorageOptions.addValue(it)
-      }
-    }, false)
-    FXUtil.transitionCenterPane(borderPane, setupPane.createUi()) { dialogUi.resize() }
   }
 }
 

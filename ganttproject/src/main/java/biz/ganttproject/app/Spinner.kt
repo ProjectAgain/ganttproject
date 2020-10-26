@@ -19,7 +19,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package biz.ganttproject.app
 
 import biz.ganttproject.FXUtil
-import biz.ganttproject.storage.cloud.GPCloudStorage
 import javafx.animation.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -71,7 +70,7 @@ class Spinner(initialState: State = State.INITIAL) {
 
   private fun createIconView(type: IconType) =
     ImageView(Image(
-        GPCloudStorage::class.java.getResourceAsStream(
+        Spinner::class.java.getResourceAsStream(
             when (type) {
               IconType.BEE_BW -> "/icons/ganttproject-logo-bee-bw-512.png"
               IconType.CIRCLE_COLOR -> "/icons/ganttproject-logo-512.png"

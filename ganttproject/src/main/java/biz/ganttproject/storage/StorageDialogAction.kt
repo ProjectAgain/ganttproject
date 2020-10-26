@@ -20,7 +20,6 @@ package biz.ganttproject.storage
 
 import biz.ganttproject.app.RootLocalizer
 import biz.ganttproject.app.dialog
-import biz.ganttproject.storage.cloud.GPCloudStorageOptions
 import net.sourceforge.ganttproject.IGanttProject
 import net.sourceforge.ganttproject.action.GPAction
 import net.sourceforge.ganttproject.document.DocumentManager
@@ -35,21 +34,20 @@ class StorageDialogAction(
     private val project: IGanttProject,
     private val projectUiFacade: ProjectUIFacade,
     private val documentManager: DocumentManager,
-    private val cloudStorageOptions: GPCloudStorageOptions,
     private val mode: StorageDialogBuilder.Mode,
     private val actionId: String) : GPAction(actionId) {
 
   override fun actionPerformed(actionEvent: ActionEvent?) {
     dialog(RootLocalizer.create("myProjects.title")) { dialogBuildApi ->
       val dialogBuilder = StorageDialogBuilder(
-          project, projectUiFacade, documentManager, cloudStorageOptions, dialogBuildApi
+          project, projectUiFacade, documentManager, dialogBuildApi
       )
       dialogBuilder.build(mode)
     }
   }
 
   override fun asToolbarAction(): GPAction {
-    return StorageDialogAction(project, projectUiFacade, documentManager, cloudStorageOptions, mode, actionId).also {
+    return StorageDialogAction(project, projectUiFacade, documentManager, mode, actionId).also {
       it.setFontAwesomeLabel(UIUtil.getFontawesomeLabel(it))
     }
   }

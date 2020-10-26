@@ -13,18 +13,14 @@ import biz.ganttproject.core.time.CalendarFactory;
 import biz.ganttproject.storage.DocumentKt;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.SystemUtils;
-import net.sourceforge.ganttproject.GPLogger;
 import net.sourceforge.ganttproject.GanttOptions;
 import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.document.webdav.HttpDocument;
-import net.sourceforge.ganttproject.document.webdav.WebDavResource.WebDavException;
-import net.sourceforge.ganttproject.document.webdav.WebDavServerDescriptor;
-import net.sourceforge.ganttproject.document.webdav.WebDavStorageImpl;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.model.GP1XOptionConverter;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.parser.ParserFactory;
+import org.apache.commons.lang3.SystemUtils;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -39,8 +35,8 @@ import java.nio.file.attribute.FileTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This is a helper class, to create new instances of Document easily. It
@@ -49,19 +45,18 @@ import java.util.logging.Logger;
  * @author Michael Haeusler (michael at akatose.de)
  */
 public class DocumentCreator implements DocumentManager {
+  private static final Logger log = getLogger(DocumentCreator.class);
+
   private final IGanttProject myProject;
 
   private final UIFacade myUIFacade;
 
   private final ParserFactory myParserFactory;
 
-  private final WebDavStorageImpl myWebDavStorage;
   private final StringOption myWorkingDirectory = new StringOptionImpl("working-dir", "working-dir", "dir");
 
   private final GPOptionGroup myOptionGroup;
 
-  private final GPOptionGroup myWebDavOptionGroup;
-  private final Logger myLogger = GPLogger.getLogger(DocumentManager.class);
   /** List containing the Most Recent Used documents */
   private final DocumentsMRU myMRU = new DocumentsMRU(5);
   private final File myDocumentsFolder;
@@ -70,18 +65,7 @@ public class DocumentCreator implements DocumentManager {
     myProject = project;
     myUIFacade = uiFacade;
     myParserFactory = parserFactory;
-    myWebDavStorage = new WebDavStorageImpl(project, uiFacade);
-    myOptionGroup = new GPOptionGroup("", new GPOption[] {
-        myWorkingDirectory,
-        myWebDavStorage.getLegacyLastWebDAVDocumentOption(),
-        myWebDavStorage.getWebDavLockTimeoutOption()
-    });
-    myWebDavOptionGroup = new GPOptionGroup("webdav", new GPOption[] {
-        myWebDavStorage.getServersOption(),
-        myWebDavStorage.getLastWebDavDocumentOption(),
-        myWebDavStorage.getWebDavReleaseLockOption(),
-        myWebDavStorage.getProxyOption()
-    });
+    myOptionGroup = new GPOptionGroup("", myWorkingDirectory);
     myDocumentsFolder = DocumentKt.getDefaultLocalFolder();
   }
 
@@ -114,24 +98,7 @@ public class DocumentCreator implements DocumentManager {
     assert path != null;
     path = path.trim();
     String lowerPath = path.toLowerCase();
-    if (lowerPath.startsWith("http://") || lowerPath.startsWith("https://")) {
-      try {
-        if (user == null && pass == null) {
-          WebDavServerDescriptor server = myWebDavStorage.findServer(path);
-          if (server != null) {
-            user = server.getUsername();
-            pass = server.getPassword();
-          }
-        }
-        return new HttpDocument(path, user, pass, myWebDavStorage.getProxyOption());
-      } catch (IOException e) {
-        GPLogger.log(e);
-        return null;
-      } catch (WebDavException e) {
-        GPLogger.log(e);
-        return null;
-      }
-    } else if (lowerPath.startsWith("ftp:")) {
+    if (lowerPath.startsWith("ftp:")) {
       return new FtpDocument(path, myFtpUserOption, myFtpPasswordOption);
     } else if (!lowerPath.startsWith("file://") && path.contains("://")) {
       // Generate error for unknown protocol
@@ -192,20 +159,20 @@ public class DocumentCreator implements DocumentManager {
       if (!optionsFile.exists()) {
         return null;
       }
-      GPLogger.log("Options file:" + optionsFile.getAbsolutePath());
+      log.info("Options file:" + optionsFile.getAbsolutePath());
       BasicFileAttributes attrs = Files.readAttributes(optionsFile.toPath(), BasicFileAttributes.class);
       FileTime accessTime = attrs.lastAccessTime();
       FileTime modifyTime = attrs.lastModifiedTime();
       long lastFileTime = Math.max(accessTime.toMillis(), modifyTime.toMillis());
       cutoff = Math.min(lastFileTime, now);
     } catch (IOException e) {
-      GPLogger.log(e);
+      log.error("Exception", e);
       return null;
     }
     return new Runnable() {
       @Override
       public void run() {
-        GPLogger.log("Deleting old auto-save files");
+        log.info("Deleting old auto-save files");
         deleteAutosaves();
       }
 
@@ -232,14 +199,14 @@ public class DocumentCreator implements DocumentManager {
       }
       File autosaveFile = new File(tempDir, "_ganttproject_autosave.zip");
       if (autosaveFile.exists() && !autosaveFile.canWrite()) {
-        myLogger.warning(String.format(
+        log.warn(String.format(
             "Autosave file %s is not writable", autosaveFile.getAbsolutePath()));
         return null;
       }
       URI uri = new URI("jar:file:" + autosaveFile.toURI().getPath());
       return FileSystems.newFileSystem(uri, ImmutableMap.<String, Object>of("create", "true"));
     } catch (Throwable e) {
-      myLogger.log(Level.SEVERE, "Failure when creating ZIP FS for autosaves", e);
+      log.error("Failure when creating ZIP FS for autosaves", e);
       return null;
     }
   }
@@ -263,9 +230,9 @@ public class DocumentCreator implements DocumentManager {
         return tempDir;
       }
     } catch (IOException e) {
-      GPLogger.getLogger(DocumentManager.class).log(Level.WARNING, "Can't get parent of the temp file", e);
+      log.warn("Can't get parent of the temp file", e);
     }
-    GPLogger.getLogger(DocumentManager.class).warning("Failed to find temporary directory");
+    log.warn("Failed to find temporary directory");
     return null;
   }
 
@@ -345,12 +312,7 @@ public class DocumentCreator implements DocumentManager {
 
   @Override
   public GPOptionGroup[] getNetworkOptionGroups() {
-    return new GPOptionGroup[] { myFtpOptions, myOptionGroup, myWebDavOptionGroup };
-  }
-
-  @Override
-  public DocumentStorageUi getWebDavStorageUi() {
-    return myWebDavStorage;
+    return new GPOptionGroup[] { myFtpOptions, myOptionGroup };
   }
 
   private final StringOption myFtpUserOption = new StringOptionImpl("user-name", "ftp", "ftpuser");
