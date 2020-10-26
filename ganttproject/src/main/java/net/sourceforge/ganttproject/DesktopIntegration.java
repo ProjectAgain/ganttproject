@@ -35,7 +35,7 @@ public class DesktopIntegration {
 
         @Override
         public void showPreferencesDialog() {
-          new SettingsDialogAction(project, uiFacade).actionPerformed(null);
+          new SettingsDialogAction().actionPerformed(null);
         }
 
         @Override

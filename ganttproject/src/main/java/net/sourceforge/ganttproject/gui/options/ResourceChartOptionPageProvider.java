@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.gui.options;
 
 import biz.ganttproject.core.option.GPOptionGroup;
+import net.projectagain.ganttplanner.plugins.ExtensionComponent;
 
+@ExtensionComponent
 public class ResourceChartOptionPageProvider extends OptionPageProviderBase {
 
   public ResourceChartOptionPageProvider() {

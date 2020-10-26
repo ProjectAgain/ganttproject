@@ -13,9 +13,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.document.DocumentCreator;
+import net.sourceforge.ganttproject.gui.options.SettingsDialog2Factory;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,17 @@ import static biz.ganttproject.app.SplashKt.SPLASH_WIDTH;
 public class UiLauncher {
   final AtomicReference<GanttProject> mainWindow = new AtomicReference<>();
   private final Logger log = LoggerFactory.getLogger(getClass());
+
+  @Autowired
+  private SettingsDialog2Factory settingsDialog2Factory;
+
+  public SettingsDialog2Factory getSettingsDialog2Factory() {
+    return settingsDialog2Factory;
+  }
+
+  public void setSettingsDialog2Factory(SettingsDialog2Factory settingsDialog2Factory) {
+    this.settingsDialog2Factory = settingsDialog2Factory;
+  }
 
   public void startUiApp(Function<GanttProject, GanttProject> configure) {
     configureApp();

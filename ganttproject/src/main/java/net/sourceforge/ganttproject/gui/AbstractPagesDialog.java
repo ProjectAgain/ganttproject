@@ -30,14 +30,17 @@ import java.util.List;
 
 public abstract class AbstractPagesDialog {
   private final UIFacade myUIFacade;
-  private final List<ListItem> myItems;
+  private List<ListItem> myItems;
   private final HashSet<String> myPageIds = new HashSet<>();
   private final String myTitleKey;
   private JList<ListItem> myPagesList;
 
-  protected AbstractPagesDialog(String titleKey, UIFacade uifacade, List<ListItem> pages) {
+  protected AbstractPagesDialog(String titleKey, UIFacade uifacade) {
     myTitleKey = titleKey;
     myUIFacade = uifacade;
+  }
+
+  protected void initPages(List<ListItem> pages) {
     myItems = pages;
     for (ListItem li : myItems) {
       myPageIds.add(li.id);
@@ -60,7 +63,7 @@ public abstract class AbstractPagesDialog {
       }
     };
     myUIFacade.createDialog(getComponent(), new Action[]{okAction, CancelAction.EMPTY},
-        GanttLanguage.getInstance().getCorrectedLabel(myTitleKey)).show();
+      GanttLanguage.getInstance().getCorrectedLabel(myTitleKey)).show();
     if (pageID != null) {
       for (int i = 0; i < myItems.size(); i++) {
         if (pageID.equals(myItems.get(i).id)) {
@@ -123,8 +126,8 @@ public abstract class AbstractPagesDialog {
           defaultResult.setBackground(EMPTY_BUTTON.getBackground());
           defaultResult.setForeground(EMPTY_BUTTON.getForeground());
           wrapper.setBorder(BorderFactory.createCompoundBorder(
-              BorderFactory.createMatteBorder(1, 0, 0, 0, EMPTY_BUTTON.getBackground().darker()),
-              BorderFactory.createEmptyBorder(2, 3, 2, 5)));
+            BorderFactory.createMatteBorder(1, 0, 0, 0, EMPTY_BUTTON.getBackground().darker()),
+            BorderFactory.createEmptyBorder(2, 3, 2, 5)));
         } else {
           defaultResult.setFont(font.deriveFont(font.getSize() + 2.0f));
           wrapper.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));

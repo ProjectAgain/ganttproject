@@ -24,7 +24,7 @@ import biz.ganttproject.core.option.GPOptionGroup;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-
+import net.projectagain.ganttplanner.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.NotificationManager;
 import net.sourceforge.ganttproject.gui.UIFacade;
@@ -47,6 +47,7 @@ import java.util.Locale;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+@ExtensionComponent
 public class InterfaceOptionPageProvider extends OptionPageProviderBase {
   private static final Logger log = getLogger(InterfaceOptionPageProvider.class);
 
@@ -70,7 +71,7 @@ public class InterfaceOptionPageProvider extends OptionPageProviderBase {
             GanttLanguage i18n = GanttLanguage.getInstance();
             myLabel.setVisible(true);
             myLabel.setText(i18n.formatText("optionPage.ui.general.localeInstallText",
-                i18n.getText("optionPage.ui.general.localeInstallUrl"), localeTest.second().getAbsolutePath()));
+              i18n.getText("optionPage.ui.general.localeInstallUrl"), localeTest.second().getAbsolutePath()));
           }
         } else if (myLabel != null && myLabel.isVisible()) {
           myLabel.setVisible(false);

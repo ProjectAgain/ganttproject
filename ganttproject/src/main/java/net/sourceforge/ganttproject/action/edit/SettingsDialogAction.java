@@ -18,9 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.action.edit;
 
-import net.sourceforge.ganttproject.IGanttProject;
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.action.GPAction;
-import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.SettingsDialog2;
 
 import java.awt.event.ActionEvent;
@@ -30,13 +29,9 @@ import java.awt.event.ActionEvent;
  * all available OptionPageProvider classes
  */
 public class SettingsDialogAction extends GPAction {
-  private final UIFacade myUiFacade;
-  private final IGanttProject myProject;
 
-  public SettingsDialogAction(IGanttProject project, UIFacade uiFacade) {
+  public SettingsDialogAction() {
     super("settings.app");
-    myUiFacade = uiFacade;
-    myProject = project;
   }
 
   @Override
@@ -44,7 +39,8 @@ public class SettingsDialogAction extends GPAction {
     if (calledFromAppleScreenMenu(e)) {
       return;
     }
-    SettingsDialog2 dialog = new SettingsDialog2(myProject, myUiFacade, "settings.app.pageOrder");
+
+    SettingsDialog2 dialog = App.getInstance().uiLauncher.getSettingsDialog2Factory().create();
     dialog.show();
   }
 }

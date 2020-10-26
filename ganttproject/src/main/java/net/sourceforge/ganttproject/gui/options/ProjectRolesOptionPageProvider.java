@@ -18,13 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui.options;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 import biz.ganttproject.core.option.GPOptionGroup;
-
+import net.projectagain.ganttplanner.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.gui.EditableList;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.roles.Role;
@@ -32,11 +27,17 @@ import net.sourceforge.ganttproject.roles.RoleImpl;
 import net.sourceforge.ganttproject.roles.RoleManager;
 import net.sourceforge.ganttproject.roles.RoleSet;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 /**
  * Provides project roles page in the project settings dialog.
  *
  * @author dbarashev (Dmitry Barashev)
  */
+@ExtensionComponent
 public class ProjectRolesOptionPageProvider extends OptionPageProviderBase {
   private EditableList<Role> myRolesList;
 

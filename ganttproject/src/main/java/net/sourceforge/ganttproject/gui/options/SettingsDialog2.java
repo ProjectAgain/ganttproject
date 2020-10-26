@@ -18,31 +18,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui.options;
 
-import java.awt.Container;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.AbstractPagesDialog;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.model.OptionPageProvider;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.plugins.PluginManager;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SettingsDialog2 extends AbstractPagesDialog {
-  private static List<OptionPageProvider> ourProviders;
-  private final List<OptionPageProvider> myProviders = new ArrayList<OptionPageProvider>();
+  private final List<OptionPageProvider> ourProviders;
+  private final List<OptionPageProvider> myProviders = new ArrayList<>();
 
-  static {
-    ourProviders = PluginManager.getExtensions("net.sourceforge.ganttproject.OptionPageProvider",
-        OptionPageProvider.class);
-  }
-
-  public SettingsDialog2(IGanttProject project, UIFacade uifacade, String pageOrderKey) {
-    super("settings.app", uifacade, getPages(pageOrderKey, project, uifacade));
-    for (OptionPageProvider p : ourProviders) {
+  protected SettingsDialog2(IGanttProject project, UIFacade uifacade, String pageOrderKey, List<OptionPageProvider> ourProviders) {
+    super("settings.app", uifacade);
+    this.ourProviders = ourProviders;
+    initPages(getPages(pageOrderKey, project, uifacade));
+    for (OptionPageProvider p : this.ourProviders) {
       if (isPageVisible(p.getPageID())) {
         p.init(project, uifacade);
         myProviders.add(p);
@@ -57,18 +54,18 @@ public class SettingsDialog2 extends AbstractPagesDialog {
     }
   }
 
-  private static List<ListItem> getPages(String pageOrderKey, IGanttProject project, UIFacade uiFacade) {
+  private List<ListItem> getPages(String pageOrderKey, IGanttProject project, UIFacade uiFacade) {
     return getListItems(ourProviders, pageOrderKey, project, uiFacade);
   }
 
-  private static List<ListItem> getListItems(List<OptionPageProvider> providers, String pageOrderKey,
+  private List<ListItem> getListItems(List<OptionPageProvider> providers, String pageOrderKey,
       IGanttProject project, UIFacade uiFacade) {
     Map<String, OptionPageProvider> pageId_provider = new HashMap<String, OptionPageProvider>();
     for (OptionPageProvider p : providers) {
       pageId_provider.put(p.getPageID(), p);
     }
     List<ListItem> items = new ArrayList<ListItem>();
-    String[] listConfig = GanttLanguage.getInstance().getText(pageOrderKey).split(",");
+    String[] listConfig = App.getInstance().settingsManager.getSetting(pageOrderKey).split(",");
     for (String pageName : listConfig) {
       ListItem li;
       if (pageName.startsWith("pageGroup.")) {

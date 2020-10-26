@@ -292,7 +292,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     myProjectMenu = new ProjectMenu(this, "project");
     bar.add(myProjectMenu);
 
-    myEditMenu = new EditMenu(getProject(), getUIFacade(), getViewManager(), () -> mySearchUi.requestFocus(), "edit");
+    myEditMenu = new EditMenu(getUIFacade(), getViewManager(), () -> mySearchUi.requestFocus(), "edit");
     bar.add(myEditMenu);
 
     ViewMenu viewMenu = new ViewMenu(getProject(), getViewManager(), getUiFacadeImpl().getDpiOption(), getUiFacadeImpl().getChartFontOption(), "view");

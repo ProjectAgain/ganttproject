@@ -1,6 +1,7 @@
 package net.projectagain.ganttplanner.app;
 
 import net.projectagain.ganttplanner.i18n.I18N;
+import net.projectagain.ganttplanner.settings.SettingsManager;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.export.Exporter;
@@ -27,6 +28,8 @@ public class App {
   private List<Chart> myCharts;
   @Autowired(required = false)
   private List<Exporter> myExporters;
+  @Autowired
+  public SettingsManager settingsManager;
 
   @Autowired
   public UiLauncher uiLauncher;
@@ -35,7 +38,7 @@ public class App {
     return instance;
   }
 
-  public static AtomicReference<GanttProject> getMainWindow() {
+  public AtomicReference<GanttProject> getMainWindow() {
     return getInstance().uiLauncher.mainWindow;
   }
 
