@@ -18,7 +18,18 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.export;
 
-import java.awt.Component;
+import biz.ganttproject.core.option.EnumerationOption;
+import biz.ganttproject.core.option.GPAbstractOption;
+import biz.ganttproject.core.option.GPOption;
+import biz.ganttproject.core.option.GPOptionGroup;
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
+import net.sourceforge.ganttproject.chart.Chart;
+import net.sourceforge.ganttproject.language.GanttLanguage;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,22 +38,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-
-import biz.ganttproject.core.option.EnumerationOption;
-import biz.ganttproject.core.option.GPAbstractOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-
-import net.sourceforge.ganttproject.chart.Chart;
-import net.sourceforge.ganttproject.language.GanttLanguage;
-
 /**
  * @author bard
  */
+@ExtensionComponent
 public class ExporterToImage extends ExporterBase {
 
   static class FileTypeOption extends GPAbstractOption<String> implements EnumerationOption {

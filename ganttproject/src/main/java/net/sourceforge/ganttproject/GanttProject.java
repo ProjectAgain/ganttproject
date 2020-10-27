@@ -59,7 +59,6 @@ import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.language.GanttLanguage.Event;
 import net.sourceforge.ganttproject.parser.GPParser;
 import net.sourceforge.ganttproject.parser.ParserFactory;
-import net.sourceforge.ganttproject.plugins.PluginManager;
 import net.sourceforge.ganttproject.print.PrintManager;
 import net.sourceforge.ganttproject.resource.HumanResourceManager;
 import net.sourceforge.ganttproject.resource.ResourceEvent;
@@ -703,7 +702,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     //myMRU.add(document.getPath(), true);
     myObservableDocument.set(document);
     setTitle(language.getText("appliTitle") + " [" + document.getFileName() + "]");
-    for (Chart chart : PluginManager.getCharts()) {
+    for (Chart chart : new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Chart.class))) {
       chart.reset();
     }
 
@@ -1175,7 +1174,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     getTaskManager().processCriticalPath(getTaskManager().getRootTask());
     getResourcePanel().getResourceTreeTableModel().updateResources();
     getResourcePanel().getResourceTreeTable().setRowHeight(getResourceChart().getModel().calculateRowHeight());
-    for (Chart chart : PluginManager.getCharts()) {
+    for (Chart chart : new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Chart.class))) {
       chart.reset();
     }
     super.repaint();

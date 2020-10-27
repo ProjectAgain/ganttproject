@@ -22,16 +22,17 @@ import biz.ganttproject.core.option.BooleanOption;
 import biz.ganttproject.core.option.ChangeValueEvent;
 import biz.ganttproject.core.option.ChangeValueListener;
 import biz.ganttproject.core.option.DefaultBooleanOption;
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.projectwizard.WizardImpl;
-import net.sourceforge.ganttproject.plugins.PluginManager;
 import org.osgi.service.prefs.Preferences;
 import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -61,7 +62,7 @@ public class ExportFileWizardImpl extends WizardImpl {
       }
     });
     if (ourExporters == null) {
-      ourExporters = PluginManager.getExporters();
+      ourExporters = new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Exporter.class));
     }
     myState.setExporter(ourLastSelectedExporter == null ? ourExporters.get(0) : ourLastSelectedExporter);
     for (Exporter e : ourExporters) {

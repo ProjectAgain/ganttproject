@@ -30,6 +30,7 @@ import net.sourceforge.ganttproject.gui.view.GPViewManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public class ViewMenu extends JMenu {
   public ViewMenu(final IGanttProject project, GPViewManager viewManager, IntegerOption dpiOption, FontOption chartFontOption, String key) {
     super(GPAction.createVoidAction(key));
 
-    List<Chart> charts = App.getInstance().getCharts();
+    List<Chart> charts = new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Chart.class));
     if (charts.isEmpty()) {
       setEnabled(false);
     }

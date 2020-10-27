@@ -5,15 +5,11 @@ import net.projectagain.ganttplanner.core.plugins.PluginManager;
 import net.projectagain.ganttplanner.core.settings.SettingsManager;
 import net.projectagain.ganttplanner.core.ui.UiManager;
 import net.sourceforge.ganttproject.GanttProject;
-import net.sourceforge.ganttproject.chart.Chart;
-import net.sourceforge.ganttproject.export.Exporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Christoph Graupner <ch.graupner@workingdeveloper.net>
@@ -25,10 +21,6 @@ public class App {
   public ApplicationContext applicationContext;
   @Autowired
   public I18N i18n;
-  @Autowired(required = false)
-  private List<Chart> myCharts;
-  @Autowired(required = false)
-  private List<Exporter> myExporters;
   @Autowired
   private PluginManager pluginManager;
   @Autowired
@@ -40,13 +32,6 @@ public class App {
     return instance;
   }
 
-  public List<Chart> getCharts() {
-    return myCharts == null ? new ArrayList<>() : myCharts;
-  }
-
-  public List<Exporter> getExporters() {
-    return myExporters == null ? new ArrayList<>() : myExporters;
-  }
 
   public GanttProject getMainWindow() {
     return getInstance().uiManager.getMainWindow().get();

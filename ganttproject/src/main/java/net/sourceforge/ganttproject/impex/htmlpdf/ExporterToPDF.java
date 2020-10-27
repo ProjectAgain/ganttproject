@@ -19,16 +19,16 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.impex.htmlpdf;
 
 import biz.ganttproject.core.option.GPOptionGroup;
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.impex.htmlpdf.itext.ITextEngine;
 import net.sourceforge.ganttproject.impex.htmlpdf.itext.ITextStylesheet;
-import org.pf4j.Extension;
 
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-@Extension
+@ExtensionComponent
 public class ExporterToPDF extends StylesheetExporterBase {
 
   private final ITextEngine myITextEngine = new ITextEngine(this);

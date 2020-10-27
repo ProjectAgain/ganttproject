@@ -24,6 +24,7 @@ import biz.ganttproject.core.option.GPOptionGroup;
 import biz.ganttproject.impex.csv.GanttCSVExport;
 import biz.ganttproject.impex.csv.SpreadsheetFormat;
 import biz.ganttproject.impex.csv.SpreadsheetWriter;
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.io.CSVOptions;
 import net.sourceforge.ganttproject.language.GanttLanguage;
@@ -42,6 +43,7 @@ import java.util.stream.Stream;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+@ExtensionComponent
 public class ExporterToCSV extends ExporterBase {
   static class FormatOption extends DefaultEnumerationOption<SpreadsheetFormat> {
     FormatOption() {

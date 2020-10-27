@@ -18,7 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject;
 
-import net.sourceforge.ganttproject.plugins.PluginManager;
 import net.sourceforge.ganttproject.task.TaskSelectionManager;
 
 /**
@@ -30,8 +29,6 @@ import net.sourceforge.ganttproject.task.TaskSelectionManager;
 public class Mediator {
   private static TaskSelectionManager taskSelectionManager = null;
 
-  private static final PluginManager pluginManager = new PluginManager();
-
   public static void registerTaskSelectionManager(TaskSelectionManager taskSelection) {
     taskSelectionManager = taskSelection;
   }
@@ -39,9 +36,5 @@ public class Mediator {
   @Deprecated
   public static TaskSelectionManager getTaskSelectionManager() {
     return taskSelectionManager;
-  }
-
-  public static PluginManager getPluginManager() {
-    return pluginManager;
   }
 }

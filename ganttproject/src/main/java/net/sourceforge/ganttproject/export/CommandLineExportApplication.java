@@ -20,10 +20,9 @@ package net.sourceforge.ganttproject.export;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
-
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.PluginPreferencesImpl;
-import net.sourceforge.ganttproject.plugins.PluginManager;
 import net.sourceforge.ganttproject.task.Task;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.service.prefs.Preferences;
@@ -31,11 +30,7 @@ import org.slf4j.Logger;
 import org.w3c.util.DateParser;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -72,7 +67,7 @@ public class CommandLineExportApplication {
   private final Args myArgs = new Args();
 
   public CommandLineExportApplication() {
-    for (Exporter exporter : PluginManager.getExporters()) {
+    for (Exporter exporter : App.getInstance().getPluginManager().getExtensions(Exporter.class)) {
       List<String> keys = Arrays.asList(exporter.getCommandLineKeys());
       for (String key : keys) {
         myFlag2exporter.put(key, exporter);

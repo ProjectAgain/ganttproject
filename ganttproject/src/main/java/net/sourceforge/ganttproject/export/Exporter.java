@@ -18,21 +18,20 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.export;
 
-import java.awt.Component;
-import java.io.File;
-import java.util.List;
-
+import biz.ganttproject.core.option.GPOptionGroup;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
-
 import org.osgi.service.prefs.Preferences;
+import org.pf4j.ExtensionPoint;
 
-import biz.ganttproject.core.option.GPOptionGroup;
+import java.awt.*;
+import java.io.File;
+import java.util.List;
 
 /**
  * @author bard
  */
-public interface Exporter {
+public interface Exporter extends ExtensionPoint {
   String getFileTypeDescription();
 
   GPOptionGroup getOptions();

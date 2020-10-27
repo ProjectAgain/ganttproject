@@ -19,12 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.impex.htmlpdf;
 
 import biz.ganttproject.core.option.GPOptionGroup;
-
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.export.ExportException;
 import net.sourceforge.ganttproject.util.FileUtil;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.pf4j.Extension;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -43,7 +42,7 @@ import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-@Extension
+@ExtensionComponent
 public class ExporterToHTML extends StylesheetExporterBase {
   private final Logger log = getLogger(getClass());
 
