@@ -62,6 +62,10 @@ public class UiManager {
         try {
           GanttProject ganttFrame = new GanttProject(false);
           configure.apply(ganttFrame);
+          GanttProject.setApplicationQuitCallback(() -> {
+            System.out.println("Exit the GanttProject app.");
+            System.exit(0);
+          });
           System.err.println("Main frame created");
           mainWindow.set(ganttFrame);
           mainWindow.get().doShow();
