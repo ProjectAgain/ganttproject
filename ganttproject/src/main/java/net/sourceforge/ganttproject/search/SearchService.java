@@ -18,10 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.search;
 
-import java.util.List;
-
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
+import org.pf4j.ExtensionPoint;
+
+import java.util.List;
 
 /**
  * Interface of a pluggable search service. Given a search query, a search
@@ -29,15 +30,15 @@ import net.sourceforge.ganttproject.gui.UIFacade;
  * objects which are shown in the search UI. When user selects some search
  * result, a service should be able to show the result somehow (e.g. make it
  * visible and switch keyboard focus to the result).
- * 
+ *
  * @author dbarashev (Dmitry Barashev)
- * 
+ *
  * @param <SR>
  *          search result object type
  * @param <SO>
  *          target search object type
  */
-public interface SearchService<SR extends SearchResult<SO>, SO> {
+public interface SearchService<SR extends SearchResult<SO>, SO> extends ExtensionPoint {
   String EXTENSION_POINT_ID = "net.sourceforge.ganttproject.search";
 
   void init(IGanttProject project, UIFacade uiFacade);
