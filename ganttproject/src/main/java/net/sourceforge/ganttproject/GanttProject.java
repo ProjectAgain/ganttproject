@@ -33,6 +33,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.google.common.collect.Lists;
 import javafx.beans.property.SimpleObjectProperty;
+import net.projectagain.ganttplanner.app.App;
 import net.projectagain.ganttplanner.core.LogMarker;
 import net.sourceforge.ganttproject.action.*;
 import net.sourceforge.ganttproject.action.edit.EditMenu;
@@ -733,7 +734,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
 
   private boolean tryImportDocument(Document document) {
     boolean success = false;
-    List<Importer> importers = PluginManager.getExtensions(Importer.EXTENSION_POINT_ID, Importer.class);
+    List<Importer> importers = new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Importer.class));
     for (Importer importer : importers) {
       if (Pattern.matches(".*(" + importer.getFileNamePattern() + ")$", document.getFilePath())) {
         try {
