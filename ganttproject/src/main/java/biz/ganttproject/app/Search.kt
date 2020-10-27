@@ -58,7 +58,7 @@ class FXSearchUi(private val project: IGanttProject, private val uiFacade: UIFac
     }
     val query = this.textField.text
     SwingUtilities.invokeLater {
-      val searcher = PopupSearchCallback(this.project, this.uiFacade, this.swingToolbar(), textFieldBounds)
+      val searcher = PopupSearchCallback(this.swingToolbar(), textFieldBounds)
       searcher.runSearch(query)
     }
   }

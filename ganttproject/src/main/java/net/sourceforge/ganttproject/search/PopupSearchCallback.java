@@ -18,8 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.search;
 
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.gui.UIUtil;
 import org.jdesktop.swingx.JXList;
 
@@ -43,8 +42,8 @@ public class PopupSearchCallback implements SearchDialog.SearchCallback {
   private Runnable onSelect;
   private Runnable onDismiss;
 
-  public PopupSearchCallback(IGanttProject project, UIFacade uiFacade, JComponent invoker, Rectangle searchBoxPosition) {
-    myDialog = new SearchDialog(project, uiFacade);
+  public PopupSearchCallback(JComponent invoker, Rectangle searchBoxPosition) {
+    myDialog = App.getInstance().getUiManager().getSearchDialogFactory().create();
     myInvoker = invoker;
     mySearchBoxPosition = searchBoxPosition;
     list.setBorder(BorderFactory.createEmptyBorder());

@@ -18,16 +18,18 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.search;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.CustomProperty;
-
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.task.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /** Search service for tasks */
+@ExtensionComponent
 public class TaskSearchService extends SearchServiceBase<TaskSearchService.MySearchResult, Task> {
   static class MySearchResult extends SearchResult<Task> {
     MySearchResult(Task t, TaskSearchService searchService, String query, String snippet, String snippetText) {

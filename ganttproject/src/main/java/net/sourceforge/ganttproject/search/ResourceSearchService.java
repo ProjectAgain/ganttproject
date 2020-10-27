@@ -18,15 +18,17 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.search;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.resource.HumanResource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /** Search service for resources */
+@ExtensionComponent
 public class ResourceSearchService extends SearchServiceBase<ResourceSearchService.MySearchResult, HumanResource> {
   static class MySearchResult extends SearchResult<HumanResource> {
     MySearchResult(HumanResource hr, ResourceSearchService searchService, String query, String snippet, String snippetText) {

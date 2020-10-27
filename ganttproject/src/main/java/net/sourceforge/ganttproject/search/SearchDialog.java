@@ -20,35 +20,30 @@ package net.sourceforge.ganttproject.search;
 
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.plugins.PluginManager;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 class SearchDialog {
   public interface SearchCallback {
     void accept(List<SearchResult<?>> results);
   }
-
-  private final UIFacade myUiFacade;
   private final IGanttProject myProject;
+  private final UIFacade myUiFacade;
+  private final List<SearchService> services;
 
-  SearchDialog(IGanttProject project, UIFacade uiFacade) {
+  SearchDialog(IGanttProject project, UIFacade uiFacade, List<SearchService> services) {
     myProject = project;
     myUiFacade = uiFacade;
+    this.services = services;
   }
 
   void runSearch(final String text, final SearchCallback callback) {
-    List<SearchService> services = PluginManager.getExtensions(SearchService.EXTENSION_POINT_ID, SearchService.class);
     final List<Future<List<SearchResult<?>>>> tasks = new ArrayList<Future<List<SearchResult<?>>>>();
     ExecutorService executor = Executors.newFixedThreadPool(services.size());
-    for (final SearchService<SearchResult<?>, ?> service : services) {
+    for (final SearchService<SearchResult<?>, ?> service: services) {
       service.init(myProject, myUiFacade);
       tasks.add(executor.submit(new Callable<List<SearchResult<?>>>() {
         @Override
@@ -62,7 +57,7 @@ class SearchDialog {
       @Override
       protected List<SearchResult<?>> doInBackground() throws Exception {
         List<SearchResult<?>> totalResult = new ArrayList<SearchResult<?>>();
-        for (Future<List<SearchResult<?>>> f : tasks) {
+        for (Future<List<SearchResult<?>>> f: tasks) {
           totalResult.addAll(f.get());
         }
         return totalResult;

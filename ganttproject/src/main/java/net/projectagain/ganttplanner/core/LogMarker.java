@@ -6,4 +6,5 @@ import org.slf4j.MarkerFactory;
 public interface LogMarker {
   Marker CLIPBOARD = MarkerFactory.getMarker("CLIPBOARD");
   Marker TASKS = MarkerFactory.getMarker("TASKS");
+  Marker APP_LIFECYCLE = MarkerFactory.getMarker("APP_LIFECYCLE");
 }

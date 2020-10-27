@@ -33,6 +33,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.google.common.collect.Lists;
 import javafx.beans.property.SimpleObjectProperty;
+import net.projectagain.ganttplanner.core.LogMarker;
 import net.sourceforge.ganttproject.action.*;
 import net.sourceforge.ganttproject.action.edit.EditMenu;
 import net.sourceforge.ganttproject.action.help.HelpMenu;
@@ -163,7 +164,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
   private FXSearchUi mySearchUi;
 
   public GanttProject(boolean isOnlyViewer) {
-    System.err.println("Creating main frame...");
+    log.debug(LogMarker.APP_LIFECYCLE, "Creating main frame...");
     ToolTipManager.sharedInstance().setInitialDelay(200);
     ToolTipManager.sharedInstance().setDismissDelay(60000);
 
@@ -182,7 +183,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
       setTitle("GanttViewer");
     }
     setFocusable(true);
-    log.trace("1. loading look'n'feels");
+    log.debug(LogMarker.APP_LIFECYCLE, "1. loading look'n'feels");
     options = new GanttOptions(getRoleManager(), getDocumentManager(), isOnlyViewer);
     myUIConfiguration = options.getUIConfiguration();
     myUIConfiguration.setChartFontOption(getUiFacadeImpl().getChartFontOption());
@@ -256,7 +257,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     options.addOptionGroups(getDocumentManager().getNetworkOptionGroups());
     options.addOptions(getRssFeedChecker().getOptions());
 
-    System.err.println("2. loading options");
+    log.debug(LogMarker.APP_LIFECYCLE, "2. loading options");
     initOptions();
     // Not a joke. This takes value from the option and applies it to the UI.
     getTree().setGraphicArea(area);
@@ -277,7 +278,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     scrollingManager.addScrollingListener(area.getViewState());
     scrollingManager.addScrollingListener(getResourcePanel().area.getViewState());
 
-    System.err.println("3. creating menus...");
+    log.debug(LogMarker.APP_LIFECYCLE, "3. creating menus...");
     myResourceActions = getResourcePanel().getResourceActionSet();
     myZoomActions = new ZoomActionSet(getZoomManager());
     JMenuBar bar = new JMenuBar();
@@ -317,7 +318,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     HelpMenu helpMenu = new HelpMenu(getProject(), getUIFacade(), getProjectUIFacade());
     bar.add(helpMenu.createMenu());
 
-    System.err.println("4. creating views...");
+    log.debug(LogMarker.APP_LIFECYCLE, "4. creating views...");
     myGanttChartTabContent = new GanttChartTabContentPanel(getProject(), getUIFacade(), getTree(), area.getJComponent(),
         getUIConfiguration());
     getViewManager().createView(myGanttChartTabContent, new ImageIcon(getClass().getResource("/icons/tasks_16.gif")));
@@ -343,7 +344,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
         });
       }
     });
-    System.err.println("5. calculating size and packing...");
+    log.debug(LogMarker.APP_LIFECYCLE, "5. calculating size and packing...");
 
     FXToolbar fxToolbar = createToolbar();
 //    Platform.runLater(() -> {
@@ -359,13 +360,13 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     // Chart tabs
     getTabs().setSelectedIndex(0);
 
-    System.err.println("6. changing language ...");
+    log.debug(LogMarker.APP_LIFECYCLE, "6. changing language ...");
     languageChanged(null);
     // Add Listener after language update (to be sure that it is not updated
     // twice)
     language.addListener(this);
 
-    System.err.println("7. first attempt to restore bounds");
+    log.debug(LogMarker.APP_LIFECYCLE, "7. first attempt to restore bounds");
     restoreBounds();
     addWindowListener(new WindowAdapter() {
       @Override
@@ -375,7 +376,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
 
       @Override
       public void windowOpened(WindowEvent e) {
-        System.err.println("Resizing window...");
+        log.debug(LogMarker.APP_LIFECYCLE, "Resizing window...");
         log.debug(String.format("Bounds after opening: %s", GanttProject.this.getBounds()));
         restoreBounds();
         // It is important to run aligners after look and feel is set and font sizes
@@ -407,7 +408,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
       }
     });
 
-    System.err.println("8. finalizing...");
+    log.debug(LogMarker.APP_LIFECYCLE, "8. finalizing...");
     // applyComponentOrientation(GanttLanguage.getInstance()
     // .getComponentOrientation());
     myTaskManager.addTaskListener(new TaskModelModificationListener(this, getUIFacade()));
@@ -423,7 +424,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
     try {
       myObservableDocument.set(getDocumentManager().newUntitledDocument());
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("Exception",e);
     }
   }
 

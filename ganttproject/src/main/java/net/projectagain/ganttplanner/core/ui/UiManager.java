@@ -11,10 +11,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.projectagain.ganttplanner.core.LogMarker;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.document.DocumentCreator;
+import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.SettingsDialog2Factory;
 import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.search.SearchDialogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +44,17 @@ public class UiManager {
   }
 
   @Autowired
+  private SearchDialogFactory searchDialogFactory;
+
+  @Autowired
   private SettingsDialog2Factory settingsDialog2Factory;
 
   public SettingsDialog2Factory getSettingsDialog2Factory() {
     return settingsDialog2Factory;
+  }
+
+  public UIFacade getUIFacade() {
+    return getMainWindow().get().getUIFacade();
   }
 
   public void setSettingsDialog2Factory(SettingsDialog2Factory settingsDialog2Factory) {
@@ -63,10 +73,10 @@ public class UiManager {
           GanttProject ganttFrame = new GanttProject(false);
           configure.apply(ganttFrame);
           GanttProject.setApplicationQuitCallback(() -> {
-            System.out.println("Exit the GanttProject app.");
+            log.debug(LogMarker.APP_LIFECYCLE, "Exit GanttProject app.");
             System.exit(0);
           });
-          System.err.println("Main frame created");
+          log.debug(LogMarker.APP_LIFECYCLE, "Main frame created");
           mainWindow.set(ganttFrame);
           mainWindow.get().doShow();
 //          ganttFrame.addWindowListener(new WindowAdapter() {
@@ -94,6 +104,10 @@ public class UiManager {
 //      ourExecutor.submit(autosaveCleanup)
 //    }
 
+  }
+
+  public SearchDialogFactory getSearchDialogFactory() {
+    return searchDialogFactory;
   }
 
   private void configureApp() {

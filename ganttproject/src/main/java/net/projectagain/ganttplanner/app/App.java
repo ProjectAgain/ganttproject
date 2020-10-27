@@ -1,8 +1,8 @@
 package net.projectagain.ganttplanner.app;
 
 import net.projectagain.ganttplanner.core.i18n.I18N;
-import net.projectagain.ganttplanner.core.ui.UiManager;
 import net.projectagain.ganttplanner.core.settings.SettingsManager;
+import net.projectagain.ganttplanner.core.ui.UiManager;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.export.Exporter;
@@ -29,17 +29,13 @@ public class App {
   @Autowired(required = false)
   private List<Exporter> myExporters;
   @Autowired
-  public SettingsManager settingsManager;
+  private SettingsManager settingsManager;
 
   @Autowired
-  public UiManager uiManager;
+  private UiManager uiManager;
 
   public static App getInstance() {
     return instance;
-  }
-
-  public GanttProject getMainWindow() {
-    return getInstance().uiManager.getMainWindow().get();
   }
 
   public List<Chart> getCharts() {
@@ -48,6 +44,18 @@ public class App {
 
   public List<Exporter> getExporters() {
     return myExporters == null ? new ArrayList<>() : myExporters;
+  }
+
+  public GanttProject getMainWindow() {
+    return getInstance().uiManager.getMainWindow().get();
+  }
+
+  public SettingsManager getSettingsManager() {
+    return settingsManager;
+  }
+
+  public UiManager getUiManager() {
+    return uiManager;
   }
 
   @PostConstruct
