@@ -1,5 +1,6 @@
 package net.projectagain.ganttplanner.app;
 
+import net.projectagain.ganttplanner.core.ui.UiManager;
 import org.pf4j.PluginManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -11,8 +12,8 @@ public class ApplicationLauncher {
     ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
 
     // retrieves automatically the extensions for the Greeting.class extension point
-    UiLauncher uiLauncher = applicationContext.getBean(UiLauncher.class);
-    uiLauncher.startUiApp(ganttProject -> null);
+    UiManager uiManager = applicationContext.getBean(UiManager.class);
+    uiManager.startUiApp(ganttProject -> null);
 
     // stop plugins
     PluginManager pluginManager = applicationContext.getBean(PluginManager.class);

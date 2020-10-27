@@ -22,7 +22,7 @@ import biz.ganttproject.core.option.ChangeValueEvent;
 import biz.ganttproject.core.option.ChangeValueListener;
 import biz.ganttproject.core.option.DefaultStringOption;
 import biz.ganttproject.core.option.GPOptionGroup;
-import net.projectagain.ganttplanner.plugins.ExtensionComponent;
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.action.OkAction;
 import net.sourceforge.ganttproject.export.WebPublisher;
 import net.sourceforge.ganttproject.gui.options.OptionPageProviderBase;

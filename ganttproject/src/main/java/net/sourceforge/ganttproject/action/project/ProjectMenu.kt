@@ -34,9 +34,7 @@ import javax.swing.JMenuItem
 class ProjectMenu(project: GanttProject, key: String) : JMenu(GPAction.createVoidAction(key)) {
 
   private val newProjectAction = NewProjectAction(project)
-  val openProjectAction = StorageDialogAction(
-    project.project, project.projectUIFacade, project.documentManager, StorageDialogBuilder.Mode.OPEN, "project.open"
-  )
+  val openProjectAction = OpenProjectAction(project.project, project.projectUIFacade)
   val saveProjectAction = SaveProjectAction(project, project.projectUIFacade)
 
   private val saveAsProjectAction = StorageDialogAction(

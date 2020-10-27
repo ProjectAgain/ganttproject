@@ -1,7 +1,8 @@
 package net.projectagain.ganttplanner.app;
 
-import net.projectagain.ganttplanner.i18n.I18N;
-import net.projectagain.ganttplanner.settings.SettingsManager;
+import net.projectagain.ganttplanner.core.i18n.I18N;
+import net.projectagain.ganttplanner.core.ui.UiManager;
+import net.projectagain.ganttplanner.core.settings.SettingsManager;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.export.Exporter;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Christoph Graupner <ch.graupner@workingdeveloper.net>
@@ -32,14 +32,14 @@ public class App {
   public SettingsManager settingsManager;
 
   @Autowired
-  public UiLauncher uiLauncher;
+  public UiManager uiManager;
 
   public static App getInstance() {
     return instance;
   }
 
-  public AtomicReference<GanttProject> getMainWindow() {
-    return getInstance().uiLauncher.mainWindow;
+  public GanttProject getMainWindow() {
+    return getInstance().uiManager.getMainWindow().get();
   }
 
   public List<Chart> getCharts() {

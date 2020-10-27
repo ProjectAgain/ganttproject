@@ -103,7 +103,7 @@ fun dialog(title: LocalizedString? = null,  contentBuilder: (DialogController) -
     contentBuilder(dialogController)
     jfxPanel.scene = Scene(dialogController.build())
     SwingUtilities.invokeLater {
-      val dialogBuilder = DialogBuilder(App.getInstance().mainWindow.get())
+      val dialogBuilder = DialogBuilder(App.getInstance().mainWindow)
       dialogBuilder.createDialog(jfxPanel, arrayOf(), title?.value ?: "", null).also {
         swingDialogController.set(it)
         dialogController.setDialogFrame(it)

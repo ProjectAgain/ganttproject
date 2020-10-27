@@ -27,7 +27,7 @@ public class SettingsDialog2Factory implements Factory<SettingsDialog2> {
 
   @Override
   public SettingsDialog2 create() {
-    GanttProject project = app.getMainWindow().get();
+    GanttProject project = app.getMainWindow();
     return new SettingsDialog2(project, project.getUIFacade(), "settings.app.pageOrder", optionPageProviders);
   }
 }

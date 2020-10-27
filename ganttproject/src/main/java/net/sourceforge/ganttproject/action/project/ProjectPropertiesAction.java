@@ -46,7 +46,7 @@ class ProjectPropertiesAction extends GPAction {
     myMainFrame.getUIFacade().getUndoManager().undoableEdit(getI18n(getID()), new Runnable() {
       @Override
       public void run() {
-        SettingsDialog2 settingsDialog = App.getInstance().uiLauncher.getSettingsDialog2Factory().create();
+        SettingsDialog2 settingsDialog = App.getInstance().uiManager.getSettingsDialog2Factory().create();
         settingsDialog.show();
       }
     });

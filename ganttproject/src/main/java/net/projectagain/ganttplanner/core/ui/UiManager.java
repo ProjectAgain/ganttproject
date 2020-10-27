@@ -1,4 +1,4 @@
-package net.projectagain.ganttplanner.app;
+package net.projectagain.ganttplanner.core.ui;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -32,9 +32,13 @@ import static biz.ganttproject.app.SplashKt.SPLASH_WIDTH;
 
 @Service
 @DependsOn("pluginManager")
-public class UiLauncher {
+public class UiManager {
   final AtomicReference<GanttProject> mainWindow = new AtomicReference<>();
   private final Logger log = LoggerFactory.getLogger(getClass());
+
+  public AtomicReference<GanttProject> getMainWindow() {
+    return mainWindow;
+  }
 
   @Autowired
   private SettingsDialog2Factory settingsDialog2Factory;

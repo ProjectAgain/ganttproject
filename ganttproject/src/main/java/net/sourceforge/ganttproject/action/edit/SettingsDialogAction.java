@@ -40,7 +40,7 @@ public class SettingsDialogAction extends GPAction {
       return;
     }
 
-    SettingsDialog2 dialog = App.getInstance().uiLauncher.getSettingsDialog2Factory().create();
+    SettingsDialog2 dialog = App.getInstance().uiManager.getSettingsDialog2Factory().create();
     dialog.show();
   }
 }

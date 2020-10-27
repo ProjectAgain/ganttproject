@@ -1,4 +1,4 @@
-package net.projectagain.ganttplanner.settings;
+package net.projectagain.ganttplanner.core.settings;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;

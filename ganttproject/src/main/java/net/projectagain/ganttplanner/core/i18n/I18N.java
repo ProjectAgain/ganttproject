@@ -1,4 +1,4 @@
-package net.projectagain.ganttplanner.i18n;
+package net.projectagain.ganttplanner.core.i18n;
 
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.springframework.stereotype.Service;

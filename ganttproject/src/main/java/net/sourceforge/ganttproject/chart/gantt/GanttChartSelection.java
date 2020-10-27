@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.chart.gantt;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import net.projectagain.ganttplanner.app.LogMarker;
+import net.projectagain.ganttplanner.core.LogMarker;
 import net.sourceforge.ganttproject.AbstractChartImplementation.ChartSelectionImpl;
 import net.sourceforge.ganttproject.*;
 import net.sourceforge.ganttproject.task.Task;

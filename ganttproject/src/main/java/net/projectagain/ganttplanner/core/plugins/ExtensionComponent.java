@@ -1,4 +1,4 @@
-package net.projectagain.ganttplanner.plugins;
+package net.projectagain.ganttplanner.core.plugins;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Indexed;

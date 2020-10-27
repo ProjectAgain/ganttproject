@@ -1,4 +1,4 @@
-package net.projectagain.ganttplanner.app;
+package net.projectagain.ganttplanner.core;
 
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
