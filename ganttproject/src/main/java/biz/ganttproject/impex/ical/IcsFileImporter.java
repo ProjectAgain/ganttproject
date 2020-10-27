@@ -33,6 +33,7 @@ import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.RRule;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.util.CompatibilityHints;
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.calendar.CalendarEditorPanel;
 import net.sourceforge.ganttproject.importer.ImporterBase;
 import net.sourceforge.ganttproject.wizard.AbstractWizard;
@@ -54,6 +55,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author dbarashev
  */
+@ExtensionComponent
 public class IcsFileImporter extends ImporterBase {
   private static final Logger log = getLogger(IcsFileImporter.class);
 

@@ -23,10 +23,11 @@ import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.wizard.WizardPage;
 import org.osgi.service.prefs.Preferences;
+import org.pf4j.ExtensionPoint;
 
 import java.io.File;
 
-public interface Importer {
+public interface Importer extends ExtensionPoint {
   String getID();
   String getFileTypeDescription();
 

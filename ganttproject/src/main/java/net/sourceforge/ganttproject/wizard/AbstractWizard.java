@@ -66,7 +66,7 @@ public class AbstractWizard {
 
   private Runnable myOkRunnable;
 
-  public AbstractWizard(UIFacade uiFacade, String title, WizardPage firstPage) {
+  public AbstractWizard(UIFacade uiFacade, String title) {
     myUIFacade = uiFacade;
     myTitle = title;
     myCardLayout = new CardLayout();
@@ -93,6 +93,9 @@ public class AbstractWizard {
     myPagesContainer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     myDialog = myUIFacade.createDialog(myPagesContainer, new Action[] { myBackAction, myNextAction, myOkAction,
         myCancelAction }, myTitle);
+  }
+
+  protected void setFirstPage(WizardPage firstPage) {
     addPageComponent(firstPage);
     myPages.add(firstPage);
     myDialog.layout();

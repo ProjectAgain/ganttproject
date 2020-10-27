@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfiguration {
 
     @Bean
-    public SpringPluginManager pluginManager() {
+    public SpringPluginManager springPluginManager() {
       return new SpringPluginManager();
     }
 

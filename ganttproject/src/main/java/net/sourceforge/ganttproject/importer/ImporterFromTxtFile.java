@@ -18,10 +18,12 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.importer;
 
-import java.io.File;
-
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.io.GanttTXTOpen;
 
+import java.io.File;
+
+@ExtensionComponent
 public class ImporterFromTxtFile extends ImporterBase {
 
   public ImporterFromTxtFile() {

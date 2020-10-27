@@ -1,6 +1,7 @@
 package net.projectagain.ganttplanner.app;
 
 import net.projectagain.ganttplanner.core.i18n.I18N;
+import net.projectagain.ganttplanner.core.plugins.PluginManager;
 import net.projectagain.ganttplanner.core.settings.SettingsManager;
 import net.projectagain.ganttplanner.core.ui.UiManager;
 import net.sourceforge.ganttproject.GanttProject;
@@ -29,8 +30,9 @@ public class App {
   @Autowired(required = false)
   private List<Exporter> myExporters;
   @Autowired
+  private PluginManager pluginManager;
+  @Autowired
   private SettingsManager settingsManager;
-
   @Autowired
   private UiManager uiManager;
 
@@ -48,6 +50,10 @@ public class App {
 
   public GanttProject getMainWindow() {
     return getInstance().uiManager.getMainWindow().get();
+  }
+
+  public PluginManager getPluginManager() {
+    return pluginManager;
   }
 
   public SettingsManager getSettingsManager() {

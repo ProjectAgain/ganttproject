@@ -21,6 +21,7 @@ package biz.ganttproject.impex.msproject2;
 import biz.ganttproject.core.calendar.ImportCalendarOption;
 import biz.ganttproject.core.option.GPOption;
 import com.google.common.collect.Lists;
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sf.mpxj.MPXJException;
 import net.sourceforge.ganttproject.GanttTask;
 import net.sourceforge.ganttproject.importer.BufferProject;
@@ -33,7 +34,6 @@ import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
 import net.sourceforge.ganttproject.util.collect.Pair;
-import org.pf4j.Extension;
 
 import java.io.File;
 import java.util.Date;
@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-@Extension
+@ExtensionComponent
 public class ImporterFromMsProjectFile extends ImporterBase implements Importer {
   private final HumanResourceMerger.MergeResourcesOption myMergeResourcesOption = new HumanResourceMerger.MergeResourcesOption();
   private final ImportCalendarOption myImportCalendarOption = new ImportCalendarOption();

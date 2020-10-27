@@ -18,33 +18,40 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.importer;
 
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.GanttOptions;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.plugins.PluginManager;
 import net.sourceforge.ganttproject.wizard.AbstractWizard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author bard
  */
 public class ImportFileWizardImpl extends AbstractWizard {
-  private static List<Importer> ourImporters = getImporters();
+  private List<Importer> ourImporters = getImporters();
 
   private static GanttLanguage i18n = GanttLanguage.getInstance();
 
   public ImportFileWizardImpl(UIFacade uiFacade, IGanttProject project, GanttOptions options) {
-    super(uiFacade, i18n.getText("importWizard.dialog.title"),
-        new ImporterChooserPage(ourImporters, uiFacade, options.getPluginPreferences().node("/instance/net.sourceforge.ganttproject/import")));
-    for (Importer importer : ourImporters) {
+    super(uiFacade, i18n.getText("importWizard.dialog.title"));
+    setFirstPage(
+      new ImporterChooserPage(
+        ourImporters,
+        uiFacade,
+        options.getPluginPreferences().node("/instance/net.sourceforge.ganttproject/import")
+      )
+    );
+    for (Importer importer: ourImporters) {
       importer.setContext(project, uiFacade, options.getPluginPreferences());
     }
   }
 
-  private static List<Importer> getImporters() {
-    return PluginManager.getExtensions(Importer.EXTENSION_POINT_ID, Importer.class);
+  private List<Importer> getImporters() {
+    return new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Importer.class));
   }
 
 //  @Override

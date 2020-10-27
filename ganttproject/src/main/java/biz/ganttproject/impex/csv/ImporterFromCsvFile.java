@@ -20,6 +20,7 @@ package biz.ganttproject.impex.csv;
 
 import biz.ganttproject.core.option.GPOption;
 
+import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.importer.BufferProject;
 import net.sourceforge.ganttproject.importer.ImporterBase;
@@ -40,6 +41,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author dbarashev (Dmitry Barashev)
  */
+@ExtensionComponent
 public class ImporterFromCsvFile extends ImporterBase {
   private final Logger log = getLogger(getClass());
 
