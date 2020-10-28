@@ -116,7 +116,7 @@ class StorageDialogBuilder(
 
   fun build(mode: Mode) {
     dialogBuildApi.addStyleClass("dlg-storage")
-    dialogBuildApi.addStyleSheet("/biz/ganttproject/storage/StorageDialog.css")
+    dialogBuildApi.addStyleSheet("/javafx/css/biz/ganttproject/storage/StorageDialog.css")
     dialogBuildApi.removeButtonBar()
 
     val contentPane = BorderPane()

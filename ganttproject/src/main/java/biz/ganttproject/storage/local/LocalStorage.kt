@@ -199,8 +199,8 @@ class LocalStorage(
       withConfirmation(RootLocalizer.create("document.overwrite"), state.confirmationRequired)
     }.build()
     paneElements.browserPane.stylesheets.addAll(
-        "biz/ganttproject/storage/StorageDialog.css",
-        "biz/ganttproject/storage/local/LocalStorage.css"
+        "/javafx/css/biz/ganttproject/storage/StorageDialog.css",
+        "/javafx/css/biz/ganttproject/storage/local/LocalStorage.css"
     )
     paneElements.breadcrumbView?.show()
 

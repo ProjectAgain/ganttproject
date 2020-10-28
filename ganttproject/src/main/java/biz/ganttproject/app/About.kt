@@ -45,9 +45,9 @@ fun showAboutDialog() {
     val installedVersion = GPVersion.getCurrentVersionNumber()
     dialogApi.addStyleClass("dlg-platform-update")
     dialogApi.addStyleSheet(
-        "/biz/ganttproject/platform/Update.css",
-        "/biz/ganttproject/storage/StorageDialog.css",
-        "/biz/ganttproject/storage/cloud/GPCloudStorage.css",
+        "/javafx/css/biz/ganttproject/platform/Update.css",
+        "/javafx/css/biz/ganttproject/storage/StorageDialog.css",
+        "/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css",
     )
 
     val logo = ImageView(Image(
@@ -83,7 +83,7 @@ fun showAboutDialog() {
             prefWidth = 600.0
             prefHeight = 500.0
             stylesheets.clear()
-            stylesheets.add("/biz/ganttproject/app/mdfx.css")
+            stylesheets.add("/javafx/css/biz/ganttproject/app/mdfx.css")
           }
 
           override fun setLink(node: Node, link: String, description: String?) {

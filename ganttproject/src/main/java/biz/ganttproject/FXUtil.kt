@@ -223,7 +223,10 @@ object FXUtil {
         it.isResizable = true
         it.dialogPane.apply {
           styleClass.addAll("dlg-lock", "dlg-cloud-file-options")
-          stylesheets.addAll("/biz/ganttproject/storage/cloud/GPCloudStorage.css", "/biz/ganttproject/storage/StorageDialog.css")
+          stylesheets.addAll(
+            "/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css",
+            "/javafx/css/biz/ganttproject/storage/StorageDialog.css"
+          )
 
           val window = scene.window
           window.onCloseRequest = EventHandler {

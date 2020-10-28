@@ -94,8 +94,8 @@ class RecentProjects(
     paneElements.breadcrumbView?.show()
     return paneElements.browserPane.also {
       it.stylesheets.addAll(
-        "/biz/ganttproject/storage/cloud/GPCloudStorage.css",
-        "/biz/ganttproject/storage/FolderViewCells.css"
+        "/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css",
+        "/javafx/css/biz/ganttproject/storage/FolderViewCells.css"
       )
       loadRecentDocs(builder.resultConsumer)
     }

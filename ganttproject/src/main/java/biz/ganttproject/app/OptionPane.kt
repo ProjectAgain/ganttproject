@@ -25,7 +25,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.Pane
 
-const val OPTION_PANE_STYLESHEET = "/biz/ganttproject/app/OptionPane.css"
+const val OPTION_PANE_STYLESHEET = "/javafx/css/biz/ganttproject/app/OptionPane.css"
 
 /**
  * Input data of a single option: its key for i18n purposes, user data for the handler and flag indicating if option

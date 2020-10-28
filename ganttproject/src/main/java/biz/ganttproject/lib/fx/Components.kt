@@ -38,7 +38,7 @@ class ListItemBuilder(val contentNode: Node) {
   var onSelectionChange: ((node: Parent) -> Unit)? = null
 
   fun build(): Pane {
-    result.stylesheets.add("biz/ganttproject/lib/fx/GPList.css")
+    result.stylesheets.add("/javafx/css/biz/ganttproject/lib/fx/GPList.css")
     result.styleClass.add("list-item")
 
     contentNode.styleClass.add("content-node")

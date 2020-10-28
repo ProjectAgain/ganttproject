@@ -47,7 +47,7 @@ class FXToolbar {
 
   internal fun init(initializer: (FXToolbar) -> Unit) {
     val scene = Scene(toolbar, Color.TRANSPARENT)
-    scene.stylesheets.add("biz/ganttproject/app/Toolbar.css")
+    scene.stylesheets.add("/javafx/css/biz/ganttproject/app/Toolbar.css")
     initializer(this)
     component.scene = scene
   }

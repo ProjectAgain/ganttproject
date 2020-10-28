@@ -155,8 +155,8 @@ internal class ProjectOpenStrategy(project: IGanttProject, uiFacade: UIFacade) :
     OptionPaneBuilder<OpenOnlineDocumentChoice>().run {
       i18n = RootLocalizer.createWithRootKey(rootKey = "cloud.openWhenOfflineIsAhead")
       styleClass = "dlg-lock"
-      styleSheets.add("/biz/ganttproject/storage/cloud/GPCloudStorage.css")
-      styleSheets.add("/biz/ganttproject/storage/StorageDialog.css")
+      styleSheets.add("/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css")
+      styleSheets.add("/javafx/css/biz/ganttproject/storage/StorageDialog.css")
       graphic = FontAwesomeIconView(FontAwesomeIcon.UNLOCK)
       elements = listOf(
           OptionElementData("useOffline", OpenOnlineDocumentChoice.USE_OFFLINE, true),
@@ -189,8 +189,8 @@ internal class ProjectOpenStrategy(project: IGanttProject, uiFacade: UIFacade) :
     OptionPaneBuilder<OpenOnlineDocumentChoice>().run {
       i18n = RootLocalizer.createWithRootKey(rootKey = "cloud.openWhenDiverged")
       styleClass = "dlg-lock"
-      styleSheets.add("/biz/ganttproject/storage/cloud/GPCloudStorage.css")
-      styleSheets.add("/biz/ganttproject/storage/StorageDialog.css")
+      styleSheets.add("/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css")
+      styleSheets.add("/javafx/css/biz/ganttproject/storage/StorageDialog.css")
       graphic = FontAwesomeIconView(FontAwesomeIcon.UNLOCK)
       elements = listOf(
           OptionElementData("useOffline", OpenOnlineDocumentChoice.USE_OFFLINE, true),

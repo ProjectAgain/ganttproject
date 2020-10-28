@@ -44,7 +44,10 @@ internal class ProjectOpenDiagnosticUiFx {
           it.content = content
           it.buttonTypes.add(ButtonType.OK)
           it.styleClass.add("dlg-lock")
-          it.stylesheets.addAll("/biz/ganttproject/storage/StorageDialog.css", "/biz/ganttproject/storage/cloud/GPCloudStorage.css")
+          it.stylesheets.addAll(
+            "/javafx/css/biz/ganttproject/storage/StorageDialog.css",
+            "/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css"
+          )
           it.lookupButton(ButtonType.OK).apply {
             styleClass.add("btn-attention")
           }

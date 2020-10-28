@@ -89,8 +89,8 @@ class ProjectUIFacadeImpl(
           baseLocalizer = RootLocalizer
         )
         it.styleClass = "dlg-lock"
-        it.styleSheets.add("/biz/ganttproject/storage/cloud/GPCloudStorage.css")
-        it.styleSheets.add("/biz/ganttproject/storage/StorageDialog.css")
+        it.styleSheets.add("/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css")
+        it.styleSheets.add("/javafx/css/biz/ganttproject/storage/StorageDialog.css")
         it.titleString.update(document.fileName)
         it.titleHelpString?.update(canWrite.message)
         it.graphic = FontAwesomeIconView(FontAwesomeIcon.LOCK, "64").also { icon ->
@@ -138,8 +138,8 @@ class ProjectUIFacadeImpl(
         OptionPaneBuilder<VersionMismatchChoice>().also {
           it.i18n = RootLocalizer.createWithRootKey(rootKey = "cloud.versionMismatch", baseLocalizer = RootLocalizer)
           it.styleClass = "dlg-lock"
-          it.styleSheets.add("/biz/ganttproject/storage/cloud/GPCloudStorage.css")
-          it.styleSheets.add("/biz/ganttproject/storage/StorageDialog.css")
+          it.styleSheets.add("/javafx/css/biz/ganttproject/storage/cloud/GPCloudStorage.css")
+          it.styleSheets.add("/javafx/css/biz/ganttproject/storage/StorageDialog.css")
           it.graphic = FontAwesomeIconView(FontAwesomeIcon.CODE_FORK, "64").also { icon ->
             icon.styleClass.add("img")
           }

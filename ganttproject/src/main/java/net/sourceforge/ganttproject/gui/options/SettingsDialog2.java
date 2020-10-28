@@ -67,6 +67,7 @@ public class SettingsDialog2 extends AbstractPagesDialog {
     List<ListItem> items = new ArrayList<ListItem>();
     String[] listConfig = App.getInstance().getSettingsManager().getSetting(pageOrderKey).split(",");
     for (String pageName : listConfig) {
+      pageName=pageName.trim();
       ListItem li;
       if (pageName.startsWith("pageGroup.")) {
         li = new ListItem(true, pageName, GanttLanguage.getInstance().correctLabel(
