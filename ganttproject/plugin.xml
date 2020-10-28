@@ -35,20 +35,20 @@
     <extension point="net.sourceforge.ganttproject.exporter">
         <exporter class="net.sourceforge.ganttproject.export.ExporterToImage"/>
         <exporter class="net.sourceforge.ganttproject.export.ExporterToCSV"/>
-        <exporter class="net.sourceforge.ganttproject.impex.htmlpdf.ExporterToHTML"/>
-        <exporter class="net.sourceforge.ganttproject.impex.htmlpdf.ExporterToPDF"/>
+        <exporter class="net.sourceforge.ganttproject.export.htmlpdf.ExporterToHTML"/>
+        <exporter class="net.sourceforge.ganttproject.export.htmlpdf.ExporterToPDF"/>
         <exporter class="biz.ganttproject.impex.msproject2.ExporterToMsProjectFile"/>
     </extension>
 
-    <extension point="net.sourceforge.ganttproject.impex.htmlpdf.HTMLStylesheet">
+    <extension point="net.sourceforge.ganttproject.export.htmlpdf.HTMLStylesheet">
         <theme name="Samara" url="html-export-themes/samara/"/>
         <theme name="Default theme" url="html-export-themes/default/"/>
         <theme name="Striped Blue" url="html-export-themes/striped_blue/"/>
     </extension>
-    <extension point="net.sourceforge.ganttproject.impex.htmlpdf.itext.ITextStylesheet">
+    <extension point="net.sourceforge.ganttproject.export.htmlpdf.itext.ITextStylesheet">
         <theme name="Sortavala" url="itext-export-themes/sortavala.txt"/>
     </extension>
-    <extension point="net.sourceforge.ganttproject.impex.htmlpdf.FontDirectory">
+    <extension point="net.sourceforge.ganttproject.export.htmlpdf.FontDirectory">
         <dir name="C:/windows/fonts" absolute="true"/>
         <dir name="/usr/share/fonts/truetype" absolute="true"/>
         <dir name="/System/Library/Fonts" absolute="true"/>

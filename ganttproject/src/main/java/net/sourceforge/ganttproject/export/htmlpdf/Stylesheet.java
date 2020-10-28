@@ -1,7 +1,7 @@
 /*
  * Created on 22.09.2005
  */
-package net.sourceforge.ganttproject.impex.htmlpdf;
+package net.sourceforge.ganttproject.export.htmlpdf;
 
 import java.net.URL;
 

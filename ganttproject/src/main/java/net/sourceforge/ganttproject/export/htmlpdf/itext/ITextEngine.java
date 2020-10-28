@@ -16,23 +16,25 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf.itext;
+package net.sourceforge.ganttproject.export.htmlpdf.itext;
 
 import biz.ganttproject.core.option.GPOptionGroup;
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.export.ExportException;
 import net.sourceforge.ganttproject.export.ExporterBase;
 import net.sourceforge.ganttproject.export.ExporterBase.ExporterJob;
+import net.sourceforge.ganttproject.export.htmlpdf.AbstractEngine;
+import net.sourceforge.ganttproject.export.htmlpdf.ExporterToPDF;
+import net.sourceforge.ganttproject.export.htmlpdf.Stylesheet;
+import net.sourceforge.ganttproject.export.htmlpdf.fonts.TTFontCache;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.OptionsPageBuilder;
-import net.sourceforge.ganttproject.impex.htmlpdf.AbstractEngine;
-import net.sourceforge.ganttproject.impex.htmlpdf.ExporterToPDF;
-import net.sourceforge.ganttproject.impex.htmlpdf.Stylesheet;
-import net.sourceforge.ganttproject.impex.htmlpdf.StylesheetFactoryImpl;
-import net.sourceforge.ganttproject.impex.htmlpdf.fonts.TTFontCache;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.osgi.service.prefs.Preferences;
 import org.slf4j.Logger;
+import org.springframework.core.io.Resource;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +43,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -82,7 +85,7 @@ public class ITextEngine extends AbstractEngine {
   }
 
   public String[] getCommandLineKeys() {
-    return new String[] { "itext" };
+    return new String[]{"itext"};
   }
 
   private Component createFontPanel() {
@@ -98,7 +101,7 @@ public class ITextEngine extends AbstractEngine {
     waitRegisterFonts();
     myStylesheet = (ITextStylesheet) stylesheet;
     if (getPreferences() != null) {
-      Preferences node = getPreferences().node("/configuration/net.sourceforge.ganttproject.impex.htmlpdf/font-substitution");
+      Preferences node = getPreferences().node("/configuration/net.sourceforge.ganttproject.export.htmlpdf/font-substitution");
       mySubstitutionModel = new FontSubstitutionModel(myFontCache, myStylesheet, node);
       myStylesheet.setFontSubstitutionModel(mySubstitutionModel);
     }
@@ -109,13 +112,14 @@ public class ITextEngine extends AbstractEngine {
   }
 
   public List<Stylesheet> getStylesheets() {
-    StylesheetFactoryImpl factory = new StylesheetFactoryImpl() {
-      @Override
-      protected Stylesheet newStylesheet(URL resolvedUrl, String localizedName) {
-        return new ThemeImpl(resolvedUrl, localizedName, getExporter(), myFontCache);
-      }
-    };
-    return factory.createStylesheets(ITextStylesheet.class);
+    List<Stylesheet> result = new ArrayList<>();
+    try {
+      URL url = App.getInstance().getResource("html-exporter/itext-export-themes/sortavala.txt").getURL();
+      result.add(new ThemeImpl(url, "Sortavala", getExporter(), myFontCache));
+    } catch (IOException e) {
+      log.error("Exception", e);
+    }
+    return result;
   }
 
   private ExporterBase getExporter() {
@@ -167,25 +171,29 @@ public class ITextEngine extends AbstractEngine {
 
   protected void registerFontDirectories() {
     myFontCache.registerDirectory(System.getProperty("java.home") + "/lib/fonts");
-    IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
-    IConfigurationElement[] configElements = extensionRegistry.getConfigurationElementsFor("net.sourceforge.ganttproject.impex.htmlpdf.FontDirectory");
-    for (int i = 0; i < configElements.length; i++) {
-      final String dirName = configElements[i].getAttribute("name");
-      if (Boolean.TRUE.toString().equalsIgnoreCase(configElements[i].getAttribute("absolute"))) {
+    Map<String, Boolean> l = Map.of(
+      "C:/windows/fonts", true,
+      "/usr/share/fonts/truetype", true,
+      "/System/Library/Fonts", true,
+      "fonts", false
+    );
+
+    for (Map.Entry<String, Boolean> x : l.entrySet()) {
+      final String dirName = x.getKey();
+      if (x.getValue()) {
         myFontCache.registerDirectory(dirName);
       } else {
-        String namespace = configElements[i].getDeclaringExtension().getNamespaceIdentifier();
-        URL dirUrl = Platform.getBundle(namespace).getResource(dirName);
-        if (dirUrl == null) {
-          log.warn("Failed to find directory " + dirName + " in plugin " + namespace);
+        Resource resource = App.getInstance().applicationContext.getResource(dirName);
+        if (!resource.exists()) {
+          log.warn("Failed to find directory '{}'", dirName);
           continue;
         }
+
         try {
-          URL resolvedDir = Platform.resolve(dirUrl);
-          myFontCache.registerDirectory(resolvedDir.getPath());
+          final URL dirUrl = resource.getURL();
+          myFontCache.registerDirectory(dirUrl.getPath());
         } catch (IOException e) {
           log.warn(e.getMessage(), e);
-          continue;
         }
       }
     }
@@ -193,7 +201,7 @@ public class ITextEngine extends AbstractEngine {
 
   public ExporterJob[] createJobs(File outputFile, List<File> resultFiles) {
     waitRegisterFonts();
-    return new ExporterJob[] { createTransformationJob(outputFile) };
+    return new ExporterJob[]{createTransformationJob(outputFile)};
   }
 
   private ExporterJob createTransformationJob(final File outputFile) {

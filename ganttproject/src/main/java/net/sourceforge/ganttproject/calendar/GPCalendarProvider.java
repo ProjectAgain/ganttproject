@@ -23,14 +23,15 @@ import biz.ganttproject.core.calendar.GPCalendarCalc;
 import biz.ganttproject.core.calendar.WeekendCalendarImpl;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
+import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.io.XmlParser;
 import net.sourceforge.ganttproject.parser.AbstractTagHandler;
 import net.sourceforge.ganttproject.parser.HolidayTagHandler;
 import net.sourceforge.ganttproject.parser.ParsingListener;
 import net.sourceforge.ganttproject.parser.TagHandler;
 import net.sourceforge.ganttproject.util.FileUtil;
-import org.eclipse.core.runtime.Platform;
 import org.slf4j.Logger;
+import org.springframework.core.io.Resource;
 import org.xml.sax.Attributes;
 
 import java.io.BufferedInputStream;
@@ -97,10 +98,13 @@ public class GPCalendarProvider {
 
   private static List<GPCalendar> readCalendars() {
     try {
-      URL resolved = Platform.resolve(GPCalendarProvider.class.getResource("/calendar"));
-      if (resolved == null) {
+      Resource resource = App.getInstance().getResource("/calendar");
+      if (!resource.exists()) {
+        log.warn("There are no calendars defined.");
         return Collections.emptyList();
       }
+
+      URL resolved = resource.getURL();
       File dir = new File(resolved.getFile());
       if (dir.exists() && dir.isDirectory() && dir.canRead()) {
         List<GPCalendar> calendars = Lists.newArrayList();
@@ -112,8 +116,7 @@ public class GPCalendarProvider {
                 calendars.add(calendar);
               }
             } catch (Throwable e) {
-              log.error("Failure when reading calendar file {}", f.getAbsolutePath());
-              log.error("Exception", e);
+              log.error("Failure when reading calendar file " + f.getAbsolutePath(), e);
             }
           }
         }

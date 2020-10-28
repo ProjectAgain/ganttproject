@@ -16,14 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf;
+package net.sourceforge.ganttproject.export.htmlpdf;
 
 import biz.ganttproject.core.option.GPOptionGroup;
+import net.projectagain.ganttplanner.app.App;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.export.ExportException;
 import net.sourceforge.ganttproject.util.FileUtil;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.apache.commons.collections4.Factory;
+import org.eclipse.core.runtime.*;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -38,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -80,7 +82,7 @@ public class ExporterToHTML extends StylesheetExporterBase {
     ExporterJob generateResourceChartJob = createGenerateResourceChartJob(outputFile, resultFiles);
     ExporterJob generatePagesJob = createGeneratePagesJob(outputFile, resultFiles);
     ExporterJob copyImagesJob = createCopyImagesJob(outputFile, resultFiles);
-    return new ExporterJob[] { generateGanttChartJob, generateResourceChartJob, generatePagesJob, copyImagesJob };
+    return new ExporterJob[]{generateGanttChartJob, generateResourceChartJob, generatePagesJob, copyImagesJob};
   }
 
   private ExporterJob createGenerateGanttChartJob(final File outputFile, final List<File> resultFiles) {
@@ -89,7 +91,7 @@ public class ExporterToHTML extends StylesheetExporterBase {
       protected IStatus run() {
         try {
           RenderedImage ganttChartImage = getGanttChart().getRenderedImage(
-              createExportSettings());
+            createExportSettings());
           File ganttChartImageFile;
           ganttChartImageFile = replaceExtension(outputFile, GANTT_CHART_FILE_EXTENSION);
           ImageIO.write(ganttChartImage, PNG_FORMAT_NAME, ganttChartImageFile);
@@ -113,7 +115,7 @@ public class ExporterToHTML extends StylesheetExporterBase {
       protected IStatus run() {
         try {
           RenderedImage resourceChartImage = getResourceChart().getRenderedImage(
-              createExportSettings());
+            createExportSettings());
           File resourceChartImageFile = replaceExtension(outputFile, RESOURCE_CHART_FILE_EXTENSION);
           ImageIO.write(resourceChartImage, PNG_FORMAT_NAME, resourceChartImageFile);
           resultFiles.add(resourceChartImageFile);
@@ -226,7 +228,7 @@ public class ExporterToHTML extends StylesheetExporterBase {
 
   @Override
   public String[] getFileExtensions() {
-    String s[] = { "html" };
+    String s[] = {"html"};
     return s;
   }
 
@@ -237,13 +239,52 @@ public class ExporterToHTML extends StylesheetExporterBase {
 
   @Override
   protected List<Stylesheet> getStylesheets() {
-    StylesheetFactoryImpl factory = new StylesheetFactoryImpl() {
+
+    Factory<List<Stylesheet>> factory = new Factory<>() {
+
+      /**
+       * <extension point="net.sourceforge.ganttproject.export.htmlpdf.HTMLStylesheet">
+       * <theme name="Samara" url="html-export-themes/samara/"/>
+       * <theme name="Default theme" url="html-export-themes/default/"/>
+       * <theme name="Striped Blue" url="html-export-themes/striped_blue/"/>
+       * </extension>
+       *
+       * @return
+       */
       @Override
-      protected Stylesheet newStylesheet(URL resolvedUrl, String localizedName) {
-        return new HTMLStylesheetImpl(resolvedUrl, localizedName);
+      public List<Stylesheet> create() {
+        List<Stylesheet> result1 = new ArrayList<Stylesheet>();
+        // <theme name="Samara" url="html-export-themes/samara/"/>
+        try {
+          result1.add(new HTMLStylesheetImpl(
+            App.getInstance().getResource("html-exporter/html-export-themes/samara/").getURL(),
+            "Samara"
+          ));
+        } catch (IOException e) {
+          log.error("Exception ", e);
+        }
+        // <theme name="Default theme" url="html-export-themes/default/"/>
+        try {
+          result1.add(new HTMLStylesheetImpl(
+            App.getInstance().getResource("html-exporter/html-export-themes/default/").getURL(),
+            "Default theme"
+          ));
+        } catch (IOException e) {
+          log.error("Exception ", e);
+        }
+        // <theme name="Striped Blue" url="html-export-themes/striped_blue/"/>
+        try {
+          result1.add(new HTMLStylesheetImpl(
+            App.getInstance().getResource("html-exporter/html-export-themes/striped_blue/").getURL(),
+            "Striped Blue"
+          ));
+        } catch (IOException e) {
+          log.error("Exception ", e);
+        }
+        return result1;
       }
     };
-    return factory.createStylesheets(HTMLStylesheet.class);
+    return factory.create();
   }
 
   class HTMLStylesheetImpl extends StylesheetImpl implements HTMLStylesheet {

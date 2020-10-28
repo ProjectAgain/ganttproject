@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf.itext;
+package net.sourceforge.ganttproject.export.htmlpdf.itext;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Rectangle;
@@ -27,7 +27,7 @@ import net.sourceforge.ganttproject.chart.ChartModel;
 import net.sourceforge.ganttproject.chart.TimelineChart;
 import net.sourceforge.ganttproject.chart.export.ChartDimensions;
 import net.sourceforge.ganttproject.chart.export.ChartImageVisitor;
-import net.sourceforge.ganttproject.impex.htmlpdf.fonts.TTFontCache;
+import net.sourceforge.ganttproject.export.htmlpdf.fonts.TTFontCache;
 
 import java.awt.*;
 

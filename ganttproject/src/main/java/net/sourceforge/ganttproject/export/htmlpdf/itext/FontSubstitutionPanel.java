@@ -16,10 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf.itext;
+package net.sourceforge.ganttproject.export.htmlpdf.itext;
 
 import net.sourceforge.ganttproject.gui.UIUtil;
-import net.sourceforge.ganttproject.impex.htmlpdf.itext.FontSubstitutionModel.FontSubstitution;
+import net.sourceforge.ganttproject.export.htmlpdf.itext.FontSubstitutionModel.FontSubstitution;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;

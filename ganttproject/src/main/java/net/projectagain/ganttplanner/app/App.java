@@ -7,6 +7,7 @@ import net.projectagain.ganttplanner.core.ui.UiManager;
 import net.sourceforge.ganttproject.GanttProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +31,10 @@ public class App {
 
   public static App getInstance() {
     return instance;
+  }
+
+  public Resource getResource(String location) {
+    return applicationContext.getResource(location);
   }
 
 

@@ -16,16 +16,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf;
-
-import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import com.google.common.base.Joiner;
+package net.sourceforge.ganttproject.export.htmlpdf;
 
 import biz.ganttproject.core.model.task.TaskDefaultColumn;
+import com.google.common.base.Joiner;
 import net.sourceforge.ganttproject.CustomProperty;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.IGanttProject;
@@ -35,6 +29,11 @@ import net.sourceforge.ganttproject.resource.HumanResource;
 import net.sourceforge.ganttproject.task.CustomColumnsValues;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskProperties;
+
+import java.text.DateFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class PropertyFetcher {
   private static final GanttLanguage language = GanttLanguage.getInstance();

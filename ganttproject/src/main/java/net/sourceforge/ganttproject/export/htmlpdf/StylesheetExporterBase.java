@@ -16,25 +16,26 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf;
-
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.export.ExporterBase;
-import net.sourceforge.ganttproject.gui.UIFacade;
-
-import org.osgi.service.prefs.Preferences;
+package net.sourceforge.ganttproject.export.htmlpdf;
 
 import biz.ganttproject.core.option.DefaultEnumerationOption;
 import biz.ganttproject.core.option.EnumerationOption;
 import biz.ganttproject.core.option.GPOption;
 import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.export.ExporterBase;
+import net.sourceforge.ganttproject.gui.UIFacade;
+import org.osgi.service.prefs.Preferences;
+import org.slf4j.Logger;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public abstract class StylesheetExporterBase extends ExporterBase {
-
+private final Logger log = getLogger(getClass());
   private GPOptionGroup myOptions;
 
   protected EnumerationOption createStylesheetOption(String optionID, final List<Stylesheet> stylesheets) {
@@ -80,6 +81,10 @@ public abstract class StylesheetExporterBase extends ExporterBase {
   }
 
   private void createStylesheetOption(List<Stylesheet> stylesheets) {
+    if (stylesheets.isEmpty()) {
+      log.warn("There are no stylesheets defined");
+      return;
+    }
     EnumerationOption stylesheetOption = createStylesheetOption(getStylesheetOptionID(), stylesheets);
     stylesheetOption.setValue(stylesheets.get(0).getLocalizedName());
     myOptions = new GPOptionGroup("exporter.html", new GPOption[] { stylesheetOption });

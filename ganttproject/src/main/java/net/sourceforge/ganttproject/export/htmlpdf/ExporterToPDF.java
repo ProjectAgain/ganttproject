@@ -16,12 +16,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf;
+package net.sourceforge.ganttproject.export.htmlpdf;
 
 import biz.ganttproject.core.option.GPOptionGroup;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.impex.htmlpdf.itext.ITextEngine;
-import net.sourceforge.ganttproject.impex.htmlpdf.itext.ITextStylesheet;
+import net.sourceforge.ganttproject.export.htmlpdf.itext.ITextEngine;
+import net.sourceforge.ganttproject.export.htmlpdf.itext.ITextStylesheet;
 
 import java.awt.*;
 import java.io.File;

@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package net.sourceforge.ganttproject.impex.htmlpdf.itext;
+package net.sourceforge.ganttproject.export.htmlpdf.itext;
 
 import biz.ganttproject.core.model.task.TaskDefaultColumn;
 import biz.ganttproject.core.option.BooleanOption;
@@ -51,9 +51,9 @@ import net.sourceforge.ganttproject.language.LanguageOption;
 import net.sourceforge.ganttproject.resource.HumanResource;
 import net.sourceforge.ganttproject.roles.Role;
 import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.impex.htmlpdf.PropertyFetcher;
-import net.sourceforge.ganttproject.impex.htmlpdf.StylesheetImpl;
-import net.sourceforge.ganttproject.impex.htmlpdf.fonts.TTFontCache;
+import net.sourceforge.ganttproject.export.htmlpdf.PropertyFetcher;
+import net.sourceforge.ganttproject.export.htmlpdf.StylesheetImpl;
+import net.sourceforge.ganttproject.export.htmlpdf.fonts.TTFontCache;
 
 import java.io.IOException;
 import java.io.OutputStream;

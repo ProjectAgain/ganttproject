@@ -44,8 +44,7 @@ class ProjectMenu(project: GanttProject, key: String) : JMenu(GPAction.createVoi
 
   private val projectSettingsAction = ProjectPropertiesAction(project)
   private val importAction = ProjectImportAction(project.uiFacade, project)
-  private val exportAction = ProjectExportAction(
-    project.uiFacade, project, project.ganttOptions.pluginPreferences)
+  private val exportAction = ProjectExportAction(project.uiFacade, project, project.ganttOptions.pluginPreferences)
   private val printAction = PrintAction(project)
   private val printPreviewAction = ProjectPreviewAction(project)
   private val exitAction = ExitAction(project)
