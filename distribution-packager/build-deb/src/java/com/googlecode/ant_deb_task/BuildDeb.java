@@ -1,7 +1,5 @@
 package com.googlecode.ant_deb_task;
 
-import java.io.*;
-import java.util.*;
 import java.text.MessageFormat;
 
 public class BuildDeb

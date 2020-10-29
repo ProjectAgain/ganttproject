@@ -29,7 +29,7 @@
         <copy todir="${build.targetDir}/usr/share/doc/${package.name}">
             <fileset dir="${build.docDir}">
                 <include name="LICENSE"/>
-                <include name="README"/>
+                <include name="README.md"/>
                 <include name="AUTHORS"/>
             </fileset>
         </copy>

@@ -1,17 +1,11 @@
 package com.googlecode.ant_deb_task;
 
-import org.apache.tools.ant.*;
 import org.apache.tools.ant.taskdefs.Tar;
-import org.apache.tools.ant.types.*;
 import org.apache.tools.tar.TarOutputStream;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import java.util.zip.*;
-import java.security.MessageDigest;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.MessageDigest;
 
 /**
  * Task that creates a Debian package.
@@ -713,16 +707,16 @@ public class Deb extends Task
 	        for (int i = 0; i < _data.size (); i++)
 	        {
 	            TarFileSet data = (TarFileSet) _data.get (i);
-	
+
 	            if (data.getUserName() == null || data.getUserName().trim().length() == 0)
 	                data.setUserName ("root");
-	
+
 	            if (data.getGroup() == null || data.getGroup().trim().length() == 0)
 	                data.setGroup ("root");
-	
+
 	            dataTar.add (data);
 	        }
-	
+
 	        dataTar.execute ();
         }
         else

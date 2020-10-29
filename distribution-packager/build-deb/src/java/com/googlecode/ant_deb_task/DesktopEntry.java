@@ -1,10 +1,6 @@
 package com.googlecode.ant_deb_task;
 
-import org.apache.tools.ant.*;
 import org.apache.tools.ant.types.EnumeratedAttribute;
-
-import java.io.*;
-import java.util.*;
 
 /**
  * Task that generates a desktop entry file used to add menu entries.

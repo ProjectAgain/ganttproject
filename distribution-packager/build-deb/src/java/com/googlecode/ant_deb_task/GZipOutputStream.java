@@ -1,7 +1,6 @@
 package com.googlecode.ant_deb_task;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.IOException;
 
 /**
  * An enhanced GZIP output stream that allows the compression level to be set.

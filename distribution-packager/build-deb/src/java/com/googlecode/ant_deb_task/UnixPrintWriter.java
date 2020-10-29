@@ -1,7 +1,5 @@
 package com.googlecode.ant_deb_task;
 
-import java.io.*;
-
 public class UnixPrintWriter extends PrintWriter
 {
     public UnixPrintWriter (File file) throws FileNotFoundException
