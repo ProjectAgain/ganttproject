@@ -23,8 +23,8 @@ import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.util.StringUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.w3c.util.DateParser;
-import org.w3c.util.InvalidDateException;
+import net.sourceforge.ganttproject.util.DateParser;
+import net.sourceforge.ganttproject.util.InvalidDateException;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;

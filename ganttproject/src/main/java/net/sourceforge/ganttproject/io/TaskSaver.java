@@ -28,7 +28,7 @@ import net.sourceforge.ganttproject.task.CustomColumnsValues;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.util.ColorConvertion;
-import org.w3c.util.DateParser;
+import net.sourceforge.ganttproject.util.DateParser;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 

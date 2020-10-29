@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.ganttproject.chart.pert;
+package net.sourceforge.ganttproject.chart.pert;
 
 import net.sourceforge.ganttproject.GanttExportSettings;
 import net.sourceforge.ganttproject.IGanttProject;
@@ -24,7 +24,7 @@ import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.chart.export.ChartImageVisitor;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.util.StringUtils;
-import org.ganttproject.chart.pert.PertChartAbstraction.TaskGraphNode;
+import net.sourceforge.ganttproject.chart.pert.PertChartAbstraction.TaskGraphNode;
 
 import javax.swing.*;
 import java.awt.*;

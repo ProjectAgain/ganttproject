@@ -34,8 +34,8 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.service.prefs.Preferences;
 import org.slf4j.Logger;
-import org.w3c.util.DateParser;
-import org.w3c.util.InvalidDateException;
+import net.sourceforge.ganttproject.util.DateParser;
+import net.sourceforge.ganttproject.util.InvalidDateException;
 
 import java.io.File;
 import java.util.ArrayList;

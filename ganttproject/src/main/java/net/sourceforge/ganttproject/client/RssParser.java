@@ -25,8 +25,8 @@ import net.sourceforge.ganttproject.util.StringUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.util.DateParser;
-import org.w3c.util.InvalidDateException;
+import net.sourceforge.ganttproject.util.DateParser;
+import net.sourceforge.ganttproject.util.InvalidDateException;
 import org.xml.sax.InputSource;
 
 import javax.xml.namespace.NamespaceContext;

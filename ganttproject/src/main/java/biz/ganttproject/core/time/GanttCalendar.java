@@ -25,8 +25,8 @@ import java.util.Date;
 import biz.ganttproject.core.time.CalendarFactory.LocaleApi;
 import biz.ganttproject.core.time.impl.GPTimeUnitStack;
 
-import org.w3c.util.DateParser;
-import org.w3c.util.InvalidDateException;
+import net.sourceforge.ganttproject.util.DateParser;
+import net.sourceforge.ganttproject.util.InvalidDateException;
 
 /**
  * Class use for calendar
@@ -162,7 +162,7 @@ public class GanttCalendar extends java.util.GregorianCalendar {
 
   public GanttCalendar getDisplayValue() {
     if (myShiftedValue == null) {
-      myShiftedValue = CalendarFactory.createGanttCalendar(GPTimeUnitStack.DAY.jumpLeft(getTime())); 
+      myShiftedValue = CalendarFactory.createGanttCalendar(GPTimeUnitStack.DAY.jumpLeft(getTime()));
     }
     return myShiftedValue;
   }

@@ -1,8 +1,9 @@
+// http://jigsaw.w3.org/Doc/Programmer/api/org/w3c/util/DateParser.html
 // DateParser.java
 // $Id: DateParser.java,v 1.5 2005/05/14 15:53:00 dbarashev Exp $
 // (c) COPYRIGHT MIT, INRIA and Keio, 2000.
 // Please first read the full copyright statement in file COPYRIGHT.html
-package org.w3c.util;
+package net.sourceforge.ganttproject.util;
 
 import java.util.Calendar;
 import java.util.Date;

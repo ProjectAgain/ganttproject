@@ -24,8 +24,8 @@ import net.sourceforge.ganttproject.task.CustomColumnsException;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
 import org.slf4j.Logger;
-import org.w3c.util.DateParser;
-import org.w3c.util.InvalidDateException;
+import net.sourceforge.ganttproject.util.DateParser;
+import net.sourceforge.ganttproject.util.InvalidDateException;
 import org.xml.sax.Attributes;
 
 import java.util.ArrayList;

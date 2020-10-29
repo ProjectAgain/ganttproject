@@ -85,7 +85,7 @@
 
     <extension
         point="net.sourceforge.ganttproject.chart">
-        <chart class="org.ganttproject.chart.pert.ActivityOnNodePertChart"/>
+        <chart class="net.sourceforge.ganttproject.chart.pert.ActivityOnNodePertChart"/>
     </extension>
 
     <!--   <extension point="net.sourceforge.ganttproject.chart">

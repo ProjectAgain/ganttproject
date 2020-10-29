@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.gui.options.model;
 
 import java.util.Date;
 
-import org.w3c.util.DateParser;
+import net.sourceforge.ganttproject.util.DateParser;
 
 import biz.ganttproject.core.option.DefaultBooleanOption;
 import biz.ganttproject.core.option.DefaultDateOption;

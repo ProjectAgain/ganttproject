@@ -27,7 +27,7 @@ import net.sourceforge.ganttproject.task.Task;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.service.prefs.Preferences;
 import org.slf4j.Logger;
-import org.w3c.util.DateParser;
+import net.sourceforge.ganttproject.util.DateParser;
 
 import java.io.File;
 import java.util.*;
