@@ -18,7 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage.local
 
-import net.sourceforge.ganttproject.ui.RootLocalizer
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import net.sourceforge.ganttproject.model.document.Document
@@ -26,6 +25,7 @@ import net.sourceforge.ganttproject.model.document.FileDocument
 import net.sourceforge.ganttproject.storage.BROWSE_PANE_LOCALIZER
 import net.sourceforge.ganttproject.storage.StorageMode
 import net.sourceforge.ganttproject.storage.asLocalDocument
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import org.controlsfx.validation.ValidationResult
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -91,7 +91,9 @@ class LocalStorageState(val currentDocument: Document,
 
   internal fun resolveFile(typedString: String): File =
     File(typedString).let {
-      if (it.isAbsolute) { it } else File(this.currentDir.get(), typedString)
+      if (it.isAbsolute) {
+        it
+      } else File(this.currentDir.get(), typedString)
     }
 
   @Throws(StorageMode.FileException::class)
@@ -100,7 +102,7 @@ class LocalStorageState(val currentDocument: Document,
       mode.tryFile(it)
     }
 
-  internal fun setCurrentFile(filename: String?)  {
+  internal fun setCurrentFile(filename: String?) {
     if (filename.isNullOrBlank()) {
       this.currentFile.set(null)
       validate()
@@ -111,10 +113,10 @@ class LocalStorageState(val currentDocument: Document,
 
   internal fun setCurrentFile(file: File?) {
     if (mode is StorageMode.Save
-        && file != null
-        && file.exists()
-        && currentDocument.uri != FileDocument(file).uri
-        && (file != currentFile.get() || !confirmationReceived.get())) {
+      && file != null
+      && file.exists()
+      && currentDocument.uri != FileDocument(file).uri
+      && (file != currentFile.get() || !confirmationReceived.get())) {
       confirmationReceived.set(false)
       confirmationRequired.set(true)
     } else {
@@ -125,7 +127,7 @@ class LocalStorageState(val currentDocument: Document,
   }
 
   private fun Document.asFile() =
-      this.asLocalDocument()?.file ?: defaultLocalFolder.resolve(this.fileName)
+    this.asLocalDocument()?.file ?: defaultLocalFolder.resolve(this.fileName)
 }
 
 private val i18n = RootLocalizer.createWithRootKey("storageService.local", BROWSE_PANE_LOCALIZER)

@@ -18,23 +18,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
+import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
 import net.sourceforge.ganttproject.model.resource.HumanResource;
 import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
-
-import org.xml.sax.Attributes;
-
-import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import org.xml.sax.Attributes;
 
 /**
  * @author nbohn
  */
 public class VacationTagHandler extends AbstractTagHandler {
-  private HumanResourceManager myResourceManager;
+  private final HumanResourceManager myResourceManager;
 
   public VacationTagHandler(HumanResourceManager resourceManager) {
     super("vacation");
     myResourceManager = resourceManager;
+  }
+
+  @Override
+  protected boolean onStartElement(Attributes attrs) {
+    loadResource(attrs);
+    return true;
   }
 
   private void loadResource(Attributes atts) {
@@ -47,16 +51,11 @@ public class VacationTagHandler extends AbstractTagHandler {
       String resourceIdAsString = atts.getValue("resourceid");
       HumanResource hr;
       hr = myResourceManager.getById(Integer.parseInt(resourceIdAsString));
-      hr.addDaysOff(new GanttDaysOff(GanttCalendar.parseXMLDate(startAsString), GanttCalendar.parseXMLDate(endAsString)));
+      hr.addDaysOff(
+        new GanttDaysOff(GanttCalendar.parseXMLDate(startAsString), GanttCalendar.parseXMLDate(endAsString)));
     } catch (NumberFormatException e) {
       System.out.println("ERROR in parsing XML File year is not numeric: " + e.toString());
       return;
     }
-  }
-
-  @Override
-  protected boolean onStartElement(Attributes attrs) {
-    loadResource(attrs);
-    return true;
   }
 }

@@ -18,22 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.parser;
 
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import org.xml.sax.Attributes;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import org.xml.sax.Attributes;
-
-import net.sourceforge.ganttproject.model.calendar.GPCalendar;
-
 public class DefaultWeekTagHandler extends AbstractTagHandler {
 
-  private GPCalendar myGPCalendar;
-
-  private Calendar myCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
-
-  private SimpleDateFormat myShortFormat = new SimpleDateFormat("EEE", Locale.ENGLISH);
+  private final Calendar myCalendar = GregorianCalendar.getInstance(Locale.ENGLISH);
+  private final GPCalendar myGPCalendar;
+  private final SimpleDateFormat myShortFormat = new SimpleDateFormat("EEE", Locale.ENGLISH);
 
   public DefaultWeekTagHandler(GPCalendar calendar) {
     super("default-week");
@@ -49,6 +46,11 @@ public class DefaultWeekTagHandler extends AbstractTagHandler {
     return true;
   }
 
+  private String getShortDayName(int i) {
+    myCalendar.set(Calendar.DAY_OF_WEEK, i);
+    return myShortFormat.format(myCalendar.getTime()).toLowerCase();
+  }
+
   private void loadCalendar(Attributes attrs) {
     for (int i = 1; i <= 7; i++) {
       String nextDayName = getShortDayName(i);
@@ -57,11 +59,5 @@ public class DefaultWeekTagHandler extends AbstractTagHandler {
         myGPCalendar.setWeekDayType(i, GPCalendar.DayType.WEEKEND);
       }
     }
-
-  }
-
-  private String getShortDayName(int i) {
-    myCalendar.set(Calendar.DAY_OF_WEEK, i);
-    return myShortFormat.format(myCalendar.getTime()).toLowerCase();
   }
 }

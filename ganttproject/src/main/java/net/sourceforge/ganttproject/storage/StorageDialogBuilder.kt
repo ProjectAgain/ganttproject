@@ -18,10 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage
 
-import net.sourceforge.ganttproject.FXUtil
-import net.sourceforge.ganttproject.ui.DialogController
-import net.sourceforge.ganttproject.ui.RootLocalizer
-import net.sourceforge.ganttproject.ui.createAlertBody
 import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.control.Button
@@ -33,12 +29,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import net.sourceforge.ganttproject.FXUtil
+import net.sourceforge.ganttproject.language.GanttLanguage
 import net.sourceforge.ganttproject.model.IGanttProject
 import net.sourceforge.ganttproject.model.document.Document
 import net.sourceforge.ganttproject.model.document.DocumentManager
 import net.sourceforge.ganttproject.model.document.ReadOnlyProxyDocument
+import net.sourceforge.ganttproject.ui.DialogController
+import net.sourceforge.ganttproject.ui.RootLocalizer
+import net.sourceforge.ganttproject.ui.createAlertBody
 import net.sourceforge.ganttproject.ui.gui.ProjectUIFacade
-import net.sourceforge.ganttproject.language.GanttLanguage
 import org.controlsfx.control.NotificationPane
 import org.slf4j.LoggerFactory
 import java.io.IOException
@@ -53,10 +53,10 @@ import kotlin.math.max
  * @author dbarashev@bardsoftware.com
  */
 class StorageDialogBuilder(
-    private val myProject: IGanttProject,
-    projectUi: ProjectUIFacade,
-    documentManager: DocumentManager,
-    private val dialogBuildApi: DialogController
+  private val myProject: IGanttProject,
+  projectUi: ProjectUIFacade,
+  documentManager: DocumentManager,
+  private val dialogBuildApi: DialogController
 ) {
   private val myDocumentReceiver: Consumer<Document>
   private val myDocumentUpdater: Consumer<Document>
@@ -151,8 +151,8 @@ class StorageDialogBuilder(
     val buttonBar = GridPane().apply {
       maxWidth = Double.MAX_VALUE
       columnConstraints.addAll(
-          ColumnConstraints().apply { percentWidth = 45.0 },
-          ColumnConstraints().apply { percentWidth = 45.0 }
+        ColumnConstraints().apply { percentWidth = 45.0 },
+        ColumnConstraints().apply { percentWidth = 45.0 }
       )
       hgap = 5.0
       styleClass.add("open-save-buttons")
@@ -198,7 +198,7 @@ class StorageDialogBuilder(
       val storagePane = buildStoragePane(Mode.OPEN)
       myNotificationPane = NotificationPane(storagePane)
       myNotificationPane!!.styleClass.addAll(
-          NotificationPane.STYLE_CLASS_DARK)
+        NotificationPane.STYLE_CLASS_DARK)
       myOpenStorage = myNotificationPane
     }
     FXUtil.transitionCenterPane(container, myOpenStorage, {})
@@ -265,6 +265,7 @@ interface StorageUi {
   val category: String
 
   val id get() = category
+
   // Display name to be shown in the list of storages
   val name: String
 

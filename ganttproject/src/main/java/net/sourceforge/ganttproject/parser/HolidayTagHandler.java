@@ -18,13 +18,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-
-import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
-import net.sourceforge.ganttproject.model.calendar.GPCalendar;
-import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.util.ColorConvertion;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
@@ -40,22 +39,12 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author nbohn
  */
 public class HolidayTagHandler extends AbstractTagHandler {
-  private final Logger log = getLogger(getClass());
-  private static final Set<String> TAGS = ImmutableSet.of("date", "calendars");
-  private final GPCalendar myCalendar;
-  private final List<CalendarEvent> myEvents = Lists.newArrayList();
-  private CalendarEventAttrs myAttrs;
-  // We may have event titles written as comments after <date> tag.
-  // To process them properly we remember the last event created from <date> tag
-  // and "patch" it if we find any non-empty cdata afterwards.
-  private CalendarEvent myLastEvent = null;
-
   private static class CalendarEventAttrs {
-    final String year;
-    final String month;
-    final String day;
-    final String type;
     final String color;
+    final String day;
+    final String month;
+    final String type;
+    final String year;
 
     CalendarEventAttrs(Attributes atts) {
       this.year = atts.getValue("year");
@@ -77,6 +66,16 @@ public class HolidayTagHandler extends AbstractTagHandler {
       return sb.toString();
     }
   }
+  private static final Set<String> TAGS = ImmutableSet.of("date", "calendars");
+  private final Logger log = getLogger(getClass());
+  private final GPCalendar myCalendar;
+  private final List<CalendarEvent> myEvents = Lists.newArrayList();
+  private CalendarEventAttrs myAttrs;
+  // We may have event titles written as comments after <date> tag.
+  // To process them properly we remember the last event created from <date> tag
+  // and "patch" it if we find any non-empty cdata afterwards.
+  private CalendarEvent myLastEvent = null;
+
   public HolidayTagHandler(GPCalendar calendar) {
     super("date", true);
     myCalendar = calendar;
@@ -85,7 +84,7 @@ public class HolidayTagHandler extends AbstractTagHandler {
 
   /**
    * @see net.sourceforge.ganttproject.parser.TagHandler#endElement(String,
-   *      String, String)
+   * String, String)
    */
   @Override
   public void endElement(String namespaceURI, String sName, String qName) {
@@ -104,9 +103,14 @@ public class HolidayTagHandler extends AbstractTagHandler {
     }
   }
 
+  public void onCalendarLoaded() {
+    processLastEvent();
+    myCalendar.setPublicHolidays(myEvents);
+  }
+
   /**
    * @see net.sourceforge.ganttproject.parser.TagHandler#startElement(String,
-   *      String, String, Attributes)
+   * String, String, Attributes)
    */
   @Override
   public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) {
@@ -120,25 +124,12 @@ public class HolidayTagHandler extends AbstractTagHandler {
     }
   }
 
-  private void processLastEvent() {
-    if (myLastEvent != null) {
-      String cdata = getCdata().replaceAll("^\\p{Space}+", "").replaceAll("\\p{Space}+$", "");
-      if (Strings.isNullOrEmpty(cdata)) {
-        myEvents.add(myLastEvent);
-      } else {
-        myEvents.add(CalendarEvent.newEvent(myLastEvent.myDate, myLastEvent.isRecurring, myLastEvent.getType(), cdata, null));
-        clearCdata();
-      }
-      myLastEvent = null;
-    }
-  }
-
   private void loadHoliday(CalendarEventAttrs atts) {
     try {
       int month = Integer.parseInt(atts.month);
       int day = Integer.parseInt(atts.day);
       CalendarEvent.Type type = Strings.isNullOrEmpty(atts.type)
-             ? CalendarEvent.Type.HOLIDAY : CalendarEvent.Type.valueOf(atts.type);
+                                ? CalendarEvent.Type.HOLIDAY : CalendarEvent.Type.valueOf(atts.type);
       Color color = atts.color == null ? null : ColorConvertion.determineColor(atts.color);
       String description = getCdata().replaceAll("^\\p{Space}+", "").replaceAll("\\p{Space}+$", "");
       if (Strings.isNullOrEmpty(atts.year)) {
@@ -156,8 +147,17 @@ public class HolidayTagHandler extends AbstractTagHandler {
     }
   }
 
-  public void onCalendarLoaded() {
-    processLastEvent();
-    myCalendar.setPublicHolidays(myEvents);
+  private void processLastEvent() {
+    if (myLastEvent != null) {
+      String cdata = getCdata().replaceAll("^\\p{Space}+", "").replaceAll("\\p{Space}+$", "");
+      if (Strings.isNullOrEmpty(cdata)) {
+        myEvents.add(myLastEvent);
+      } else {
+        myEvents.add(
+          CalendarEvent.newEvent(myLastEvent.myDate, myLastEvent.isRecurring, myLastEvent.getType(), cdata, null));
+        clearCdata();
+      }
+      myLastEvent = null;
+    }
   }
 }

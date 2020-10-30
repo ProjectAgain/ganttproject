@@ -12,8 +12,8 @@ import java.util.List;
 @Service
 public class SearchDialogFactory implements Factory<SearchDialog> {
 
-  private final App app;
   final List<SearchService> services;
+  private final App app;
 
   public SearchDialogFactory(
     final App app,

@@ -18,8 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.util;
 
-
-
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -42,5 +40,4 @@ public class PropertiesUtil {
       log.error("Exception", e);
     }
   }
-
 }

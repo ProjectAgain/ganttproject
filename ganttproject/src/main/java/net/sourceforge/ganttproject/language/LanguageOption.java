@@ -1,9 +1,9 @@
 package net.sourceforge.ganttproject.language;
 
-import java.util.Locale;
-
 import net.sourceforge.ganttproject.ui.gui.options.model.GP1XOptionConverter;
 import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
+
+import java.util.Locale;
 
 public abstract class LanguageOption extends DefaultEnumerationOption<Locale> implements GP1XOptionConverter {
   public LanguageOption() {
@@ -15,31 +15,14 @@ public abstract class LanguageOption extends DefaultEnumerationOption<Locale> im
   }
 
   @Override
-  protected String objectToString(Locale locale) {
-    return GanttLanguage.getInstance().formatLanguageAndCountry(locale);
-  }
-
-  @Override
   public void commit() {
     super.commit();
     applyLocale(stringToObject(getValue()));
   }
 
-  protected abstract void applyLocale(Locale locale);
-
-  @Override
-  public String getTagName() {
-    return "language";
-  }
-
   @Override
   public String getAttributeName() {
     return "selection";
-  }
-
-  @Override
-  public void loadValue(String legacyValue) {
-    loadPersistentValue(legacyValue);
   }
 
   @Override
@@ -57,6 +40,11 @@ public abstract class LanguageOption extends DefaultEnumerationOption<Locale> im
   }
 
   @Override
+  public String getTagName() {
+    return "language";
+  }
+
+  @Override
   public void loadPersistentValue(String value) {
     String[] lang_country = value.split("_");
     Locale l;
@@ -70,5 +58,17 @@ public abstract class LanguageOption extends DefaultEnumerationOption<Locale> im
       resetValue(value, true);
       applyLocale(l);
     }
+  }
+
+  @Override
+  public void loadValue(String legacyValue) {
+    loadPersistentValue(legacyValue);
+  }
+
+  protected abstract void applyLocale(Locale locale);
+
+  @Override
+  protected String objectToString(Locale locale) {
+    return GanttLanguage.getInstance().formatLanguageAndCountry(locale);
   }
 }

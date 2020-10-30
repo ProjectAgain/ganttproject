@@ -18,10 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage
 
-import net.sourceforge.ganttproject.ui.Localizer
-import net.sourceforge.ganttproject.ui.RootLocalizer
-import net.sourceforge.ganttproject.lib.fx.VBoxBuilder
-import net.sourceforge.ganttproject.lib.fx.vbox
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.application.Platform
@@ -34,7 +30,13 @@ import javafx.collections.ObservableList
 import javafx.scene.control.Button
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Label
-import javafx.scene.layout.*
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Pane
+import javafx.scene.layout.Priority
+import net.sourceforge.ganttproject.lib.fx.VBoxBuilder
+import net.sourceforge.ganttproject.lib.fx.vbox
+import net.sourceforge.ganttproject.ui.Localizer
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import org.controlsfx.control.textfield.CustomTextField
 import org.controlsfx.validation.ValidationResult
 import org.controlsfx.validation.ValidationSupport
@@ -63,15 +65,15 @@ typealias OnItemAction<T> = (T) -> Unit
 
 typealias ItemActionFactory<T> = Function<FolderItem, Map<String, OnItemAction<T>>>
 
-data class BrowserPaneElements<T: FolderItem>(
-    val breadcrumbView: BreadcrumbView?,
-    val listView: FolderView<T>,
-    val filenameInput: CustomTextField,
-    val browserPane: Pane,
-    val busyIndicator: Consumer<Boolean>,
-    val errorLabel: Label,
-    val validationSupport: ValidationSupport,
-    val confirmationCheckBox: CheckBox?
+data class BrowserPaneElements<T : FolderItem>(
+  val breadcrumbView: BreadcrumbView?,
+  val listView: FolderView<T>,
+  val filenameInput: CustomTextField,
+  val browserPane: Pane,
+  val busyIndicator: Consumer<Boolean>,
+  val errorLabel: Label,
+  val validationSupport: ValidationSupport,
+  val confirmationCheckBox: CheckBox?
 ) {
   init {
     validationSupport.validationResultProperty().addListener { _, _, validationResult ->
@@ -116,15 +118,16 @@ data class BrowserPaneElements<T: FolderItem>(
  *
  * @author dbarashev@bardsoftware.com
  */
-class BrowserPaneBuilder<T: FolderItem>(
-    private val mode: StorageDialogBuilder.Mode,
-    private val exceptionUi: ExceptionUi,
-    private val loader: Loader<T>
+class BrowserPaneBuilder<T : FolderItem>(
+  private val mode: StorageDialogBuilder.Mode,
+  private val exceptionUi: ExceptionUi,
+  private val loader: Loader<T>
 ) {
   private val rootPane = VBoxBuilder("pane-service-contents")
 
   private lateinit var listView: FolderView<T>
-//  private val busyIndicator = StatusBar().apply {
+
+  //  private val busyIndicator = StatusBar().apply {
 //    text = ""
 //    HBox.setHgrow(this, Priority.ALWAYS)
 //  }
@@ -159,22 +162,22 @@ class BrowserPaneBuilder<T: FolderItem>(
   }
 
   fun withListView(
-      /** This is called on double-click or Enter */
-      onSelectionChange: OnItemAction<T> = {},
-      onLaunch: OnItemAction<T> = {},
-      onOpenDirectory: OnItemAction<T> = {},
-      onDelete: OnItemAction<T> = {},
-      onLock: OnItemAction<T> = {},
-      onNameTyped: (filename: String, matchedItems: List<T>, withEnter: Boolean, withControl: Boolean) -> Unit = { _, _, _, _ ->},
-      canLock: BooleanProperty = SimpleBooleanProperty(false),
-      canDelete: ReadOnlyBooleanProperty = SimpleBooleanProperty(false),
-      itemActionFactory: ItemActionFactory<T> = Function { Collections.emptyMap() },
-      cellFactory: CellFactory<T>? = null) {
+    /** This is called on double-click or Enter */
+    onSelectionChange: OnItemAction<T> = {},
+    onLaunch: OnItemAction<T> = {},
+    onOpenDirectory: OnItemAction<T> = {},
+    onDelete: OnItemAction<T> = {},
+    onLock: OnItemAction<T> = {},
+    onNameTyped: (filename: String, matchedItems: List<T>, withEnter: Boolean, withControl: Boolean) -> Unit = { _, _, _, _ -> },
+    canLock: BooleanProperty = SimpleBooleanProperty(false),
+    canDelete: ReadOnlyBooleanProperty = SimpleBooleanProperty(false),
+    itemActionFactory: ItemActionFactory<T> = Function { Collections.emptyMap() },
+    cellFactory: CellFactory<T>? = null) {
     this.listView = FolderView(
-        this.exceptionUi,
-        onDelete,
-        onLock,
-        canLock, canDelete, itemActionFactory, cellFactory)
+      this.exceptionUi,
+      onDelete,
+      onLock,
+      canLock, canDelete, itemActionFactory, cellFactory)
     this.onSelectionChange = onSelectionChange
     this.onOpenDirectory = onOpenDirectory
     this.onLaunch = onLaunch
@@ -184,8 +187,8 @@ class BrowserPaneBuilder<T: FolderItem>(
   fun withBreadcrumbs(rootPath: Path) {
     val onSelectCrumb = Consumer { path: Path ->
       this.loader(path,
-          resultConsumer,
-          busyIndicatorToggler
+        resultConsumer,
+        busyIndicatorToggler
       )
 
     }
@@ -299,13 +302,13 @@ class BrowserPaneBuilder<T: FolderItem>(
       add(listViewHint)
       HBox().apply {
         children.addAll(
-            Pane().also {
-              if (hasConfirmation) {
-                it.children.add(confirmationCheckBox)
-              }
-              HBox.setHgrow(it, Priority.ALWAYS)
-            },
-            btnSave
+          Pane().also {
+            if (hasConfirmation) {
+              it.children.add(confirmationCheckBox)
+            }
+            HBox.setHgrow(it, Priority.ALWAYS)
+          },
+          btnSave
         )
         styleClass.add("doclist-save-box")
       }.also {
@@ -314,15 +317,15 @@ class BrowserPaneBuilder<T: FolderItem>(
     }
 
     return BrowserPaneElements(breadcrumbView, listView, filename, rootPane.vbox, busyIndicatorToggler, errorLabel, validationSupport,
-        if (hasConfirmation) confirmationCheckBox else null
+      if (hasConfirmation) confirmationCheckBox else null
     )
   }
 }
 
 private fun formatError(validation: ValidationResult): String {
   return Stream.concat(validation.errors.stream(), validation.warnings.stream())
-      .map { error -> error.text }
-      .collect(Collectors.joining("\n"))
+    .map { error -> error.text }
+    .collect(Collectors.joining("\n"))
 }
 
 val BROWSE_PANE_LOCALIZER = RootLocalizer.createWithRootKey("storageService._default")

@@ -18,9 +18,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.parser;
 
-import java.awt.Color;
-
 import net.sourceforge.ganttproject.util.ColorConvertion;
+
+import java.awt.*;
 
 class ColorValueParser {
   public static Color parseString(String value) {

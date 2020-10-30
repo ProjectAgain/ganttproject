@@ -7,7 +7,6 @@
 package net.sourceforge.ganttproject.parser;
 
 import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
-
 import org.xml.sax.Attributes;
 
 /**
@@ -23,8 +22,8 @@ public class TaskPropertiesTagHandler extends AbstractTagHandler {
 
   @Override
   protected boolean onStartElement(Attributes attrs) {
-     loadTaskProperty(attrs);
-     return true;
+    loadTaskProperty(attrs);
+    return true;
   }
 
   private void loadTaskProperty(Attributes atts) {

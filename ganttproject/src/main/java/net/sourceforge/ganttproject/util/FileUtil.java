@@ -24,31 +24,14 @@ import java.io.IOException;
 public abstract class FileUtil {
   private static final char FILE_EXTENSION_SEPARATOR = '.';
 
-  /**
-   * @return the extension of file, or an empty String if no extension is
-   *         present
-   */
-  public static String getExtension(File file) {
-    int lastDot = file.getName().lastIndexOf(FILE_EXTENSION_SEPARATOR);
-    return lastDot >= 0 ? file.getName().substring(lastDot + 1) : "";
-  }
-
-  /** @return f with the new extension */
-  public static File replaceExtension(File f, String newExtension) {
-    String filenameWithouExtension = getFilenameWithoutExtension(f);
-    File containingFolder = f.getParentFile();
-    return new File(containingFolder, filenameWithouExtension + FILE_EXTENSION_SEPARATOR + newExtension);
-  }
-
   public static File appendExtension(File f, String extension) {
     File containingFolder = f.getParentFile();
     return new File(containingFolder, f.getName() + FILE_EXTENSION_SEPARATOR + extension);
   }
 
-
   /**
    * @return f with the suffix added before the extension (or at the end of the
-   *         name if no extension is present)
+   * name if no extension is present)
    */
   public static File appendSuffixBeforeExtension(File f, String suffix) throws IOException {
     String filename = f.getName();
@@ -69,17 +52,37 @@ public abstract class FileUtil {
     return result;
   }
 
-  /** @return the filename of f without extension */
+  /**
+   * @return the extension of file, or an empty String if no extension is
+   * present
+   */
+  public static String getExtension(File file) {
+    int lastDot = file.getName().lastIndexOf(FILE_EXTENSION_SEPARATOR);
+    return lastDot >= 0 ? file.getName().substring(lastDot + 1) : "";
+  }
+
+  /**
+   * @return the filename of f without extension
+   */
   public static String getFilenameWithoutExtension(File f) {
     return getFilenameWithoutExtension(f.getName());
+  }
+
+  private static String getFilenameWithoutExtension(String filename) {
+    int i = filename.lastIndexOf(FILE_EXTENSION_SEPARATOR);
+    return i >= 0 ? filename.substring(0, i) : filename;
   }
 
   public static String replaceExtension(String filename, String newExtension) {
     return getFilenameWithoutExtension(filename) + FILE_EXTENSION_SEPARATOR + newExtension;
   }
 
-  private static String getFilenameWithoutExtension(String filename) {
-    int i = filename.lastIndexOf(FILE_EXTENSION_SEPARATOR);
-    return i >= 0 ? filename.substring(0, i) : filename;
+  /**
+   * @return f with the new extension
+   */
+  public static File replaceExtension(File f, String newExtension) {
+    String filenameWithouExtension = getFilenameWithoutExtension(f);
+    File containingFolder = f.getParentFile();
+    return new File(containingFolder, filenameWithouExtension + FILE_EXTENSION_SEPARATOR + newExtension);
   }
 }

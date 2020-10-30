@@ -23,9 +23,9 @@ import java.util.List;
 
 public class RssFeed {
   public static class Item {
-    public final String title;
     public final String body;
     public final boolean isUpdate;
+    public final String title;
 
     Item(String title, String body, boolean isUpdate) {
       this.title = title;
@@ -36,11 +36,11 @@ public class RssFeed {
 
   private final List<Item> myItems = new ArrayList<Item>();
 
-  void addItem(String title, String body, boolean isUpdate) {
-    myItems.add(new Item(title, body, isUpdate));
-  }
-
   public List<Item> getItems() {
     return myItems;
+  }
+
+  void addItem(String title, String body, boolean isUpdate) {
+    myItems.add(new Item(title, body, isUpdate));
   }
 }

@@ -18,15 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.filter;
 
+import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.util.regex.Pattern;
-
-import javax.swing.filechooser.FileFilter;
 
 /**
  * Class to select a filter for the FileChooser object for the provided
  * extension
- * 
+ *
  * @author bard
  */
 public class ExtensionBasedFileFilter extends FileFilter {
@@ -37,6 +36,20 @@ public class ExtensionBasedFileFilter extends FileFilter {
   public ExtensionBasedFileFilter(String fileExtension, String description) {
     myDescription = description;
     myPattern = Pattern.compile(fileExtension);
+  }
+
+  /**
+   * @return extension of File f
+   */
+  private static String getExtension(File f) {
+    String ext = null;
+    String s = f.getName();
+    int i = s.lastIndexOf('.');
+
+    if (i > 0 && i < s.length() - 1) {
+      ext = s.substring(i + 1).toLowerCase();
+    }
+    return ext;
   }
 
   @Override
@@ -50,18 +63,6 @@ public class ExtensionBasedFileFilter extends FileFilter {
   @Override
   public String getDescription() {
     return myDescription;
-  }
-
-  /** @return extension of File f */
-  private static String getExtension(File f) {
-    String ext = null;
-    String s = f.getName();
-    int i = s.lastIndexOf('.');
-
-    if (i > 0 && i < s.length() - 1) {
-      ext = s.substring(i + 1).toLowerCase();
-    }
-    return ext;
   }
 
   private boolean matches(String fileExtension) {

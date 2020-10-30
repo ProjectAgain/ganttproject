@@ -18,21 +18,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.updater.client;
 
-import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
-import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
-import net.sourceforge.ganttproject.ui.viewmodel.option.DateOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultBooleanOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultDateOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
-import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
 import com.bardsoftware.eclipsito.update.Updater;
 import net.sourceforge.ganttproject.GPVersion;
+import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
 import net.sourceforge.ganttproject.ui.gui.NotificationChannel;
 import net.sourceforge.ganttproject.ui.gui.NotificationItem;
 import net.sourceforge.ganttproject.ui.gui.NotificationManager;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
-import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.ui.viewmodel.option.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -57,15 +51,15 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class RssFeedChecker {
 
-
-  private static enum CheckOption {
-    YES, NO, UNDEFINED;
+  private enum CheckOption {
+    YES, NO, UNDEFINED
   }
-
-  private Updater myUpdater;
-  private final UIFacade myUiFacade;
+  protected static final int MAX_ATTEMPTS = 10;
+  private static final String RSS_URL = "https://www.ganttproject.biz/my/feed";
+  private final DefaultBooleanOption myBooleanCheckRssOption = new DefaultBooleanOption("rss.checkUpdates");
   private final DefaultEnumerationOption<CheckOption> myCheckRssOption = new DefaultEnumerationOption<CheckOption>(
-      "check", CheckOption.values()) {
+    "check", CheckOption.values())
+  {
     @Override
     protected String objectToString(CheckOption obj) {
       return obj.toString();
@@ -76,22 +70,26 @@ public class RssFeedChecker {
       return CheckOption.valueOf(value);
     }
   };
-  private final DefaultBooleanOption myBooleanCheckRssOption = new DefaultBooleanOption("rss.checkUpdates");
   private final DateOption myLastCheckOption = new DefaultDateOption("lastCheck", null);
   private final GPOptionGroup myOptionGroup = new GPOptionGroup("updateRss",
-      myCheckRssOption, myLastCheckOption);
+                                                                myCheckRssOption, myLastCheckOption
+  );
+  private final NotificationItem myRssProposalNotification = new NotificationItem(
+    "",
+    GanttLanguage.getInstance().formatText(
+      "updateRss.question.template",
+      GanttLanguage.getInstance().getText("updateRss.question.0"),
+      GanttLanguage.getInstance().getText("updateRss.question.1"),
+      GanttLanguage.getInstance().getText("updateRss.question.2")
+    ),
+    NotificationManager.DEFAULT_HYPERLINK_LISTENER
+  );
+  private final UIFacade myUiFacade;
   private final GPOptionGroup myUiOptionGroup = new GPOptionGroup("rss", myBooleanCheckRssOption);
-  private GPTimeUnitStack myTimeUnitStack;
-  private static final String RSS_URL = "https://www.ganttproject.biz/my/feed";
-  protected static final int MAX_ATTEMPTS = 10;
   private final RssParser parser = new RssParser();
-  private final NotificationItem myRssProposalNotification = new NotificationItem("",
-      GanttLanguage.getInstance().formatText("updateRss.question.template",
-          GanttLanguage.getInstance().getText("updateRss.question.0"),
-          GanttLanguage.getInstance().getText("updateRss.question.1"),
-          GanttLanguage.getInstance().getText("updateRss.question.2")),
-      NotificationManager.DEFAULT_HYPERLINK_LISTENER);
   private String myOptionsVersion;
+  private final GPTimeUnitStack myTimeUnitStack;
+  private Updater myUpdater;
 
   public RssFeedChecker(GPTimeUnitStack timeUnitStack, UIFacade uiFacade) {
     myCheckRssOption.setValue(CheckOption.UNDEFINED.toString());
@@ -120,16 +118,20 @@ public class RssFeedChecker {
     });
   }
 
-  private NotificationManager getNotificationManager() {
-    return myUiFacade.getNotificationManager();
-  }
-
   public GPOptionGroup getOptions() {
     return myOptionGroup;
   }
 
   public GPOptionGroup getUiOptions() {
     return myUiOptionGroup;
+  }
+
+  public Updater getUpdater() {
+    return myUpdater;
+  }
+
+  public void setUpdater(Updater updater) {
+    myUpdater = updater;
   }
 
   public void run() {
@@ -177,9 +179,27 @@ public class RssFeedChecker {
     new Thread(command).start();
   }
 
+  public void setOptionsVersion(String version) {
+    myOptionsVersion = version;
+  }
+
+  private Runnable createRssProposalCommand() {
+    return new Runnable() {
+      @Override
+      public void run() {
+        onYes();
+        getNotificationManager().addNotifications(
+          NotificationChannel.RSS,
+          Collections.singletonList(myRssProposalNotification)
+        );
+      }
+    };
+  }
+
   private Runnable createRssReadCommand() {
     return new Runnable() {
       private final Logger log = getLogger(getClass());
+
       @Override
       public void run() {
         log.info("Starting RSS check...");
@@ -211,7 +231,7 @@ public class RssFeedChecker {
         RssFeed feed = parser.parse(responseStream, myLastCheckOption.getValue());
         List<NotificationItem> items = new ArrayList<NotificationItem>();
         boolean updateDialogShowed = false;
-        for (RssFeed.Item item : feed.getItems()) {
+        for (RssFeed.Item item: feed.getItems()) {
           if (item.isUpdate) {
             if (!updateDialogShowed) {
               updateDialogShowed = true;
@@ -230,17 +250,6 @@ public class RssFeedChecker {
     };
   }
 
-  private Runnable createRssProposalCommand() {
-    return new Runnable() {
-      @Override
-      public void run() {
-        onYes();
-        getNotificationManager().addNotifications(NotificationChannel.RSS,
-            Collections.singletonList(myRssProposalNotification));
-      }
-    };
-  }
-
   private void createUpdateDialog(String content) {
 //    RssUpdate update = parser.parseUpdate(content);
 //    if (update != null) {
@@ -248,28 +257,21 @@ public class RssFeedChecker {
 //    }
   }
 
-  private boolean wasToday(Date date) {
-    return myTimeUnitStack.createDuration(GPTimeUnitStack.DAY, date, GPTimeUnitStack.DAY.adjustLeft(new Date())).getLength() == 0;
-  }
-
-  private void onYes() {
-    myCheckRssOption.setValue(CheckOption.YES.toString());
+  private NotificationManager getNotificationManager() {
+    return myUiFacade.getNotificationManager();
   }
 
   private void markLastCheck() {
     myLastCheckOption.setValue(new Date());
   }
 
-  public void setOptionsVersion(String version) {
-    myOptionsVersion = version;
+  private void onYes() {
+    myCheckRssOption.setValue(CheckOption.YES.toString());
   }
 
-  public void setUpdater(Updater updater) {
-    myUpdater = updater;
+  private boolean wasToday(Date date) {
+    return myTimeUnitStack
+             .createDuration(GPTimeUnitStack.DAY, date, GPTimeUnitStack.DAY.adjustLeft(new Date()))
+             .getLength() == 0;
   }
-
-  public Updater getUpdater() {
-    return myUpdater;
-  }
-
 }

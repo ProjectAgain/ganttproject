@@ -20,23 +20,23 @@ package net.sourceforge.ganttproject.search;
 
 public class SearchResult<SearchObjectType> {
   private final int myId;
-  private final String mySecondaryLabel;
-  private final String myTypeOfResult;
-  private final String mySecondaryText;
   private final String myLabel; //Top line
   private final String myQueryMatch;
-  private final SearchService<?, SearchObjectType> mySearchService;
   private final SearchObjectType mySearchObject;
+  private final SearchService<?, SearchObjectType> mySearchService;
+  private final String mySecondaryLabel;
+  private final String mySecondaryText;
+  private final String myTypeOfResult;
 
   SearchResult(
-      int id,
-      String typeOfResult,
-      String label,
-      String queryMatch,
-      String secondaryLabel,
-      String secondaryText,
-      SearchObjectType searchObject,
-      SearchService<?, SearchObjectType> service
+    int id,
+    String typeOfResult,
+    String label,
+    String queryMatch,
+    String secondaryLabel,
+    String secondaryText,
+    SearchObjectType searchObject,
+    SearchService<?, SearchObjectType> service
   ) {
     myId = id;
     myTypeOfResult = typeOfResult;
@@ -48,20 +48,6 @@ public class SearchResult<SearchObjectType> {
     mySearchObject = searchObject;
   }
 
-  int getId() { return myId; }
-
-  String getTypeOfResult() { return myTypeOfResult; }
-
-  String getSecondaryText() { return mySecondaryText; }
-
-  String getQueryMatch() { return myQueryMatch; }
-
-  String getLabel() {
-    return myLabel;
-  }
-
-  String getSecondaryLabel() { return mySecondaryLabel; }
-
   public SearchObjectType getObject() {
     return mySearchObject;
   }
@@ -71,7 +57,31 @@ public class SearchResult<SearchObjectType> {
     return myLabel;
   }
 
+  int getId() {
+    return myId;
+  }
+
+  String getLabel() {
+    return myLabel;
+  }
+
+  String getQueryMatch() {
+    return myQueryMatch;
+  }
+
   SearchService<?, SearchObjectType> getSearchService() {
     return mySearchService;
+  }
+
+  String getSecondaryLabel() {
+    return mySecondaryLabel;
+  }
+
+  String getSecondaryText() {
+    return mySecondaryText;
+  }
+
+  String getTypeOfResult() {
+    return myTypeOfResult;
   }
 }

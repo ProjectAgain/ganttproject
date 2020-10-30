@@ -3,7 +3,7 @@ Copyright 2003-2012 Dmitry Barashev, GanttProject Team
 
 This file is part of GanttProject, an opensource project management tool.
 
-GanttProject is free software: you can redistribute it and/or modify 
+GanttProject is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
@@ -30,15 +30,15 @@ public class Pair<F, S> {
     mySecond = second;
   }
 
+  public static final <F, S> Pair<F, S> create(F first, S second) {
+    return new Pair<F, S>(first, second);
+  }
+
   public F first() {
     return myFirst;
   }
 
   public S second() {
     return mySecond;
-  }
-
-  public static final <F, S> Pair<F, S> create(F first, S second) {
-    return new Pair<F, S>(first, second);
   }
 }

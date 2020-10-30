@@ -18,8 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage.local
 
-import net.sourceforge.ganttproject.ui.RootLocalizer
-import net.sourceforge.ganttproject.lib.fx.buildFontAwesomeButton
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
@@ -29,19 +27,11 @@ import javafx.event.ActionEvent
 import javafx.scene.control.Button
 import javafx.scene.layout.Pane
 import javafx.stage.FileChooser
+import net.sourceforge.ganttproject.lib.fx.buildFontAwesomeButton
 import net.sourceforge.ganttproject.model.document.Document
 import net.sourceforge.ganttproject.model.document.FileDocument
-import net.sourceforge.ganttproject.storage.BROWSE_PANE_LOCALIZER
-import net.sourceforge.ganttproject.storage.BrowserPaneBuilder
-import net.sourceforge.ganttproject.storage.BrowserPaneElements
-import net.sourceforge.ganttproject.storage.DocumentUri
-import net.sourceforge.ganttproject.storage.FolderItem
-import net.sourceforge.ganttproject.storage.Path
-import net.sourceforge.ganttproject.storage.StorageDialogBuilder
-import net.sourceforge.ganttproject.storage.StorageMode
-import net.sourceforge.ganttproject.storage.StorageUi
-import net.sourceforge.ganttproject.storage.createPath
-import net.sourceforge.ganttproject.storage.getDefaultLocalFolder
+import net.sourceforge.ganttproject.storage.*
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import java.io.File
 import java.nio.file.Paths
 import java.util.*
@@ -79,16 +69,16 @@ fun absolutePrefix(path: Path, end: Int = path.getNameCount()): Path {
  * @author dbarashev@bardsoftware.com
  */
 class LocalStorage(
-    private val myDialogUi: StorageDialogBuilder.DialogUi,
-    private val mode: StorageDialogBuilder.Mode,
-    private val currentDocument: Document,
-    private val myDocumentReceiver: (Document) -> Unit) : StorageUi {
+  private val myDialogUi: StorageDialogBuilder.DialogUi,
+  private val mode: StorageDialogBuilder.Mode,
+  private val currentDocument: Document,
+  private val myDocumentReceiver: (Document) -> Unit) : StorageUi {
   private val myMode = if (mode == StorageDialogBuilder.Mode.OPEN) StorageMode.Open() else StorageMode.Save()
   private lateinit var paneElements: BrowserPaneElements<FileAsFolderItem>
   private val state: LocalStorageState = LocalStorageState(currentDocument, myMode, getDefaultLocalFolder())
   private val validator = createLocalStorageValidator(
-      { this@LocalStorage.paneElements.listView.listView.items.isEmpty() },
-      state
+    { this@LocalStorage.paneElements.listView.listView.items.isEmpty() },
+    state
   )
 
 
@@ -98,7 +88,7 @@ class LocalStorage(
   private fun loadFiles(path: Path, success: Consumer<ObservableList<FileAsFolderItem>>, state: LocalStorageState) {
     val dir = DocumentUri.toFile(path)
     val result = FXCollections.observableArrayList<FileAsFolderItem>()
-    dir.listFiles()?.let {files ->
+    dir.listFiles()?.let { files ->
       files.filter { !it.name.startsWith(".") }.map { f -> FileAsFolderItem(f) }.sorted().toCollection(result)
     }
     success.accept(result)
@@ -118,7 +108,7 @@ class LocalStorage(
     }
     fileChooser.title = i18n.formatText("storageService.local.${myMode.name.toLowerCase()}.fileChooser.title")
     fileChooser.extensionFilters.addAll(
-        FileChooser.ExtensionFilter(RootLocalizer.formatText("ganttprojectFiles"), "*.gan"))
+      FileChooser.ExtensionFilter(RootLocalizer.formatText("ganttprojectFiles"), "*.gan"))
     val chosenFile = fileChooser.showOpenDialog(null)
     if (chosenFile != null) {
       state.setCurrentFile(chosenFile)
@@ -135,15 +125,15 @@ class LocalStorage(
     val actionButtonHandler = object {
       var selectedProject: FileAsFolderItem? = null
       var button: Button? = null
-      set(btn) {
-        field = btn
-        btn?.let {
-          it.addEventHandler(ActionEvent.ACTION) {
-            onAction()
+        set(btn) {
+          field = btn
+          btn?.let {
+            it.addEventHandler(ActionEvent.ACTION) {
+              onAction()
+            }
+            it.disableProperty().bind(state.canWrite.not())
           }
-          it.disableProperty().bind(state.canWrite.not())
         }
-      }
 
       fun onOpenDirectory(item: FolderItem) {
         if (item is FileAsFolderItem) {
@@ -171,8 +161,8 @@ class LocalStorage(
 
       fun onAction() {
         val doc = selectedProject?.let { FileDocument(it.file) }
-            ?: state.currentDir.get()?.resolve(paneElements.filenameInput.text)?.let { FileDocument(it) }
-            ?: return
+          ?: state.currentDir.get()?.resolve(paneElements.filenameInput.text)?.let { FileDocument(it) }
+          ?: return
         myDocumentReceiver.invoke(doc)
       }
 
@@ -190,35 +180,35 @@ class LocalStorage(
     this.paneElements = builder.apply {
       withI18N(i18n)
       withBreadcrumbs(
-          if (filePath.toFile().isDirectory) createPath(filePath.toFile())
-          else createPath(filePath.parent.toFile())
+        if (filePath.toFile().isDirectory) createPath(filePath.toFile())
+        else createPath(filePath.parent.toFile())
       )
       withActionButton { btn ->
         actionButtonHandler.button = btn
       }
       withListView(
-          onSelectionChange = actionButtonHandler::onSelectionChange,
-          onOpenDirectory = actionButtonHandler::onOpenDirectory,
-          onLaunch = {
-            myDocumentReceiver(FileDocument(it.file))
-          },
-          onNameTyped = actionButtonHandler::onNameTyped
+        onSelectionChange = actionButtonHandler::onSelectionChange,
+        onOpenDirectory = actionButtonHandler::onOpenDirectory,
+        onLaunch = {
+          myDocumentReceiver(FileDocument(it.file))
+        },
+        onNameTyped = actionButtonHandler::onNameTyped
       )
       withValidator(validator)
       withListViewHint(listViewHint)
       withConfirmation(RootLocalizer.create("document.overwrite"), state.confirmationRequired)
     }.build()
     paneElements.browserPane.stylesheets.addAll(
-        "/javafx/css/biz/ganttproject/storage/StorageDialog.css",
-        "/javafx/css/biz/ganttproject/storage/local/LocalStorage.css"
+      "/javafx/css/biz/ganttproject/storage/StorageDialog.css",
+      "/javafx/css/biz/ganttproject/storage/local/LocalStorage.css"
     )
     paneElements.breadcrumbView?.show()
 
     val btnBrowse = buildFontAwesomeButton(
-        iconName = FontAwesomeIcon.SEARCH.name,
-        label = i18n.formatText("btn"),
-        onClick = { onBrowse() },
-        styleClass = "local-storage-browse"
+      iconName = FontAwesomeIcon.SEARCH.name,
+      label = i18n.formatText("btn"),
+      onClick = { onBrowse() },
+      styleClass = "local-storage-browse"
     )
     this.paneElements.filenameInput.right = btnBrowse
     if (this.mode == StorageDialogBuilder.Mode.SAVE) {

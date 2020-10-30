@@ -18,7 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskManager;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
@@ -26,6 +25,7 @@ import net.sourceforge.ganttproject.model.task.dependency.TaskDependency.Hardnes
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
 import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
@@ -35,26 +35,46 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class DependencyTagHandler extends AbstractTagHandler implements ParsingListener {
+  private class GanttDependStructure {
+    public TaskDependencyConstraint.Type dependType = TaskDependencyConstraint.Type.finishstart;
+    public int difference = 0;
+    public int taskID, successorTaskID;
+    private Hardness myHardness = TaskDependency.Hardness.STRONG;
+
+    public GanttDependStructure() {
+    }
+
+    public void setDependTaskID(int successorTaskID) {
+      this.successorTaskID = successorTaskID;
+    }
+
+    public void setDependType(TaskDependencyConstraint.Type dependType) {
+      this.dependType = dependType;
+    }
+
+    public void setDifference(int difference) {
+      this.difference = difference;
+    }
+
+    public void setHardness(Hardness hardness) {
+      myHardness = hardness;
+    }
+
+    public void setTaskID(int taskID) {
+      this.taskID = taskID;
+    }
+  }
   private final Logger log = getLogger(getClass());
   private final TaskManager myTaskManager;
-
   private final UIFacade myUIFacade;
+  private final ParsingContext myContext;
+  private final List<GanttDependStructure> myDependencies = new ArrayList<GanttDependStructure>();
 
   public DependencyTagHandler(ParsingContext context, TaskManager taskManager, UIFacade uiFacade) {
     super("depend");
     myContext = context;
     myTaskManager = taskManager;
     myUIFacade = uiFacade;
-  }
-
-  @Override
-  protected boolean onStartElement(Attributes attrs) {
-    loadDependency(attrs);
-    return true;
-  }
-
-  @Override
-  public void parsingStarted() {
   }
 
   @Override
@@ -69,7 +89,8 @@ public class DependencyTagHandler extends AbstractTagHandler implements ParsingL
 
       try {
         TaskDependency dep = myTaskManager.getDependencyCollection().createDependency(dependant, dependee,
-            new FinishStartConstraintImpl());
+                                                                                      new FinishStartConstraintImpl()
+        );
         dep.setConstraint(myTaskManager.createConstraint(ds.dependType));
         dep.setDifference(ds.difference);
         if (myContext.getTasksWithLegacyFixedStart().contains(dependant)) {
@@ -81,6 +102,10 @@ public class DependencyTagHandler extends AbstractTagHandler implements ParsingL
         log.error("Exception", e);
       }
     }
+  }
+
+  @Override
+  public void parsingStarted() {
   }
 
   protected void loadDependency(Attributes attrs) {
@@ -112,6 +137,20 @@ public class DependencyTagHandler extends AbstractTagHandler implements ParsingL
     }
   }
 
+  @Override
+  protected boolean onStartElement(Attributes attrs) {
+    loadDependency(attrs);
+    return true;
+  }
+
+  private ParsingContext getContext() {
+    return myContext;
+  }
+
+  private List<GanttDependStructure> getDependencies() {
+    return myDependencies;
+  }
+
   private int getDependencyAddressee() {
     return getContext().peekTask().getTaskID();
   }
@@ -121,52 +160,7 @@ public class DependencyTagHandler extends AbstractTagHandler implements ParsingL
       return Integer.parseInt(attrs.getValue("id"));
     } catch (NumberFormatException e) {
       throw new RuntimeException("Failed to parse 'depend' tag. Attribute 'id' seems to be invalid: "
-          + attrs.getValue("id"), e);
-    }
-  }
-
-  private List<GanttDependStructure> getDependencies() {
-    return myDependencies;
-  }
-
-  private ParsingContext getContext() {
-    return myContext;
-  }
-
-  private List<GanttDependStructure> myDependencies = new ArrayList<GanttDependStructure>();
-
-  private ParsingContext myContext;
-
-  private class GanttDependStructure {
-    public int taskID, successorTaskID;
-
-    public int difference = 0;
-
-    public TaskDependencyConstraint.Type dependType = TaskDependencyConstraint.Type.finishstart;
-
-    private Hardness myHardness = TaskDependency.Hardness.STRONG;
-
-    public void setHardness(Hardness hardness) {
-      myHardness = hardness;
-    }
-
-    public GanttDependStructure() {
-    }
-
-    public void setTaskID(int taskID) {
-      this.taskID = taskID;
-    }
-
-    public void setDifference(int difference) {
-      this.difference = difference;
-    }
-
-    public void setDependTaskID(int successorTaskID) {
-      this.successorTaskID = successorTaskID;
-    }
-
-    public void setDependType(TaskDependencyConstraint.Type dependType) {
-      this.dependType = dependType;
+                                 + attrs.getValue("id"), e);
     }
   }
 }

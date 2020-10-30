@@ -18,9 +18,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage.local
 
-import net.sourceforge.ganttproject.ui.RootLocalizer
 import net.sourceforge.ganttproject.storage.BROWSE_PANE_LOCALIZER
 import net.sourceforge.ganttproject.storage.StorageMode
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import org.controlsfx.validation.ValidationResult
 import org.controlsfx.validation.Validator
 import java.util.function.Supplier
@@ -31,8 +31,8 @@ import java.util.function.Supplier
  * @author dbarashev@bardsoftware.com
  */
 fun createLocalStorageValidator(
-    isListEmpty: Supplier<Boolean>,
-    state: LocalStorageState
+  isListEmpty: Supplier<Boolean>,
+  state: LocalStorageState
 ): Validator<String> {
   return Validator { control, value ->
     if (value == null) {

@@ -19,20 +19,27 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.search;
 
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.model.IGanttProject;
-import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Search service for resources */
+/**
+ * Search service for resources
+ */
 @ExtensionComponent
 public class ResourceSearchService extends SearchServiceBase<ResourceSearchService.MySearchResult, HumanResource> {
   static class MySearchResult extends SearchResult<HumanResource> {
-    MySearchResult(HumanResource hr, ResourceSearchService searchService, String query, String snippet, String snippetText) {
-      super(hr.getId(), GanttLanguage.getInstance().getText("generic.resource"), hr.getName(), query, snippet, snippetText, hr, searchService);
+    MySearchResult(
+      HumanResource hr, ResourceSearchService searchService, String query, String snippet, String snippetText
+    ) {
+      super(
+        hr.getId(), GanttLanguage.getInstance().getText("generic.resource"), hr.getName(), query, snippet, snippetText,
+        hr, searchService
+      );
     }
   }
 
@@ -41,19 +48,19 @@ public class ResourceSearchService extends SearchServiceBase<ResourceSearchServi
   }
 
   @Override
+  public void init(IGanttProject project, UIFacade uiFacade) {
+    super.init(project, uiFacade.getResourceTree(), uiFacade);
+  }
+
+  @Override
   public List<MySearchResult> search(String query) {
     query = query.toLowerCase();
     List<MySearchResult> results = new ArrayList<>();
-    for (HumanResource hr : getProject().getHumanResourceManager().getResources()) {
+    for (HumanResource hr: getProject().getHumanResourceManager().getResources()) {
       if (isNotEmptyAndContains(hr.getName(), query)) {
         results.add(new MySearchResult(hr, this, query, "", ""));
       }
     }
     return results;
-  }
-
-  @Override
-  public void init(IGanttProject project, UIFacade uiFacade) {
-    super.init(project, uiFacade.getResourceTree(), uiFacade);
   }
 }

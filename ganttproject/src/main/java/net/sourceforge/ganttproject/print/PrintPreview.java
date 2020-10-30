@@ -18,18 +18,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.print;
 
-import net.sourceforge.ganttproject.ui.viewmodel.option.DateOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultDateOption;
+import net.sourceforge.ganttproject.chart.Chart;
+import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.ui.GanttExportSettings;
 import net.sourceforge.ganttproject.ui.GanttProject;
-import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.action.zoom.ZoomActionSet;
-import net.sourceforge.ganttproject.chart.Chart;
-import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.ui.gui.TestGanttRolloverButton;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.ui.gui.options.OptionsPageBuilder;
-import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DateOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultDateOption;
 import org.slf4j.Logger;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -56,35 +56,211 @@ import java.util.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class PrintPreview extends JDialog {
-  private final Logger log = getLogger(getClass());
+  static class PreviewContainer extends JPanel {
+    protected final int H_GAP = 16;
 
+    protected final int V_GAP = 10;
+
+    @Override
+    public void doLayout() {
+      Insets ins = getInsets();
+      int x = ins.left + H_GAP;
+      int y = ins.top + V_GAP;
+
+      int n = getComponentCount();
+      if (n == 0) {
+        return;
+      }
+      Component comp = getComponent(0);
+      Dimension dc = comp.getPreferredSize();
+      int w = dc.width;
+      int h = dc.height;
+
+      Dimension dp = getParent().getSize();
+      int nCol = Math.max((dp.width - H_GAP) / (w + H_GAP), 1);
+      int nRow = n / nCol;
+      if (nRow * nCol < n) {
+        nRow++;
+      }
+
+      int index = 0;
+      for (int k = 0; k < nRow; k++) {
+        for (int m = 0; m < nCol; m++) {
+          if (index >= n) {
+            return;
+          }
+          comp = getComponent(index++);
+          comp.setBounds(x, y, w, h);
+          x += w + H_GAP;
+        }
+        y += h + V_GAP;
+        x = ins.left + H_GAP;
+      }
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+      return getPreferredSize();
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+      return getPreferredSize();
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+      int n = getComponentCount();
+      if (n == 0) {
+        return new Dimension(H_GAP, V_GAP);
+      }
+      Component comp = getComponent(0);
+      Dimension dc = comp.getPreferredSize();
+      int w = dc.width;
+      int h = dc.height;
+
+      Dimension dp = getParent().getSize();
+      int nCol = Math.max((dp.width - H_GAP) / (w + H_GAP), 1);
+      int nRow = n / nCol;
+      if (nRow * nCol < n) {
+        nRow++;
+      }
+
+      int ww = nCol * (w + H_GAP) + H_GAP;
+      int hh = nRow * (h + V_GAP) + V_GAP;
+      Insets ins = getInsets();
+      return new Dimension(ww + ins.left + ins.right, hh + ins.top + ins.bottom);
+    }
+  }
+
+  static class PagePreview extends JPanel {
+    static SortedMap<Integer, Image> ourImageCache = new TreeMap<Integer, Image>();
+    private final Logger log = getLogger(getClass());
+    private final PageFormat myPageFormat;
+    private final int myPageIndex;
+    private final Printable myPrintableChart;
+    private int myScalePercents;
+
+    public PagePreview(int pageIndex, PageFormat pageFormat, Printable chart, int scalePercents) {
+      myScalePercents = scalePercents;
+      myPageIndex = pageIndex;
+      myPageFormat = pageFormat;
+      myPrintableChart = chart;
+      setBackground(Color.white);
+      setBorder(new MatteBorder(1, 1, 2, 2, Color.black));
+    }
+
+    public static void clearCache() {
+      ourImageCache.clear();
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+      return getPreferredSize();
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+      return getPreferredSize();
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+      Insets ins = getInsets();
+      return new Dimension(getScaledWidth() + ins.left + ins.right, getScaledHeight() + ins.top + ins.bottom);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      Image scaledImage = ourImageCache.get(new Integer(myPageIndex));
+      if (scaledImage == null) {
+        BufferedImage bufferImage = new BufferedImage((int) myPageFormat.getWidth(), (int) myPageFormat.getHeight(),
+                                                      BufferedImage.TYPE_INT_RGB
+        );
+        Graphics bufferGraphics = bufferImage.getGraphics();
+        {
+          bufferGraphics.setColor(Color.white);
+          bufferGraphics.fillRect(0, 0, bufferImage.getWidth(), bufferImage.getHeight());
+          try {
+            myPrintableChart.print(bufferGraphics, myPageFormat, myPageIndex);
+          } catch (PrinterException e) {
+            log.error("Exception", e);
+          }
+        }
+        scaledImage = bufferImage.getScaledInstance(getScaledWidth(), getScaledHeight(), Image.SCALE_SMOOTH);
+        ourImageCache.put(new Integer(myPageIndex), scaledImage);
+      }
+      g.setColor(getBackground());
+      g.fillRect(0, 0, getWidth(), getHeight());
+      g.drawImage(scaledImage, 0, 0, null);
+    }
+
+    void setScale(int scale) {
+      myScalePercents = scale;
+    }
+
+    private int getScaledHeight() {
+      return (int) (myPageFormat.getHeight() * myScalePercents / 100);
+    }
+
+    private int getScaledWidth() {
+      return (int) (myPageFormat.getWidth() * myScalePercents / 100);
+    }
+  }
+
+  static class StatusBar extends JPanel {
+    JLabel label0;
+    JLabel label1;
+    JLabel message0;
+    JLabel message1;
+
+    public StatusBar() {
+      super(new BorderLayout());
+      label0 = new JLabel();
+      message0 = new JLabel();
+      JPanel panel0 = new JPanel();
+      panel0.add(label0);
+      panel0.add(message0);
+      add(panel0, BorderLayout.WEST);
+      label1 = new JLabel();
+      message1 = new JLabel();
+      JPanel panel1 = new JPanel();
+      panel1.add(label1);
+      panel1.add(message1);
+      add(panel1, BorderLayout.EAST);
+    }
+
+    public void setLabel0(String label) {
+      label0.setText(label);
+    }
+
+    public void setLabel1(String label) {
+      label1.setText(label);
+    }
+
+    public void setText0(String text) {
+      message0.setText(text);
+    }
+
+    public void setText1(String text) {
+      message1.setText(text);
+    }
+  }
   private final static MediaSizeName DEFAULT_MEDIA_SIZE_NAME = MediaSizeName.ISO_A4;
-
-  private static GanttLanguage language = GanttLanguage.getInstance();
-
-  private int myPageWidth;
-
-  private int myPageHeight;
-
-  private Printable myPrintable = null;
-
-  private JComboBox myComboScale = null;
-
-  private PreviewContainer myPreviewContainer = null;
-
-  private int myOrientation = PageFormat.LANDSCAPE;
-
-  private PageFormat myPageFormat = null;
-
-  private int myScale;
-
+  private static final GanttLanguage language = GanttLanguage.getInstance();
+  private final Logger log = getLogger(getClass());
+  private final IGanttProject myProject;
+  private final UIFacade myUIFacade;
   private Chart myChart = null;
+  private JComboBox myComboMediaSize = null;
+  private JComboBox myComboScale = null;
+  private GanttExportSettings myExportSettings = null;
 
   // private JButton myStartDateButton = null;
   //
   // private JButton myEndDateButton = null;
-
-  private GanttExportSettings myExportSettings = null;
+  private MediaSizeName myMediaSizeName;
 
   // private Date myStartDate = null;
   //
@@ -93,44 +269,33 @@ public class PrintPreview extends JDialog {
   // private GanttDialogDate myEndDialogDate = null;
   //
   // private GanttDialogDate myStartDialogDate = null;
-
+  private int myOrientation = PageFormat.LANDSCAPE;
+  private PageFormat myPageFormat = null;
+  private int myPageHeight;
+  private int myPageWidth;
+  private PreviewContainer myPreviewContainer = null;
+  private Printable myPrintable = null;
+  private int myScale;
+  private final DateOption myStart = new DefaultDateOption("generic.startDate") {
+    @Override
+    public void setValue(Date value) {
+      super.setValue(value);
+      commit();
+      onChangingDates();
+      lock();
+    }
+  };
+  private final DateOption myFinish = new DefaultDateOption("generic.endDate") {
+    @Override
+    public void setValue(Date value) {
+      super.setValue(value);
+      commit();
+      onChangingDates();
+      lock();
+    }
+  };
   private JButton myWholeProjectButton = null;
-
-  private MediaSizeName myMediaSizeName;
-
-  private JComboBox myComboMediaSize = null;
-
-  private StatusBar statusBar;
-
-  private DateOption myStart = new DefaultDateOption("generic.startDate") {
-    @Override
-    public void setValue(Date value) {
-      super.setValue(value);
-      commit();
-      onChangingDates();
-      lock();
-    }
-  };
-
-  private DateOption myFinish = new DefaultDateOption("generic.endDate") {
-    @Override
-    public void setValue(Date value) {
-      super.setValue(value);
-      commit();
-      onChangingDates();
-      lock();
-    }
-  };
-
-  private final IGanttProject myProject;
-
-  private final UIFacade myUIFacade;
-
-  private void onChangingDates() {
-    myExportSettings.setStartDate(myStart.getValue());
-    myExportSettings.setEndDate(myFinish.getValue());
-    updateSourceImage();
-  }
+  private final StatusBar statusBar;
 
   public PrintPreview(IGanttProject project, UIFacade uifacade, Chart chart, Date start, Date end) {
     super(uifacade.getMainFrame(), language.getText("preview"), false);
@@ -173,9 +338,9 @@ public class PrintPreview extends JDialog {
     });
 
     final JButton bPortrait = new TestGanttRolloverButton(new ImageIcon(
-        getClass().getResource("/icons/portrait_16.gif")));
+      getClass().getResource("/icons/portrait_16.gif")));
     final JButton bLandscape = new TestGanttRolloverButton(new ImageIcon(getClass().getResource(
-        "/icons/landscape_16.gif")));
+      "/icons/landscape_16.gif")));
 
     bPortrait.addActionListener(new ActionListener() {
       @Override
@@ -205,7 +370,7 @@ public class PrintPreview extends JDialog {
       }
     });
     bLandscape.setEnabled(false);
-    String[] scales = { "10 %", "25 %", "50 %", "100 %" };
+    String[] scales = {"10 %", "25 %", "50 %", "100 %"};
     myComboScale = new JComboBox(scales);
     myComboScale.setSelectedIndex(2);
     myComboScale.addActionListener(new ActionListener() {
@@ -473,6 +638,47 @@ public class PrintPreview extends JDialog {
     myFinish.setValue(end);
   }
 
+  private void changePageOrientation(int newOrientation) {
+    myOrientation = newOrientation;
+    myPageFormat.setOrientation(myOrientation);
+    myPageWidth = (int) (myPageFormat.getWidth());
+    myPageHeight = (int) (myPageFormat.getHeight());
+
+    myPreviewContainer.removeAll();
+    myPreviewContainer.repaint();
+    createPages();
+    myPreviewContainer.doLayout();
+    myPreviewContainer.getParent().getParent().validate();
+    myPreviewContainer.validate();
+    PagePreview.clearCache();
+  }
+
+  private void changeScale() {
+    String str = myComboScale.getSelectedItem().toString();
+    if (str.endsWith("%")) {
+      str = str.substring(0, str.length() - 1);
+    }
+    str = str.trim();
+    myScale = 0;
+    try {
+      myScale = Integer.parseInt(str);
+    } catch (NumberFormatException ex) {
+      return;
+    }
+
+    Component[] comps = myPreviewContainer.getComponents();
+    for (Component c: comps) {
+      if (!(c instanceof PagePreview)) {
+        continue;
+      }
+      PagePreview pp = (PagePreview) c;
+      pp.setScale(myScale);
+    }
+    PagePreview.clearCache();
+    myPreviewContainer.doLayout();
+    myPreviewContainer.getParent().getParent().validate();
+  }
+
   private void createPages() {
     int pageIndex = 0;
     try {
@@ -494,56 +700,10 @@ public class PrintPreview extends JDialog {
     }
   }
 
-  private void changeScale() {
-    String str = myComboScale.getSelectedItem().toString();
-    if (str.endsWith("%")) {
-      str = str.substring(0, str.length() - 1);
-    }
-    str = str.trim();
-    myScale = 0;
-    try {
-      myScale = Integer.parseInt(str);
-    } catch (NumberFormatException ex) {
-      return;
-    }
-
-    Component[] comps = myPreviewContainer.getComponents();
-    for (Component c : comps) {
-      if (!(c instanceof PagePreview)) {
-        continue;
-      }
-      PagePreview pp = (PagePreview) c;
-      pp.setScale(myScale);
-    }
-    PagePreview.clearCache();
-    myPreviewContainer.doLayout();
-    myPreviewContainer.getParent().getParent().validate();
-  }
-
-  private void run(Runnable runnable) {
-    try {
-      setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      runnable.run();
-    } catch (Exception e) {
-      log.error("Exception", e);
-    } finally {
-      setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    }
-  }
-
-  private void changePageOrientation(int newOrientation) {
-    myOrientation = newOrientation;
-    myPageFormat.setOrientation(myOrientation);
-    myPageWidth = (int) (myPageFormat.getWidth());
-    myPageHeight = (int) (myPageFormat.getHeight());
-
-    myPreviewContainer.removeAll();
-    myPreviewContainer.repaint();
-    createPages();
-    myPreviewContainer.doLayout();
-    myPreviewContainer.getParent().getParent().validate();
-    myPreviewContainer.validate();
-    PagePreview.clearCache();
+  private void onChangingDates() {
+    myExportSettings.setStartDate(myStart.getValue());
+    myExportSettings.setEndDate(myFinish.getValue());
+    updateSourceImage();
   }
 
   private void print() {
@@ -563,7 +723,6 @@ public class PrintPreview extends JDialog {
       try {
         prnJob.print(attr);
         setVisible(false);
-
       } catch (Exception e) {
         e.printStackTrace();
         myUIFacade.showErrorDialog(e);
@@ -571,7 +730,17 @@ public class PrintPreview extends JDialog {
       dispose();
     }
     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+  }
 
+  private void run(Runnable runnable) {
+    try {
+      setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      runnable.run();
+    } catch (Exception e) {
+      log.error("Exception", e);
+    } finally {
+      setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
   }
 
   private void updateSourceImage() {
@@ -581,199 +750,6 @@ public class PrintPreview extends JDialog {
       changePageOrientation(myOrientation);
     } catch (OutOfMemoryError e) {
       myUIFacade.showErrorDialog(language.getText("printing.out_of_memory"));
-    }
-  }
-
-  static class PreviewContainer extends JPanel {
-    protected final int H_GAP = 16;
-
-    protected final int V_GAP = 10;
-
-    @Override
-    public Dimension getPreferredSize() {
-      int n = getComponentCount();
-      if (n == 0) {
-        return new Dimension(H_GAP, V_GAP);
-      }
-      Component comp = getComponent(0);
-      Dimension dc = comp.getPreferredSize();
-      int w = dc.width;
-      int h = dc.height;
-
-      Dimension dp = getParent().getSize();
-      int nCol = Math.max((dp.width - H_GAP) / (w + H_GAP), 1);
-      int nRow = n / nCol;
-      if (nRow * nCol < n) {
-        nRow++;
-      }
-
-      int ww = nCol * (w + H_GAP) + H_GAP;
-      int hh = nRow * (h + V_GAP) + V_GAP;
-      Insets ins = getInsets();
-      return new Dimension(ww + ins.left + ins.right, hh + ins.top + ins.bottom);
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-      return getPreferredSize();
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-      return getPreferredSize();
-    }
-
-    @Override
-    public void doLayout() {
-      Insets ins = getInsets();
-      int x = ins.left + H_GAP;
-      int y = ins.top + V_GAP;
-
-      int n = getComponentCount();
-      if (n == 0)
-        return;
-      Component comp = getComponent(0);
-      Dimension dc = comp.getPreferredSize();
-      int w = dc.width;
-      int h = dc.height;
-
-      Dimension dp = getParent().getSize();
-      int nCol = Math.max((dp.width - H_GAP) / (w + H_GAP), 1);
-      int nRow = n / nCol;
-      if (nRow * nCol < n)
-        nRow++;
-
-      int index = 0;
-      for (int k = 0; k < nRow; k++) {
-        for (int m = 0; m < nCol; m++) {
-          if (index >= n) {
-            return;
-          }
-          comp = getComponent(index++);
-          comp.setBounds(x, y, w, h);
-          x += w + H_GAP;
-        }
-        y += h + V_GAP;
-        x = ins.left + H_GAP;
-      }
-    }
-  }
-
-  static class PagePreview extends JPanel {
-    private final Logger log = getLogger(getClass());
-    static SortedMap<Integer, Image> ourImageCache = new TreeMap<Integer, Image>();
-    private final int myPageIndex;
-    private final PageFormat myPageFormat;
-    private final Printable myPrintableChart;
-    private int myScalePercents;
-
-    public PagePreview(int pageIndex, PageFormat pageFormat, Printable chart, int scalePercents) {
-      myScalePercents = scalePercents;
-      myPageIndex = pageIndex;
-      myPageFormat = pageFormat;
-      myPrintableChart = chart;
-      setBackground(Color.white);
-      setBorder(new MatteBorder(1, 1, 2, 2, Color.black));
-    }
-
-    public static void clearCache() {
-      ourImageCache.clear();
-    }
-
-    void setScale(int scale) {
-      myScalePercents = scale;
-    }
-
-    private int getScaledWidth() {
-      return (int) (myPageFormat.getWidth() * myScalePercents / 100);
-    }
-
-    private int getScaledHeight() {
-      return (int) (myPageFormat.getHeight() * myScalePercents / 100);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-      Insets ins = getInsets();
-      return new Dimension(getScaledWidth() + ins.left + ins.right, getScaledHeight() + ins.top + ins.bottom);
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-      return getPreferredSize();
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-      return getPreferredSize();
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-      super.paintComponent(g);
-      Image scaledImage = ourImageCache.get(new Integer(myPageIndex));
-      if (scaledImage == null) {
-        BufferedImage bufferImage = new BufferedImage((int) myPageFormat.getWidth(), (int) myPageFormat.getHeight(),
-            BufferedImage.TYPE_INT_RGB);
-        Graphics bufferGraphics = bufferImage.getGraphics();
-        {
-          bufferGraphics.setColor(Color.white);
-          bufferGraphics.fillRect(0, 0, bufferImage.getWidth(), bufferImage.getHeight());
-          try {
-            myPrintableChart.print(bufferGraphics, myPageFormat, myPageIndex);
-          } catch (PrinterException e) {
-            log.error("Exception", e);
-          }
-        }
-        scaledImage = bufferImage.getScaledInstance(getScaledWidth(), getScaledHeight(), Image.SCALE_SMOOTH);
-        ourImageCache.put(new Integer(myPageIndex), scaledImage);
-      }
-      g.setColor(getBackground());
-      g.fillRect(0, 0, getWidth(), getHeight());
-      g.drawImage(scaledImage, 0, 0, null);
-    }
-  }
-
-  static class StatusBar extends JPanel {
-    JLabel label0;
-
-    JLabel message0;
-
-    JLabel label1;
-
-    JLabel message1;
-
-    public StatusBar() {
-      super(new BorderLayout());
-      label0 = new JLabel();
-      message0 = new JLabel();
-      JPanel panel0 = new JPanel();
-      panel0.add(label0);
-      panel0.add(message0);
-      add(panel0, BorderLayout.WEST);
-      label1 = new JLabel();
-      message1 = new JLabel();
-      JPanel panel1 = new JPanel();
-      panel1.add(label1);
-      panel1.add(message1);
-      add(panel1, BorderLayout.EAST);
-
-    }
-
-    public void setLabel0(String label) {
-      label0.setText(label);
-    }
-
-    public void setText0(String text) {
-      message0.setText(text);
-    }
-
-    public void setLabel1(String label) {
-      label1.setText(label);
-    }
-
-    public void setText1(String text) {
-      message1.setText(text);
     }
   }
 }

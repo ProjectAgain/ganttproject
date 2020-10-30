@@ -35,12 +35,12 @@ import java.util.List;
  * @author dbarashev@bardsoftware.com
  */
 public class PopupSearchCallback implements SearchDialog.SearchCallback {
-  private final Rectangle mySearchBoxPosition;
   private final JComponent myInvoker;
-  private SearchDialog myDialog;
-  private JXList list = new JXList();
-  private Runnable onSelect;
+  private final Rectangle mySearchBoxPosition;
+  private final JXList list = new JXList();
+  private final SearchDialog myDialog;
   private Runnable onDismiss;
+  private Runnable onSelect;
 
   public PopupSearchCallback(JComponent invoker, Rectangle searchBoxPosition) {
     myDialog = App.getInstance().getUiManager().getSearchDialogFactory().create();
@@ -108,13 +108,13 @@ public class PopupSearchCallback implements SearchDialog.SearchCallback {
     };
   }
 
+  public void runSearch(String query) {
+    myDialog.runSearch(query, this);
+  }
+
   private void onSelect(JPopupMenu popup, List<SearchResult<?>> results) {
     popup.setVisible(false);
     SearchResult selectedValue = results.get(list.getSelectedIndex());
     selectedValue.getSearchService().select(Collections.singletonList(selectedValue));
-  }
-
-  public void runSearch(String query) {
-    myDialog.runSearch(query, this);
   }
 }

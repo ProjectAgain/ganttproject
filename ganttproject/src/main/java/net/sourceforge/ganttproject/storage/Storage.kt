@@ -18,11 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage
 
-import net.sourceforge.ganttproject.FXUtil
-import net.sourceforge.ganttproject.ui.RootLocalizer
-import net.sourceforge.ganttproject.lib.fx.ListItemBuilder
-import net.sourceforge.ganttproject.lib.fx.buildFontAwesomeButton
-import net.sourceforge.ganttproject.storage.local.LocalStorage
 import com.google.common.base.Supplier
 import com.google.common.base.Suppliers
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
@@ -34,9 +29,14 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
+import net.sourceforge.ganttproject.FXUtil
+import net.sourceforge.ganttproject.lib.fx.ListItemBuilder
+import net.sourceforge.ganttproject.lib.fx.buildFontAwesomeButton
 import net.sourceforge.ganttproject.model.document.Document
 import net.sourceforge.ganttproject.model.document.DocumentManager
 import net.sourceforge.ganttproject.model.document.ReadOnlyProxyDocument
+import net.sourceforge.ganttproject.storage.local.LocalStorage
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import java.io.File
 import java.util.function.Consumer
 
@@ -88,11 +88,11 @@ sealed class StorageMode(val name: String) {
  * @author dbarashev@bardsoftware.com
  */
 class StoragePane internal constructor(
-    private val documentManager: DocumentManager,
-    private val currentDocument: ReadOnlyProxyDocument,
-    private val documentReceiver: Consumer<Document>,
-    private val documentUpdater: Consumer<Document>,
-    private val dialogUi: StorageDialogBuilder.DialogUi
+  private val documentManager: DocumentManager,
+  private val currentDocument: ReadOnlyProxyDocument,
+  private val documentReceiver: Consumer<Document>,
+  private val documentUpdater: Consumer<Document>,
+  private val dialogUi: StorageDialogBuilder.DialogUi
 ) {
 
   private val storageUiMap = mutableMapOf<String, Supplier<Pane>>()
@@ -144,14 +144,15 @@ class StoragePane internal constructor(
         dialogUi.error(e)
       }
     }
-    val localStorage = LocalStorage(dialogUi, mode, currentDocument, openDocument).also{ storageUiList.add(it) }
+    val localStorage = LocalStorage(dialogUi, mode, currentDocument, openDocument).also { storageUiList.add(it) }
     val recentProjects = RecentProjects(
-        mode,
-        documentManager,
-        currentDocument,
-        openDocument).also{ storageUiList.add(it) }
+      mode,
+      documentManager,
+      currentDocument,
+      openDocument).also { storageUiList.add(it) }
 
-    val initialStorageId = selectedId ?: if (mode == StorageDialogBuilder.Mode.OPEN) recentProjects.id else localStorage.id
+    val initialStorageId = selectedId
+      ?: if (mode == StorageDialogBuilder.Mode.OPEN) recentProjects.id else localStorage.id
 
     // Iterate the list of available storages and create for each storage:
     // - a list item with optional settings button if settings are available
@@ -163,20 +164,20 @@ class StoragePane internal constructor(
       val itemIcon = i18n.formatText("service.${storageUi.category}.icon")
 
       val listItemContent = buildFontAwesomeButton(
-          itemIcon,
-          itemLabel,
-          { onStorageChange(storageUiPane, storageUi.id) },
-          "storage-name")
+        itemIcon,
+        itemLabel,
+        { onStorageChange(storageUiPane, storageUi.id) },
+        "storage-name")
       ListItemBuilder(listItemContent).let { builder ->
         builder.onSelectionChange = { pane: Parent -> this.setSelected(pane) }
 
         storageUi.createSettingsUi().ifPresent { settingsPane ->
           builder.hoverNode = buildFontAwesomeButton(FontAwesomeIcon.COG.name, null,
-              {
-                FXUtil.transitionCenterPane(storageUiPane, settingsPane) { dialogUi.resize() }
-                Unit
-              },
-              "settings"
+            {
+              FXUtil.transitionCenterPane(storageUiPane, settingsPane) { dialogUi.resize() }
+              Unit
+            },
+            "settings"
           )
         }
         builder.build().apply {

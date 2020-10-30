@@ -19,7 +19,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.storage
 
 //import net.sourceforge.ganttproject.storage.local.setupErrorLabel
-import net.sourceforge.ganttproject.ui.RootLocalizer
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.event.ActionEvent
@@ -28,6 +27,7 @@ import kotlinx.coroutines.*
 import net.sourceforge.ganttproject.model.document.Document
 import net.sourceforge.ganttproject.model.document.DocumentManager
 import net.sourceforge.ganttproject.model.document.FileDocument
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.MalformedURLException

@@ -6,13 +6,12 @@
 package net.sourceforge.ganttproject.util;
 
 /**
- * @version $Revision: 1.1 $
  * @author Benoît Mahé (bmahe@w3.org)
+ * @version $Revision: 1.1 $
  */
 public class InvalidDateException extends Exception {
 
-    public InvalidDateException(String msg) {
-        super(msg);
-    }
-
+  public InvalidDateException(String msg) {
+    super(msg);
+  }
 }

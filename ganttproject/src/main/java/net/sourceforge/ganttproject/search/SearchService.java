@@ -31,12 +31,10 @@ import java.util.List;
  * result, a service should be able to show the result somehow (e.g. make it
  * visible and switch keyboard focus to the result).
  *
- * @author dbarashev (Dmitry Barashev)
+ * @param <SR> search result object type
+ * @param <SO> target search object type
  *
- * @param <SR>
- *          search result object type
- * @param <SO>
- *          target search object type
+ * @author dbarashev (Dmitry Barashev)
  */
 public interface SearchService<SR extends SearchResult<SO>, SO> extends ExtensionPoint {
   String EXTENSION_POINT_ID = "net.sourceforge.ganttproject.search";

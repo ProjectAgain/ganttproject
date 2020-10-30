@@ -18,14 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.chart;
 
-import net.sourceforge.ganttproject.ui.table.ColumnList;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
-import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.chart.overview.ToolbarBuilder;
+import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.ui.gui.TreeUiFacade;
 import net.sourceforge.ganttproject.ui.gui.UIUtil;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
 import net.sourceforge.ganttproject.util.collect.Pair;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
@@ -37,21 +37,11 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.awt.event.*;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -132,12 +122,7 @@ public abstract class TreeTableContainer<ModelObject, TreeTableClass extends GPT
     this.addFocusListener(new FocusAdapter() {
       @Override
       public void focusGained(FocusEvent e) {
-        SwingUtilities.invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            getTreeTable().getTable().requestFocusInWindow();
-          }
-        });
+        SwingUtilities.invokeLater(() -> getTreeTable().getTable().requestFocusInWindow());
       }
     });
     MouseListener ml = new MouseAdapter() {
@@ -158,12 +143,7 @@ public abstract class TreeTableContainer<ModelObject, TreeTableClass extends GPT
 
     };
     getTreeTable().addMouseListener(ml);
-    getTree().addTreeSelectionListener(new TreeSelectionListener() {
-      @Override
-      public void valueChanged(TreeSelectionEvent e) {
-        onSelectionChanged(Arrays.asList(getSelectedNodes()));
-      }
-    });
+    getTree().addTreeSelectionListener(e -> onSelectionChanged(Arrays.asList(getSelectedNodes())));
   }
 
   private void expandAll(TreePath root) {

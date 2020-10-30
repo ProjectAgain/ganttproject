@@ -18,8 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.print;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.RenderedImage;
 import java.awt.print.PageFormat;
@@ -28,11 +27,11 @@ import java.awt.print.Printable;
 public class GanttPrintable implements Printable {
 
   public final static double REDUCE_FACTOR_DEFAULT = 1.5d;
-
-  private double reduceFactor;
-
-  /** The image to print */
-  private RenderedImage image;
+  /**
+   * The image to print
+   */
+  private final RenderedImage image;
+  private final double reduceFactor;
 
   public GanttPrintable(RenderedImage image, double reduceFactor) {
     super();
@@ -40,7 +39,9 @@ public class GanttPrintable implements Printable {
     this.reduceFactor = reduceFactor < 1.0d ? REDUCE_FACTOR_DEFAULT : reduceFactor;
   }
 
-  /** Print the page */
+  /**
+   * Print the page
+   */
   @Override
   public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
     System.err.println("[GanttPrintable] print(): reduceFactor=" + reduceFactor);
@@ -60,13 +61,15 @@ public class GanttPrintable implements Printable {
     int currentColumn = pageIndex - currentRow * pagesPerRow;
     System.err.println("[GanttPrintable] print(): curentpage=" + currentColumn + " current row=" + currentRow);
 
-    int leftx = (int) (currentColumn * (pageFormat.getImageableWidth() * reduceFactor - 2 / 3 * pageFormat.getImageableX()));
+    int leftx =
+      (int) (currentColumn * (pageFormat.getImageableWidth() * reduceFactor - 2 / 3 * pageFormat.getImageableX()));
     int topy = (int) (currentRow * pageFormat.getImageableHeight() * reduceFactor);
     System.err.println("[GanttPrintable] print(): leftx=" + leftx + " topy=" + topy);
 
     Graphics2D g2d = (Graphics2D) graphics;
     g2d.setClip((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY(),
-        (int) pageFormat.getImageableWidth(), (int) pageFormat.getImageableHeight());
+                (int) pageFormat.getImageableWidth(), (int) pageFormat.getImageableHeight()
+    );
 
     AffineTransform transform = AffineTransform.getScaleInstance(1 / reduceFactor, 1 / reduceFactor);
     transform.translate(pageFormat.getImageableX() - leftx, pageFormat.getImageableY() - topy);

@@ -21,20 +21,16 @@ package net.sourceforge.ganttproject.updater.client;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import net.sourceforge.ganttproject.GPVersion;
+import net.sourceforge.ganttproject.util.DateParser;
+import net.sourceforge.ganttproject.util.InvalidDateException;
 import net.sourceforge.ganttproject.util.StringUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import net.sourceforge.ganttproject.util.DateParser;
-import net.sourceforge.ganttproject.util.InvalidDateException;
 import org.xml.sax.InputSource;
 
 import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.*;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
@@ -42,9 +38,9 @@ import java.util.Iterator;
 
 public class RssParser {
 
-  private final XPathFactory myXPathFactory = XPathFactory.newInstance();
   private final String myCurrentBuildNumber;
   private final String myCurrentVersionNumber;
+  private final XPathFactory myXPathFactory = XPathFactory.newInstance();
 
   RssParser() {
     this(GPVersion.getCurrentVersionNumber(), GPVersion.getCurrentBuildNumber());
@@ -53,6 +49,68 @@ public class RssParser {
   public RssParser(String currentVersionNumber, String currentBuildNumber) {
     myCurrentVersionNumber = Preconditions.checkNotNull(currentVersionNumber);
     myCurrentBuildNumber = Preconditions.checkNotNull(currentBuildNumber);
+  }
+
+  public RssFeed parse(InputStream inputStream, Date lastCheckDate) {
+    RssFeed result = new RssFeed();
+    try {
+      XPathExpression xpath = getXPath("//atom:entry");
+      NodeList items = (NodeList) xpath.evaluate(
+        new InputSource(new InputStreamReader(inputStream)),
+        XPathConstants.NODESET
+      );
+      for (int i = 0; i < items.getLength(); i++) {
+        if (isApplicableToVersion(items.item(i), myCurrentVersionNumber, myCurrentBuildNumber)) {
+          addItem(result, items.item(i), lastCheckDate);
+        }
+      }
+    } catch (XPathExpressionException e) {
+      e.printStackTrace();
+    }
+    return result;
+  }
+
+  public RssUpdate parseUpdate(String content) {
+    if (!StringUtils.isEmptyOrNull(content)) {
+
+      String[] parts = content.split("\n", 3);
+      if (parts.length == 3) {
+        return new RssUpdate(parts[0], parts[1], parts[2]);
+      }
+    }
+    return null;
+  }
+
+  private void addItem(RssFeed result, Node item, Date lastCheckDate) throws XPathExpressionException {
+    if (lastCheckDate != null) {
+      String updateString = getXPath("atom:updated/text()").evaluate(item);
+      try {
+        Date updateDate = DateParser.parse(updateString);
+        if (updateDate.before(lastCheckDate)) {
+          return;
+        }
+      } catch (InvalidDateException e) {
+        e.printStackTrace();
+      }
+    }
+    String title = getXPath("atom:title/text()").evaluate(item);
+    String body = getXPath("atom:content/text()").evaluate(item);
+    boolean isUpdate = isUpdateItem(item);
+    result.addItem(title, body, isUpdate);
+  }
+
+  private boolean compareCategory(String category, String type, String value) {
+    if (category.startsWith("__" + type + "_lt_")) {
+      String valueRequired = category.substring(("__" + type + "_lt_").length());
+      return value.compareTo(valueRequired) < 0;
+    } else if (category.startsWith("__" + type + "_gt_")) {
+      String valueRequired = category.substring(("__" + type + "_gt_").length());
+      return value.compareTo(valueRequired) > 0;
+    } else if (category.startsWith("__" + type + "_eq_")) {
+      String valueRequired = category.substring(("__" + type + "_eq_").length());
+      return value.equals(valueRequired);
+    }
+    return false;
   }
 
   private XPathExpression getXPath(String expression) throws XPathExpressionException {
@@ -79,35 +137,6 @@ public class RssParser {
     return xpath.compile(expression);
   }
 
-  public RssFeed parse(InputStream inputStream, Date lastCheckDate) {
-    RssFeed result = new RssFeed();
-    try {
-      XPathExpression xpath = getXPath("//atom:entry");
-      NodeList items = (NodeList) xpath.evaluate(new InputSource(new InputStreamReader(inputStream)),
-          XPathConstants.NODESET);
-      for (int i = 0; i < items.getLength(); i++) {
-        if (isApplicableToVersion(items.item(i), myCurrentVersionNumber, myCurrentBuildNumber)) {
-          addItem(result, items.item(i), lastCheckDate);
-        }
-      }
-
-    } catch (XPathExpressionException e) {
-      e.printStackTrace();
-    }
-    return result;
-  }
-
-  public RssUpdate parseUpdate(String content) {
-    if (!StringUtils.isEmptyOrNull(content)) {
-
-      String[] parts = content.split("\n", 3);
-      if (parts.length == 3) {
-        return new RssUpdate(parts[0], parts[1], parts[2]);
-      }
-    }
-    return null;
-  }
-
   private boolean isApplicableToVersion(Node item, String version, String build) throws XPathExpressionException {
     boolean hasRestriction = false;
     NodeList categories = (NodeList) getXPath("atom:category").evaluate(item, XPathConstants.NODESET);
@@ -130,38 +159,6 @@ public class RssParser {
       }
     }
     return !hasRestriction;
-  }
-
-  private boolean compareCategory(String category, String type, String value) {
-    if (category.startsWith("__" + type + "_lt_")) {
-      String valueRequired = category.substring(("__" + type + "_lt_").length());
-      return value.compareTo(valueRequired) < 0;
-    } else if (category.startsWith("__" + type + "_gt_")) {
-      String valueRequired = category.substring(("__" + type + "_gt_").length());
-      return value.compareTo(valueRequired) > 0;
-    } else if (category.startsWith("__" + type + "_eq_")) {
-      String valueRequired = category.substring(("__" + type + "_eq_").length());
-      return value.equals(valueRequired);
-    }
-    return false;
-  }
-
-  private void addItem(RssFeed result, Node item, Date lastCheckDate) throws XPathExpressionException {
-    if (lastCheckDate != null) {
-      String updateString = getXPath("atom:updated/text()").evaluate(item);
-      try {
-        Date updateDate = DateParser.parse(updateString);
-        if (updateDate.before(lastCheckDate)) {
-          return;
-        }
-      } catch (InvalidDateException e) {
-        e.printStackTrace();
-      }
-    }
-    String title = getXPath("atom:title/text()").evaluate(item);
-    String body = getXPath("atom:content/text()").evaluate(item);
-    boolean isUpdate = isUpdateItem(item);
-    result.addItem(title, body, isUpdate);
   }
 
   private boolean isUpdateItem(Node item) throws XPathExpressionException {

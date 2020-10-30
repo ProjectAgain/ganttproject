@@ -18,14 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.model.task.CustomColumnsException;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskManager;
-import org.slf4j.Logger;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.util.DateParser;
 import net.sourceforge.ganttproject.util.InvalidDateException;
+import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
 import java.util.ArrayList;
@@ -39,33 +39,38 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author bbaranne Mar 10, 2005
  */
 public class CustomPropertiesTagHandler extends AbstractTagHandler implements ParsingListener {
+  private class CustomPropertiesStructure {
+    public int taskID;
+
+    public String taskPropertyID = null;
+
+    public String value = null;
+
+    public CustomPropertiesStructure() {
+    }
+
+    public void setTaskID(int taskID) {
+      this.taskID = taskID;
+    }
+
+    public void setTaskPropertyID(String propertyID) {
+      this.taskPropertyID = propertyID;
+    }
+
+    public void setValue(String val) {
+      this.value = val;
+    }
+  }
   private final Logger log = getLogger(getClass());
-
-  private TaskManager taskManager = null;
-
-  private ParsingContext parsingContext = null;
-
   private List<CustomPropertiesStructure> listStructure = null;
+  private ParsingContext parsingContext = null;
+  private TaskManager taskManager = null;
 
   public CustomPropertiesTagHandler(ParsingContext context, TaskManager taskManager) {
     super("customproperty");
     this.taskManager = taskManager;
     this.parsingContext = context;
     this.listStructure = new ArrayList<CustomPropertiesStructure>();
-  }
-
-  @Override
-  protected boolean onStartElement(Attributes attrs) {
-    loadProperty(attrs);
-    return true;
-  }
-
-  /**
-   * @see net.sourceforge.ganttproject.parser.ParsingListener#parsingStarted()
-   */
-  @Override
-  public void parsingStarted() {
-    // nothing to do.
   }
 
   /**
@@ -79,14 +84,14 @@ public class CustomPropertiesTagHandler extends AbstractTagHandler implements Pa
       CustomPropertiesStructure cps = it.next();
       Task task = taskManager.getTask(cps.taskID);
       CustomPropertyDefinition cc = taskManager.getCustomPropertyManager().getCustomPropertyDefinition(
-          cps.taskPropertyID);
+        cps.taskPropertyID);
       String valueStr = cps.value;
       Object value = null;
       Class<?> cla = cc.getType();
 
       if (valueStr != null) {
         if (cla.equals(String.class)) {
-          value = valueStr.toString();
+          value = valueStr;
         } else if (cla.equals(Boolean.class)) {
           value = Boolean.valueOf(valueStr);
         } else if (cla.equals(Integer.class)) {
@@ -110,6 +115,20 @@ public class CustomPropertiesTagHandler extends AbstractTagHandler implements Pa
     }
   }
 
+  /**
+   * @see net.sourceforge.ganttproject.parser.ParsingListener#parsingStarted()
+   */
+  @Override
+  public void parsingStarted() {
+    // nothing to do.
+  }
+
+  @Override
+  protected boolean onStartElement(Attributes attrs) {
+    loadProperty(attrs);
+    return true;
+  }
+
   private void loadProperty(Attributes attrs) {
     if (attrs != null) {
       // System.out.println(parsingContext.getTaskID());
@@ -119,29 +138,6 @@ public class CustomPropertiesTagHandler extends AbstractTagHandler implements Pa
       cps.setValue(attrs.getValue("value"));
 
       this.listStructure.add(cps);
-    }
-  }
-
-  private class CustomPropertiesStructure {
-    public int taskID;
-
-    public String taskPropertyID = null;
-
-    public String value = null;
-
-    public CustomPropertiesStructure() {
-    }
-
-    public void setTaskID(int taskID) {
-      this.taskID = taskID;
-    }
-
-    public void setTaskPropertyID(String propertyID) {
-      this.taskPropertyID = propertyID;
-    }
-
-    public void setValue(String val) {
-      this.value = val;
     }
   }
 }

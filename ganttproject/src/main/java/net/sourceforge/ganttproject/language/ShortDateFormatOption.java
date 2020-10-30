@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class ShortDateFormatOption extends DefaultStringOption {
   private SimpleDateFormat myDateFormat;
 
@@ -38,13 +37,32 @@ public class ShortDateFormatOption extends DefaultStringOption {
   }
 
   @Override
-  public void setValue(String value) {
-    try {
-      myDateFormat = new SimpleDateFormat(value);
-      super.setValue(value);
-    } catch (IllegalArgumentException e) {
-      throw new ValidationException();
+  public void commit() {
+    super.commit();
+    GanttLanguage.getInstance().setShortDateFormat(myDateFormat);
+  }
+
+  public String formatDate(Date date) {
+    return myDateFormat.format(date);
+  }
+
+  public DateFormat getSelectedValue() {
+    return myDateFormat;
+  }
+
+  @Override
+  public void loadPersistentValue(String value) {
+    super.loadPersistentValue(value);
+    GanttLanguage.getInstance().setShortDateFormat(myDateFormat);
+  }
+
+  public void setSelectedLocale(Locale locale) {
+    if (locale == null) {
+      // Find default locale
+      locale = GanttLanguage.getInstance().getLocale();
     }
+    myDateFormat = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, locale);
+    super.resetValue(myDateFormat.toPattern(), true);
   }
 
   @Override
@@ -58,31 +76,12 @@ public class ShortDateFormatOption extends DefaultStringOption {
   }
 
   @Override
-  public void loadPersistentValue(String value) {
-    super.loadPersistentValue(value);
-    GanttLanguage.getInstance().setShortDateFormat(myDateFormat);
-  }
-
-  @Override
-  public void commit() {
-    super.commit();
-    GanttLanguage.getInstance().setShortDateFormat(myDateFormat);
-  }
-
-  public void setSelectedLocale(Locale locale) {
-    if (locale == null) {
-      // Find default locale
-      locale = GanttLanguage.getInstance().getLocale();
+  public void setValue(String value) {
+    try {
+      myDateFormat = new SimpleDateFormat(value);
+      super.setValue(value);
+    } catch (IllegalArgumentException e) {
+      throw new ValidationException();
     }
-    myDateFormat = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, locale);
-    super.resetValue(myDateFormat.toPattern(), true);
-  }
-
-  public DateFormat getSelectedValue() {
-    return myDateFormat;
-  }
-
-  public String formatDate(Date date) {
-    return myDateFormat.format(date);
   }
 }

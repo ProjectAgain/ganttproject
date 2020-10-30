@@ -18,10 +18,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.parser;
 
-import org.xml.sax.Attributes;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import org.xml.sax.Attributes;
 
 /**
  * Base class for all tag handlers.
@@ -30,8 +29,8 @@ import com.google.common.base.Preconditions;
  */
 public abstract class AbstractTagHandler implements TagHandler {
 
-  private final String myTagName;
   private final StringBuilder myCdataBuffer;
+  private final String myTagName;
   private boolean myTagStarted;
 
   protected AbstractTagHandler(String tagName, boolean hasCdata) {
@@ -44,11 +43,6 @@ public abstract class AbstractTagHandler implements TagHandler {
   }
 
   @Override
-  public boolean hasCdata() {
-    return myCdataBuffer != null;
-  }
-
-  @Override
   public void appendCdata(String cdata) {
     assert hasCdata() : "It is a bug: this method should not be called for a tag which has no cdata";
     if (myTagStarted) {
@@ -56,12 +50,34 @@ public abstract class AbstractTagHandler implements TagHandler {
     }
   }
 
-  protected void setTagStarted(boolean started) {
-    myTagStarted = started;
-    if (!started && hasCdata()) {
-      // we clear accumulated CDATA value when tag which contains CDATA closes
-      clearCdata();
+  @Override
+  public void endElement(String namespaceURI, String sName, String qName) {
+    if (myTagStarted && Objects.equal(myTagName, qName)) {
+      myTagStarted = false;
+      onEndElement();
     }
+  }
+
+  @Override
+  public boolean hasCdata() {
+    return myCdataBuffer != null;
+  }
+
+  @Override
+  public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
+    throws FileFormatException {
+    Preconditions.checkNotNull(myTagName, "If you don't define tag name then please override this method");
+    if (Objects.equal(myTagName, qName)) {
+      myTagStarted = onStartElement(attrs);
+    }
+  }
+
+  protected void clearCdata() {
+    myCdataBuffer.setLength(0);
+  }
+
+  protected String getCdata() {
+    return myCdataBuffer.toString();
   }
 
   protected boolean isMyTag(String tagName) {
@@ -73,36 +89,18 @@ public abstract class AbstractTagHandler implements TagHandler {
     return myTagStarted;
   }
 
-  protected String getCdata() {
-    return myCdataBuffer.toString();
-  }
-
-  protected void clearCdata() {
-    myCdataBuffer.setLength(0);
-  }
-
-  @Override
-  public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
-      throws FileFormatException {
-    Preconditions.checkNotNull(myTagName, "If you don't define tag name then please override this method");
-    if (Objects.equal(myTagName, qName)) {
-      myTagStarted = onStartElement(attrs);
-    }
-  }
-
-  protected boolean onStartElement(Attributes attrs) {
-    return true;
-  }
-
-  @Override
-  public void endElement(String namespaceURI, String sName, String qName) {
-    if (myTagStarted && Objects.equal(myTagName, qName)) {
-      myTagStarted = false;
-      onEndElement();
+  protected void setTagStarted(boolean started) {
+    myTagStarted = started;
+    if (!started && hasCdata()) {
+      // we clear accumulated CDATA value when tag which contains CDATA closes
+      clearCdata();
     }
   }
 
   protected void onEndElement() {
   }
 
+  protected boolean onStartElement(Attributes attrs) {
+    return true;
+  }
 }

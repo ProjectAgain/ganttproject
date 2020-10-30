@@ -20,13 +20,13 @@ package net.sourceforge.ganttproject.parser;
 
 import com.google.common.collect.ImmutableSet;
 import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
 import net.sourceforge.ganttproject.model.resource.HumanResource;
 import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
 import net.sourceforge.ganttproject.model.roles.Role;
 import net.sourceforge.ganttproject.model.roles.RoleManager;
 import net.sourceforge.ganttproject.model.roles.RolePersistentID;
 import net.sourceforge.ganttproject.model.roles.RoleSet;
+import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
@@ -36,23 +36,22 @@ import java.util.Map.Entry;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-/** Class to parse the attribute of resources handler */
+/**
+ * Class to parse the attribute of resources handler
+ */
 public class ResourceTagHandler extends AbstractTagHandler implements ParsingListener {
-  private final Logger log = getLogger(getClass());
-
   private final Set<String> TAGS = ImmutableSet.of("resource", "custom-property", "custom-property-definition", "rate");
+  private final Logger log = getLogger(getClass());
   private final CustomPropertyManager myCustomPropertyManager;
-
+  private final HashMap<HumanResource, String> myLateResource2roleBinding = new HashMap<HumanResource, String>();
+  private final HumanResourceManager myResourceManager;
+  private final RoleManager myRoleManager;
   private HumanResource myCurrentResource;
 
-  private final HashMap<HumanResource, String> myLateResource2roleBinding = new HashMap<HumanResource, String>();
-
-  private final HumanResourceManager myResourceManager;
-
-  private final RoleManager myRoleManager;
-
-  public ResourceTagHandler(HumanResourceManager resourceManager, RoleManager roleManager,
-      CustomPropertyManager resourceCustomPropertyManager) {
+  public ResourceTagHandler(
+    HumanResourceManager resourceManager, RoleManager roleManager,
+    CustomPropertyManager resourceCustomPropertyManager
+  ) {
     super(null);
     myResourceManager = resourceManager;
     myCustomPropertyManager = resourceCustomPropertyManager;
@@ -62,7 +61,7 @@ public class ResourceTagHandler extends AbstractTagHandler implements ParsingLis
 
   /**
    * @see net.sourceforge.ganttproject.parser.TagHandler#endElement(String,
-   *      String, String)
+   * String, String)
    */
   @Override
   public void endElement(String namespaceURI, String sName, String qName) {
@@ -72,9 +71,31 @@ public class ResourceTagHandler extends AbstractTagHandler implements ParsingLis
     setTagStarted(false);
   }
 
+  @Override
+  public void parsingFinished() {
+    // System.err.println("[ResourceTagHandler] parsingFinished():");
+    for (Iterator<Entry<HumanResource, String>> lateBindingEntries =
+         myLateResource2roleBinding.entrySet().iterator(); lateBindingEntries.hasNext(); ) {
+      Map.Entry<HumanResource, String> nextEntry = lateBindingEntries.next();
+      String persistentID = nextEntry.getValue();
+      Role nextRole = findRole(persistentID);
+      if (nextRole != null) {
+        lateBindingEntries.remove();
+        nextEntry.getKey().setRole(nextRole);
+      }
+    }
+    if (!myLateResource2roleBinding.isEmpty()) {
+      System.err.println("[ResourceTagHandler] parsingFinished(): not found roles:\n" + myLateResource2roleBinding);
+    }
+  }
+
+  @Override
+  public void parsingStarted() {
+  }
+
   /**
    * @see net.sourceforge.ganttproject.parser.TagHandler#startElement(String,
-   *      String, String, Attributes)
+   * String, String, Attributes)
    */
   @Override
   public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) {
@@ -97,18 +118,31 @@ public class ResourceTagHandler extends AbstractTagHandler implements ParsingLis
     }
   }
 
+  private Role findRole(String persistentIDasString) {
+    //
+    RolePersistentID persistentID = new RolePersistentID(persistentIDasString);
+    String rolesetName = persistentID.getRoleSetID();
+    int roleID = persistentID.getRoleID();
+    RoleSet roleSet;
+    if (rolesetName == null) {
+      roleSet = myRoleManager.getProjectRoleSet();
+      if (roleSet.findRole(roleID) == null) {
+        if (roleID <= 10 && roleID > 2) {
+          roleSet = myRoleManager.getRoleSet(RoleSet.SOFTWARE_DEVELOPMENT);
+          roleSet.setEnabled(true);
+        } else if (roleID <= 2) {
+          roleSet = myRoleManager.getRoleSet(RoleSet.DEFAULT);
+        }
+      }
+    } else {
+      roleSet = myRoleManager.getRoleSet(rolesetName);
+    }
+    Role result = roleSet.findRole(roleID);
+    return result;
+  }
 
-  private void loadRate(Attributes attrs) {
-    String name = attrs.getValue("name");
-    if (!"standard".equals(name)) {
-      return;
-    }
-    try {
-      BigDecimal value = new BigDecimal(attrs.getValue("value"));
-      myCurrentResource.setStandardPayRate(value);
-    } catch (NumberFormatException e) {
-      log.error("Exception", e);
-    }
+  private HumanResourceManager getResourceManager() {
+    return myResourceManager;
   }
 
   private void loadCustomProperty(Attributes attrs) {
@@ -124,6 +158,8 @@ public class ResourceTagHandler extends AbstractTagHandler implements ParsingLis
     }
   }
 
+  // private GanttPeoplePanel myPeople;
+
   private void loadCustomPropertyDefinition(Attributes attrs) {
     String id = attrs.getValue("id");
     String name = attrs.getValue("name");
@@ -132,7 +168,22 @@ public class ResourceTagHandler extends AbstractTagHandler implements ParsingLis
     myCustomPropertyManager.createDefinition(id, type, name, defaultValue);
   }
 
-  /** Las a resources */
+  private void loadRate(Attributes attrs) {
+    String name = attrs.getValue("name");
+    if (!"standard".equals(name)) {
+      return;
+    }
+    try {
+      BigDecimal value = new BigDecimal(attrs.getValue("value"));
+      myCurrentResource.setStandardPayRate(value);
+    } catch (NumberFormatException e) {
+      log.error("Exception", e);
+    }
+  }
+
+  /**
+   * Las a resources
+   */
   private void loadResource(Attributes atts) {
     final HumanResource hr;
 
@@ -159,56 +210,6 @@ public class ResourceTagHandler extends AbstractTagHandler implements ParsingLis
       // hr.setFunction(Integer.parseInt());
     } catch (NumberFormatException e) {
       System.out.println("ERROR in parsing XML File function id is not numeric: " + e.toString());
-    }
-  }
-
-  private HumanResourceManager getResourceManager() {
-    return myResourceManager;
-  }
-
-  // private GanttPeoplePanel myPeople;
-
-  private Role findRole(String persistentIDasString) {
-    //
-    RolePersistentID persistentID = new RolePersistentID(persistentIDasString);
-    String rolesetName = persistentID.getRoleSetID();
-    int roleID = persistentID.getRoleID();
-    RoleSet roleSet;
-    if (rolesetName == null) {
-      roleSet = myRoleManager.getProjectRoleSet();
-      if (roleSet.findRole(roleID) == null) {
-        if (roleID <= 10 && roleID > 2) {
-          roleSet = myRoleManager.getRoleSet(RoleSet.SOFTWARE_DEVELOPMENT);
-          roleSet.setEnabled(true);
-        } else if (roleID <= 2) {
-          roleSet = myRoleManager.getRoleSet(RoleSet.DEFAULT);
-        }
-      }
-    } else {
-      roleSet = myRoleManager.getRoleSet(rolesetName);
-    }
-    Role result = roleSet.findRole(roleID);
-    return result;
-  }
-
-  @Override
-  public void parsingStarted() {
-  }
-
-  @Override
-  public void parsingFinished() {
-    // System.err.println("[ResourceTagHandler] parsingFinished():");
-    for (Iterator<Entry<HumanResource, String>> lateBindingEntries = myLateResource2roleBinding.entrySet().iterator(); lateBindingEntries.hasNext();) {
-      Map.Entry<HumanResource, String> nextEntry = lateBindingEntries.next();
-      String persistentID = nextEntry.getValue();
-      Role nextRole = findRole(persistentID);
-      if (nextRole != null) {
-        lateBindingEntries.remove();
-        nextEntry.getKey().setRole(nextRole);
-      }
-    }
-    if (!myLateResource2roleBinding.isEmpty()) {
-      System.err.println("[ResourceTagHandler] parsingFinished(): not found roles:\n" + myLateResource2roleBinding);
     }
   }
 }

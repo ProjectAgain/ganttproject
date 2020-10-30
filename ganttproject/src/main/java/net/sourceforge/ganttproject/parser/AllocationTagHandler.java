@@ -40,16 +40,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author bard
  */
-public class AllocationTagHandler extends AbstractTagHandler implements  ParsingListener {
+public class AllocationTagHandler extends AbstractTagHandler implements ParsingListener {
   private final Logger log = getLogger(getClass());
-
-  private HumanResourceManager myResourceManager;
-
-  private TaskManager myTaskManager;
-
-  private RoleManager myRoleManager;
-
-  private final HashMap<ResourceAssignment, String> myLateAssigmnent2roleBinding = new HashMap<ResourceAssignment, String>();
+  private final HashMap<ResourceAssignment, String> myLateAssigmnent2roleBinding =
+    new HashMap<ResourceAssignment, String>();
+  private final HumanResourceManager myResourceManager;
+  private final RoleManager myRoleManager;
+  private final TaskManager myTaskManager;
 
   public AllocationTagHandler(HumanResourceManager resourceMgr, TaskManager taskMgr, RoleManager roleMgr) {
     super("allocation");
@@ -58,6 +55,26 @@ public class AllocationTagHandler extends AbstractTagHandler implements  Parsing
     myRoleManager = roleMgr;
   }
 
+  @Override
+  public void parsingFinished() {
+    for (Iterator<Entry<ResourceAssignment, String>> lateBindingEntries =
+         myLateAssigmnent2roleBinding.entrySet().iterator(); lateBindingEntries.hasNext(); ) {
+      Map.Entry<ResourceAssignment, String> nextEntry = lateBindingEntries.next();
+      String persistentID = nextEntry.getValue();
+      Role nextRole = findRole(persistentID);
+      if (nextRole != null) {
+        lateBindingEntries.remove();
+        nextEntry.getKey().setRoleForAssignment(nextRole);
+      }
+    }
+    if (!myLateAssigmnent2roleBinding.isEmpty()) {
+      System.err.println("[ResourceTagHandler] parsingFinished(): not found roles:\n" + myLateAssigmnent2roleBinding);
+    }
+  }
+
+  @Override
+  public void parsingStarted() {
+  }
 
   @Override
   protected boolean onStartElement(Attributes attrs) {
@@ -68,6 +85,36 @@ public class AllocationTagHandler extends AbstractTagHandler implements  Parsing
       log.error("Exception", e);
       return false;
     }
+  }
+
+  private Role findRole(String persistentIDasString) {
+    RolePersistentID persistentID = new RolePersistentID(persistentIDasString);
+    String rolesetName = persistentID.getRoleSetID();
+    int roleID = persistentID.getRoleID();
+    RoleSet roleSet;
+    if (rolesetName == null) {
+      roleSet = myRoleManager.getProjectRoleSet();
+      if (roleSet.findRole(roleID) == null) {
+        if (roleID <= 10 && roleID > 2) {
+          roleSet = myRoleManager.getRoleSet(RoleSet.SOFTWARE_DEVELOPMENT);
+          roleSet.setEnabled(true);
+        } else if (roleID <= 2) {
+          roleSet = myRoleManager.getRoleSet(RoleSet.DEFAULT);
+        }
+      }
+    } else {
+      roleSet = myRoleManager.getRoleSet(rolesetName);
+    }
+    Role result = roleSet.findRole(roleID);
+    return result;
+  }
+
+  private HumanResourceManager getResourceManager() {
+    return myResourceManager;
+  }
+
+  private TaskManager getTaskManager() {
+    return myTaskManager;
   }
 
   private void loadAllocation(Attributes attrs) throws FileFormatException {
@@ -96,7 +143,6 @@ public class AllocationTagHandler extends AbstractTagHandler implements  Parsing
       if (coordinatorAsString != null) {
         coordinator = Boolean.valueOf(coordinatorAsString).booleanValue();
       }
-
     } catch (NumberFormatException e) {
       throw new FileFormatException("Failed to load <allocation> tag: one of attribute values is invalid", e);
     }
@@ -118,63 +164,14 @@ public class AllocationTagHandler extends AbstractTagHandler implements  Parsing
     ResourceAssignment assignment = task.getAssignmentCollection().addAssignment(human);
 
     try {
-      if (rolePersistendIDString != null)
+      if (rolePersistendIDString != null) {
         myLateAssigmnent2roleBinding.put(assignment, rolePersistendIDString);
+      }
     } catch (NumberFormatException e) {
       System.out.println("ERROR in parsing XML File function id is not numeric: " + e.toString());
     }
 
     assignment.setLoad(load);
     assignment.setCoordinator(coordinator);
-  }
-
-  private HumanResourceManager getResourceManager() {
-    return myResourceManager;
-  }
-
-  private TaskManager getTaskManager() {
-    return myTaskManager;
-  }
-
-  private Role findRole(String persistentIDasString) {
-    RolePersistentID persistentID = new RolePersistentID(persistentIDasString);
-    String rolesetName = persistentID.getRoleSetID();
-    int roleID = persistentID.getRoleID();
-    RoleSet roleSet;
-    if (rolesetName == null) {
-      roleSet = myRoleManager.getProjectRoleSet();
-      if (roleSet.findRole(roleID) == null) {
-        if (roleID <= 10 && roleID > 2) {
-          roleSet = myRoleManager.getRoleSet(RoleSet.SOFTWARE_DEVELOPMENT);
-          roleSet.setEnabled(true);
-        } else if (roleID <= 2) {
-          roleSet = myRoleManager.getRoleSet(RoleSet.DEFAULT);
-        }
-      }
-    } else {
-      roleSet = myRoleManager.getRoleSet(rolesetName);
-    }
-    Role result = roleSet.findRole(roleID);
-    return result;
-  }
-
-  @Override
-  public void parsingStarted() {
-  }
-
-  @Override
-  public void parsingFinished() {
-    for (Iterator<Entry<ResourceAssignment, String>> lateBindingEntries = myLateAssigmnent2roleBinding.entrySet().iterator(); lateBindingEntries.hasNext();) {
-      Map.Entry<ResourceAssignment, String> nextEntry = lateBindingEntries.next();
-      String persistentID = nextEntry.getValue();
-      Role nextRole = findRole(persistentID);
-      if (nextRole != null) {
-        lateBindingEntries.remove();
-        nextEntry.getKey().setRoleForAssignment(nextRole);
-      }
-    }
-    if (!myLateAssigmnent2roleBinding.isEmpty()) {
-      System.err.println("[ResourceTagHandler] parsingFinished(): not found roles:\n" + myLateAssigmnent2roleBinding);
-    }
   }
 }

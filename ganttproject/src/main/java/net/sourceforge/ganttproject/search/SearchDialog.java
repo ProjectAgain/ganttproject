@@ -30,6 +30,7 @@ class SearchDialog {
   public interface SearchCallback {
     void accept(List<SearchResult<?>> results);
   }
+
   private final IGanttProject myProject;
   private final UIFacade myUiFacade;
   private final List<SearchService> services;

@@ -125,8 +125,8 @@ class DocumentUri(private val components: List<String>,
 
   override fun toString(): String {
     return components.joinToString(
-        separator = "/",
-        prefix = "/"
+      separator = "/",
+      prefix = "/"
     )
   }
 

@@ -34,16 +34,22 @@ import java.util.function.Function
 interface FolderItem {
   // Is this item locked?
   val isLocked: Boolean
+
   // Is it possible to acquire exclusive lock on this item?
   val isLockable: Boolean
+
   // Item name
   val name: String
+
   // Base path is a folder where this document sits
   val basePath: String
+
   // Is it a directory?
   val isDirectory: Boolean
+
   // Is it possible to change lock state: unlock if locked or lock if unlocked
   val canChangeLock: Boolean
+
   // Item tags, indicating whether item is local, is read-only, etc
   val tags: List<String>
 }
@@ -57,13 +63,13 @@ typealias ExceptionUi = (Exception) -> Unit
  * Encapsulates a list view showing the contents of a single folder.
  */
 class FolderView<T : FolderItem>(
-    val exceptionUi: ExceptionUi,
-    onDeleteResource: OnItemAction<T> = {},
-    onToggleLockResource: OnItemAction<T> = {},
-    isLockingSupported: BooleanProperty = unsupported,
-    isDeleteSupported: ReadOnlyBooleanProperty = unsupported,
-    private val itemActionFactory: ItemActionFactory<T> = Function { Collections.emptyMap() },
-    maybeCellFactory: CellFactory<T>? = null) {
+  val exceptionUi: ExceptionUi,
+  onDeleteResource: OnItemAction<T> = {},
+  onToggleLockResource: OnItemAction<T> = {},
+  isLockingSupported: BooleanProperty = unsupported,
+  isDeleteSupported: ReadOnlyBooleanProperty = unsupported,
+  private val itemActionFactory: ItemActionFactory<T> = Function { Collections.emptyMap() },
+  maybeCellFactory: CellFactory<T>? = null) {
 
   private val cellFactory: CellFactory<T> = maybeCellFactory ?: {
     createListCell(exceptionUi, onDeleteResource, onToggleLockResource, isLockingSupported, isDeleteSupported, itemActionFactory)
@@ -105,8 +111,8 @@ class FolderView<T : FolderItem>(
   private fun reloadItems(folderContents: ObservableList<T>) {
     val items = FXCollections.observableArrayList(createExtractor<T>())
     folderContents.stream()
-        .map { resource -> ListViewItem(resource) }
-        .forEach { items.add(it) }
+      .map { resource -> ListViewItem(resource) }
+      .forEach { items.add(it) }
     listView.items = items
   }
 
@@ -121,7 +127,7 @@ class FolderView<T : FolderItem>(
 
   fun filter(byValue: String) {
     reloadItems(FXCollections.observableArrayList(
-        doFilter(FXCollections.observableArrayList(myContents), byValue)))
+      doFilter(FXCollections.observableArrayList(myContents), byValue)))
   }
 
   fun doFilter(contents: List<T>, byValue: String): List<T> {
@@ -156,18 +162,18 @@ fun <T : FolderItem> createExtractor(): Callback<ListViewItem<T>, Array<Observab
   return Callback { item ->
     item?.let {
       arrayOf(
-          item.isSelected as Observable, item.resource as Observable)
+        item.isSelected as Observable, item.resource as Observable)
     } ?: emptyArray()
   }
 }
 
 fun <T : FolderItem> createListCell(
-    exceptionUi: ExceptionUi,
-    onDeleteResource: OnItemAction<T>,
-    onToggleLockResource: OnItemAction<T>,
-    isLockingSupported: BooleanProperty,
-    isDeleteSupported: ReadOnlyBooleanProperty,
-    itemActionFactory: ItemActionFactory<T>
+  exceptionUi: ExceptionUi,
+  onDeleteResource: OnItemAction<T>,
+  onToggleLockResource: OnItemAction<T>,
+  isLockingSupported: BooleanProperty,
+  isDeleteSupported: ReadOnlyBooleanProperty,
+  itemActionFactory: ItemActionFactory<T>
 ): ListCell<ListViewItem<T>> {
   return CellWithButtons(exceptionUi, onDeleteResource, onToggleLockResource, isLockingSupported, isDeleteSupported, itemActionFactory)
 }
@@ -196,8 +202,8 @@ class BreadcrumbView(private val initialPath: Path, private val onSelectCrumb: C
       var lastItem: TreeItem<BreadcrumbNode> = TreeItem(BreadcrumbNode(value.getRoot(), value.getRootName()))
       for (idx in 0 until value.getNameCount()) {
         val treeItem = TreeItem<BreadcrumbNode>(
-            BreadcrumbNode(value.subpath(0, idx+1),
-                value.getName(idx))
+          BreadcrumbNode(value.subpath(0, idx + 1),
+            value.getName(idx))
         )
         lastItem.children?.add(treeItem)
         lastItem = treeItem
@@ -246,22 +252,22 @@ class BreadcrumbView(private val initialPath: Path, private val onSelectCrumb: C
 }
 
 fun <T : FolderItem> connect(
-    filename: TextField?, listView: FolderView<T>, breadcrumbView: BreadcrumbView?,
-    /**
-     * This is called on selection change or on some action with the selected item.
-     * In case of mere selection change both withEnter and withControl are false
-     * In case of double-click or hitting Ctrl+Enter in the list both flags are true.
-     * In case of hitting Enter in the list withEnter == true and withControl == false.
-     * In case of typing in the text search field and hitting Enter, withEnter == true and
-     * withControl depends on whether modifier key is hold.
-     *
-     * Typical expected behavior of the handler:
-     * - both flags false (selection change) may update some UI control state (e.g. disable or enable action button)
-     * - both flags true (dbl-click or Ctrl+Enter) is equivalent to action button click or to opening a folder
-     * - withEnter == true may open a folder or do something with file, depending on what is selected
-     */
-    selectItem: (withEnter: Boolean, withControl: Boolean) -> Unit,
-    onFilenameEnter: (withEnter: Boolean, withControl: Boolean) -> Unit) {
+  filename: TextField?, listView: FolderView<T>, breadcrumbView: BreadcrumbView?,
+  /**
+   * This is called on selection change or on some action with the selected item.
+   * In case of mere selection change both withEnter and withControl are false
+   * In case of double-click or hitting Ctrl+Enter in the list both flags are true.
+   * In case of hitting Enter in the list withEnter == true and withControl == false.
+   * In case of typing in the text search field and hitting Enter, withEnter == true and
+   * withControl depends on whether modifier key is hold.
+   *
+   * Typical expected behavior of the handler:
+   * - both flags false (selection change) may update some UI control state (e.g. disable or enable action button)
+   * - both flags true (dbl-click or Ctrl+Enter) is equivalent to action button click or to opening a folder
+   * - withEnter == true may open a folder or do something with file, depending on what is selected
+   */
+  selectItem: (withEnter: Boolean, withControl: Boolean) -> Unit,
+  onFilenameEnter: (withEnter: Boolean, withControl: Boolean) -> Unit) {
   listView.listView.onMouseClicked = EventHandler { evt ->
     val dblClick = evt.clickCount == 2
     selectItem(dblClick, dblClick)

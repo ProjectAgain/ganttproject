@@ -11,15 +11,20 @@ import org.xml.sax.Attributes;
  * @author bard
  */
 public class ViewTagHandler extends AbstractTagHandler {
+  private final TaskDisplayColumnsTagHandler myFieldsHandler;
   private final UIFacade myUIFacade;
   private final String myViewId;
-  private final TaskDisplayColumnsTagHandler myFieldsHandler;
 
   public ViewTagHandler(String viewId, UIFacade uiFacade, TaskDisplayColumnsTagHandler fieldsHandler) {
     super("view");
     myViewId = viewId;
     myFieldsHandler = fieldsHandler;
     myUIFacade = uiFacade;
+  }
+
+  @Override
+  protected void onEndElement() {
+    myFieldsHandler.setEnabled(false);
   }
 
   @Override
@@ -30,11 +35,6 @@ public class ViewTagHandler extends AbstractTagHandler {
       return true;
     }
     return false;
-  }
-
-  @Override
-  protected void onEndElement() {
-    myFieldsHandler.setEnabled(false);
   }
 
   private void loadViewState(Attributes attrs) {

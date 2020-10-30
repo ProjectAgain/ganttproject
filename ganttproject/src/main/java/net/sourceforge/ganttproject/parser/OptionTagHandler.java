@@ -18,31 +18,37 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.parser;
 
-import org.xml.sax.Attributes;
-
 import com.google.common.base.Objects;
-
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
 import net.sourceforge.ganttproject.ui.viewmodel.option.ListOption;
+import org.xml.sax.Attributes;
 
 /**
  * Tag handler which writes parsed value to GPOption instance.
- *
+ * <p>
  * This handler reads "id" and "value" attributes of <option> tag. If id
  * equals to the id of the passed option, handler asks option to load its persistent
  * value from "value" attribute, unless option is a ListOption. In the latter case
  * its value is read from CDATA between the opening and closing tags
  *
- * @author dbarashev (Dmitry Barashev)
- *
  * @param <T> option class
+ *
+ * @author dbarashev (Dmitry Barashev)
  */
 public class OptionTagHandler<T extends GPOption<?>> extends AbstractTagHandler {
-  private T myOption;
+  private final T myOption;
 
   public OptionTagHandler(T option) {
     super("option", option instanceof ListOption);
     myOption = option;
+  }
+
+  @Override
+  public void onEndElement() {
+    if (hasCdata()) {
+      myOption.loadPersistentValue(getCdata());
+      clearCdata();
+    }
   }
 
   @Override
@@ -54,13 +60,5 @@ public class OptionTagHandler<T extends GPOption<?>> extends AbstractTagHandler 
       myOption.loadPersistentValue(attrs.getValue("value"));
     }
     return super.onStartElement(attrs);
-  }
-
-  @Override
-  public void onEndElement() {
-    if (hasCdata()) {
-      myOption.loadPersistentValue(getCdata());
-      clearCdata();
-    }
   }
 }

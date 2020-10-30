@@ -18,11 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage
 
-import net.sourceforge.ganttproject.ui.RootLocalizer
-import net.sourceforge.ganttproject.ui.dialog
 import net.sourceforge.ganttproject.model.IGanttProject
-import net.sourceforge.ganttproject.ui.action.GPAction
 import net.sourceforge.ganttproject.model.document.DocumentManager
+import net.sourceforge.ganttproject.ui.RootLocalizer
+import net.sourceforge.ganttproject.ui.action.GPAction
+import net.sourceforge.ganttproject.ui.dialog
 import net.sourceforge.ganttproject.ui.gui.ProjectUIFacade
 import net.sourceforge.ganttproject.ui.gui.UIUtil
 import java.awt.event.ActionEvent
@@ -31,16 +31,16 @@ import java.awt.event.ActionEvent
  * @author dbarashev@bardsoftware.com
  */
 class StorageDialogAction(
-    private val project: IGanttProject,
-    private val projectUiFacade: ProjectUIFacade,
-    private val documentManager: DocumentManager,
-    private val mode: StorageDialogBuilder.Mode,
-    private val actionId: String) : GPAction(actionId) {
+  private val project: IGanttProject,
+  private val projectUiFacade: ProjectUIFacade,
+  private val documentManager: DocumentManager,
+  private val mode: StorageDialogBuilder.Mode,
+  private val actionId: String) : GPAction(actionId) {
 
   override fun actionPerformed(actionEvent: ActionEvent?) {
     dialog(RootLocalizer.create("myProjects.title")) { dialogBuildApi ->
       val dialogBuilder = StorageDialogBuilder(
-          project, projectUiFacade, documentManager, dialogBuildApi
+        project, projectUiFacade, documentManager, dialogBuildApi
       )
       dialogBuilder.build(mode)
     }

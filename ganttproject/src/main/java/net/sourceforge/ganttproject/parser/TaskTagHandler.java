@@ -18,17 +18,16 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.ui.chart.render.ShapePaint;
-import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import com.google.common.base.Charsets;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import net.sourceforge.ganttproject.ui.gui.TaskTreeUIFacade;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskManager;
 import net.sourceforge.ganttproject.model.task.TaskManager.TaskBuilder;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import net.sourceforge.ganttproject.ui.chart.render.ShapePaint;
+import net.sourceforge.ganttproject.ui.gui.TaskTreeUIFacade;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 
@@ -46,20 +45,14 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
 
   private final ParsingContext myContext;
   private final TaskManager myManager;
-  private final TaskTreeUIFacade myTreeFacade;
   private final Map<Integer, Boolean> myTaskIdToExpansionState = Maps.newHashMap();
+  private final TaskTreeUIFacade myTreeFacade;
 
   public TaskTagHandler(TaskManager mgr, ParsingContext context, TaskTreeUIFacade treeFacade) {
     super("task");
     myManager = mgr;
     myContext = context;
     myTreeFacade = treeFacade;
-  }
-
-  @Override
-  protected boolean onStartElement(Attributes attrs) {
-    loadTask(attrs);
-    return true;
   }
 
   @Override
@@ -72,6 +65,29 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
     }
   }
 
+  @Override
+  public void parsingFinished() {
+    List<Task> tasksBottomUp = Lists.reverse(myManager.getTaskHierarchy().breadthFirstSearch(null, false));
+
+    for (Task t: tasksBottomUp) {
+      myTreeFacade.setExpanded(t, MoreObjects.firstNonNull(myTaskIdToExpansionState.get(t.getTaskID()), Boolean.TRUE));
+    }
+  }
+
+  @Override
+  public void parsingStarted() {
+  }
+
+  @Override
+  protected boolean onStartElement(Attributes attrs) {
+    loadTask(attrs);
+    return true;
+  }
+
+  private TaskManager getManager() {
+    return myManager;
+  }
+
   private void loadTask(Attributes attrs) {
     String taskIdAsString = attrs.getValue("id");
     int taskId;
@@ -79,7 +95,7 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
       taskId = Integer.parseInt(taskIdAsString);
     } catch (NumberFormatException e) {
       throw new RuntimeException(
-          "Failed to parse the value '" + taskIdAsString + "' of attribute 'id' of tag <task>", e);
+        "Failed to parse the value '" + taskIdAsString + "' of attribute 'id' of tag <task>", e);
     }
     TaskBuilder builder = getManager().newTaskBuilder().withId(taskId);
 
@@ -100,7 +116,7 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
         builder = builder.withDuration(getManager().createLength(length));
       } catch (NumberFormatException e) {
         throw new RuntimeException(
-            "Failed to parse the value '" + duration + "' of attribute 'duration' of tag <task>", e);
+          "Failed to parse the value '" + duration + "' of attribute 'duration' of tag <task>", e);
       }
     }
 
@@ -130,7 +146,7 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
         task.setCompletionPercentage(Integer.parseInt(complete));
       } catch (NumberFormatException e) {
         throw new RuntimeException(
-            "Failed to parse the value '" + complete + "' of attribute 'complete' of tag <task>", e);
+          "Failed to parse the value '" + complete + "' of attribute 'complete' of tag <task>", e);
       }
     }
 
@@ -159,18 +175,19 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
         task.setThirdDateConstraint(Integer.parseInt(thirdConstraint));
       } catch (NumberFormatException e) {
         throw new RuntimeException("Failed to parse the value '" + thirdConstraint
-            + "' of attribute 'thirdDate-constraint' of tag <task>", e);
+                                   + "' of attribute 'thirdDate-constraint' of tag <task>", e);
       }
     }
 
     String webLink_enc = attrs.getValue("webLink");
     String webLink = webLink_enc;
-    if (webLink_enc != null)
+    if (webLink_enc != null) {
       try {
         webLink = URLDecoder.decode(webLink_enc, Charsets.UTF_8.name());
       } catch (UnsupportedEncodingException e) {
         log.error("Exception", e);
       }
+    }
     if (webLink != null) {
       task.setWebLink(webLink);
     }
@@ -198,22 +215,5 @@ public class TaskTagHandler extends AbstractTagHandler implements ParsingListene
       task.getCost().setCalculated(true);
     }
     myContext.pushTask(task);
-  }
-
-  private TaskManager getManager() {
-    return myManager;
-  }
-
-  @Override
-  public void parsingStarted() {
-  }
-
-  @Override
-  public void parsingFinished() {
-    List<Task> tasksBottomUp = Lists.reverse(myManager.getTaskHierarchy().breadthFirstSearch(null, false));
-
-    for (Task t : tasksBottomUp) {
-      myTreeFacade.setExpanded(t, MoreObjects.firstNonNull(myTaskIdToExpansionState.get(t.getTaskID()), Boolean.TRUE));
-    }
   }
 }

@@ -17,33 +17,40 @@ package net.sourceforge.ganttproject.search;
 
 import net.sourceforge.ganttproject.language.GanttLanguage;
 
-import java.awt.Component;
-import java.awt.Font;
-
 import javax.swing.*;
+import java.awt.*;
 
 public class SearchResultCellRenderer implements ListCellRenderer {
 
   private final DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 
   @Override
-  public Component getListCellRendererComponent(JList jList, Object searchResultObject, int index, boolean isSelected, boolean cellHasFocus) {
+  public Component getListCellRendererComponent(
+    JList jList, Object searchResultObject, int index, boolean isSelected, boolean cellHasFocus
+  ) {
     StringBuilder theText = new StringBuilder();
     theText.append("<html>");
 
     JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(jList, searchResultObject, index,
-        isSelected, cellHasFocus);
+                                                                            isSelected, cellHasFocus
+    );
 
     if (searchResultObject instanceof SearchResult) {
       SearchResult searchResult = (SearchResult) searchResultObject;
       String label = searchResult.getLabel();
       String searchTerm = searchResult.getQueryMatch();
       String boldedLabel = label.replaceAll("(?i)" + searchTerm, "<b><i>$0</i></b>");
-      theText.append(GanttLanguage.getInstance().formatText("search.result.line1", searchResult.getTypeOfResult(), searchResult.getId(), boldedLabel));
+      theText.append(GanttLanguage
+                       .getInstance()
+                       .formatText("search.result.line1", searchResult.getTypeOfResult(), searchResult.getId(),
+                                   boldedLabel
+                       ));
       if (!searchResult.getSecondaryLabel().isEmpty()) {
         String secondaryText = searchResult.getSecondaryText();
         String boldedSecondaryText = secondaryText.replaceAll("(?i)" + searchTerm, "<b><i>$0</i></b>");
-        theText.append(GanttLanguage.getInstance().formatText("search.result.line2", searchResult.getSecondaryLabel(), boldedSecondaryText));
+        theText.append(GanttLanguage
+                         .getInstance()
+                         .formatText("search.result.line2", searchResult.getSecondaryLabel(), boldedSecondaryText));
       }
     } else {
       theText.append(searchResultObject.toString());

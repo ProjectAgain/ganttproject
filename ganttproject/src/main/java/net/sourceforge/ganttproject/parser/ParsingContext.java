@@ -18,18 +18,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
+import net.sourceforge.ganttproject.model.task.Task;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import net.sourceforge.ganttproject.model.task.Task;
-
 public class ParsingContext {
+  private final Set<Task> myFixedStartTasks = new HashSet<Task>();
   private final Stack<Task> myStack = new Stack<Task>();
-
-  boolean isStackEmpty() {
-    return myStack.isEmpty();
-  }
 
   public Task peekTask() {
     return myStack.peek();
@@ -37,10 +34,6 @@ public class ParsingContext {
 
   public void pushTask(Task t) {
     myStack.push(t);
-  }
-
-  Task popTask() {
-    return myStack.pop();
   }
 
   void addTaskWithLegacyFixedStart(Task task) {
@@ -51,5 +44,11 @@ public class ParsingContext {
     return myFixedStartTasks;
   }
 
-  private final Set<Task> myFixedStartTasks = new HashSet<Task>();
+  boolean isStackEmpty() {
+    return myStack.isEmpty();
+  }
+
+  Task popTask() {
+    return myStack.pop();
+  }
 }

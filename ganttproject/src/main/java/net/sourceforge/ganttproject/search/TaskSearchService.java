@@ -19,21 +19,26 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.search;
 
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
+import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.CustomProperty;
 import net.sourceforge.ganttproject.model.IGanttProject;
-import net.sourceforge.ganttproject.ui.gui.UIFacade;
-import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Search service for tasks */
+/**
+ * Search service for tasks
+ */
 @ExtensionComponent
 public class TaskSearchService extends SearchServiceBase<TaskSearchService.MySearchResult, Task> {
   static class MySearchResult extends SearchResult<Task> {
     MySearchResult(Task t, TaskSearchService searchService, String query, String snippet, String snippetText) {
-      super(t.getTaskID(), GanttLanguage.getInstance().getText("generic.task"), t.getName(), query, snippet, snippetText, t, searchService);
+      super(
+        t.getTaskID(), GanttLanguage.getInstance().getText("generic.task"), t.getName(), query, snippet, snippetText, t,
+        searchService
+      );
     }
   }
 
@@ -42,17 +47,22 @@ public class TaskSearchService extends SearchServiceBase<TaskSearchService.MySea
   }
 
   @Override
+  public void init(IGanttProject project, UIFacade uiFacade) {
+    super.init(project, uiFacade.getTaskTree(), uiFacade);
+  }
+
+  @Override
   public List<MySearchResult> search(String query) {
     query = query.toLowerCase();
     List<MySearchResult> results = new ArrayList<>();
-    for (Task t : getProject().getTaskManager().getTasks()) {
+    for (Task t: getProject().getTaskManager().getTasks()) {
       String snippet = "";
       String snippetText = "";
       boolean matched = false;
       if (isNotEmptyAndContains(t.getName(), query)) {
         matched = true;
       }
-      for (CustomProperty c : t.getCustomValues().getCustomProperties()) {
+      for (CustomProperty c: t.getCustomValues().getCustomProperties()) {
         if (isNotEmptyAndContains(c.getValueAsString(), query)) {
           matched = true;
           snippet = c.getDefinition().getName();
@@ -76,10 +86,4 @@ public class TaskSearchService extends SearchServiceBase<TaskSearchService.MySea
     }
     return results;
   }
-
-  @Override
-  public void init(IGanttProject project, UIFacade uiFacade) {
-    super.init(project, uiFacade.getTaskTree(), uiFacade);
-  }
-
 }

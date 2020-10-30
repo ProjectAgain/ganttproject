@@ -26,6 +26,16 @@ import java.awt.event.MouseWheelEvent;
  * @author dbarashev (Dmitry Barashev)
  */
 public class MouseUtil {
+  private static void append(StringBuilder builder, int modifiers, int mask, String text) {
+    if ((modifiers & mask) == 0) {
+      return;
+    }
+    if (builder.length() > 0) {
+      builder.append('+');
+    }
+    builder.append(text);
+  }
+
   public static String toString(MouseEvent e) {
     int modifiers = e.getModifiersEx();
     StringBuilder buf = new StringBuilder();
@@ -42,15 +52,5 @@ public class MouseUtil {
       append(buf, modifiers, InputEvent.BUTTON3_DOWN_MASK, "Button3");
     }
     return buf.toString().trim();
-  }
-
-  private static void append(StringBuilder builder, int modifiers, int mask, String text) {
-    if ((modifiers & mask) == 0) {
-      return;
-    }
-    if (builder.length() > 0) {
-      builder.append('+');
-    }
-    builder.append(text);
   }
 }

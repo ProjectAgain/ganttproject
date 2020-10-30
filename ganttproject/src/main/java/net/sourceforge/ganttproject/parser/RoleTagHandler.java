@@ -18,22 +18,22 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.parser;
 
-import java.util.Set;
-
+import com.google.common.collect.ImmutableSet;
 import net.sourceforge.ganttproject.model.roles.Role;
 import net.sourceforge.ganttproject.model.roles.RoleManager;
 import net.sourceforge.ganttproject.model.roles.RolePersistentID;
 import net.sourceforge.ganttproject.model.roles.RoleSet;
-
 import org.xml.sax.Attributes;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 
-/** Class to parse the attributes of resources handler */
-public class RoleTagHandler  extends AbstractTagHandler {
+/**
+ * Class to parse the attributes of resources handler
+ */
+public class RoleTagHandler extends AbstractTagHandler {
   private final Set<String> TAGS = ImmutableSet.of("roles", "role");
-  private RoleSet myRoleSet;
   private final RoleManager myRoleManager;
+  private RoleSet myRoleSet;
 
   public RoleTagHandler(RoleManager roleManager) {
     super(null, false);
@@ -43,7 +43,7 @@ public class RoleTagHandler  extends AbstractTagHandler {
 
   /**
    * @see net.sourceforge.ganttproject.parser.TagHandler#endElement(String,
-   *      String, String)
+   * String, String)
    */
   @Override
   public void endElement(String namespaceURI, String sName, String qName) {
@@ -56,13 +56,9 @@ public class RoleTagHandler  extends AbstractTagHandler {
     setTagStarted(false);
   }
 
-  private void clearRoleSet() {
-    myRoleSet = null;
-  }
-
   /**
    * @see net.sourceforge.ganttproject.parser.TagHandler#startElement(String,
-   *      String, String, Attributes)
+   * String, String, Attributes)
    */
   @Override
   public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) {
@@ -77,6 +73,10 @@ public class RoleTagHandler  extends AbstractTagHandler {
     }
   }
 
+  private void clearRoleSet() {
+    myRoleSet = null;
+  }
+
   private void findRoleSet(String roleSetName) {
     if (roleSetName == null) {
       myRoleSet = myRoleManager.getProjectRoleSet();
@@ -89,7 +89,9 @@ public class RoleTagHandler  extends AbstractTagHandler {
     }
   }
 
-  /** Las a role */
+  /**
+   * Las a role
+   */
   private void loadRoles(Attributes atts) {
     String roleName = atts.getValue("name");
     RolePersistentID persistentID = new RolePersistentID(atts.getValue("id"));

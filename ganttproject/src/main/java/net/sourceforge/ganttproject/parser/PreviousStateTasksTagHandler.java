@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import net.sourceforge.ganttproject.model.GanttPreviousState;
 import net.sourceforge.ganttproject.model.GanttPreviousStateTask;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -36,13 +36,9 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class PreviousStateTasksTagHandler extends DefaultHandler implements TagHandler {
   private final Logger log = getLogger(getClass());
-
-  private String myName = "";
-
-  private GanttPreviousState previousState;
-
   private final List<GanttPreviousState> myPreviousStates;
-
+  private String myName = "";
+  private GanttPreviousState previousState;
   private ArrayList<GanttPreviousStateTask> tasks = new ArrayList<GanttPreviousStateTask>();
 
   public PreviousStateTasksTagHandler() {
@@ -53,14 +49,7 @@ public class PreviousStateTasksTagHandler extends DefaultHandler implements TagH
     myPreviousStates = previousStates;
   }
 
-  @Override
-  public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) {
-    if (qName.equals("previous-tasks")) {
-      setName(attrs.getValue("name"));
-      tasks = new ArrayList<GanttPreviousStateTask>();
-    } else if (qName.equals("previous-task")) {
-      loadPreviousTask(attrs);
-    }
+  public void appendCdata(String cdata) {
   }
 
   @Override
@@ -77,8 +66,30 @@ public class PreviousStateTasksTagHandler extends DefaultHandler implements TagH
     }
   }
 
+  public String getName() {
+    return myName;
+  }
+
   private void setName(String name) {
     myName = name;
+  }
+
+  public ArrayList<GanttPreviousStateTask> getTasks() {
+    return tasks;
+  }
+
+  public boolean hasCdata() {
+    return false;
+  }
+
+  @Override
+  public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) {
+    if (qName.equals("previous-tasks")) {
+      setName(attrs.getValue("name"));
+      tasks = new ArrayList<GanttPreviousStateTask>();
+    } else if (qName.equals("previous-task")) {
+      loadPreviousTask(attrs);
+    }
   }
 
   private void loadPreviousTask(Attributes attrs) {
@@ -94,22 +105,9 @@ public class PreviousStateTasksTagHandler extends DefaultHandler implements TagH
     boolean nested = Boolean.parseBoolean(attrs.getValue("super"));
 
     GanttPreviousStateTask task = new GanttPreviousStateTask(new Integer(id).intValue(),
-        GanttCalendar.parseXMLDate(start), new Integer(duration).intValue(), meeting, nested);
+                                                             GanttCalendar.parseXMLDate(start),
+                                                             new Integer(duration).intValue(), meeting, nested
+    );
     tasks.add(task);
-  }
-
-  public String getName() {
-    return myName;
-  }
-
-  public ArrayList<GanttPreviousStateTask> getTasks() {
-    return tasks;
-  }
-
-  public boolean hasCdata() {
-    return false;
-  }
-
-  public void appendCdata(String cdata) {
   }
 }

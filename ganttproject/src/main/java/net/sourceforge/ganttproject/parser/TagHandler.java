@@ -21,14 +21,18 @@ package net.sourceforge.ganttproject.parser;
 import org.xml.sax.Attributes;
 
 public interface TagHandler {
-  public boolean hasCdata();
+  void appendCdata(String cdata);
 
-  public void appendCdata(String cdata);
+  /**
+   * Method when finish to parse an attribute
+   */
+  void endElement(String namespaceURI, String sName, String qName);
 
-  /** Method when start to parse an attribute */
-  public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
-      throws FileFormatException;
+  boolean hasCdata();
 
-  /** Method when finish to parse an attribute */
-  public void endElement(String namespaceURI, String sName, String qName);
+  /**
+   * Method when start to parse an attribute
+   */
+  void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
+    throws FileFormatException;
 }

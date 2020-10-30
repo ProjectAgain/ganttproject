@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.util;
 
-import java.awt.FontMetrics;
+import java.awt.*;
 
 /**
  * This class groups static methods together to handle strings.
@@ -28,30 +28,8 @@ import java.awt.FontMetrics;
 public class StringUtils {
 
   /**
-   * @return string with the given amount of spaces padded to the left. For
-   *         negative amounts the original string will be returned
+   * @return a comma separated list showing the names of the given objects
    */
-  static public String padLeft(String string, int padding) {
-    if (padding > 0) {
-      padding += string.length();
-      return String.format("%1$" + padding + "s", string);
-    }
-    return string;
-  }
-
-  /**
-   * @return string with the given amount of spaces padded to the right. For
-   *         negative amounts the original string will be returned
-   */
-  static public String padRight(String string, int padding) {
-    if (padding > 0) {
-      padding += string.length();
-      return String.format("%1$-" + padding + "s", string);
-    }
-    return string;
-  }
-
-  /** @return a comma separated list showing the names of the given objects */
   public static String getDisplayNames(Object[] objects) {
     if (objects.length == 1) {
       return objects[0].toString();
@@ -86,7 +64,6 @@ public class StringUtils {
     int i;
     for (i = 0; i < str.length() && maxWidth < width; i++) {
       maxWidth += fontMetrics.charWidth(str.charAt(i));
-      ;
     }
     // last check went over allowed width, so use up to this length (see
     // substring documentation)
@@ -97,11 +74,30 @@ public class StringUtils {
     if (s == null) {
       return true;
     }
-    if (s.isEmpty()) {
-      return true;
-    }
-    return false;
+    return s.isEmpty();
   }
 
+  /**
+   * @return string with the given amount of spaces padded to the left. For
+   * negative amounts the original string will be returned
+   */
+  static public String padLeft(String string, int padding) {
+    if (padding > 0) {
+      padding += string.length();
+      return String.format("%1$" + padding + "s", string);
+    }
+    return string;
+  }
 
+  /**
+   * @return string with the given amount of spaces padded to the right. For
+   * negative amounts the original string will be returned
+   */
+  static public String padRight(String string, int padding) {
+    if (padding > 0) {
+      padding += string.length();
+      return String.format("%1$-" + padding + "s", string);
+    }
+    return string;
+  }
 }

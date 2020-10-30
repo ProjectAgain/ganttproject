@@ -18,21 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.search;
 
-import java.util.List;
-
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.gui.TreeUiFacade;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 
+import java.util.List;
+
 /**
  * Base class for task and resource search services.
  *
- * @author dbarashev (Dmitry Barashev)
+ * @param <SR> search result object type
+ * @param <SO> target search object type
  *
- * @param <SR>
- *          search result object type
- * @param <SO>
- *          target search object type
+ * @author dbarashev (Dmitry Barashev)
  */
 abstract class SearchServiceBase<SR extends SearchResult<SO>, SO> implements SearchService<SR, SO> {
   private final int myViewIndex;
@@ -44,28 +42,28 @@ abstract class SearchServiceBase<SR extends SearchResult<SO>, SO> implements Sea
     myViewIndex = viewIndex;
   }
 
-  protected void init(IGanttProject project, TreeUiFacade<SO> treeUiFacade, UIFacade uiFacade) {
-    myProject = project;
-    myTreeUiFacade = treeUiFacade;
-    myUiFacade = uiFacade;
-  }
-
   protected static boolean isNotEmptyAndContains(String doc, String query) {
     return doc != null && doc.toLowerCase().contains(query);
+  }
+
+  @Override
+  public void select(List<SR> results) {
+    myTreeUiFacade.clearSelection();
+    for (SearchResult<SO> r: results) {
+      myTreeUiFacade.setSelected(r.getObject(), false);
+      myTreeUiFacade.makeVisible(r.getObject());
+    }
+    myUiFacade.setViewIndex(myViewIndex);
+    myTreeUiFacade.getTreeComponent().requestFocusInWindow();
   }
 
   protected IGanttProject getProject() {
     return myProject;
   }
 
-  @Override
-  public void select(List<SR> results) {
-    myTreeUiFacade.clearSelection();
-    for (SearchResult<SO> r : results) {
-      myTreeUiFacade.setSelected(r.getObject(), false);
-      myTreeUiFacade.makeVisible(r.getObject());
-    }
-    myUiFacade.setViewIndex(myViewIndex);
-    myTreeUiFacade.getTreeComponent().requestFocusInWindow();
+  protected void init(IGanttProject project, TreeUiFacade<SO> treeUiFacade, UIFacade uiFacade) {
+    myProject = project;
+    myTreeUiFacade = treeUiFacade;
+    myUiFacade = uiFacade;
   }
 }
