@@ -30,7 +30,7 @@ public class TestTaskDocumentOrder extends TaskTestCase {
     task5.setName("5");
     task5.move(task2);
 
-    List<Task> expectedOrder = Arrays.asList(new Task[]{task1, task2, task5, task3, task4,});
+    List<Task> expectedOrder = Arrays.asList(task1, task2, task5, task3, task4);
     List<Task> actualOrder = Arrays.asList(getTaskManager().getTasks());
     assertEquals(expectedOrder, actualOrder, "Unexpected order of tasks returnedby TaskManager.getTasks()");
 

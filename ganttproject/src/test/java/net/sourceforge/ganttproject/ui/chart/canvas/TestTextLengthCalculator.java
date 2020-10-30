@@ -27,29 +27,29 @@ import java.awt.*;
  * @author dbarashev (Dmitry Barashev)
  */
 public class TestTextLengthCalculator implements TextMetrics {
-    private final int myBboxSize;
+  private final int myBboxSize;
 
-    public TestTextLengthCalculator(int bboxSize) {
-        myBboxSize = bboxSize;
-    }
+  public TestTextLengthCalculator(int bboxSize) {
+    myBboxSize = bboxSize;
+  }
 
-    @Override
-    public Object getState() {
-        return Boolean.TRUE;
-    }
+  @Override
+  public Object getState() {
+    return Boolean.TRUE;
+  }
 
-    @Override
-    public int getTextHeight(String text) {
-        return myBboxSize;
-    }
+  @Override
+  public int getTextHeight(String text) {
+    return myBboxSize;
+  }
 
-    @Override
-    public int getTextHeight(Font f, String text) {
-        return getTextHeight(text);
-    }
+  @Override
+  public int getTextHeight(Font f, String text) {
+    return getTextHeight(text);
+  }
 
-    @Override
-    public int getTextLength(String text) {
-        return text.length() * myBboxSize;
-    }
+  @Override
+  public int getTextLength(String text) {
+    return text.length() * myBboxSize;
+  }
 }

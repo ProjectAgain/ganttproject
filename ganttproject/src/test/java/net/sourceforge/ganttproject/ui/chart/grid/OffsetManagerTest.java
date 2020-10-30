@@ -34,78 +34,78 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dbarashev (Dmitry Barashev)
  */
 public class OffsetManagerTest extends TaskTestCase {
-    class TestOffsetBuilderFactory implements OffsetManager.OffsetBuilderFactory {
-        private OffsetBuilder myAtomicOffsetBuilder;
-        private OffsetBuilder myTopAndBottomOffsetBuilder;
+  class TestOffsetBuilderFactory implements OffsetManager.OffsetBuilderFactory {
+    private final OffsetBuilder myAtomicOffsetBuilder;
+    private final OffsetBuilder myTopAndBottomOffsetBuilder;
 
-        public TestOffsetBuilderFactory(Date viewportStart) {
-            myTopAndBottomOffsetBuilder = new OffsetBuilderImpl.FactoryImpl()
-                .withStartDate(viewportStart)
-                .withViewportStartDate(viewportStart)
-                .withCalendar(GPCalendarCalc.PLAIN)
-                .withTopUnit(GPTimeUnitStack.YEAR)
-                .withBottomUnit(GPTimeUnitStack.MONTH)
-                .withAtomicUnitWidth(5)
-                .withEndOffset(700)
-                .withWeekendDecreaseFactor(1.0f)
-                .build();
-            myAtomicOffsetBuilder = new OffsetBuilderImpl.FactoryImpl()
-                .withStartDate(viewportStart)
-                .withViewportStartDate(viewportStart)
-                .withCalendar(GPCalendarCalc.PLAIN).withTopUnit(GPTimeUnitStack.DAY).withBottomUnit(GPTimeUnitStack.DAY)
-                .withAtomicUnitWidth(5).withEndOffset(700).withWeekendDecreaseFactor(1.0f)
-                .build();
-        }
-
-        @Override
-        public OffsetBuilder createAtomUnitBuilder() {
-            return myAtomicOffsetBuilder;
-        }
-
-        @Override
-        public OffsetBuilder createTopAndBottomUnitBuilder() {
-            return myTopAndBottomOffsetBuilder;
-        }
+    public TestOffsetBuilderFactory(Date viewportStart) {
+      myTopAndBottomOffsetBuilder = new OffsetBuilderImpl.FactoryImpl()
+        .withStartDate(viewportStart)
+        .withViewportStartDate(viewportStart)
+        .withCalendar(GPCalendarCalc.PLAIN)
+        .withTopUnit(GPTimeUnitStack.YEAR)
+        .withBottomUnit(GPTimeUnitStack.MONTH)
+        .withAtomicUnitWidth(5)
+        .withEndOffset(700)
+        .withWeekendDecreaseFactor(1.0f)
+        .build();
+      myAtomicOffsetBuilder = new OffsetBuilderImpl.FactoryImpl()
+        .withStartDate(viewportStart)
+        .withViewportStartDate(viewportStart)
+        .withCalendar(GPCalendarCalc.PLAIN).withTopUnit(GPTimeUnitStack.DAY).withBottomUnit(GPTimeUnitStack.DAY)
+        .withAtomicUnitWidth(5).withEndOffset(700).withWeekendDecreaseFactor(1.0f)
+        .build();
     }
 
-    /**
-     * In this test we create a timeline with years in the top, months in the bottom, and day
-     * as atomic time unit. Viewport start date is Oct 18 (Monday). We expect that Oct 31 would have the same offset
-     * in month and day offset lists, and Dec 31 would have the same offset in all three lists.
-     */
-    @Test
-    public void testAlignment() {
-        OffsetManager manager = new OffsetManager(new TestOffsetBuilderFactory(TestSetupHelper.newMonday().getTime()));
-        OffsetList yearOffsets = manager.getTopUnitOffsets();
-        OffsetList monthOffsets = manager.getBottomUnitOffsets();
-        OffsetList dayOffsets = manager.getAtomUnitOffsets();
-
-        OffsetLookup lookup = new OffsetLookup();
-        {
-            Date endOfMonth = GPTimeUnitStack.MONTH.adjustRight(TestSetupHelper.newMonday().getTime());
-            int idxDayEomOffset = lookup.lookupOffsetByEndDate(endOfMonth, dayOffsets);
-            int idxMonthEomOffset = lookup.lookupOffsetByEndDate(endOfMonth, monthOffsets);
-            assertEquals(
-                monthOffsets.get(idxMonthEomOffset).getOffsetPixels(),
-                dayOffsets.get(idxDayEomOffset).getOffsetPixels(),
-                "It is expected that offset pixels are the same for offsets with the same end date" + endOfMonth
-            );
-        }
-        {
-            Date endOfYear = GPTimeUnitStack.YEAR.adjustRight(TestSetupHelper.newMonday().getTime());
-            int idxDayEoyOffset = lookup.lookupOffsetByEndDate(endOfYear, dayOffsets);
-            int idxMonthEoyOffset = lookup.lookupOffsetByEndDate(endOfYear, monthOffsets);
-            int idxYearEoyOffset = lookup.lookupOffsetByEndDate(endOfYear, yearOffsets);
-            assertEquals(
-                monthOffsets.get(idxMonthEoyOffset).getOffsetPixels(),
-                dayOffsets.get(idxDayEoyOffset).getOffsetPixels(),
-                "It is expected that offset pixels are the same for offsets with the same end date=" + endOfYear
-            );
-            assertEquals(
-                monthOffsets.get(idxMonthEoyOffset).getOffsetPixels(),
-                yearOffsets.get(idxYearEoyOffset).getOffsetPixels(),
-                "It is expected that offset pixels are the same for offsets with the same end date" + endOfYear
-            );
-        }
+    @Override
+    public OffsetBuilder createAtomUnitBuilder() {
+      return myAtomicOffsetBuilder;
     }
+
+    @Override
+    public OffsetBuilder createTopAndBottomUnitBuilder() {
+      return myTopAndBottomOffsetBuilder;
+    }
+  }
+
+  /**
+   * In this test we create a timeline with years in the top, months in the bottom, and day
+   * as atomic time unit. Viewport start date is Oct 18 (Monday). We expect that Oct 31 would have the same offset
+   * in month and day offset lists, and Dec 31 would have the same offset in all three lists.
+   */
+  @Test
+  public void testAlignment() {
+    OffsetManager manager = new OffsetManager(new TestOffsetBuilderFactory(TestSetupHelper.newMonday().getTime()));
+    OffsetList yearOffsets = manager.getTopUnitOffsets();
+    OffsetList monthOffsets = manager.getBottomUnitOffsets();
+    OffsetList dayOffsets = manager.getAtomUnitOffsets();
+
+    OffsetLookup lookup = new OffsetLookup();
+    {
+      Date endOfMonth = GPTimeUnitStack.MONTH.adjustRight(TestSetupHelper.newMonday().getTime());
+      int idxDayEomOffset = lookup.lookupOffsetByEndDate(endOfMonth, dayOffsets);
+      int idxMonthEomOffset = lookup.lookupOffsetByEndDate(endOfMonth, monthOffsets);
+      assertEquals(
+        monthOffsets.get(idxMonthEomOffset).getOffsetPixels(),
+        dayOffsets.get(idxDayEomOffset).getOffsetPixels(),
+        "It is expected that offset pixels are the same for offsets with the same end date" + endOfMonth
+      );
+    }
+    {
+      Date endOfYear = GPTimeUnitStack.YEAR.adjustRight(TestSetupHelper.newMonday().getTime());
+      int idxDayEoyOffset = lookup.lookupOffsetByEndDate(endOfYear, dayOffsets);
+      int idxMonthEoyOffset = lookup.lookupOffsetByEndDate(endOfYear, monthOffsets);
+      int idxYearEoyOffset = lookup.lookupOffsetByEndDate(endOfYear, yearOffsets);
+      assertEquals(
+        monthOffsets.get(idxMonthEoyOffset).getOffsetPixels(),
+        dayOffsets.get(idxDayEoyOffset).getOffsetPixels(),
+        "It is expected that offset pixels are the same for offsets with the same end date=" + endOfYear
+      );
+      assertEquals(
+        monthOffsets.get(idxMonthEoyOffset).getOffsetPixels(),
+        yearOffsets.get(idxYearEoyOffset).getOffsetPixels(),
+        "It is expected that offset pixels are the same for offsets with the same end date" + endOfYear
+      );
+    }
+  }
 }

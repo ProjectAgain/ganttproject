@@ -26,7 +26,7 @@ public class TestDependencyActivityBinding extends TaskTestCase {
   private Date myJanuaryFirst;
 
   private Date myJanuarySecond;
-  private GPCalendar myJanuaryFirstIsHolidayCalendar = new AlwaysWorkingTimeCalendarImpl() {
+  private final GPCalendar myJanuaryFirstIsHolidayCalendar = new AlwaysWorkingTimeCalendarImpl() {
     @Override
     public List<GPCalendarActivity> getActivities(Date startDate, Date endDate) {
       List<GPCalendarActivity> result = new ArrayList<GPCalendarActivity>();

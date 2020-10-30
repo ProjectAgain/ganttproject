@@ -30,54 +30,54 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UpdateParserTest {
 
-    private static final String CONTENT = "3.0.0\n" +
-                                          "http://www.ganttproject.biz/my/feed\n" +
-                                          "GanttProject 3.0.0 is now available.&amp;nbsp;&lt;a href=&quot;https://www.ganttproject.biz/download/upgrade&quot;&gt;Download the update&lt;/a&gt;";
+  private static final String CONTENT = "3.0.0\n" +
+                                        "http://www.ganttproject.biz/my/feed\n" +
+                                        "GanttProject 3.0.0 is now available.&amp;nbsp;&lt;a href=&quot;https://www.ganttproject.biz/download/upgrade&quot;&gt;Download the update&lt;/a&gt;";
 
-    @Test
-    public void testParseRss_Successful() {
-        InputStream updateRss = UpdateParserTest.class.getResourceAsStream("/update.rss");
+  @Test
+  public void testParseRss_Successful() {
+    InputStream updateRss = UpdateParserTest.class.getResourceAsStream("/update.rss");
 
-        RssParser parser = new RssParser("2.8.6", "2262");
-        RssFeed feed = parser.parse(updateRss, null);
+    RssParser parser = new RssParser("2.8.6", "2262");
+    RssFeed feed = parser.parse(updateRss, null);
 
-        assertNotNull(feed);
-        List<RssFeed.Item> items = feed.getItems();
-        assertEquals(2, items.size());
+    assertNotNull(feed);
+    List<RssFeed.Item> items = feed.getItems();
+    assertEquals(2, items.size());
 
-        assertFalse(items.get(1).isUpdate);
+    assertFalse(items.get(1).isUpdate);
 
-        RssFeed.Item updateItem = items.get(0);
-        assertTrue(updateItem.isUpdate);
-        assertNotNull(updateItem.body);
+    RssFeed.Item updateItem = items.get(0);
+    assertTrue(updateItem.isUpdate);
+    assertNotNull(updateItem.body);
 
-        RssUpdate update = parser.parseUpdate(updateItem.body);
-        assertEquals("3.0.0", update.getVersion());
-        assertEquals("https://www.dropbox.com/s/exetyj5pk0na3ze/update-2.8.6.zip?dl=1", update.getUrl());
-        assertEquals(
-            "<b>GanttProject 2.8.6</b> is now available.&nbsp;<a href=\"https://www.ganttproject.biz/download/upgrade\">Download the update</a>\n",
-            update.getDescription()
-        );
-    }
+    RssUpdate update = parser.parseUpdate(updateItem.body);
+    assertEquals("3.0.0", update.getVersion());
+    assertEquals("https://www.dropbox.com/s/exetyj5pk0na3ze/update-2.8.6.zip?dl=1", update.getUrl());
+    assertEquals(
+      "<b>GanttProject 2.8.6</b> is now available.&nbsp;<a href=\"https://www.ganttproject.biz/download/upgrade\">Download the update</a>\n",
+      update.getDescription()
+    );
+  }
 
-    @Test
-    public void testUpdateParser_Empty() {
-        RssParser parser = new RssParser("2.8.6", "2262");
-        RssUpdate update = parser.parseUpdate("");
+  @Test
+  public void testUpdateParser_Empty() {
+    RssParser parser = new RssParser("2.8.6", "2262");
+    RssUpdate update = parser.parseUpdate("");
 
-        assertNull(update);
-    }
+    assertNull(update);
+  }
 
-    @Test
-    public void testUpdateParser_Sussessful() {
-        RssParser parser = new RssParser("2.8.6", "2262");
-        RssUpdate update = parser.parseUpdate(CONTENT);
+  @Test
+  public void testUpdateParser_Sussessful() {
+    RssParser parser = new RssParser("2.8.6", "2262");
+    RssUpdate update = parser.parseUpdate(CONTENT);
 
-        assertEquals("3.0.0", update.getVersion());
-        assertEquals("http://www.ganttproject.biz/my/feed", update.getUrl());
-        assertEquals(
-            "GanttProject 3.0.0 is now available.&amp;nbsp;&lt;a href=&quot;https://www.ganttproject.biz/download/upgrade&quot;&gt;Download the update&lt;/a&gt;",
-            update.getDescription()
-        );
-    }
+    assertEquals("3.0.0", update.getVersion());
+    assertEquals("http://www.ganttproject.biz/my/feed", update.getUrl());
+    assertEquals(
+      "GanttProject 3.0.0 is now available.&amp;nbsp;&lt;a href=&quot;https://www.ganttproject.biz/download/upgrade&quot;&gt;Download the update&lt;/a&gt;",
+      update.getDescription()
+    );
+  }
 }

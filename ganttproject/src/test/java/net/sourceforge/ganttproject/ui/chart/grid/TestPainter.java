@@ -29,46 +29,46 @@ import net.sourceforge.ganttproject.ui.chart.canvas.TextMetrics;
  */
 public class TestPainter implements Painter {
 
-    private final TextMetrics myCalculator;
+  private final TextMetrics myCalculator;
 
-    public TestPainter(TextMetrics calculator) {
-        myCalculator = calculator;
+  public TestPainter(TextMetrics calculator) {
+    myCalculator = calculator;
+  }
+
+  @Override
+  public void paint(Rectangle rectangle) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void paint(Line line) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void paint(Text text) {
+    Label[] labels = text.getLabels(myCalculator);
+    for (Label l: labels) {
+      l.setVisible(true);
     }
+  }
 
-    @Override
-    public void paint(Rectangle rectangle) {
-        // TODO Auto-generated method stub
+  @Override
+  public void paint(TextGroup textGroup) {
+    // TODO Auto-generated method stub
 
-    }
+  }
 
-    @Override
-    public void paint(Line line) {
-        // TODO Auto-generated method stub
+  public void paint(Rhombus rhombus) {
+    // TODO Auto-generated method stub
 
-    }
+  }
 
-    @Override
-    public void paint(Text text) {
-        Label[] labels = text.getLabels(myCalculator);
-        for (Label l: labels) {
-            l.setVisible(true);
-        }
-    }
+  @Override
+  public void prePaint() {
+    // TODO Auto-generated method stub
 
-    @Override
-    public void paint(TextGroup textGroup) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void paint(Rhombus rhombus) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void prePaint() {
-        // TODO Auto-generated method stub
-
-    }
+  }
 }

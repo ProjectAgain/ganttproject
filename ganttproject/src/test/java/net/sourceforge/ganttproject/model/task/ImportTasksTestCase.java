@@ -71,7 +71,7 @@ public class ImportTasksTestCase extends TaskTestCase {
       importFrom.createTask(3).move(importRoot);
     }
 
-    taskManager.importData(importFrom, Collections.<CustomPropertyDefinition, CustomPropertyDefinition>emptyMap());
+    taskManager.importData(importFrom, Collections.emptyMap());
     {
       Task root = taskManager.getTaskHierarchy().getRootTask();
       Task[] nestedTasks = taskManager.getTaskHierarchy().getNestedTasks(

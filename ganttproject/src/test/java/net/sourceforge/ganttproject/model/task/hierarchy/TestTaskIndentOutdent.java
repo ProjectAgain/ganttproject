@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dbarashev@bardsoftware.com
  */
 public class TestTaskIndentOutdent extends TaskTestCase {
-  private static TaskIndentAction.IndentApplyFxn INDENT_APPLY_FXN = new TaskIndentAction.IndentApplyFxn() {
+  private static final TaskIndentAction.IndentApplyFxn INDENT_APPLY_FXN = new TaskIndentAction.IndentApplyFxn() {
     @Override
     public void apply(Task task, Task newParent) {
       task.move(newParent);
     }
   };
-  private static TaskUnindentAction.UnindentApplyFxn OUTDENT_APPLY_FXN = new TaskUnindentAction.UnindentApplyFxn() {
+  private static final TaskUnindentAction.UnindentApplyFxn OUTDENT_APPLY_FXN = new TaskUnindentAction.UnindentApplyFxn() {
     @Override
     public void apply(Task task, Task newParent, int position) {
       task.move(newParent, position);

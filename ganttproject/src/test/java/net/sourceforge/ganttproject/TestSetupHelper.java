@@ -20,95 +20,95 @@ import java.awt.*;
 import java.net.URL;
 
 public class TestSetupHelper {
-    public static class TaskManagerBuilder implements TaskManagerConfig {
-        private DefaultColorOption myDefaultColorOption = new DefaultColorOption("taskcolor", Color.CYAN);
-        private GPCalendarCalc myGPCalendar = new AlwaysWorkingTimeCalendarImpl();
-        private HumanResourceManager myResourceManager;
+  public static class TaskManagerBuilder implements TaskManagerConfig {
+    private final DefaultColorOption myDefaultColorOption = new DefaultColorOption("taskcolor", Color.CYAN);
+    private GPCalendarCalc myGPCalendar = new AlwaysWorkingTimeCalendarImpl();
+    private final HumanResourceManager myResourceManager;
 
-        private RoleManager myRoleManager;
-        private TimeUnitStack myTimeUnitStack;
+    private final RoleManager myRoleManager;
+    private final TimeUnitStack myTimeUnitStack;
 
-        public TaskManagerBuilder() {
-            myTimeUnitStack = new GPTimeUnitStack();
-            myRoleManager = new RoleManagerImpl();
-            myResourceManager =
-                new HumanResourceManager(myRoleManager.getDefaultRole(), new CustomColumnsManager(), myRoleManager);
-        }
-
-        public TaskManager build() {
-            return TaskManager.Access.newInstance(null, this);
-        }
-
-        @Override
-        public GPCalendarCalc getCalendar() {
-            return myGPCalendar;
-        }
-
-        @Override
-        public Color getDefaultColor() {
-            return myDefaultColorOption.getValue();
-        }
-
-        @Override
-        public ColorOption getDefaultColorOption() {
-            return myDefaultColorOption;
-        }
-
-        @Override
-        public NotificationManager getNotificationManager() {
-            return null;
-        }
-
-        @Override
-        public URL getProjectDocumentURL() {
-            return null;
-        }
-
-        @Override
-        public HumanResourceManager getResourceManager() {
-            return myResourceManager;
-        }
-
-        @Override
-        public TimeUnitStack getTimeUnitStack() {
-            return myTimeUnitStack;
-        }
-
-        public TaskManagerBuilder withCalendar(GPCalendarCalc calendar) {
-            myGPCalendar = calendar;
-            return this;
-        }
+    public TaskManagerBuilder() {
+      myTimeUnitStack = new GPTimeUnitStack();
+      myRoleManager = new RoleManagerImpl();
+      myResourceManager =
+        new HumanResourceManager(myRoleManager.getDefaultRole(), new CustomColumnsManager(), myRoleManager);
     }
 
-    public static GanttCalendar newFriday() {
-        return CalendarFactory.createGanttCalendar(2004, 9, 15);
+    public TaskManager build() {
+      return TaskManager.Access.newInstance(null, this);
     }
 
-    public static GanttCalendar newMonday() {
-        return CalendarFactory.createGanttCalendar(2004, 9, 18);
+    @Override
+    public GPCalendarCalc getCalendar() {
+      return myGPCalendar;
     }
 
-    public static GanttCalendar newSaturday() {
-        return CalendarFactory.createGanttCalendar(2004, 9, 16);
+    @Override
+    public Color getDefaultColor() {
+      return myDefaultColorOption.getValue();
     }
 
-    public static GanttCalendar newSunday() {
-        return CalendarFactory.createGanttCalendar(2004, 9, 17);
+    @Override
+    public ColorOption getDefaultColorOption() {
+      return myDefaultColorOption;
     }
 
-    public static TaskManagerBuilder newTaskManagerBuilder() {
-        return new TaskManagerBuilder();
+    @Override
+    public NotificationManager getNotificationManager() {
+      return null;
     }
 
-    public static GanttCalendar newThursday() {
-        return CalendarFactory.createGanttCalendar(2004, 9, 21);
+    @Override
+    public URL getProjectDocumentURL() {
+      return null;
     }
 
-    public static GanttCalendar newTuesday() {
-        return CalendarFactory.createGanttCalendar(2004, 9, 19);
+    @Override
+    public HumanResourceManager getResourceManager() {
+      return myResourceManager;
     }
 
-    public static GanttCalendar newWednesday() {
-        return CalendarFactory.createGanttCalendar(2004, 9, 20);
+    @Override
+    public TimeUnitStack getTimeUnitStack() {
+      return myTimeUnitStack;
     }
+
+    public TaskManagerBuilder withCalendar(GPCalendarCalc calendar) {
+      myGPCalendar = calendar;
+      return this;
+    }
+  }
+
+  public static GanttCalendar newFriday() {
+    return CalendarFactory.createGanttCalendar(2004, 9, 15);
+  }
+
+  public static GanttCalendar newMonday() {
+    return CalendarFactory.createGanttCalendar(2004, 9, 18);
+  }
+
+  public static GanttCalendar newSaturday() {
+    return CalendarFactory.createGanttCalendar(2004, 9, 16);
+  }
+
+  public static GanttCalendar newSunday() {
+    return CalendarFactory.createGanttCalendar(2004, 9, 17);
+  }
+
+  public static TaskManagerBuilder newTaskManagerBuilder() {
+    return new TaskManagerBuilder();
+  }
+
+  public static GanttCalendar newThursday() {
+    return CalendarFactory.createGanttCalendar(2004, 9, 21);
+  }
+
+  public static GanttCalendar newTuesday() {
+    return CalendarFactory.createGanttCalendar(2004, 9, 19);
+  }
+
+  public static GanttCalendar newWednesday() {
+    return CalendarFactory.createGanttCalendar(2004, 9, 20);
+  }
 }

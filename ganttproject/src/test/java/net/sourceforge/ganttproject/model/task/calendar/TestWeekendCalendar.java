@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author bard
  */
 public class TestWeekendCalendar extends TaskTestCase {
-  private WeekendCalendarImpl myWeekendCalendar = new WeekendCalendarImpl();
+  private final WeekendCalendarImpl myWeekendCalendar = new WeekendCalendarImpl();
 
   @Test
   public void testNoWeekendsButHasHolidays() {

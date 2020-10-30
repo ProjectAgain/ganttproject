@@ -31,28 +31,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author dbarashev (Dmitry Barashev)
  */
 public class TestCanvas {
-    /**
-     * Tests whether labels are returned by getPrimitive() method.
-     */
-    @Test
-    public void testTextLabelSearch() {
-        Canvas canvas = new Canvas();
-        {
-            Text text = canvas.createText(100, 20, "");
-            Label label = text.createLabel("foobar", 50, 10);
-            label.setVisible(true);
-        }
-        // Visible labels will be indexed
-        assertTrue(canvas.getPrimitive(120, 15) instanceof Text);
-        assertNull(canvas.getPrimitive(120, 30));
-        assertNull(canvas.getPrimitive(151, 15));
-        assertNull(canvas.getPrimitive(99, 15));
-
-        {
-            Text text = canvas.createText(200, 20, "");
-            text.createLabel("foobar", 50, 10);
-        }
-        // Labels which have not been made visible are not indexed
-        assertNull(canvas.getPrimitive(220, 15));
+  /**
+   * Tests whether labels are returned by getPrimitive() method.
+   */
+  @Test
+  public void testTextLabelSearch() {
+    Canvas canvas = new Canvas();
+    {
+      Text text = canvas.createText(100, 20, "");
+      Label label = text.createLabel("foobar", 50, 10);
+      label.setVisible(true);
     }
+    // Visible labels will be indexed
+    assertTrue(canvas.getPrimitive(120, 15) instanceof Text);
+    assertNull(canvas.getPrimitive(120, 30));
+    assertNull(canvas.getPrimitive(151, 15));
+    assertNull(canvas.getPrimitive(99, 15));
+
+    {
+      Text text = canvas.createText(200, 20, "");
+      text.createLabel("foobar", 50, 10);
+    }
+    // Labels which have not been made visible are not indexed
+    assertNull(canvas.getPrimitive(220, 15));
+  }
 }

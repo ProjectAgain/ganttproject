@@ -34,36 +34,36 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class TaskMoveEnabledPredicateTest extends TaskTestCase {
 
-    @Test
-    public void testIndentLinkedTasks() {
-        Task[] tasks = new Task[]{createTask(), createTask(), createTask()};
-        getTaskManager().getDependencyGraph().addDependency(createDependency(tasks[2], tasks[1]));
+  @Test
+  public void testIndentLinkedTasks() {
+    Task[] tasks = new Task[]{createTask(), createTask(), createTask()};
+    getTaskManager().getDependencyGraph().addDependency(createDependency(tasks[2], tasks[1]));
 
-        TaskMoveEnabledPredicate predicate =
-            new TaskMoveEnabledPredicate(getTaskManager(), new IndentTargetFunctionFactory(getTaskManager()));
-        assertTrue(predicate.apply(ImmutableList.of(tasks[1], tasks[2])));
-        assertFalse(predicate.apply(ImmutableList.of(tasks[2])));
-    }
+    TaskMoveEnabledPredicate predicate =
+      new TaskMoveEnabledPredicate(getTaskManager(), new IndentTargetFunctionFactory(getTaskManager()));
+    assertTrue(predicate.apply(ImmutableList.of(tasks[1], tasks[2])));
+    assertFalse(predicate.apply(ImmutableList.of(tasks[2])));
+  }
 
-    @Test
-    public void testSimpleIndent() {
-        Task[] tasks = new Task[]{createTask(), createTask()};
-        TaskMoveEnabledPredicate predicate =
-            new TaskMoveEnabledPredicate(getTaskManager(), new IndentTargetFunctionFactory(getTaskManager()));
-        assertTrue(predicate.apply(ImmutableList.of(tasks[1])));
-        assertFalse(predicate.apply(ImmutableList.of(tasks[0])));
-        assertFalse(predicate.apply(ImmutableList.of(tasks[0], tasks[1])));
-    }
+  @Test
+  public void testSimpleIndent() {
+    Task[] tasks = new Task[]{createTask(), createTask()};
+    TaskMoveEnabledPredicate predicate =
+      new TaskMoveEnabledPredicate(getTaskManager(), new IndentTargetFunctionFactory(getTaskManager()));
+    assertTrue(predicate.apply(ImmutableList.of(tasks[1])));
+    assertFalse(predicate.apply(ImmutableList.of(tasks[0])));
+    assertFalse(predicate.apply(ImmutableList.of(tasks[0], tasks[1])));
+  }
 
-    @Test
-    public void testSimpleOutdent() {
-        Task[] tasks = new Task[]{createTask(), createTask()};
-        DependencyGraphTest.move(tasks[1], tasks[0], getTaskManager().getDependencyGraph());
+  @Test
+  public void testSimpleOutdent() {
+    Task[] tasks = new Task[]{createTask(), createTask()};
+    DependencyGraphTest.move(tasks[1], tasks[0], getTaskManager().getDependencyGraph());
 
-        TaskMoveEnabledPredicate predicate =
-            new TaskMoveEnabledPredicate(getTaskManager(), new OutdentTargetFunctionFactory(getTaskManager()));
-        assertTrue(predicate.apply(ImmutableList.of(tasks[1])));
-        assertFalse(predicate.apply(ImmutableList.of(tasks[0])));
-        assertFalse(predicate.apply(ImmutableList.of(tasks[0], tasks[1])));
-    }
+    TaskMoveEnabledPredicate predicate =
+      new TaskMoveEnabledPredicate(getTaskManager(), new OutdentTargetFunctionFactory(getTaskManager()));
+    assertTrue(predicate.apply(ImmutableList.of(tasks[1])));
+    assertFalse(predicate.apply(ImmutableList.of(tasks[0])));
+    assertFalse(predicate.apply(ImmutableList.of(tasks[0], tasks[1])));
+  }
 }

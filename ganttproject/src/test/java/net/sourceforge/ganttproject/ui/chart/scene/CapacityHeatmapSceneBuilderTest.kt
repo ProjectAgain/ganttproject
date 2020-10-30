@@ -24,67 +24,67 @@ import org.junit.jupiter.api.Test
 import java.text.SimpleDateFormat
 
 class CapacityHeatmapSceneBuilderTest {
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-    private val initialBorder = LoadBorder(Long.MIN_VALUE, 0f)
+  private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+  private val initialBorder = LoadBorder(Long.MIN_VALUE, 0f)
 
-    @Test
-    fun `test zero loads are not counted`() {
-        val loads = listOf(
-            Load("2020-09-1".toTs(), "2020-09-11".toTs(), 0f),
-            Load("2020-09-5".toTs(), "2020-09-6".toTs(), 1f),
-            Load("2020-09-3".toTs(), "2020-09-11".toTs(), 0f)
-        )
-        val expected = listOf(
-            initialBorder, LoadBorder("2020-09-5".toTs(), 1f), LoadBorder("2020-09-6".toTs(), 0f)
-        )
-        assertIterableEquals(expected, calcLoadDistribution(loads))
-    }
+  @Test
+  fun `test zero loads are not counted`() {
+    val loads = listOf(
+      Load("2020-09-1".toTs(), "2020-09-11".toTs(), 0f),
+      Load("2020-09-5".toTs(), "2020-09-6".toTs(), 1f),
+      Load("2020-09-3".toTs(), "2020-09-11".toTs(), 0f)
+    )
+    val expected = listOf(
+      initialBorder, LoadBorder("2020-09-5".toTs(), 1f), LoadBorder("2020-09-6".toTs(), 0f)
+    )
+    assertIterableEquals(expected, calcLoadDistribution(loads))
+  }
 
-    @Test
-    fun `test nested loads`() {
-        val loads = listOf(
-            Load("2020-09-15".toTs(), "2020-09-17".toTs(), 4f),
-            Load("2020-09-1".toTs(), "2020-09-20".toTs(), 1f),
-            Load("2020-09-2".toTs(), "2020-09-7".toTs(), 2f),
-            Load("2020-09-3".toTs(), "2020-09-4".toTs(), 3f)
-        )
-        val expected = listOf(
-            initialBorder, LoadBorder("2020-09-1".toTs(), 1f), LoadBorder("2020-09-2".toTs(), 3f),
-            LoadBorder("2020-09-3".toTs(), 6f), LoadBorder("2020-09-4".toTs(), 3f), LoadBorder("2020-09-7".toTs(), 1f),
-            LoadBorder("2020-09-15".toTs(), 5f), LoadBorder("2020-09-17".toTs(), 1f), LoadBorder("2020-09-20".toTs(), 0f)
-        )
-        assertIterableEquals(expected, calcLoadDistribution(loads))
-    }
+  @Test
+  fun `test nested loads`() {
+    val loads = listOf(
+      Load("2020-09-15".toTs(), "2020-09-17".toTs(), 4f),
+      Load("2020-09-1".toTs(), "2020-09-20".toTs(), 1f),
+      Load("2020-09-2".toTs(), "2020-09-7".toTs(), 2f),
+      Load("2020-09-3".toTs(), "2020-09-4".toTs(), 3f)
+    )
+    val expected = listOf(
+      initialBorder, LoadBorder("2020-09-1".toTs(), 1f), LoadBorder("2020-09-2".toTs(), 3f),
+      LoadBorder("2020-09-3".toTs(), 6f), LoadBorder("2020-09-4".toTs(), 3f), LoadBorder("2020-09-7".toTs(), 1f),
+      LoadBorder("2020-09-15".toTs(), 5f), LoadBorder("2020-09-17".toTs(), 1f), LoadBorder("2020-09-20".toTs(), 0f)
+    )
+    assertIterableEquals(expected, calcLoadDistribution(loads))
+  }
 
-    @Test
-    fun `test loads intersection`() {
-        val loads = listOf(
-            Load("2020-09-10".toTs(), "2020-09-20".toTs(), 1f),
-            Load("2020-09-5".toTs(), "2020-09-15".toTs(), 2f),
-            Load("2020-09-8".toTs(), "2020-09-12".toTs(), 3f)
-        )
-        val expected = listOf(
-            initialBorder, LoadBorder("2020-09-5".toTs(), 2f), LoadBorder("2020-09-8".toTs(), 5f),
-            LoadBorder("2020-09-10".toTs(), 6f), LoadBorder("2020-09-12".toTs(), 3f), LoadBorder("2020-09-15".toTs(), 1f),
-            LoadBorder("2020-09-20".toTs(), 0f)
-        )
-        assertIterableEquals(expected, calcLoadDistribution(loads))
-    }
+  @Test
+  fun `test loads intersection`() {
+    val loads = listOf(
+      Load("2020-09-10".toTs(), "2020-09-20".toTs(), 1f),
+      Load("2020-09-5".toTs(), "2020-09-15".toTs(), 2f),
+      Load("2020-09-8".toTs(), "2020-09-12".toTs(), 3f)
+    )
+    val expected = listOf(
+      initialBorder, LoadBorder("2020-09-5".toTs(), 2f), LoadBorder("2020-09-8".toTs(), 5f),
+      LoadBorder("2020-09-10".toTs(), 6f), LoadBorder("2020-09-12".toTs(), 3f), LoadBorder("2020-09-15".toTs(), 1f),
+      LoadBorder("2020-09-20".toTs(), 0f)
+    )
+    assertIterableEquals(expected, calcLoadDistribution(loads))
+  }
 
-    @Test
-    fun `test loads with matching borders`() {
-        val loads = listOf(
-            Load("2020-09-1".toTs(), "2020-09-20".toTs(), 1f),
-            Load("2020-09-1".toTs(), "2020-09-3".toTs(), 2f),
-            Load("2020-09-3".toTs(), "2020-09-10".toTs(), 3f),
-            Load("2020-09-1".toTs(), "2020-09-20".toTs(), 4f)
-        )
-        val expected = listOf(
-            initialBorder, LoadBorder("2020-09-1".toTs(), 7f), LoadBorder("2020-09-3".toTs(), 8f),
-            LoadBorder("2020-09-10".toTs(), 5f), LoadBorder("2020-09-20".toTs(), 0f)
-        )
-        assertIterableEquals(expected, calcLoadDistribution(loads))
-    }
+  @Test
+  fun `test loads with matching borders`() {
+    val loads = listOf(
+      Load("2020-09-1".toTs(), "2020-09-20".toTs(), 1f),
+      Load("2020-09-1".toTs(), "2020-09-3".toTs(), 2f),
+      Load("2020-09-3".toTs(), "2020-09-10".toTs(), 3f),
+      Load("2020-09-1".toTs(), "2020-09-20".toTs(), 4f)
+    )
+    val expected = listOf(
+      initialBorder, LoadBorder("2020-09-1".toTs(), 7f), LoadBorder("2020-09-3".toTs(), 8f),
+      LoadBorder("2020-09-10".toTs(), 5f), LoadBorder("2020-09-20".toTs(), 0f)
+    )
+    assertIterableEquals(expected, calcLoadDistribution(loads))
+  }
 
-    private fun String.toTs() = dateFormat.parse(this).time
+  private fun String.toTs() = dateFormat.parse(this).time
 }

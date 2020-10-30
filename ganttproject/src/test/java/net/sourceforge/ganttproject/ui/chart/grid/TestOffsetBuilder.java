@@ -36,29 +36,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dbarashev (Dmitry Barashev)
  */
 public class TestOffsetBuilder extends TaskTestCase {
-    @Test
-    public void testBasicOffsets() {
-        GPCalendarCalc calendar = GPCalendarCalc.PLAIN;
-        Date start = TestSetupHelper.newMonday().getTime();
+  @Test
+  public void testBasicOffsets() {
+    GPCalendarCalc calendar = GPCalendarCalc.PLAIN;
+    Date start = TestSetupHelper.newMonday().getTime();
 
-        OffsetBuilder builder = new OffsetBuilderImpl.FactoryImpl()
-            .withStartDate(start).withViewportStartDate(start)
-            .withCalendar(calendar).withTopUnit(GPTimeUnitStack.WEEK).withBottomUnit(GPTimeUnitStack.DAY)
-            .withAtomicUnitWidth(20).withEndOffset(210).withWeekendDecreaseFactor(1.0f)
-            .build();
-        OffsetList bottomUnitOffsets = new OffsetList();
-        builder.constructOffsets(new ArrayList<Offset>(), bottomUnitOffsets);
+    OffsetBuilder builder = new OffsetBuilderImpl.FactoryImpl()
+      .withStartDate(start).withViewportStartDate(start)
+      .withCalendar(calendar).withTopUnit(GPTimeUnitStack.WEEK).withBottomUnit(GPTimeUnitStack.DAY)
+      .withAtomicUnitWidth(20).withEndOffset(210).withWeekendDecreaseFactor(1.0f)
+      .build();
+    OffsetList bottomUnitOffsets = new OffsetList();
+    builder.constructOffsets(new ArrayList<Offset>(), bottomUnitOffsets);
 
-        assertEquals(11, bottomUnitOffsets.size());
-        assertEquals(20, bottomUnitOffsets.get(0).getOffsetPixels());
-        assertEquals(220, bottomUnitOffsets.get(10).getOffsetPixels());
+    assertEquals(11, bottomUnitOffsets.size());
+    assertEquals(20, bottomUnitOffsets.get(0).getOffsetPixels());
+    assertEquals(220, bottomUnitOffsets.get(10).getOffsetPixels());
 
-        Calendar c = (Calendar) Calendar.getInstance().clone();
-        c.setTime(start);
-        c.add(Calendar.DAY_OF_YEAR, 11);
-        assertEquals(c.getTime(), bottomUnitOffsets.get(10).getOffsetEnd());
+    Calendar c = (Calendar) Calendar.getInstance().clone();
+    c.setTime(start);
+    c.add(Calendar.DAY_OF_YEAR, 11);
+    assertEquals(c.getTime(), bottomUnitOffsets.get(10).getOffsetEnd());
 
-        c.add(Calendar.DAY_OF_YEAR, -1);
-        assertEquals(c.getTime(), bottomUnitOffsets.get(10).getOffsetStart());
-    }
+    c.add(Calendar.DAY_OF_YEAR, -1);
+    assertEquals(c.getTime(), bottomUnitOffsets.get(10).getOffsetStart());
+  }
 }

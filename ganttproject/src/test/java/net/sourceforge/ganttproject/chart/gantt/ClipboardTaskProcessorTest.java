@@ -42,85 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author dbarashev
  */
 public class ClipboardTaskProcessorTest {
-    @Test
-  public void testCopyDates() {
-    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
-    GanttTask task = taskManager.createTask();
-    task.setDuration(taskManager.createLength(3));
-
-    ClipboardContents contents = new ClipboardContents(taskManager);
-    contents.addTasks(ImmutableList.<Task>of(task));
-    contents.copy();
-    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
-    Task pastedTask = clipboardProcessor.pasteAsSibling(taskManager.getRootTask(), contents).get(0);
-    assertEquals(task.getStart(), pastedTask.getStart());
-    assertEquals(task.getEnd(), pastedTask.getEnd());
-    assertEquals(task.getDuration(), pastedTask.getDuration());
-  }
-    @Test
-  public void testIntraDependencies() {
-    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
-    Task task1 = taskManager.newTaskBuilder().build();
-    Task task2 = taskManager.newTaskBuilder().build();
-    taskManager.getDependencyCollection().createDependency(task2, task1);
-    Task target = taskManager.newTaskBuilder().build();
-
-    ClipboardContents contents = new ClipboardContents(taskManager);
-    contents.addTasks(ImmutableList.of(task1, task2));
-    contents.copy();
-    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
-    List<Task> pasted = clipboardProcessor.pasteAsSibling(target, contents);
-    assertEquals(2, pasted.size());
-    assertTrue(pasted.get(0).getDependencies().hasLinks(pasted));
-    assertTrue(pasted.get(1).getDependencies().hasLinks(pasted));
-  }
-    @Test
-  public void testExtraDependencies() {
-    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
-    Task task1 = taskManager.newTaskBuilder().build();
-    Task task2 = taskManager.newTaskBuilder().build();
-
-    Task predecessor = taskManager.newTaskBuilder().build();
-    taskManager.getDependencyCollection().createDependency(task1, predecessor);
-    taskManager.getDependencyCollection().createDependency(task2, predecessor);
-    Task target = taskManager.newTaskBuilder().build();
-
-    ClipboardContents contents = new ClipboardContents(taskManager);
-    contents.addTasks(ImmutableList.of(task1, task2));
-    contents.copy();
-    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
-    List<Task> pasted = clipboardProcessor.pasteAsSibling(target, contents);
-    assertEquals(2, pasted.size());
-    assertTrue(pasted.get(0).getDependencies().hasLinks(ImmutableList.of(pasted.get(0), predecessor)));
-    assertTrue(pasted.get(1).getDependencies().hasLinks(ImmutableList.of(pasted.get(1), predecessor)));
-  }
-    @Test
-  public void testTruncateExternalDependencies() {
-    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
-    Task task1 = taskManager.newTaskBuilder().build();
-    Task task2 = taskManager.newTaskBuilder().build();
-
-    Task predecessor = taskManager.newTaskBuilder().build();
-    Task successor = taskManager.newTaskBuilder().build();
-    taskManager.getDependencyCollection().createDependency(task1, predecessor);
-    taskManager.getDependencyCollection().createDependency(task2, task1);
-    taskManager.getDependencyCollection().createDependency(successor, task2);
-
-    Task target = taskManager.newTaskBuilder().build();
-
-    ClipboardContents contents = new ClipboardContents(taskManager);
-    contents.addTasks(ImmutableList.of(task1, task2));
-    contents.copy();
-    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
-    clipboardProcessor.setTruncateExternalDeps(true);
-    List<Task> pasted = clipboardProcessor.pasteAsSibling(target, contents);
-    assertEquals(2, pasted.size());
-    assertEquals(1, predecessor.getDependencies().toArray().length);
-    assertEquals(1, successor.getDependencies().toArray().length);
-    assertEquals(1, pasted.get(1).getDependencies().toArray().length);
-    assertEquals(1, pasted.get(0).getDependencies().toArray().length);
-  }
-    @Test
+  @Test
   public void testAssignmentsCopy() {
     TaskManagerBuilder builder = TestSetupHelper.newTaskManagerBuilder();
     HumanResourceManager hrMgr = builder.getResourceManager();
@@ -143,7 +65,8 @@ public class ClipboardTaskProcessorTest {
     assertEquals(100f, newAssignments[0].getLoad());
     assertEquals(2, res1.getAssignments().length);
   }
-    @Test
+
+  @Test
   public void testAssignmentsCut() {
     TaskManagerBuilder builder = TestSetupHelper.newTaskManagerBuilder();
     HumanResourceManager hrMgr = builder.getResourceManager();
@@ -169,7 +92,8 @@ public class ClipboardTaskProcessorTest {
     assertEquals(100f, newAssignments[0].getLoad());
     assertEquals(1, res1.getAssignments().length);
   }
-    @Test
+
+  @Test
   public void testAssignmentsTruncated() {
     TaskManagerBuilder builder = TestSetupHelper.newTaskManagerBuilder();
     HumanResourceManager hrMgr = builder.getResourceManager();
@@ -190,6 +114,109 @@ public class ClipboardTaskProcessorTest {
     List<Task> pasted = clipboardProcessor.pasteAsSibling(taskManager.getRootTask(), contents);
     ResourceAssignment[] newAssignments = pasted.get(0).getAssignments();
     assertEquals(0, newAssignments.length);
+  }
+
+  @Test
+  public void testCopyDates() {
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
+    GanttTask task = taskManager.createTask();
+    task.setDuration(taskManager.createLength(3));
+
+    ClipboardContents contents = new ClipboardContents(taskManager);
+    contents.addTasks(ImmutableList.of(task));
+    contents.copy();
+    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
+    Task pastedTask = clipboardProcessor.pasteAsSibling(taskManager.getRootTask(), contents).get(0);
+    assertEquals(task.getStart(), pastedTask.getStart());
+    assertEquals(task.getEnd(), pastedTask.getEnd());
+    assertEquals(task.getDuration(), pastedTask.getDuration());
+  }
+
+  @Test
+  public void testExtraDependencies() {
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
+    Task task1 = taskManager.newTaskBuilder().build();
+    Task task2 = taskManager.newTaskBuilder().build();
+
+    Task predecessor = taskManager.newTaskBuilder().build();
+    taskManager.getDependencyCollection().createDependency(task1, predecessor);
+    taskManager.getDependencyCollection().createDependency(task2, predecessor);
+    Task target = taskManager.newTaskBuilder().build();
+
+    ClipboardContents contents = new ClipboardContents(taskManager);
+    contents.addTasks(ImmutableList.of(task1, task2));
+    contents.copy();
+    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
+    List<Task> pasted = clipboardProcessor.pasteAsSibling(target, contents);
+    assertEquals(2, pasted.size());
+    assertTrue(pasted.get(0).getDependencies().hasLinks(ImmutableList.of(pasted.get(0), predecessor)));
+    assertTrue(pasted.get(1).getDependencies().hasLinks(ImmutableList.of(pasted.get(1), predecessor)));
+  }
+
+  @Test
+  public void testIntraDependencies() {
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
+    Task task1 = taskManager.newTaskBuilder().build();
+    Task task2 = taskManager.newTaskBuilder().build();
+    taskManager.getDependencyCollection().createDependency(task2, task1);
+    Task target = taskManager.newTaskBuilder().build();
+
+    ClipboardContents contents = new ClipboardContents(taskManager);
+    contents.addTasks(ImmutableList.of(task1, task2));
+    contents.copy();
+    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
+    List<Task> pasted = clipboardProcessor.pasteAsSibling(target, contents);
+    assertEquals(2, pasted.size());
+    assertTrue(pasted.get(0).getDependencies().hasLinks(pasted));
+    assertTrue(pasted.get(1).getDependencies().hasLinks(pasted));
+  }
+
+  @Test
+  public void testNestedTasksCopy() {
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
+    Task task1 = taskManager.newTaskBuilder().build();
+    Task task2 = taskManager.newTaskBuilder().build();
+    taskManager.getTaskHierarchy().move(task2, task1);
+    Task target = taskManager.newTaskBuilder().build();
+
+    {
+      ClipboardContents contents = new ClipboardContents(taskManager);
+      contents.addTasks(ImmutableList.of(task1));
+      contents.copy();
+      ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
+      List<Task> pasted = clipboardProcessor.pasteAsChild(target, contents);
+      assertEquals(1, pasted.size());
+      assertTrue(taskManager.getTaskHierarchy().hasNestedTasks(pasted.get(0)));
+      assertEquals(1, taskManager.getTaskHierarchy().getNestedTasks(pasted.get(0)).length);
+    }
+    {
+      ClipboardContents contents = new ClipboardContents(taskManager);
+      contents.addTasks(ImmutableList.of(task1));
+      contents.cut();
+      ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
+      List<Task> pasted = clipboardProcessor.pasteAsChild(target, contents);
+      assertEquals(1, pasted.size());
+      assertTrue(taskManager.getTaskHierarchy().hasNestedTasks(pasted.get(0)));
+      assertEquals(1, taskManager.getTaskHierarchy().getNestedTasks(pasted.get(0)).length);
+    }
+  }
+
+  @Test
+  public void testTaskNamePattern() {
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
+    taskManager.getTaskCopyNamePrefixOption().setValue("{1}_new");
+    GanttTask task = taskManager.createTask();
+
+    ClipboardContents contents = new ClipboardContents(taskManager);
+    contents.addTasks(ImmutableList.of(task));
+    contents.copy();
+    ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
+    Task pastedTask = clipboardProcessor.pasteAsSibling(taskManager.getRootTask(), contents).get(0);
+    assertEquals(task.getName(), pastedTask.getName());
+
+    clipboardProcessor.setTaskCopyNameOption(taskManager.getTaskCopyNamePrefixOption());
+    pastedTask = clipboardProcessor.pasteAsSibling(taskManager.getRootTask(), contents).get(0);
+    assertEquals(task.getName() + "_new", pastedTask.getName());
   }
 
   /**
@@ -225,50 +252,31 @@ public class ClipboardTaskProcessorTest {
       }
     }));
   }
-    @Test
-  public void testNestedTasksCopy() {
+
+  @Test
+  public void testTruncateExternalDependencies() {
     TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
     Task task1 = taskManager.newTaskBuilder().build();
     Task task2 = taskManager.newTaskBuilder().build();
-    taskManager.getTaskHierarchy().move(task2, task1);
+
+    Task predecessor = taskManager.newTaskBuilder().build();
+    Task successor = taskManager.newTaskBuilder().build();
+    taskManager.getDependencyCollection().createDependency(task1, predecessor);
+    taskManager.getDependencyCollection().createDependency(task2, task1);
+    taskManager.getDependencyCollection().createDependency(successor, task2);
+
     Task target = taskManager.newTaskBuilder().build();
 
-    {
-      ClipboardContents contents = new ClipboardContents(taskManager);
-      contents.addTasks(ImmutableList.of(task1));
-      contents.copy();
-      ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
-      List<Task> pasted = clipboardProcessor.pasteAsChild(target, contents);
-      assertEquals(1, pasted.size());
-      assertTrue(taskManager.getTaskHierarchy().hasNestedTasks(pasted.get(0)));
-      assertEquals(1, taskManager.getTaskHierarchy().getNestedTasks(pasted.get(0)).length);
-    }
-    {
-      ClipboardContents contents = new ClipboardContents(taskManager);
-      contents.addTasks(ImmutableList.of(task1));
-      contents.cut();
-      ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
-      List<Task> pasted = clipboardProcessor.pasteAsChild(target, contents);
-      assertEquals(1, pasted.size());
-      assertTrue(taskManager.getTaskHierarchy().hasNestedTasks(pasted.get(0)));
-      assertEquals(1, taskManager.getTaskHierarchy().getNestedTasks(pasted.get(0)).length);
-    }
-  }
-    @Test
-  public void testTaskNamePattern() {
-    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
-    taskManager.getTaskCopyNamePrefixOption().setValue("{1}_new");
-    GanttTask task = taskManager.createTask();
-
     ClipboardContents contents = new ClipboardContents(taskManager);
-    contents.addTasks(ImmutableList.<Task>of(task));
+    contents.addTasks(ImmutableList.of(task1, task2));
     contents.copy();
     ClipboardTaskProcessor clipboardProcessor = new ClipboardTaskProcessor(taskManager);
-    Task pastedTask = clipboardProcessor.pasteAsSibling(taskManager.getRootTask(), contents).get(0);
-    assertEquals(task.getName(), pastedTask.getName());
-
-    clipboardProcessor.setTaskCopyNameOption(taskManager.getTaskCopyNamePrefixOption());
-    pastedTask = clipboardProcessor.pasteAsSibling(taskManager.getRootTask(), contents).get(0);
-    assertEquals(task.getName() + "_new", pastedTask.getName());
+    clipboardProcessor.setTruncateExternalDeps(true);
+    List<Task> pasted = clipboardProcessor.pasteAsSibling(target, contents);
+    assertEquals(2, pasted.size());
+    assertEquals(1, predecessor.getDependencies().toArray().length);
+    assertEquals(1, successor.getDependencies().toArray().length);
+    assertEquals(1, pasted.get(1).getDependencies().toArray().length);
+    assertEquals(1, pasted.get(0).getDependencies().toArray().length);
   }
 }

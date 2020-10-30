@@ -45,122 +45,123 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author dbarashev (Dmitry Barashev)
  */
 public class TestTimelineLabelRendererImpl {
-    private class TestChartModelApi implements TimelineLabelRendererImpl.ChartModelApi {
-        final List<Offset> myOffsets = Lists.newArrayList();
-        private final TaskManager myTaskManager = TestSetupHelper.newTaskManagerBuilder().build();
+  private class TestChartModelApi implements TimelineLabelRendererImpl.ChartModelApi {
+    final List<Offset> myOffsets = Lists.newArrayList();
+    private final TaskManager myTaskManager = TestSetupHelper.newTaskManagerBuilder().build();
 
-        @Override
-        public List<Offset> getDefaultUnitOffsets() {
-            return myOffsets;
+    @Override
+    public List<Offset> getDefaultUnitOffsets() {
+      return myOffsets;
+    }
+
+    @Override
+    public Date getStartDate() {
+      return myTaskManager.getProjectStart();
+    }
+
+    @Override
+    public Collection<Task> getTimelineTasks() {
+      List<Task> result = Lists.newArrayList();
+      for (Task t: myTaskManager.getTasks()) {
+        if (t.isMilestone()) {
+          result.add(t);
         }
-
-        @Override
-        public Date getStartDate() {
-            return myTaskManager.getProjectStart();
-        }
-
-        @Override
-        public Collection<Task> getTimelineTasks() {
-            List<Task> result = Lists.newArrayList();
-            for (Task t: myTaskManager.getTasks()) {
-                if (t.isMilestone()) {
-                    result.add(t);
-                }
-            }
-            return result;
-        }
-
-        @Override
-        public int getTimelineTopLineHeight() {
-            return 20;
-        }
-
-        TaskManager getTaskManager() {
-            return myTaskManager;
-        }
-    }
-    private static final GanttCalendar MONDAY = TestSetupHelper.newMonday();
-    private static final GanttCalendar SUNDAY = TestSetupHelper.newSunday();
-    private static final GanttCalendar TUESDAY = TestSetupHelper.newTuesday();
-    private static final GanttCalendar WEDNESDAY = TestSetupHelper.newWednesday();
-
-    private TestChartModelApi testApi;
-
-    @Test
-    public void testLongLabelsAreDisplayedTruncated() {
-        Task task = testApi.getTaskManager().createTask();
-        task.setName("123456789012345678901");
-        TimelineLabelRendererImpl renderer = new TimelineLabelRendererImpl(testApi);
-        TimelineLabelRendererImpl.LabelTextSelector textSelector =
-            new TimelineLabelRendererImpl.LabelTextSelector(task, renderer.getLabelLayer().createText(0, 0, ""));
-        TestTextLengthCalculator lengthCalculator = new TestTextLengthCalculator(10);
-        Canvas.Label[] labels = textSelector.getLabels(lengthCalculator);
-        assertEquals(1, labels.length);
-        assertEquals("123456789012345678...", labels[0].text);
+      }
+      return result;
     }
 
-    @Test
-    public void testMilestoneLabels() {
-        Task task = testApi.getTaskManager().createTask();
-        task.setName("foo");
-        task.setMilestone(true);
-        task.setStart(MONDAY);
-        task.setEnd(TUESDAY);
-        testHasTimelineLabel(task, true);
+    @Override
+    public int getTimelineTopLineHeight() {
+      return 20;
     }
 
-    @Test
-    public void testNoLabelsForMereMortals() {
-        TestChartModelApi testApi = new TestChartModelApi();
-        Task task = testApi.getTaskManager().createTask();
-        task.setName("foo");
-        task.setMilestone(false);
-        task.setStart(MONDAY);
-        task.setEnd(TUESDAY);
-        testHasTimelineLabel(task, false);
+    TaskManager getTaskManager() {
+      return myTaskManager;
     }
+  }
 
-    @Test
-    public void testShortLabelsAreDisplayedFully() {
-        Task task = testApi.getTaskManager().createTask();
-        task.setName("foo");
-        TimelineLabelRendererImpl renderer = new TimelineLabelRendererImpl(testApi);
-        TimelineLabelRendererImpl.LabelTextSelector textSelector =
-            new TimelineLabelRendererImpl.LabelTextSelector(task, renderer.getLabelLayer().createText(0, 0, ""));
-        TestTextLengthCalculator lengthCalculator = new TestTextLengthCalculator(10);
-        Canvas.Label[] labels = textSelector.getLabels(lengthCalculator);
-        assertEquals(1, labels.length);
-        assertEquals("foo", labels[0].text);
+  private static final GanttCalendar MONDAY = TestSetupHelper.newMonday();
+  private static final GanttCalendar SUNDAY = TestSetupHelper.newSunday();
+  private static final GanttCalendar TUESDAY = TestSetupHelper.newTuesday();
+  private static final GanttCalendar WEDNESDAY = TestSetupHelper.newWednesday();
+
+  private TestChartModelApi testApi;
+
+  @Test
+  public void testLongLabelsAreDisplayedTruncated() {
+    Task task = testApi.getTaskManager().createTask();
+    task.setName("123456789012345678901");
+    TimelineLabelRendererImpl renderer = new TimelineLabelRendererImpl(testApi);
+    TimelineLabelRendererImpl.LabelTextSelector textSelector =
+      new TimelineLabelRendererImpl.LabelTextSelector(task, renderer.getLabelLayer().createText(0, 0, ""));
+    TestTextLengthCalculator lengthCalculator = new TestTextLengthCalculator(10);
+    Canvas.Label[] labels = textSelector.getLabels(lengthCalculator);
+    assertEquals(1, labels.length);
+    assertEquals("123456789012345678...", labels[0].text);
+  }
+
+  @Test
+  public void testMilestoneLabels() {
+    Task task = testApi.getTaskManager().createTask();
+    task.setName("foo");
+    task.setMilestone(true);
+    task.setStart(MONDAY);
+    task.setEnd(TUESDAY);
+    testHasTimelineLabel(task, true);
+  }
+
+  @Test
+  public void testNoLabelsForMereMortals() {
+    TestChartModelApi testApi = new TestChartModelApi();
+    Task task = testApi.getTaskManager().createTask();
+    task.setName("foo");
+    task.setMilestone(false);
+    task.setStart(MONDAY);
+    task.setEnd(TUESDAY);
+    testHasTimelineLabel(task, false);
+  }
+
+  @Test
+  public void testShortLabelsAreDisplayedFully() {
+    Task task = testApi.getTaskManager().createTask();
+    task.setName("foo");
+    TimelineLabelRendererImpl renderer = new TimelineLabelRendererImpl(testApi);
+    TimelineLabelRendererImpl.LabelTextSelector textSelector =
+      new TimelineLabelRendererImpl.LabelTextSelector(task, renderer.getLabelLayer().createText(0, 0, ""));
+    TestTextLengthCalculator lengthCalculator = new TestTextLengthCalculator(10);
+    Canvas.Label[] labels = textSelector.getLabels(lengthCalculator);
+    assertEquals(1, labels.length);
+    assertEquals("foo", labels[0].text);
+  }
+
+  @BeforeEach
+  protected void setUp() {
+    testApi = new TestChartModelApi();
+  }
+
+  @Test
+  private void testHasTimelineLabel(Task task, boolean condition) {
+    testApi.getTaskManager().getTaskHierarchy().move(task, testApi.getTaskManager().getRootTask());
+
+    testApi.myOffsets.add(
+      new Offset(GPTimeUnitStack.DAY, SUNDAY.getTime(), SUNDAY.getTime(), MONDAY.getTime(), 0, 50,
+                 DayMask.WEEKEND
+      ));
+    testApi.myOffsets.add(
+      new Offset(GPTimeUnitStack.DAY, SUNDAY.getTime(), MONDAY.getTime(), TUESDAY.getTime(), 50, 100,
+                 DayMask.WORKING
+      ));
+    testApi.myOffsets.add(new Offset(GPTimeUnitStack.DAY, SUNDAY.getTime(), TUESDAY.getTime(), WEDNESDAY.getTime(),
+                                     100, 150, DayMask.WORKING
+    ));
+
+    TimelineLabelRendererImpl renderer = new TimelineLabelRendererImpl(testApi);
+    renderer.render();
+    renderer.getLabelLayer().paint(new TestPainter(new TestTextLengthCalculator(10)));
+    if (condition) {
+      assertTrue(renderer.getLabelLayer().getPrimitive(60, 15) instanceof Text);
+    } else {
+      assertNull(renderer.getLabelLayer().getPrimitive(60, 15));
     }
-
-    @BeforeEach
-    protected void setUp() {
-        testApi = new TestChartModelApi();
-    }
-
-    @Test
-    private void testHasTimelineLabel(Task task, boolean condition) {
-        testApi.getTaskManager().getTaskHierarchy().move(task, testApi.getTaskManager().getRootTask());
-
-        testApi.myOffsets.add(
-            new Offset(GPTimeUnitStack.DAY, SUNDAY.getTime(), SUNDAY.getTime(), MONDAY.getTime(), 0, 50,
-                       DayMask.WEEKEND
-            ));
-        testApi.myOffsets.add(
-            new Offset(GPTimeUnitStack.DAY, SUNDAY.getTime(), MONDAY.getTime(), TUESDAY.getTime(), 50, 100,
-                       DayMask.WORKING
-            ));
-        testApi.myOffsets.add(new Offset(GPTimeUnitStack.DAY, SUNDAY.getTime(), TUESDAY.getTime(), WEDNESDAY.getTime(),
-                                         100, 150, DayMask.WORKING
-        ));
-
-        TimelineLabelRendererImpl renderer = new TimelineLabelRendererImpl(testApi);
-        renderer.render();
-        renderer.getLabelLayer().paint(new TestPainter(new TestTextLengthCalculator(10)));
-        if (condition) {
-            assertTrue(renderer.getLabelLayer().getPrimitive(60, 15) instanceof Text);
-        } else {
-            assertNull(renderer.getLabelLayer().getPrimitive(60, 15));
-        }
-    }
+  }
 }

@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Dmitry Barashev
  */
-public class ChangeTaskProgressRulerTest{
+public class ChangeTaskProgressRulerTest {
 
   private static Task createTask(TaskManager taskManager) {
     Task result = taskManager.createTask();
@@ -51,7 +51,8 @@ public class ChangeTaskProgressRulerTest{
     result.setName(String.valueOf(result.getTaskID()));
     return result;
   }
-    @Test
+
+  @Test
   public void testProgressConversionToUnits() {
     TimeDuration taskDuration = new TimeDurationImpl(GPTimeUnitStack.DAY, 2);
     assertEquals("0", new ChangeTaskProgressRuler.Progress(0, taskDuration).toUnits());
@@ -62,38 +63,11 @@ public class ChangeTaskProgressRulerTest{
     assertEquals("2", new ChangeTaskProgressRuler.Progress(100, taskDuration).toUnits());
   }
 
-    @Test
-  public void testSimpleRuler() {
-    TaskChartModelFacade mockChartModel = EasyMock.createMock(TaskChartModelFacade.class);
-    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder()
-        .withCalendar(new WeekendCalendarImpl()).build();
-    Task task = createTask(taskManager);
-    task.setStart(TestSetupHelper.newMonday());
-    task.setDuration(taskManager.createLength(2));
-
-    Canvas primitives = new Canvas();
-    Rectangle r = primitives.createRectangle(0, 0, 100, 10);
-
-    assertEquals(1, task.getActivities().size());
-    primitives.bind(r, task.getActivities().get(0));
-
-    EasyMock.expect(mockChartModel.getTaskRectangles(task)).andReturn(Collections.singletonList(r));
-    EasyMock.replay(mockChartModel);
-    ChangeTaskProgressRuler ruler = new ChangeTaskProgressRuler(task, mockChartModel);
-    assertEquals(0, ruler.getProgress(-1).toPercents());
-    assertEquals(0, ruler.getProgress(0).toPercents());
-    assertEquals(1, ruler.getProgress(1).toPercents());
-    assertEquals(50, ruler.getProgress(50).toPercents());
-    assertEquals(99, ruler.getProgress(99).toPercents());
-    assertEquals(100, ruler.getProgress(100).toPercents());
-    assertEquals(100, ruler.getProgress(101).toPercents());
-    EasyMock.verify(mockChartModel);
-  }
-    @Test
+  @Test
   public void testRulerOverWeekend() {
     TaskChartModelFacade mockChartModel = EasyMock.createMock(TaskChartModelFacade.class);
     TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder()
-        .withCalendar(new WeekendCalendarImpl()).build();
+                                             .withCalendar(new WeekendCalendarImpl()).build();
     Task task = createTask(taskManager);
     task.setStart(TestSetupHelper.newFriday());
     task.setDuration(taskManager.createLength(2));
@@ -128,6 +102,34 @@ public class ChangeTaskProgressRulerTest{
     assertEquals(100, ruler.getProgress(211).toPercents());
     assertEquals(100, ruler.getProgress(212).toPercents());
 
+    EasyMock.verify(mockChartModel);
+  }
+
+  @Test
+  public void testSimpleRuler() {
+    TaskChartModelFacade mockChartModel = EasyMock.createMock(TaskChartModelFacade.class);
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder()
+                                             .withCalendar(new WeekendCalendarImpl()).build();
+    Task task = createTask(taskManager);
+    task.setStart(TestSetupHelper.newMonday());
+    task.setDuration(taskManager.createLength(2));
+
+    Canvas primitives = new Canvas();
+    Rectangle r = primitives.createRectangle(0, 0, 100, 10);
+
+    assertEquals(1, task.getActivities().size());
+    primitives.bind(r, task.getActivities().get(0));
+
+    EasyMock.expect(mockChartModel.getTaskRectangles(task)).andReturn(Collections.singletonList(r));
+    EasyMock.replay(mockChartModel);
+    ChangeTaskProgressRuler ruler = new ChangeTaskProgressRuler(task, mockChartModel);
+    assertEquals(0, ruler.getProgress(-1).toPercents());
+    assertEquals(0, ruler.getProgress(0).toPercents());
+    assertEquals(1, ruler.getProgress(1).toPercents());
+    assertEquals(50, ruler.getProgress(50).toPercents());
+    assertEquals(99, ruler.getProgress(99).toPercents());
+    assertEquals(100, ruler.getProgress(100).toPercents());
+    assertEquals(100, ruler.getProgress(101).toPercents());
     EasyMock.verify(mockChartModel);
   }
 }

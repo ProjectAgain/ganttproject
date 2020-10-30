@@ -41,13 +41,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 
 class WeekendCalendarImplTest {
-  private static Function<CalendarEvent, String> GET_TITLE = new Function<CalendarEvent, String>() {
+  private static final Function<CalendarEvent, String> GET_TITLE = new Function<CalendarEvent, String>() {
     @Override
     public String apply(CalendarEvent e) {
       return e.getTitle();
     }
   };
-  private static List<CalendarEvent> TEST_EVENTS = ImmutableList.of(
+  private static final List<CalendarEvent> TEST_EVENTS = ImmutableList.of(
     CalendarEvent.newEvent(
       CalendarFactory.createGanttCalendar(2014, 0, 1).getTime(), true, CalendarEvent.Type.HOLIDAY, "Jan 1", null),
     CalendarEvent.newEvent(
@@ -73,7 +73,7 @@ class WeekendCalendarImplTest {
       "Apr 12, 2014", null
     )
   );
-  private static List<CalendarEvent> TEST_EVENTS_RECURRING_FIRST = ImmutableList.of(
+  private static final List<CalendarEvent> TEST_EVENTS_RECURRING_FIRST = ImmutableList.of(
     CalendarEvent.newEvent(
       CalendarFactory.createGanttCalendar(2014, 0, 1).getTime(), true, CalendarEvent.Type.HOLIDAY, "Jan 1", null),
     CalendarEvent.newEvent(

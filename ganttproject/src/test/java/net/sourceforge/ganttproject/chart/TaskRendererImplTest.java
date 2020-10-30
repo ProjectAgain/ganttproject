@@ -43,164 +43,164 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author dbarashev (Dmitry Barashev)
  */
 public class TaskRendererImplTest extends TaskTestCase {
-    @Test
-    public void testGetTaskRectangles() {
-        Task t = createTask(TestSetupHelper.newMonday());
-        {
-            t.setColor(Color.RED);
-            t.setDuration(getTaskManager().createLength(4));
-        }
-        ChartModelImpl chartModel;
-        {
-            // Setup chart with start date on Wednesday, size 200x200, weeks as big unit, days as small unit
-            UIConfiguration projectConfig = new UIConfiguration(Color.BLACK, false);
-            projectConfig.setChartFontOption(
-                new DefaultFontOption("foo", new FontSpec("Foo", FontSpec.Size.HUGE), Collections.<String>emptyList()));
-            projectConfig.setDpiOption(new DefaultIntegerOption("bar", 96));
-            chartModel = new ChartModelImpl(getTaskManager(), new GPTimeUnitStack(), projectConfig);
-            chartModel.setStartDate(TestSetupHelper.newWednesday().getTime());
-            chartModel.setVisibleTasks(Lists.newArrayList(t));
-            chartModel.setBounds(new Dimension(200, 200));
-            chartModel.setTopTimeUnit(GPTimeUnitStack.WEEK);
-            chartModel.setBottomTimeUnit(GPTimeUnitStack.DAY);
-            chartModel.setBottomUnitWidth(20);
-        }
-        TaskRendererImpl2 renderer = new TaskRendererImpl2(chartModel);
-        chartModel.addRenderer(renderer);
-        renderer.render();
-
-        // We expect that renderer will create two rectangles for our task, one "invisible" (before chart start date)
-        // and one visible
-        List<Canvas.Rectangle> rectangles = TaskRendererImpl2.getTaskRectangles(t, chartModel);
-        assertEquals(2, rectangles.size());
-        TaskActivity part1 = (TaskActivity) rectangles.get(0).getModelObject();
-        assertNotNull(part1);
-        assertEquals(TestSetupHelper.newMonday().getTime(), part1.getStart());
-        assertEquals(TestSetupHelper.newWednesday().getTime(), part1.getEnd());
-
-        TaskActivity part2 = (TaskActivity) rectangles.get(1).getModelObject();
-        assertNotNull(part2);
-        assertEquals(TestSetupHelper.newWednesday().getTime(), part2.getStart());
-        assertEquals(2, part2.getDuration().getLength());
+  @Test
+  public void testGetTaskRectangles() {
+    Task t = createTask(TestSetupHelper.newMonday());
+    {
+      t.setColor(Color.RED);
+      t.setDuration(getTaskManager().createLength(4));
     }
-
-    // Tests algorithm which partitions task activities into "before viewport", "inside viewport"
-    // and "after viewport" parts
-    @Test
-    public void testSplitOnBounds() {
-        Task task = createTask(TestSetupHelper.newFriday(), 5);
-        {
-            // Split on frame with frame start = task start
-            List<TaskActivity> activities = TaskRendererImpl2.splitOnBounds(
-                task.getActivities(), TestSetupHelper.newFriday().getTime(), TestSetupHelper.newMonday().getTime());
-            assertEquals(2, activities.size());
-            assertTrue(activities.get(0).isFirst());
-            assertEquals(TestSetupHelper.newFriday().getTime(), activities.get(0).getStart());
-            assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(0).getEnd());
-
-            assertTrue(activities.get(1).isLast());
-            assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(1).getStart());
-            assertEquals(TestSetupHelper.newWednesday().getTime(), activities.get(1).getEnd());
-        }
-        {
-            // Task crosses both frame borders
-            List<TaskActivity> activities = TaskRendererImpl2.splitOnBounds(
-                task.getActivities(), TestSetupHelper.newSaturday().getTime(), TestSetupHelper.newTuesday().getTime());
-            assertEquals(3, activities.size());
-            assertTrue(activities.get(0).isFirst());
-            assertEquals(TestSetupHelper.newFriday().getTime(), activities.get(0).getStart());
-            assertEquals(TestSetupHelper.newSaturday().getTime(), activities.get(0).getEnd());
-
-            assertFalse(activities.get(1).isFirst());
-            assertFalse(activities.get(1).isLast());
-            assertEquals(TestSetupHelper.newSaturday().getTime(), activities.get(1).getStart());
-            assertEquals(TestSetupHelper.newTuesday().getTime(), activities.get(1).getEnd());
-
-            assertTrue(activities.get(2).isLast());
-            assertEquals(TestSetupHelper.newTuesday().getTime(), activities.get(2).getStart());
-            assertEquals(TestSetupHelper.newWednesday().getTime(), activities.get(2).getEnd());
-        }
-        {
-            // Split on frame with frame end = task end
-            List<TaskActivity> activities = TaskRendererImpl2.splitOnBounds(
-                task.getActivities(), TestSetupHelper.newMonday().getTime(), TestSetupHelper.newWednesday().getTime());
-            assertEquals(2, activities.size());
-            assertTrue(activities.get(0).isFirst());
-            assertEquals(TestSetupHelper.newFriday().getTime(), activities.get(0).getStart());
-            assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(0).getEnd());
-
-            assertTrue(activities.get(1).isLast());
-            assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(1).getStart());
-            assertEquals(TestSetupHelper.newWednesday().getTime(), activities.get(1).getEnd());
-        }
+    ChartModelImpl chartModel;
+    {
+      // Setup chart with start date on Wednesday, size 200x200, weeks as big unit, days as small unit
+      UIConfiguration projectConfig = new UIConfiguration(Color.BLACK, false);
+      projectConfig.setChartFontOption(
+        new DefaultFontOption("foo", new FontSpec("Foo", FontSpec.Size.HUGE), Collections.emptyList()));
+      projectConfig.setDpiOption(new DefaultIntegerOption("bar", 96));
+      chartModel = new ChartModelImpl(getTaskManager(), new GPTimeUnitStack(), projectConfig);
+      chartModel.setStartDate(TestSetupHelper.newWednesday().getTime());
+      chartModel.setVisibleTasks(Lists.newArrayList(t));
+      chartModel.setBounds(new Dimension(200, 200));
+      chartModel.setTopTimeUnit(GPTimeUnitStack.WEEK);
+      chartModel.setBottomTimeUnit(GPTimeUnitStack.DAY);
+      chartModel.setBottomUnitWidth(20);
     }
+    TaskRendererImpl2 renderer = new TaskRendererImpl2(chartModel);
+    chartModel.addRenderer(renderer);
+    renderer.render();
 
-    @Test
-    public void testVerticalPartitioningNoCollapsed() {
-        TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
-        List<Task> allTasks = createTasks(taskManager, 10);
-        {
-            VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(0, 10));
-            partitioning.build(taskManager.getTaskHierarchy());
-            assertTrue(partitioning.aboveViewport.isEmpty());
-            assertTrue(partitioning.belowViewport.isEmpty());
-        }
-        {
-            VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(0, 5));
-            partitioning.build(taskManager.getTaskHierarchy());
-            assertTrue(partitioning.aboveViewport.isEmpty());
-            assertEquals(5, partitioning.belowViewport.size());
-        }
-        {
-            VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(5, 10));
-            partitioning.build(taskManager.getTaskHierarchy());
-            assertEquals(5, partitioning.aboveViewport.size());
-            assertTrue(partitioning.belowViewport.isEmpty());
-        }
-        {
-            VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(3, 7));
-            partitioning.build(taskManager.getTaskHierarchy());
-            assertEquals(3, partitioning.aboveViewport.size());
-            assertEquals(3, partitioning.belowViewport.size());
-        }
-    }
+    // We expect that renderer will create two rectangles for our task, one "invisible" (before chart start date)
+    // and one visible
+    List<Canvas.Rectangle> rectangles = TaskRendererImpl2.getTaskRectangles(t, chartModel);
+    assertEquals(2, rectangles.size());
+    TaskActivity part1 = (TaskActivity) rectangles.get(0).getModelObject();
+    assertNotNull(part1);
+    assertEquals(TestSetupHelper.newMonday().getTime(), part1.getStart());
+    assertEquals(TestSetupHelper.newWednesday().getTime(), part1.getEnd());
 
-    @Test
-    public void testVerticalPartitioningWithCollapsedTasks() {
-        TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
-        List<Task> allTasks = createTasks(taskManager, 10);
-        allTasks.get(2).move(allTasks.get(1));
-        allTasks.get(1).move(allTasks.get(0));
-        allTasks.get(0).setExpand(false);
-        {
-            VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(4, 10));
-            partitioning.build(taskManager.getTaskHierarchy());
-            assertEquals(2, partitioning.aboveViewport.size());
-            assertEquals(0, partitioning.aboveViewport.get(0).getTaskID());
-            assertEquals(3, partitioning.aboveViewport.get(1).getTaskID());
-            assertTrue(partitioning.belowViewport.isEmpty());
-        }
-        allTasks.get(7).move(allTasks.get(6));
-        allTasks.get(9).move(allTasks.get(8));
-        allTasks.get(6).setExpand(false);
-        allTasks.get(8).setExpand(false);
-        {
-            VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(4, 6));
-            partitioning.build(taskManager.getTaskHierarchy());
-            assertEquals(2, partitioning.aboveViewport.size());
-            assertEquals(0, partitioning.aboveViewport.get(0).getTaskID());
-            assertEquals(3, partitioning.aboveViewport.get(1).getTaskID());
-            assertEquals(2, partitioning.belowViewport.size());
-            assertEquals(6, partitioning.belowViewport.get(0).getTaskID());
-            assertEquals(8, partitioning.belowViewport.get(1).getTaskID());
-        }
-    }
+    TaskActivity part2 = (TaskActivity) rectangles.get(1).getModelObject();
+    assertNotNull(part2);
+    assertEquals(TestSetupHelper.newWednesday().getTime(), part2.getStart());
+    assertEquals(2, part2.getDuration().getLength());
+  }
 
-    private List<Task> createTasks(TaskManager taskManager, int count) {
-        List<Task> result = Lists.newArrayList();
-        for (int i = 0; i < count; i++) {
-            result.add(taskManager.newTaskBuilder().withId(i).build());
-        }
-        return result;
+  // Tests algorithm which partitions task activities into "before viewport", "inside viewport"
+  // and "after viewport" parts
+  @Test
+  public void testSplitOnBounds() {
+    Task task = createTask(TestSetupHelper.newFriday(), 5);
+    {
+      // Split on frame with frame start = task start
+      List<TaskActivity> activities = TaskRendererImpl2.splitOnBounds(
+        task.getActivities(), TestSetupHelper.newFriday().getTime(), TestSetupHelper.newMonday().getTime());
+      assertEquals(2, activities.size());
+      assertTrue(activities.get(0).isFirst());
+      assertEquals(TestSetupHelper.newFriday().getTime(), activities.get(0).getStart());
+      assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(0).getEnd());
+
+      assertTrue(activities.get(1).isLast());
+      assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(1).getStart());
+      assertEquals(TestSetupHelper.newWednesday().getTime(), activities.get(1).getEnd());
     }
+    {
+      // Task crosses both frame borders
+      List<TaskActivity> activities = TaskRendererImpl2.splitOnBounds(
+        task.getActivities(), TestSetupHelper.newSaturday().getTime(), TestSetupHelper.newTuesday().getTime());
+      assertEquals(3, activities.size());
+      assertTrue(activities.get(0).isFirst());
+      assertEquals(TestSetupHelper.newFriday().getTime(), activities.get(0).getStart());
+      assertEquals(TestSetupHelper.newSaturday().getTime(), activities.get(0).getEnd());
+
+      assertFalse(activities.get(1).isFirst());
+      assertFalse(activities.get(1).isLast());
+      assertEquals(TestSetupHelper.newSaturday().getTime(), activities.get(1).getStart());
+      assertEquals(TestSetupHelper.newTuesday().getTime(), activities.get(1).getEnd());
+
+      assertTrue(activities.get(2).isLast());
+      assertEquals(TestSetupHelper.newTuesday().getTime(), activities.get(2).getStart());
+      assertEquals(TestSetupHelper.newWednesday().getTime(), activities.get(2).getEnd());
+    }
+    {
+      // Split on frame with frame end = task end
+      List<TaskActivity> activities = TaskRendererImpl2.splitOnBounds(
+        task.getActivities(), TestSetupHelper.newMonday().getTime(), TestSetupHelper.newWednesday().getTime());
+      assertEquals(2, activities.size());
+      assertTrue(activities.get(0).isFirst());
+      assertEquals(TestSetupHelper.newFriday().getTime(), activities.get(0).getStart());
+      assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(0).getEnd());
+
+      assertTrue(activities.get(1).isLast());
+      assertEquals(TestSetupHelper.newMonday().getTime(), activities.get(1).getStart());
+      assertEquals(TestSetupHelper.newWednesday().getTime(), activities.get(1).getEnd());
+    }
+  }
+
+  @Test
+  public void testVerticalPartitioningNoCollapsed() {
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
+    List<Task> allTasks = createTasks(taskManager, 10);
+    {
+      VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(0, 10));
+      partitioning.build(taskManager.getTaskHierarchy());
+      assertTrue(partitioning.aboveViewport.isEmpty());
+      assertTrue(partitioning.belowViewport.isEmpty());
+    }
+    {
+      VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(0, 5));
+      partitioning.build(taskManager.getTaskHierarchy());
+      assertTrue(partitioning.aboveViewport.isEmpty());
+      assertEquals(5, partitioning.belowViewport.size());
+    }
+    {
+      VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(5, 10));
+      partitioning.build(taskManager.getTaskHierarchy());
+      assertEquals(5, partitioning.aboveViewport.size());
+      assertTrue(partitioning.belowViewport.isEmpty());
+    }
+    {
+      VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(3, 7));
+      partitioning.build(taskManager.getTaskHierarchy());
+      assertEquals(3, partitioning.aboveViewport.size());
+      assertEquals(3, partitioning.belowViewport.size());
+    }
+  }
+
+  @Test
+  public void testVerticalPartitioningWithCollapsedTasks() {
+    TaskManager taskManager = TestSetupHelper.newTaskManagerBuilder().build();
+    List<Task> allTasks = createTasks(taskManager, 10);
+    allTasks.get(2).move(allTasks.get(1));
+    allTasks.get(1).move(allTasks.get(0));
+    allTasks.get(0).setExpand(false);
+    {
+      VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(4, 10));
+      partitioning.build(taskManager.getTaskHierarchy());
+      assertEquals(2, partitioning.aboveViewport.size());
+      assertEquals(0, partitioning.aboveViewport.get(0).getTaskID());
+      assertEquals(3, partitioning.aboveViewport.get(1).getTaskID());
+      assertTrue(partitioning.belowViewport.isEmpty());
+    }
+    allTasks.get(7).move(allTasks.get(6));
+    allTasks.get(9).move(allTasks.get(8));
+    allTasks.get(6).setExpand(false);
+    allTasks.get(8).setExpand(false);
+    {
+      VerticalPartitioning partitioning = new TaskRendererImpl2.VerticalPartitioning(allTasks.subList(4, 6));
+      partitioning.build(taskManager.getTaskHierarchy());
+      assertEquals(2, partitioning.aboveViewport.size());
+      assertEquals(0, partitioning.aboveViewport.get(0).getTaskID());
+      assertEquals(3, partitioning.aboveViewport.get(1).getTaskID());
+      assertEquals(2, partitioning.belowViewport.size());
+      assertEquals(6, partitioning.belowViewport.get(0).getTaskID());
+      assertEquals(8, partitioning.belowViewport.get(1).getTaskID());
+    }
+  }
+
+  private List<Task> createTasks(TaskManager taskManager, int count) {
+    List<Task> result = Lists.newArrayList();
+    for (int i = 0; i < count; i++) {
+      result.add(taskManager.newTaskBuilder().withId(i).build());
+    }
+    return result;
+  }
 }
