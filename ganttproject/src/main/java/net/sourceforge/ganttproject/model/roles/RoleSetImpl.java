@@ -32,7 +32,7 @@ public class RoleSetImpl implements RoleSet {
 
   private final RoleManagerImpl myRoleManager;
 
-  RoleSetImpl(String name, RoleManagerImpl roleManager) {
+  public RoleSetImpl(String name, RoleManagerImpl roleManager) {
     myName = name;
     myRoleManager = roleManager;
   }

@@ -18,16 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task;
 
-import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.model.calendar.GPCalendarListener;
-import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.EnumerationOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.StringOption;
-import net.sourceforge.ganttproject.model.time.TimeDuration;
-import net.sourceforge.ganttproject.model.time.TimeUnit;
 import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.model.GanttTask;
 import net.sourceforge.ganttproject.model.ProjectEventListener;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarListener;
 import net.sourceforge.ganttproject.model.resource.HumanResource;
 import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
 import net.sourceforge.ganttproject.model.task.Task.Priority;
@@ -36,6 +31,11 @@ import net.sourceforge.ganttproject.model.task.algorithm.DependencyGraph;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyCollection;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.model.task.event.TaskListener;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeUnit;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.EnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.StringOption;
 
 import java.awt.*;
 import java.math.BigDecimal;
@@ -46,198 +46,203 @@ import java.util.Map;
  * @author bard
  */
 public interface TaskManager {
-  abstract class TaskBuilder {
-    String myName;
-    Integer myId;
-    Date myStartDate;
-    TimeDuration myDuration;
-    Color myColor;
-    Task myPrevSibling;
-    Boolean isExpanded;
-    Task myParent;
-    boolean isLegacyMilestone;
-    Date myEndDate;
-    String myNotes;
-    String myWebLink;
-    Integer myCompletion;
-    Priority myPriority;
-    Task myPrototype;
-    BigDecimal myCost;
+    abstract class TaskBuilder {
+        Boolean isExpanded;
+        boolean isLegacyMilestone;
+        Color myColor;
+        Integer myCompletion;
+        BigDecimal myCost;
+        TimeDuration myDuration;
+        Date myEndDate;
+        Integer myId;
+        String myName;
+        String myNotes;
+        Task myParent;
+        Task myPrevSibling;
+        Priority myPriority;
+        Task myPrototype;
+        Date myStartDate;
+        String myWebLink;
 
-    public TaskBuilder withColor(Color color) {
-      myColor = color;
-      return this;
+        public abstract Task build();
+
+        public TaskBuilder withColor(Color color) {
+            myColor = color;
+            return this;
+        }
+
+        public TaskBuilder withCompletion(int pctgCompletion) {
+            myCompletion = pctgCompletion;
+            return this;
+        }
+
+        public TaskBuilder withCost(BigDecimal value) {
+            myCost = value;
+            return this;
+        }
+
+        public TaskBuilder withDuration(TimeDuration duration) {
+            myDuration = duration;
+            return this;
+        }
+
+        public TaskBuilder withEndDate(Date date) {
+            myEndDate = date;
+            return this;
+        }
+
+        public TaskBuilder withExpansionState(boolean isExpanded) {
+            this.isExpanded = isExpanded;
+            return this;
+        }
+
+        public TaskBuilder withId(int id) {
+            myId = id;
+            return this;
+        }
+
+        public TaskBuilder withLegacyMilestone() {
+            isLegacyMilestone = true;
+            return this;
+        }
+
+        public TaskBuilder withName(String name) {
+            myName = name;
+            return this;
+        }
+
+        public TaskBuilder withNotes(String notes) {
+            myNotes = notes;
+            return this;
+        }
+
+        public TaskBuilder withParent(Task parent) {
+            myParent = parent;
+            return this;
+        }
+
+        public TaskBuilder withPrevSibling(Task sibling) {
+            myPrevSibling = sibling;
+            return this;
+        }
+
+        public TaskBuilder withPriority(Priority priority) {
+            myPriority = priority;
+            return this;
+        }
+
+        public TaskBuilder withPrototype(Task prototype) {
+            myPrototype = prototype;
+            return this;
+        }
+
+        public TaskBuilder withStartDate(Date startDate) {
+            myStartDate = startDate;
+            return this;
+        }
+
+        public TaskBuilder withWebLink(String value) {
+            myWebLink = value;
+            return this;
+        }
     }
 
-    public TaskBuilder withCompletion(int pctgCompletion) {
-      myCompletion = pctgCompletion;
-      return this;
+    class Access {
+        public static TaskManager newInstance(
+            TaskContainmentHierarchyFacade.Factory containmentFacadeFactory,
+            TaskManagerConfig config
+        ) {
+            return new TaskManagerImpl(containmentFacadeFactory, config);
+        }
     }
 
-    public TaskBuilder withDuration(TimeDuration duration) {
-      myDuration = duration;
-      return this;
-    }
+    void addTaskListener(TaskListener listener);
 
-    public TaskBuilder withEndDate(Date date) {
-      myEndDate = date;
-      return this;
-    }
+    TaskDependencyConstraint createConstraint(TaskDependencyConstraint.Type constraintType);
 
-    public TaskBuilder withExpansionState(boolean isExpanded) {
-      this.isExpanded = isExpanded;
-      return this;
-    }
+    TimeDuration createLength(String lengthAsString);
 
-    public TaskBuilder withId(int id) {
-      myId = id;
-      return this;
-    }
+    TimeDuration createLength(long length);
 
-    public TaskBuilder withLegacyMilestone() {
-      isLegacyMilestone = true;
-      return this;
-    }
+    TimeDuration createLength(TimeUnit unit, float length);
 
-    public TaskBuilder withName(String name) {
-      myName = name;
-      return this;
-    }
+    TimeDuration createLength(TimeUnit timeUnit, Date startDate, Date endDate);
 
-    public TaskBuilder withNotes(String notes) {
-      myNotes = notes;
-      return this;
-    }
+    GanttTask createTask();
 
-    public TaskBuilder withParent(Task parent) {
-      myParent = parent;
-      return this;
-    }
-    public TaskBuilder withPrevSibling(Task sibling) {
-      myPrevSibling = sibling;
-      return this;
-    }
+    @Deprecated
+    GanttTask createTask(int taskId);
 
-    public TaskBuilder withPriority(Priority priority) {
-      myPriority = priority;
-      return this;
-    }
+    void deleteTask(Task tasktoRemove);
 
-    public TaskBuilder withPrototype(Task prototype) {
-      myPrototype = prototype;
-      return this;
-    }
+    TaskManager emptyClone();
 
-    public TaskBuilder withStartDate(Date startDate) {
-      myStartDate = startDate;
-      return this;
-    }
+    String encode(TimeDuration duration);
 
-    public TaskBuilder withWebLink(String value) {
-      myWebLink = value;
-      return this;
-    }
+    AlgorithmCollection getAlgorithmCollection();
 
-    public TaskBuilder withCost(BigDecimal value) {
-      myCost = value;
-      return this;
-    }
+    GPCalendarCalc getCalendar();
 
-    public abstract Task build();
-  }
+    GPCalendarListener getCalendarListener();
 
-  public TaskBuilder newTaskBuilder();
+    CustomPropertyManager getCustomPropertyManager();
 
-  Task[] getTasks();
+    TaskDependencyCollection getDependencyCollection();
 
-  public Task getRootTask();
+    DependencyGraph getDependencyGraph();
 
-  public GanttTask getTask(int taskId);
+    EnumerationOption getDependencyHardnessOption();
 
-  public void registerTask(Task task);
+    int getProjectCompletion();
 
-  public GanttTask createTask();
+    Date getProjectEnd();
 
-  @Deprecated
-  public GanttTask createTask(int taskId);
+    TimeDuration getProjectLength();
 
+    ProjectEventListener getProjectListener();
 
-  String encode(TimeDuration duration);
+    Date getProjectStart();
 
-  TimeDuration createLength(String lengthAsString);
+    Task getRootTask();
 
-  public TimeDuration createLength(long length);
+    GanttTask getTask(int taskId);
 
-  TimeDuration createLength(TimeUnit unit, float length);
+    StringOption getTaskCopyNamePrefixOption();
 
-  public TimeDuration createLength(TimeUnit timeUnit, Date startDate, Date endDate);
+    int getTaskCount();
 
-  Date shift(Date original, TimeDuration duration);
+    ColorOption getTaskDefaultColorOption();
 
-  TaskDependencyCollection getDependencyCollection();
+    TaskContainmentHierarchyFacade getTaskHierarchy();
 
-  AlgorithmCollection getAlgorithmCollection();
+    StringOption getTaskNamePrefixOption();
 
-  TaskDependencyConstraint createConstraint(TaskDependencyConstraint.Type constraintType);
+    Task[] getTasks();
 
-  GPCalendarCalc getCalendar();
+    void importAssignments(
+        TaskManager importedTaskManager, HumanResourceManager hrManager,
+        Map<Task, Task> original2importedTask, Map<HumanResource, HumanResource> original2importedResource
+    );
 
-  TaskContainmentHierarchyFacade getTaskHierarchy();
+    Map<Task, Task> importData(
+        TaskManager taskManager,
+        Map<CustomPropertyDefinition, CustomPropertyDefinition> customPropertyMapping
+    );
 
-  void addTaskListener(TaskListener listener);
+    Boolean isZeroMilestones();
 
-  public class Access {
-    public static TaskManager newInstance(TaskContainmentHierarchyFacade.Factory containmentFacadeFactory,
-        TaskManagerConfig config) {
-      return new TaskManagerImpl(containmentFacadeFactory, config);
-    }
-  }
+    TaskBuilder newTaskBuilder();
 
-  public TimeDuration getProjectLength();
+    /**
+     * Processes the critical path finding on <code>root</code> tasks.
+     *
+     * @param root The root of the tasks to consider in the critical path finding.
+     */
+    void processCriticalPath(Task root);
 
-  public int getTaskCount();
+    void registerTask(Task task);
 
-  public Date getProjectStart();
+    void setZeroMilestones(Boolean b);
 
-  public Date getProjectEnd();
-
-  int getProjectCompletion();
-
-  public TaskManager emptyClone();
-
-  public Map<Task, Task> importData(TaskManager taskManager,
-      Map<CustomPropertyDefinition, CustomPropertyDefinition> customPropertyMapping);
-
-  public void importAssignments(TaskManager importedTaskManager, HumanResourceManager hrManager,
-      Map<Task, Task> original2importedTask, Map<HumanResource, HumanResource> original2importedResource);
-
-  /**
-   * Processes the critical path finding on <code>root</code> tasks.
-   *
-   * @param root
-   *          The root of the tasks to consider in the critical path finding.
-   */
-  public void processCriticalPath(Task root);
-
-  public void deleteTask(Task tasktoRemove);
-
-  CustomPropertyManager getCustomPropertyManager();
-
-  StringOption getTaskNamePrefixOption();
-
-  StringOption getTaskCopyNamePrefixOption();
-
-  ColorOption getTaskDefaultColorOption();
-
-  EnumerationOption getDependencyHardnessOption();
-
-  void setZeroMilestones(Boolean b);
-
-  Boolean isZeroMilestones();
-
-  DependencyGraph getDependencyGraph();
-
-  ProjectEventListener getProjectListener();
-
-  GPCalendarListener getCalendarListener();
+    Date shift(Date original, TimeDuration duration);
 }

@@ -32,7 +32,7 @@ import com.google.common.base.Function;
  *
  * @author dbarashev
  */
-class OutdentTargetFunctionFactory implements Function<Collection<Task>, Function<Task, Task>> {
+public class OutdentTargetFunctionFactory implements Function<Collection<Task>, Function<Task, Task>> {
   private final TaskManager myTaskManager;
   private final Function<Task, Task> myGetMoveTargetFxn = new Function<Task, Task>() {
     @Override
@@ -45,7 +45,7 @@ class OutdentTargetFunctionFactory implements Function<Collection<Task>, Functio
     }
   };
 
-  OutdentTargetFunctionFactory(TaskManager taskManager) {
+  public OutdentTargetFunctionFactory(TaskManager taskManager) {
     myTaskManager = taskManager;
   }
 

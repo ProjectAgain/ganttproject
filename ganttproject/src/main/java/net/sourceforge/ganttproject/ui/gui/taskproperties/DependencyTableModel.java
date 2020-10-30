@@ -225,12 +225,12 @@ public class DependencyTableModel extends AbstractTableModel {
     }
   }
 
-  static class TaskComboItem {
+  public static class TaskComboItem {
     final String myText;
 
     final Task myTask;
 
-    TaskComboItem(Task task) {
+    public TaskComboItem(Task task) {
       myTask = task;
       myText = "[#" + task.getTaskID() + "] " + task.getName();
     }

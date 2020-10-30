@@ -44,10 +44,10 @@ import java.util.SortedSet;
 /**
  * @author dbarashev@bardsoftware.com
  */
-class CustomPropertyMapping {
-  static final String MSPROJECT_TYPE = "MSPROJECT_TYPE";
+public class CustomPropertyMapping {
+  public static final String MSPROJECT_TYPE = "MSPROJECT_TYPE";
 
-  static Map<CustomPropertyDefinition, FieldType> buildMapping(TaskManager taskManager) throws MPXJException {
+  public static Map<CustomPropertyDefinition, FieldType> buildMapping(TaskManager taskManager) throws MPXJException {
     final SortedSet<TaskField> taskFields = Sets.newTreeSet(new Comparator<TaskField>() {
       @Override
       public int compare(TaskField o1, TaskField o2) {

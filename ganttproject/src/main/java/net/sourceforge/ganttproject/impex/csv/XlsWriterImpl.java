@@ -43,7 +43,7 @@ public class XlsWriterImpl implements SpreadsheetWriter {
   private int myNextCellInd = 0;
 
 
-  XlsWriterImpl(OutputStream stream) {
+  public XlsWriterImpl(OutputStream stream) {
     myStream = Preconditions.checkNotNull(stream);
     myWorkbook = new HSSFWorkbook();
     mySheet = myWorkbook.createSheet();

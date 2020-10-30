@@ -50,13 +50,13 @@ public abstract class RecordGroup {
   private final String myName;
   private List<Pair<Level, String>> myErrorOutput;
 
-  RecordGroup(String name, Set<String> fields) {
+  public RecordGroup(String name, Set<String> fields) {
     myName = name;
     myFields = fields;
     myMandatoryFields = fields;
   }
 
-  RecordGroup(String name, Set<String> regularFields, Set<String> mandatoryFields) {
+  public RecordGroup(String name, Set<String> regularFields, Set<String> mandatoryFields) {
     myName = name;
     myFields = regularFields;
     myMandatoryFields = mandatoryFields;

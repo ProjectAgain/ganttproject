@@ -37,8 +37,8 @@ dependencies {
 
     implementation ':swingx:1.6.4'
     implementation ':eclipsito:0.0'
-    implementation ':milton-api:2.7.4.4'
-    implementation ':milton-client:2.7.4.4-bs'
+    implementation 'io.milton:milton-api:2.7.5.1'
+    implementation 'io.milton:milton-client:2.7.5.1'
     implementation ':ganttproject-jxbusycomponent:1.2.2'
     implementation 'commons-codec:commons-codec:1.10'
     implementation 'org.apache.poi:poi:3.17'
@@ -125,14 +125,17 @@ test {
     testLogging {
         exceptionFormat = 'full'
     }
-}
-
-addPublishing(project)
-publishing {
-    publications {
-        core(MavenPublication) {
-            artifactId = 'ganttproject'
-            artifact jar
-        }
+    beforeTest { descriptor ->
+        logger.lifecycle "Running test: ${descriptor}"
     }
 }
+
+//addPublishing(project)
+//publishing {
+//    publications {
+//        core(MavenPublication) {
+//            artifactId = 'ganttproject'
+//            artifact jar
+//        }
+//    }
+//}

@@ -39,12 +39,12 @@ import com.google.common.collect.Lists;
  *
  * @author dbarashev
  */
-class TaskMoveEnabledPredicate implements Predicate<List<Task>> {
+public class TaskMoveEnabledPredicate implements Predicate<List<Task>> {
   private final RetainRootsAlgorithm<Task> myRetainRootsAlgorithm = new RetainRootsAlgorithm<Task>();
   private final TaskManager myTaskManager;
   private final Function<Collection<Task>, Function<Task, Task>> myGetMoveTargetFxnFactory;
 
-  TaskMoveEnabledPredicate(TaskManager taskManager, Function<Collection<Task>, Function<Task, Task>> getMoveTargetFxnFactory) {
+  public TaskMoveEnabledPredicate(TaskManager taskManager, Function<Collection<Task>, Function<Task, Task>> getMoveTargetFxnFactory) {
     myTaskManager = taskManager;
     myGetMoveTargetFxnFactory = getMoveTargetFxnFactory;
   }

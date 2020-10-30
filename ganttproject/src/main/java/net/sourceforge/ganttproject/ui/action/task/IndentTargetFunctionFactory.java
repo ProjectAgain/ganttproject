@@ -32,9 +32,9 @@ import com.google.common.base.Function;
  *
  * @author dbarashev
  */
-class IndentTargetFunctionFactory implements Function<Collection<Task>, Function<Task, Task>> {
+public class IndentTargetFunctionFactory implements Function<Collection<Task>, Function<Task, Task>> {
   private final TaskManager myTaskManager;
-  IndentTargetFunctionFactory(TaskManager taskManager) {
+  public IndentTargetFunctionFactory(TaskManager taskManager) {
     myTaskManager = taskManager;
   }
 

@@ -216,7 +216,7 @@ public class GanttCSVOpen {
     return errors;
   }
 
-  int getSkippedLineCount() {
+  public int getSkippedLineCount() {
     return mySkippedLine;
   }
 

@@ -52,7 +52,13 @@ allprojects {
             force "org.slf4j:slf4j-api:1.7.25"
             force "commons-codec:commons-codec:1.15"
             force "commons-lang:commons-lang:2.6"
+            force "org.apache.commons:commons-lang3:3.11"
+            force "org.apache.commons:commons-collections4:4.4"
+            force "org.apache.httpcomponents:httpclient:4.5.13"
+            force "commons-io:commons-io:2.8.0"
             force "org.apache.poi:poi:4.1.2"
+            force "org.jdom:jdom:2.0.2"
+            force "org.mnode.ical4j:ical4j:1.+"
             force "org.openjfx:javafx-base:${versions.javafx}"
             force "org.openjfx:javafx-graphics:${versions.javafx}"
             force "org.openjfx:javafx-controls:${versions.javafx}"
@@ -78,6 +84,9 @@ allprojects {
         jcenter()
         maven {
             url "http://sandec.bintray.com/repo"
+        }
+        maven {
+            url "https://dl.bintray.com/milton/Milton/"
         }
         flatDir {
             dirs "$rootProject.projectDir/libs"

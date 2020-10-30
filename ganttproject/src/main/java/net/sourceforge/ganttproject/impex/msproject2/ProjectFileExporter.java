@@ -73,7 +73,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author dbarashev (Dmitry Barashev)
  */
-class ProjectFileExporter {
+public class ProjectFileExporter {
   private final Logger log = getLogger(getClass());
 
   private IGanttProject myNativeProject;
@@ -139,7 +139,7 @@ class ProjectFileExporter {
     exportHolidays(getCalendar(), calendar);
   }
 
-  static void exportHolidays(GPCalendar gpCalendar, ProjectCalendar calendar) {
+  public static void exportHolidays(GPCalendar gpCalendar, ProjectCalendar calendar) {
     for (CalendarEvent h : gpCalendar.getPublicHolidays()) {
       if (!h.isRecurring && h.getType() == CalendarEvent.Type.HOLIDAY) {
         Date d = h.myDate;
