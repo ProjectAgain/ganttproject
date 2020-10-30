@@ -27,11 +27,8 @@ package net.sourceforge.ganttproject.model.task;
  */
 public class CustomColumnsException extends Exception {
   public static final int ALREADY_EXIST = 0;
-
-  public static final int DO_NOT_EXIST = 1;
-
   public static final int CLASS_MISMATCH = 2;
-
+  public static final int DO_NOT_EXIST = 1;
   /**
    * Exception type.
    */

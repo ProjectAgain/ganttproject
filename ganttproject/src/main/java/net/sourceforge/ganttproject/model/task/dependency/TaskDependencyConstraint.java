@@ -18,75 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.dependency;
 
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
+
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA. User: bard Date: 14.02.2004 Time: 2:35:20 To change
  * this template use File | Settings | File Templates.
  */
 public interface TaskDependencyConstraint extends Cloneable {
-  enum Type {
-    startstart, finishstart, finishfinish, startfinish;
-    private static final String[] PERSISTENT_VALUES = new String[] {
-      "SS", "FS", "FF", "SF"
-    };
-
-    public String getPersistentValue() {
-      return String.valueOf(ordinal() + 1);
-    }
-
-    public String getReadablePersistentValue() {
-      return PERSISTENT_VALUES[ordinal()];
-    }
-    public static Type fromPersistentValue(String dependencyTypeAsString) {
-      return Type.values()[Integer.parseInt(dependencyTypeAsString) - 1];
-    }
-    public static Type fromReadablePersistentValue(String str) {
-      for (int i = 0; i < PERSISTENT_VALUES.length; i++) {
-        if (PERSISTENT_VALUES[i].equals(str)) {
-          return Type.values()[i];
-        }
-      }
-      throw new IllegalArgumentException("Can't find constraint by persistent value=" + str);
-    }
-  }
-
-  Type getType();
-
-  void setTaskDependency(TaskDependency dependency);
-
-  // boolean isFulfilled();
-  // void fulfil();
-  Collision getCollision();
-
-  Collision getBackwardCollision(Date depedantStart);
-
-  String getName();
-
-  TaskDependency.ActivityBinding getActivityBinding();
-
-  interface Collision {
-    GanttCalendar getAcceptableStart();
-
-    int getVariation();
-
-    int NO_VARIATION = 0;
-
-    int START_EARLIER_VARIATION = -1;
-
-    int START_LATER_VARIATION = 1;
-
-    boolean isActive();
-  }
-
   class DefaultCollision implements Collision {
-    private final GanttCalendar myAcceptableStart;
-
-    private final int myVariation;
-
     private final boolean isActive;
+    private final GanttCalendar myAcceptableStart;
+    private final int myVariation;
 
     public DefaultCollision(GanttCalendar myAcceptableStart, int myVariation, boolean isActive) {
       this.myAcceptableStart = myAcceptableStart;
@@ -108,8 +52,61 @@ public interface TaskDependencyConstraint extends Cloneable {
     public boolean isActive() {
       return isActive;
     }
+  }
 
+  enum Type {
+    startstart, finishstart, finishfinish, startfinish;
+    private static final String[] PERSISTENT_VALUES = new String[]{
+      "SS", "FS", "FF", "SF"
+    };
+
+    public static Type fromPersistentValue(String dependencyTypeAsString) {
+      return Type.values()[Integer.parseInt(dependencyTypeAsString) - 1];
+    }
+
+    public static Type fromReadablePersistentValue(String str) {
+      for (int i = 0; i < PERSISTENT_VALUES.length; i++) {
+        if (PERSISTENT_VALUES[i].equals(str)) {
+          return Type.values()[i];
+        }
+      }
+      throw new IllegalArgumentException("Can't find constraint by persistent value=" + str);
+    }
+
+    public String getPersistentValue() {
+      return String.valueOf(ordinal() + 1);
+    }
+
+    public String getReadablePersistentValue() {
+      return PERSISTENT_VALUES[ordinal()];
+    }
+  }
+
+  interface Collision {
+    int NO_VARIATION = 0;
+    int START_EARLIER_VARIATION = -1;
+    int START_LATER_VARIATION = 1;
+
+    GanttCalendar getAcceptableStart();
+
+    int getVariation();
+
+    boolean isActive();
   }
 
   Object clone() throws CloneNotSupportedException;
+
+  TaskDependency.ActivityBinding getActivityBinding();
+
+  Collision getBackwardCollision(Date depedantStart);
+
+  // boolean isFulfilled();
+  // void fulfil();
+  Collision getCollision();
+
+  String getName();
+
+  Type getType();
+
+  void setTaskDependency(TaskDependency dependency);
 }

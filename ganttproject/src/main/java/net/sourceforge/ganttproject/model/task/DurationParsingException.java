@@ -33,5 +33,4 @@ public class DurationParsingException extends RuntimeException {
   public DurationParsingException(String message, Throwable cause) {
     super(message, cause);
   }
-
 }

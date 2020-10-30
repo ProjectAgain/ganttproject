@@ -18,35 +18,30 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
-import net.sourceforge.ganttproject.ui.chart.scene.gantt.ChartBoundsAlgorithm;
 import net.sourceforge.ganttproject.model.task.TaskManagerImpl;
+import net.sourceforge.ganttproject.ui.chart.scene.gantt.ChartBoundsAlgorithm;
 
 /**
  * Created by IntelliJ IDEA. User: bard
  */
 public class AlgorithmCollection {
-  private final FindPossibleDependeesAlgorithm myFindPossibleDependeesAlgorithm;
-
-  private final RecalculateTaskScheduleAlgorithm myRecalculateTaskScheduleAlgorithm;
-
   private final AdjustTaskBoundsAlgorithm myAdjustTaskBoundsAlgorithm;
-
   private final RecalculateTaskCompletionPercentageAlgorithm myCompletionPercentageAlgorithm;
-
+  private final CriticalPathAlgorithm myCriticalPathAlgorithm;
+  private final FindPossibleDependeesAlgorithm myFindPossibleDependeesAlgorithm;
   private final ChartBoundsAlgorithm myProjectBoundsAlgorithm;
-
+  private final RecalculateTaskScheduleAlgorithm myRecalculateTaskScheduleAlgorithm;
+  private final SchedulerImpl myScheduler;
   private final ShiftTaskTreeAlgorithm myShiftTaskTreeAlgorithm;
 
-  private final CriticalPathAlgorithm myCriticalPathAlgorithm;
-
-  private final SchedulerImpl myScheduler;
-
-  public AlgorithmCollection(TaskManagerImpl taskManager,
-      FindPossibleDependeesAlgorithm myFindPossibleDependeesAlgorithm,
-      RecalculateTaskScheduleAlgorithm recalculateTaskScheduleAlgorithm,
-      AdjustTaskBoundsAlgorithm adjustTaskBoundsAlgorithm,
-      RecalculateTaskCompletionPercentageAlgorithm completionPercentageAlgorithm,
-      ChartBoundsAlgorithm projectBoundsAlgorithm, CriticalPathAlgorithm criticalPathAlgorithm, SchedulerImpl scheduler) {
+  public AlgorithmCollection(
+    TaskManagerImpl taskManager,
+    FindPossibleDependeesAlgorithm myFindPossibleDependeesAlgorithm,
+    RecalculateTaskScheduleAlgorithm recalculateTaskScheduleAlgorithm,
+    AdjustTaskBoundsAlgorithm adjustTaskBoundsAlgorithm,
+    RecalculateTaskCompletionPercentageAlgorithm completionPercentageAlgorithm,
+    ChartBoundsAlgorithm projectBoundsAlgorithm, CriticalPathAlgorithm criticalPathAlgorithm, SchedulerImpl scheduler
+  ) {
     myScheduler = scheduler;
     this.myFindPossibleDependeesAlgorithm = myFindPossibleDependeesAlgorithm;
     myRecalculateTaskScheduleAlgorithm = recalculateTaskScheduleAlgorithm;
@@ -57,35 +52,35 @@ public class AlgorithmCollection {
     myCriticalPathAlgorithm = criticalPathAlgorithm;
   }
 
-  public FindPossibleDependeesAlgorithm getFindPossibleDependeesAlgorithm() {
-    return myFindPossibleDependeesAlgorithm;
-  }
-
-  public RecalculateTaskScheduleAlgorithm getRecalculateTaskScheduleAlgorithm() {
-    return myRecalculateTaskScheduleAlgorithm;
-  }
-
   public AdjustTaskBoundsAlgorithm getAdjustTaskBoundsAlgorithm() {
     return myAdjustTaskBoundsAlgorithm;
-  }
-
-  public RecalculateTaskCompletionPercentageAlgorithm getRecalculateTaskCompletionPercentageAlgorithm() {
-    return myCompletionPercentageAlgorithm;
-  }
-
-  public ChartBoundsAlgorithm getProjectBoundsAlgorithm() {
-    return myProjectBoundsAlgorithm;
-  }
-
-  public ShiftTaskTreeAlgorithm getShiftTaskTreeAlgorithm() {
-    return myShiftTaskTreeAlgorithm;
   }
 
   public CriticalPathAlgorithm getCriticalPathAlgorithm() {
     return myCriticalPathAlgorithm;
   }
 
+  public FindPossibleDependeesAlgorithm getFindPossibleDependeesAlgorithm() {
+    return myFindPossibleDependeesAlgorithm;
+  }
+
+  public ChartBoundsAlgorithm getProjectBoundsAlgorithm() {
+    return myProjectBoundsAlgorithm;
+  }
+
+  public RecalculateTaskCompletionPercentageAlgorithm getRecalculateTaskCompletionPercentageAlgorithm() {
+    return myCompletionPercentageAlgorithm;
+  }
+
+  public RecalculateTaskScheduleAlgorithm getRecalculateTaskScheduleAlgorithm() {
+    return myRecalculateTaskScheduleAlgorithm;
+  }
+
   public AlgorithmBase getScheduler() {
     return myScheduler;
+  }
+
+  public ShiftTaskTreeAlgorithm getShiftTaskTreeAlgorithm() {
+    return myShiftTaskTreeAlgorithm;
   }
 }

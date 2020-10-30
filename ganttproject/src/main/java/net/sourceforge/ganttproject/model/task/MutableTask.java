@@ -18,49 +18,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task;
 
-import java.awt.Color;
-
-import net.sourceforge.ganttproject.ui.chart.render.ShapePaint;
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.ui.chart.render.ShapePaint;
 
+import java.awt.*;
 
 /**
  * @author bard
  */
 public interface MutableTask {
-  void setName(String name);
-
-  void setMilestone(boolean isMilestone);
-
-  void setPriority(Task.Priority priority);
-
-  void setStart(GanttCalendar start);
-
-  void setEnd(GanttCalendar end);
-
-  void setDuration(TimeDuration length);
-
-  void shift(TimeDuration shift);
-
-  void setCompletionPercentage(int percentage);
-
-  // void setStartFixed(boolean isFixed);
-
-  // void setFinishFixed(boolean isFixed);
-
-  void setShape(ShapePaint shape);
+  void addNotes(String notes);
 
   void setColor(Color color);
 
-  /** Sets the weblink for the task */
-  void setWebLink(String webLink);
-
-  void setNotes(String notes);
-
-  void addNotes(String notes);
-
-  void setExpand(boolean expand);
+  void setCompletionPercentage(int percentage);
 
   /**
    * Sets the task as critical or not. The method is used be TaskManager after
@@ -68,13 +40,41 @@ public interface MutableTask {
    * the tasks are rendered as critical using Task.isCritical(). So, a task is
    * set as critical only if critical path is displayed.
    *
-   * @param critical
-   *          <code>true</code> if this is critical, <code>false</code>
-   *          otherwise.
+   * @param critical <code>true</code> if this is critical, <code>false</code>
+   *                 otherwise.
    */
   void setCritical(boolean critical);
 
-  void setTaskInfo(TaskInfo taskInfo);
+  void setDuration(TimeDuration length);
+
+  void setEnd(GanttCalendar end);
+
+  void setExpand(boolean expand);
+
+  void setMilestone(boolean isMilestone);
+
+  // void setStartFixed(boolean isFixed);
+
+  // void setFinishFixed(boolean isFixed);
+
+  void setName(String name);
+
+  void setNotes(String notes);
+
+  void setPriority(Task.Priority priority);
 
   void setProjectTask(boolean projectTask);
+
+  void setShape(ShapePaint shape);
+
+  void setStart(GanttCalendar start);
+
+  void setTaskInfo(TaskInfo taskInfo);
+
+  /**
+   * Sets the weblink for the task
+   */
+  void setWebLink(String webLink);
+
+  void shift(TimeDuration shift);
 }

@@ -24,12 +24,12 @@ import net.sourceforge.ganttproject.model.task.Task;
  * Created by IntelliJ IDEA. User: bard
  */
 public class TaskDependencySliceAsDependee extends TaskDependencySliceImpl {
+  public TaskDependencySliceAsDependee(Task task, TaskDependencyCollection dependencyCollection) {
+    super(task, dependencyCollection, TaskDependencySlice.DEPENDANT_SLICE_FXN);
+  }
+
   @Override
   public TaskDependency[] toArray() {
     return getDependencyCollection().getDependenciesAsDependee(getTask());
-  }
-
-  public TaskDependencySliceAsDependee(Task task, TaskDependencyCollection dependencyCollection) {
-    super(task, dependencyCollection, TaskDependencySlice.DEPENDANT_SLICE_FXN);
   }
 }

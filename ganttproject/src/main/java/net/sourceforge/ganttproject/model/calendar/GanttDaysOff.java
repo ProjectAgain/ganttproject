@@ -18,12 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.calendar;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
 
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author nbohn
@@ -41,21 +40,20 @@ public class GanttDaysOff {
     myFinish = finish;
   }
 
-  @Override
-  public String toString() {
-    return (myStart + " -> " + myFinish);
+  public static GanttDaysOff create(GanttDaysOff from) {
+    return new GanttDaysOff(from.myStart.clone(), from.myFinish.clone());
   }
 
   public boolean equals(GanttDaysOff dayOffs) {
     return ((dayOffs.getStart().equals(myStart)) && (dayOffs.getFinish().equals(myFinish)));
   }
 
-  public GanttCalendar getStart() {
-    return myStart;
-  }
-
   public GanttCalendar getFinish() {
     return myFinish;
+  }
+
+  public GanttCalendar getStart() {
+    return myStart;
   }
 
   public boolean isADayOff(GanttCalendar date) {
@@ -63,7 +61,8 @@ public class GanttDaysOff {
   }
 
   public boolean isADayOff(Date date) {
-    return (date.equals(myStart.getTime()) || date.equals(myFinish.getTime()) || (date.before(myFinish.getTime()) && date.after(myStart.getTime())));
+    return (date.equals(myStart.getTime()) || date.equals(myFinish.getTime()) ||
+            (date.before(myFinish.getTime()) && date.after(myStart.getTime())));
   }
 
   public int isADayOffInWeek(Date date) {
@@ -74,13 +73,15 @@ public class GanttDaysOff {
       finish.add(Calendar.DATE, -1);
       if (date.equals(start.getTime()) || date.equals(finish.getTime())
           || (date.before(finish.getTime()) && date.after(start.getTime())))
+      {
         return i + 1;
+      }
     }
     return -1;
   }
 
-  public static GanttDaysOff create(GanttDaysOff from) {
-    return new GanttDaysOff(from.myStart.clone(), from.myFinish.clone());
+  @Override
+  public String toString() {
+    return (myStart + " -> " + myFinish);
   }
-
 }

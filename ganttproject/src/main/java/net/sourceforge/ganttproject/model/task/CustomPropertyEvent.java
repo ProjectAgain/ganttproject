@@ -23,18 +23,14 @@ import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
 public class CustomPropertyEvent {
 
   public static final int EVENT_ADD = 0;
-
-  public static final int EVENT_REMOVE = 1;
-
-  public static final int EVENT_REBUILD = 2;
-
   public static final int EVENT_NAME_CHANGE = 3;
-
+  public static final int EVENT_REBUILD = 2;
+  public static final int EVENT_REMOVE = 1;
   public static final int EVENT_TYPE_CHANGE = 4;
 
   private final int myType;
 
-  private CustomPropertyDefinition myDefinition;
+  private final CustomPropertyDefinition myDefinition;
 
   private CustomPropertyDefinition myOldDef;
 
@@ -49,24 +45,23 @@ public class CustomPropertyEvent {
     myOldDef = oldDef;
   }
 
-  public CustomPropertyDefinition getDefinition() {
-    return myDefinition;
+  public String getColName() {
+    return myDefinition.getName();
   }
 
-  public CustomPropertyDefinition getOldValue() {
-    return myOldDef;
+  public CustomPropertyDefinition getDefinition() {
+    return myDefinition;
   }
 
   public String getOldName() {
     return myOldDef.getName();
   }
 
-  public String getColName() {
-    return myDefinition.getName();
+  public CustomPropertyDefinition getOldValue() {
+    return myOldDef;
   }
 
   public int getType() {
     return myType;
   }
-
 }

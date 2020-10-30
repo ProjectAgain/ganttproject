@@ -21,19 +21,13 @@ package net.sourceforge.ganttproject.model.task;
 public class CustomColumEvent {
 
   public static final int EVENT_ADD = 0;
-
-  public static final int EVENT_REMOVE = 1;
-
   public static final int EVENT_REBUILD = 2;
-
+  public static final int EVENT_REMOVE = 1;
   public static final int EVENT_RENAME = 3;
-  protected final int myType;
-
   protected final String myColName;
-
-  private final String myOldName;
-
+  protected final int myType;
   private final CustomColumn myColumn;
+  private final String myOldName;
 
   public CustomColumEvent(int type, String colName) {
     myType = type;
@@ -56,19 +50,19 @@ public class CustomColumEvent {
     myColumn = column;
   }
 
-  public CustomColumn getColumn() {
-    return myColumn;
-  }
-
   public String getColName() {
     return myColName;
   }
 
-  public int getType() {
-    return myType;
+  public CustomColumn getColumn() {
+    return myColumn;
   }
 
   public String getOldName() {
     return myOldName;
+  }
+
+  public int getType() {
+    return myType;
   }
 }

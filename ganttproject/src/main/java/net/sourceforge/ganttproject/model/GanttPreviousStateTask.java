@@ -20,21 +20,16 @@ package net.sourceforge.ganttproject.model;
 
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
 
-
 /**
  * @author nbohn
  */
 public class GanttPreviousStateTask {
 
-  private int myId;
-
-  private GanttCalendar myStart;
-
-  private int myDuration;
-
-  private boolean isMilestone;
-
-  private boolean hasNested;
+  private final boolean hasNested;
+  private final boolean isMilestone;
+  private final int myDuration;
+  private final int myId;
+  private final GanttCalendar myStart;
 
   public GanttPreviousStateTask(int id, GanttCalendar start, int duration, boolean isMilestone, boolean hasNested) {
     myId = id;
@@ -42,6 +37,10 @@ public class GanttPreviousStateTask {
     myDuration = duration;
     this.isMilestone = isMilestone;
     this.hasNested = hasNested;
+  }
+
+  public int getDuration() {
+    return myDuration;
   }
 
   public int getId() {
@@ -52,16 +51,11 @@ public class GanttPreviousStateTask {
     return myStart;
   }
 
-  public int getDuration() {
-    return myDuration;
+  public boolean hasNested() {
+    return hasNested;
   }
 
   public boolean isMilestone() {
     return isMilestone;
   }
-
-  public boolean hasNested() {
-    return hasNested;
-  }
-
 }

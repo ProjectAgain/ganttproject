@@ -18,10 +18,10 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
-import java.util.ArrayList;
-
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskContainmentHierarchyFacade;
+
+import java.util.ArrayList;
 
 /**
  * Created by IntelliJ IDEA. User: bard

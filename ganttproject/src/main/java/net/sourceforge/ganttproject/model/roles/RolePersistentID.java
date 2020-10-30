@@ -20,10 +20,8 @@ package net.sourceforge.ganttproject.model.roles;
 
 public class RolePersistentID {
   private static final String ROLESET_DELIMITER = ":";
-
-  private final String myRoleSetID;
-
   private final int myRoleID;
+  private final String myRoleSetID;
 
   public RolePersistentID(String persistentID) {
     int posDelimiter = persistentID.lastIndexOf(ROLESET_DELIMITER);
@@ -37,19 +35,17 @@ public class RolePersistentID {
     }
     myRoleID = roleID;
     myRoleSetID = rolesetName;
-
-  }
-
-  public String getRoleSetID() {
-    return myRoleSetID;
-  }
-
-  public int getRoleID() {
-    return myRoleID;
   }
 
   public String asString() {
     return myRoleSetID + ROLESET_DELIMITER + myRoleID;
   }
 
+  public int getRoleID() {
+    return myRoleID;
+  }
+
+  public String getRoleSetID() {
+    return myRoleSetID;
+  }
 }

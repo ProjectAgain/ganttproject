@@ -18,10 +18,10 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.model.calendar;
 
-import java.awt.Color;
-import java.util.Date;
-
 import com.google.common.base.Objects;
+
+import java.awt.*;
+import java.util.Date;
 
 /**
  * This class represents a calendar event, which roughly corresponds to VEVENT data type from iCal
@@ -36,18 +36,15 @@ public class CalendarEvent {
    * NEUTRAL means that this event will have a type inherited from the base calendar, if any, or from
    * weekend configuration.
    */
-  public static enum Type {
+  public enum Type {
     HOLIDAY, WORKING_DAY, NEUTRAL
   }
-  public final Date myDate;
-  public final boolean isRecurring;
-  private final Type myType;
-  private final String myTitle;
-  private final Color myColor;
 
-  public static CalendarEvent newEvent(Date date, boolean isRecurring, Type type, String title, Color color) {
-    return new CalendarEvent(date, isRecurring, type, title, color);
-  }
+  public final boolean isRecurring;
+  public final Date myDate;
+  private final Color myColor;
+  private final String myTitle;
+  private final Type myType;
 
   CalendarEvent(Date date, boolean recurring, Type type, String title, Color color) {
     myDate = date;
@@ -55,6 +52,24 @@ public class CalendarEvent {
     myType = type;
     myTitle = title;
     myColor = color;
+  }
+
+  public static CalendarEvent newEvent(Date date, boolean isRecurring, Type type, String title, Color color) {
+    return new CalendarEvent(date, isRecurring, type, title, color);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (false == obj instanceof CalendarEvent) {
+      return false;
+    }
+    CalendarEvent that = (CalendarEvent) obj;
+    return Objects.equal(this.myDate, that.myDate) && Objects.equal(this.isRecurring, that.isRecurring)
+           && Objects.equal(this.myType, that.myType);
+  }
+
+  public Color getColor() {
+    return myColor;
   }
 
   public String getTitle() {
@@ -65,29 +80,13 @@ public class CalendarEvent {
     return myType;
   }
 
-  public Color getColor() {
-    return myColor;
-  }
-
   @Override
   public int hashCode() {
     return this.myDate.hashCode();
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (false == obj instanceof CalendarEvent) {
-      return false;
-    }
-    CalendarEvent that = (CalendarEvent) obj;
-    return Objects.equal(this.myDate, that.myDate) && Objects.equal(this.isRecurring, that.isRecurring)
-        && Objects.equal(this.myType, that.myType);
-  }
-
-
-  @Override
   public String toString() {
     return "Date=" + myDate + " repeating=" + isRecurring;
   }
-
 }

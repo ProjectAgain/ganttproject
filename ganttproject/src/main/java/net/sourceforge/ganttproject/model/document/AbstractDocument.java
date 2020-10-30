@@ -12,6 +12,11 @@ import java.io.IOException;
 public abstract class AbstractDocument implements Document {
 
   @Override
+  public boolean acquireLock() {
+    return true;
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (o instanceof Document) {
       return ((Document) o).getPath().equals(this.getPath());
@@ -20,30 +25,8 @@ public abstract class AbstractDocument implements Document {
   }
 
   @Override
-  public boolean acquireLock() {
-    return true;
-  }
-
-  @Override
-  public void releaseLock() {
-  }
-
-  @Override
   public String getFilePath() {
     return null;
-  }
-
-  @Override
-  public String getUsername() {
-    return null;
-  }
-
-  @Override
-  public String getPassword() {
-    return null;
-  }
-
-  public void setUserInfo(String user, String pass) {
   }
 
   @Override
@@ -52,8 +35,8 @@ public abstract class AbstractDocument implements Document {
   }
 
   @Override
-  public void read() throws IOException {
-    throw new UnsupportedOperationException("This method should be overriden in derived classes");
+  public String getPassword() {
+    return null;
   }
 
   @Override
@@ -62,7 +45,24 @@ public abstract class AbstractDocument implements Document {
   }
 
   @Override
+  public String getUsername() {
+    return null;
+  }
+
+  @Override
+  public void read() throws IOException {
+    throw new UnsupportedOperationException("This method should be overriden in derived classes");
+  }
+
+  @Override
+  public void releaseLock() {
+  }
+
+  @Override
   public void setMirror(Document mirrorDocument) {
     throw new UnsupportedOperationException("Abstract document doesn't support mirroring");
+  }
+
+  public void setUserInfo(String user, String pass) {
   }
 }

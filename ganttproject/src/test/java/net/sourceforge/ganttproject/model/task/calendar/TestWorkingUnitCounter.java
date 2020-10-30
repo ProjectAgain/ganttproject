@@ -34,49 +34,49 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestWorkingUnitCounter extends TaskTestCase {
-    @Test
-    public void testChunkAcrossHolidays() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setWeekDayType(Calendar.SATURDAY, GPCalendar.DayType.WEEKEND);
-        calendar.setWeekDayType(Calendar.SUNDAY, GPCalendar.DayType.WEEKEND);
-        calendar.setPublicHolidays(ImmutableList.of(
-            CalendarEvent.newEvent(TestSetupHelper.newTuesday().getTime(), false, CalendarEvent.Type.HOLIDAY, null,
-                                   null
-            )));
+  @Test
+  public void testChunkAcrossHolidays() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setWeekDayType(Calendar.SATURDAY, GPCalendar.DayType.WEEKEND);
+    calendar.setWeekDayType(Calendar.SUNDAY, GPCalendar.DayType.WEEKEND);
+    calendar.setPublicHolidays(ImmutableList.of(
+      CalendarEvent.newEvent(TestSetupHelper.newTuesday().getTime(), false, CalendarEvent.Type.HOLIDAY, null,
+                             null
+      )));
 
-        WorkingUnitCounter counter = new WorkingUnitCounter(
-            calendar, GregorianTimeUnitStack.DAY);
-        TimeDuration result =
-            counter.run(TestSetupHelper.newMonday().getTime(), TestSetupHelper.newThursday().getTime());
-        assertEquals(2, result.getLength());
-        assertEquals(GregorianTimeUnitStack.DAY, result.getTimeUnit());
-    }
+    WorkingUnitCounter counter = new WorkingUnitCounter(
+      calendar, GregorianTimeUnitStack.DAY);
+    TimeDuration result =
+      counter.run(TestSetupHelper.newMonday().getTime(), TestSetupHelper.newThursday().getTime());
+    assertEquals(2, result.getLength());
+    assertEquals(GregorianTimeUnitStack.DAY, result.getTimeUnit());
+  }
 
-    @Test
-    public void testChunkAcrossWeekend() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setWeekDayType(Calendar.SATURDAY, GPCalendar.DayType.WEEKEND);
-        calendar.setWeekDayType(Calendar.SUNDAY, GPCalendar.DayType.WEEKEND);
+  @Test
+  public void testChunkAcrossWeekend() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setWeekDayType(Calendar.SATURDAY, GPCalendar.DayType.WEEKEND);
+    calendar.setWeekDayType(Calendar.SUNDAY, GPCalendar.DayType.WEEKEND);
 
-        WorkingUnitCounter counter = new WorkingUnitCounter(
-            calendar, GregorianTimeUnitStack.DAY);
-        TimeDuration result =
-            counter.run(TestSetupHelper.newFriday().getTime(), TestSetupHelper.newTuesday().getTime());
-        assertEquals(2, result.getLength());
-        assertEquals(GregorianTimeUnitStack.DAY, result.getTimeUnit());
-    }
+    WorkingUnitCounter counter = new WorkingUnitCounter(
+      calendar, GregorianTimeUnitStack.DAY);
+    TimeDuration result =
+      counter.run(TestSetupHelper.newFriday().getTime(), TestSetupHelper.newTuesday().getTime());
+    assertEquals(2, result.getLength());
+    assertEquals(GregorianTimeUnitStack.DAY, result.getTimeUnit());
+  }
 
-    @Test
-    public void testWorkingDaysChunk() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setWeekDayType(Calendar.SATURDAY, GPCalendar.DayType.WEEKEND);
-        calendar.setWeekDayType(Calendar.SUNDAY, GPCalendar.DayType.WEEKEND);
+  @Test
+  public void testWorkingDaysChunk() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setWeekDayType(Calendar.SATURDAY, GPCalendar.DayType.WEEKEND);
+    calendar.setWeekDayType(Calendar.SUNDAY, GPCalendar.DayType.WEEKEND);
 
-        WorkingUnitCounter counter = new WorkingUnitCounter(
-            calendar, GregorianTimeUnitStack.DAY);
-        TimeDuration result =
-            counter.run(TestSetupHelper.newMonday().getTime(), TestSetupHelper.newThursday().getTime());
-        assertEquals(3, result.getLength());
-        assertEquals(GregorianTimeUnitStack.DAY, result.getTimeUnit());
-    }
+    WorkingUnitCounter counter = new WorkingUnitCounter(
+      calendar, GregorianTimeUnitStack.DAY);
+    TimeDuration result =
+      counter.run(TestSetupHelper.newMonday().getTime(), TestSetupHelper.newThursday().getTime());
+    assertEquals(3, result.getLength());
+    assertEquals(GregorianTimeUnitStack.DAY, result.getTimeUnit());
+  }
 }

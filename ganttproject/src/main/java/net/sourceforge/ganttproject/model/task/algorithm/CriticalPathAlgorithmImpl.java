@@ -19,7 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.model.task.algorithm;
 
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
-
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskManager;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
@@ -32,23 +31,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class CriticalPathAlgorithmImpl implements CriticalPathAlgorithm {
 
-  private final TaskManager myTaskManager;
-  private final GPCalendarCalc myCalendar;
-
-  public CriticalPathAlgorithmImpl(TaskManager taskManager, GPCalendarCalc calendar) {
-    myTaskManager = taskManager;
-    myCalendar = calendar;
-  }
-
   static class Node {
-    private final Task task;
     private final List<Task> dependees = new ArrayList<Task>();
-    private int numDependants;
-    private final Date est;
     private final Date eft;
-    private Date lst;
+    private final Date est;
+    private final Task task;
     private Date lft;
     private boolean lftFromSupertask = false;
+    private Date lst;
+    private int numDependants;
 
     public Node(Task t, Set<Task> taskScope) {
       assert t != null;
@@ -79,9 +70,14 @@ public class CriticalPathAlgorithmImpl implements CriticalPathAlgorithm {
       }
     }
 
+    @Override
+    public String toString() {
+      return task == null ? "[Deadline node " + eft + "]" : task.toString();
+    }
+
     void collectDependees(Task task, Set<Task> taskScope) {
       TaskDependency[] deps = task.getDependenciesAsDependant().toArray();
-      for (TaskDependency dep : deps) {
+      for (TaskDependency dep: deps) {
         if (taskScope.contains(dep.getDependee())) {
           dependees.add(dep.getDependee());
         }
@@ -91,57 +87,27 @@ public class CriticalPathAlgorithmImpl implements CriticalPathAlgorithm {
     boolean isCritical() {
       return est.equals(lst);
     }
-
-    @Override
-    public String toString() {
-      return task == null ? "[Deadline node " + eft + "]" : task.toString();
-    }
-  }
-
-  @Override
-  public Task[] getCriticalTasks() {
-    Date projectEnd = myTaskManager.getProjectEnd();
-    Node fakeFinalNode = new Node(null, projectEnd, projectEnd, projectEnd, projectEnd, 0, null);
-    Task[] tasks = myTaskManager.getTasks();
-    if (tasks.length == 0) {
-      return tasks;
-    }
-    Map<Task, Node> task_node = createTaskNodeMap(tasks, fakeFinalNode);
-    for (Node curNode : task_node.values()) {
-      curNode.numDependants += myTaskManager.getTaskHierarchy().getDepth(curNode.task) - 1;
-    }
-    assert fakeFinalNode.dependees.size() > 0;
-
-    LinkedHashSet<Task> result = new LinkedHashSet<Task>();
-    Processor p = new Processor(task_node, fakeFinalNode);
-    result.addAll(p.run());
-    return result.toArray(new Task[result.size()]);
-  }
-
-  private Map<Task, Node> createTaskNodeMap(Task[] tasks, Node deadlineNode) {
-    Set<Task> taskScope = new HashSet<Task>(Arrays.asList(tasks));
-    Map<Task, Node> task_node = new HashMap<Task, Node>();
-    for (Task task : tasks) {
-      Node newNode = new Node(task, taskScope);
-      deadlineNode.dependees.add(task);
-      newNode.numDependants++;
-      task_node.put(task, newNode);
-    }
-    return task_node;
   }
 
   class Processor {
     private final Logger log = getLogger(getClass());
-
+    private final Node myDeadlineNode;
+    private final ArrayList<Task> myResult = new ArrayList<Task>();
     private final Map<Task, Node> myTask_Node;
     private LinkedList<Node> myQueue = new LinkedList<Node>();
-    private final ArrayList<Task> myResult = new ArrayList<Task>();
-    private final Node myDeadlineNode;
 
     Processor(Map<Task, Node> task_node, Node deadlineNode) {
       myDeadlineNode = deadlineNode;
       myTask_Node = task_node;
       myQueue.add(myDeadlineNode);
+    }
+
+    Date findLatestFinishTime(Node curNode, Node depNode, TaskDependency dep) {
+      Collision backwardCollision = dep.getConstraint().getBackwardCollision(depNode.lst);
+      if (backwardCollision == null) {
+        return depNode.lst;
+      }
+      return backwardCollision.getAcceptableStart().getTime();
     }
 
     boolean hasMoreInput() {
@@ -155,14 +121,56 @@ public class CriticalPathAlgorithmImpl implements CriticalPathAlgorithm {
       return myResult;
     }
 
+    private void calculateLatestDates(Node curNode) {
+      log.debug("Calculating latest dates for: {}", curNode);
+      curNode.lft = findLatestFinishTime(myTask_Node, curNode);
+      curNode.lst = myCalendar.shiftDate(
+        curNode.lft,
+        myTaskManager.createLength(-curNode.task.getDuration().getLength())
+      );
+      log.debug("latest start date={}", curNode.lst);
+    }
+
+    private void enqueueDependees(LinkedList<Node> newQueue, Node curNode) {
+      for (int i = 0; i < curNode.dependees.size(); i++) {
+        Task dependeeTask = curNode.dependees.get(i);
+        Node dependeeNode = myTask_Node.get(dependeeTask);
+        assert dependeeNode.numDependants > 0;
+        if (--dependeeNode.numDependants == 0) {
+          newQueue.add(dependeeNode);
+        }
+      }
+    }
+
+    private Date findLatestFinishTime(Map<Task, Node> task_node, Node curNode) {
+      Date result = curNode.lft;
+      Node resultNode = null;
+      TaskDependency[] deps = curNode.task.getDependenciesAsDependee().toArray();
+      for (TaskDependency dep: deps) {
+        Node depNode = task_node.get(dep.getDependant());
+        if (depNode != null) {
+          Date lft = findLatestFinishTime(curNode, depNode, dep);
+          if (result == null || result.after(lft)) {
+            result = lft;
+            resultNode = depNode;
+          }
+        }
+      }
+      if (result == null || result.after(myDeadlineNode.lft)) {
+        result = myDeadlineNode.lft;
+      }
+      log.debug("latest finish time={} (defined by: {})", result, resultNode);
+      return result;
+    }
+
     private LinkedList<Node> processQueue() {
       LinkedList<Node> newQueue = new LinkedList<Node>();
-      for (Iterator<Node> nodes = myQueue.iterator(); nodes.hasNext();) {
+      for (Iterator<Node> nodes = myQueue.iterator(); nodes.hasNext(); ) {
         Node curNode = nodes.next();
         if (curNode.lft == null || curNode.lftFromSupertask) {
           calculateLatestDates(curNode);
           Task[] nestedTasks = myTaskManager.getTaskHierarchy().getNestedTasks(curNode.task);
-          for (Task nestedTask : nestedTasks) {
+          for (Task nestedTask: nestedTasks) {
             Node nested = myTask_Node.get(nestedTask);
             nested.numDependants -= (myTaskManager.getTaskHierarchy().getDepth(nested.task) - 1);
             assert nested.numDependants >= 0;
@@ -186,53 +194,44 @@ public class CriticalPathAlgorithmImpl implements CriticalPathAlgorithm {
       }
       return newQueue;
     }
+  }
+  private final GPCalendarCalc myCalendar;
+  private final TaskManager myTaskManager;
 
-    private void calculateLatestDates(Node curNode) {
-      log.debug("Calculating latest dates for: {}", curNode);
-      curNode.lft = findLatestFinishTime(myTask_Node, curNode);
-      curNode.lst = myCalendar.shiftDate(curNode.lft,
-          myTaskManager.createLength(-curNode.task.getDuration().getLength()));
-      log.debug("latest start date={}", curNode.lst);
-    }
+  public CriticalPathAlgorithmImpl(TaskManager taskManager, GPCalendarCalc calendar) {
+    myTaskManager = taskManager;
+    myCalendar = calendar;
+  }
 
-    private void enqueueDependees(LinkedList<Node> newQueue, Node curNode) {
-      for (int i = 0; i < curNode.dependees.size(); i++) {
-        Task dependeeTask = curNode.dependees.get(i);
-        Node dependeeNode = myTask_Node.get(dependeeTask);
-        assert dependeeNode.numDependants > 0;
-        if (--dependeeNode.numDependants == 0) {
-          newQueue.add(dependeeNode);
-        }
-      }
+  @Override
+  public Task[] getCriticalTasks() {
+    Date projectEnd = myTaskManager.getProjectEnd();
+    Node fakeFinalNode = new Node(null, projectEnd, projectEnd, projectEnd, projectEnd, 0, null);
+    Task[] tasks = myTaskManager.getTasks();
+    if (tasks.length == 0) {
+      return tasks;
     }
+    Map<Task, Node> task_node = createTaskNodeMap(tasks, fakeFinalNode);
+    for (Node curNode: task_node.values()) {
+      curNode.numDependants += myTaskManager.getTaskHierarchy().getDepth(curNode.task) - 1;
+    }
+    assert fakeFinalNode.dependees.size() > 0;
 
-    private Date findLatestFinishTime(Map<Task, Node> task_node, Node curNode) {
-      Date result = curNode.lft;
-      Node resultNode = null;
-      TaskDependency[] deps = curNode.task.getDependenciesAsDependee().toArray();
-      for (TaskDependency dep : deps) {
-        Node depNode = task_node.get(dep.getDependant());
-        if (depNode != null) {
-          Date lft = findLatestFinishTime(curNode, depNode, dep);
-          if (result == null || result.after(lft)) {
-            result = lft;
-            resultNode = depNode;
-          }
-        }
-      }
-      if (result == null || result.after(myDeadlineNode.lft)) {
-        result = myDeadlineNode.lft;
-      }
-      log.debug("latest finish time={} (defined by: {})",result,resultNode);
-      return result;
-    }
+    LinkedHashSet<Task> result = new LinkedHashSet<Task>();
+    Processor p = new Processor(task_node, fakeFinalNode);
+    result.addAll(p.run());
+    return result.toArray(new Task[result.size()]);
+  }
 
-    Date findLatestFinishTime(Node curNode, Node depNode, TaskDependency dep) {
-      Collision backwardCollision = dep.getConstraint().getBackwardCollision(depNode.lst);
-      if (backwardCollision == null) {
-        return depNode.lst;
-      }
-      return backwardCollision.getAcceptableStart().getTime();
+  private Map<Task, Node> createTaskNodeMap(Task[] tasks, Node deadlineNode) {
+    Set<Task> taskScope = new HashSet<Task>(Arrays.asList(tasks));
+    Map<Task, Node> task_node = new HashMap<Task, Node>();
+    for (Task task: tasks) {
+      Node newNode = new Node(task, taskScope);
+      deadlineNode.dependees.add(task);
+      newNode.numDependants++;
+      task_node.put(task, newNode);
     }
+    return task_node;
   }
 }

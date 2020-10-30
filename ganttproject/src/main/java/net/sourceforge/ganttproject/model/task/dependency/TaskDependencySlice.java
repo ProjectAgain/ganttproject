@@ -18,23 +18,18 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.dependency;
 
-import java.util.List;
-
 import com.google.common.base.Function;
-
 import net.sourceforge.ganttproject.model.task.Task;
 
+import java.util.List;
+
 public interface TaskDependencySlice {
-  TaskDependency[] toArray();
-
-  void clear();
-
-  void clear(List<Task> selection);
-
-  boolean hasLinks(List<Task> selection);
-
-  TaskDependency getDependency(Task dependee);
-
+  Function<Task, TaskDependencySlice> COMPLETE_SLICE_FXN = new Function<Task, TaskDependencySlice>() {
+    @Override
+    public TaskDependencySlice apply(Task task) {
+      return task.getDependencies();
+    }
+  };
   Function<Task, TaskDependencySlice> DEPENDANT_SLICE_FXN = new Function<Task, TaskDependencySlice>() {
     @Override
     public TaskDependencySlice apply(Task task) {
@@ -47,10 +42,14 @@ public interface TaskDependencySlice {
       return task.getDependenciesAsDependee();
     }
   };
-  Function<Task, TaskDependencySlice> COMPLETE_SLICE_FXN = new Function<Task, TaskDependencySlice>() {
-    @Override
-    public TaskDependencySlice apply(Task task) {
-      return task.getDependencies();
-    }
-  };
+
+  void clear();
+
+  void clear(List<Task> selection);
+
+  TaskDependency getDependency(Task dependee);
+
+  boolean hasLinks(List<Task> selection);
+
+  TaskDependency[] toArray();
 }

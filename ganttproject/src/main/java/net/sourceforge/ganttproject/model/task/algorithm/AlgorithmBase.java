@@ -18,35 +18,35 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.task.Task;
+
+import java.util.Date;
 
 public class AlgorithmBase {
 
-  public static interface Diagnostic {
+  public interface Diagnostic {
     void addModifiedTask(Task t, Date newStart, Date newEnd);
   }
 
   private boolean isEnabled = true;
   private Diagnostic myDiagnostic;
 
-  public void setEnabled(boolean enabled) {
-    isEnabled = enabled;
-  }
-
-  protected boolean isEnabled() {
-    return isEnabled;
-  }
-
-  public void setDiagnostic(Diagnostic d) {
-    myDiagnostic = d;
+  public void run() {
   }
 
   protected Diagnostic getDiagnostic() {
     return myDiagnostic;
   }
 
-  public void run() {
+  public void setDiagnostic(Diagnostic d) {
+    myDiagnostic = d;
+  }
+
+  protected boolean isEnabled() {
+    return isEnabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    isEnabled = enabled;
   }
 }

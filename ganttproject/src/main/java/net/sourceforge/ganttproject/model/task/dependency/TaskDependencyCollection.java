@@ -26,6 +26,10 @@ import net.sourceforge.ganttproject.model.task.Task;
  */
 public interface TaskDependencyCollection extends MutableTaskDependencyCollection {
 
+  boolean canCreateDependency(Task myDependant, Task dependee);
+
+  TaskDependencyCollectionMutator createMutator();
+
   // void addDependency(TaskDependency dep) throws TaskDependencyException;
   // void removeDependency(TaskDependency dep);
   TaskDependency[] getDependencies();
@@ -35,8 +39,4 @@ public interface TaskDependencyCollection extends MutableTaskDependencyCollectio
   TaskDependency[] getDependenciesAsDependant(Task dependant);
 
   TaskDependency[] getDependenciesAsDependee(Task dependee);
-
-  TaskDependencyCollectionMutator createMutator();
-
-  boolean canCreateDependency(Task myDependant, Task dependee);
 }

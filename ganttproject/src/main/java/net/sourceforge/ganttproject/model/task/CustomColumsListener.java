@@ -19,5 +19,5 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.model.task;
 
 public interface CustomColumsListener {
-  public void customColumsChange(CustomColumEvent event);
+  void customColumsChange(CustomColumEvent event);
 }

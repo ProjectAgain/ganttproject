@@ -18,20 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import net.sourceforge.ganttproject.model.time.TimeDuration;
-
-import net.sourceforge.ganttproject.model.task.Task;
-import net.sourceforge.ganttproject.model.task.TaskActivity;
 
 /**
  * @author bard
  */
 public class SortTasksAlgorithm {
-  private Comparator<TaskActivity> mySortActivitiesByStartDateComparator = new Comparator<TaskActivity>() {
+  private final Comparator<TaskActivity> mySortActivitiesByStartDateComparator = new Comparator<TaskActivity>() {
     @Override
     public int compare(TaskActivity leftTask, TaskActivity rightTask) {
       int result = 0;
@@ -55,10 +54,9 @@ public class SortTasksAlgorithm {
       }
       return result;
     }
-
   };
 
-  private Comparator<Task> mySortTasksByStartDateComparator = new Comparator<Task>() {
+  private final Comparator<Task> mySortTasksByStartDateComparator = new Comparator<Task>() {
     @Override
     public int compare(Task leftTask, Task rightTask) {
       int result = 0;
@@ -82,7 +80,6 @@ public class SortTasksAlgorithm {
       }
       return result;
     }
-
   };
 
   public void sortByStartDate(List<TaskActivity> tasks) {
@@ -92,5 +89,4 @@ public class SortTasksAlgorithm {
   public void sortTasksByStartDate(List<Task> tasks) {
     Collections.sort(tasks, mySortTasksByStartDateComparator);
   }
-
 }

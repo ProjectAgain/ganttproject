@@ -26,28 +26,26 @@ public class SearchKey implements Comparable<SearchKey> {
   static final int DEPENDEE = 2;
 
   final int myFirstTaskID;
-
-  final int myType;
-
   final int mySecondTaskID;
+  final int myType;
 
   public SearchKey(int type, TaskDependencyImpl taskDependency) {
     myType = type;
     Task firstTask, secondTask;
     switch (type) {
-    case DEPENDANT: {
-      firstTask = taskDependency.getDependant();
-      secondTask = taskDependency.getDependee();
-      break;
-    }
-    case DEPENDEE: {
-      firstTask = taskDependency.getDependee();
-      secondTask = taskDependency.getDependant();
-      break;
-    }
-    default: {
-      throw new RuntimeException("Invalid type=" + type);
-    }
+      case DEPENDANT: {
+        firstTask = taskDependency.getDependant();
+        secondTask = taskDependency.getDependee();
+        break;
+      }
+      case DEPENDEE: {
+        firstTask = taskDependency.getDependee();
+        secondTask = taskDependency.getDependant();
+        break;
+      }
+      default: {
+        throw new RuntimeException("Invalid type=" + type);
+      }
     }
     myFirstTaskID = firstTask.getTaskID();
     mySecondTaskID = secondTask.getTaskID();

@@ -21,5 +21,5 @@ package net.sourceforge.ganttproject.model;
 import net.sourceforge.ganttproject.model.task.CustomPropertyEvent;
 
 public interface CustomPropertyListener {
-  public void customPropertyChange(CustomPropertyEvent event);
+  void customPropertyChange(CustomPropertyEvent event);
 }

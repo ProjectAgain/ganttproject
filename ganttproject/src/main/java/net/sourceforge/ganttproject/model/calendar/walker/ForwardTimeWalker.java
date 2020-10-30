@@ -18,12 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.calendar.walker;
 
-import java.util.Date;
-
-import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayMask;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.time.TimeUnit;
 
+import java.util.Date;
 
 /**
  * Abstract iterator-like class for walking forward over the calendar timeline
@@ -40,12 +39,6 @@ public abstract class ForwardTimeWalker {
     myCalendar = calendar;
     myTimeUnit = timeUnit;
   }
-
-  protected TimeUnit getTimeUnit() {
-    return myTimeUnit;
-  }
-
-  abstract protected boolean isMoving();
 
   public void walk(Date startDate) {
     Date unitStart = myTimeUnit.adjustLeft(startDate);
@@ -65,7 +58,13 @@ public abstract class ForwardTimeWalker {
     }
   }
 
-  protected abstract void processWorkingTime(Date intervalStart, Date nextIntervalStart);
+  protected TimeUnit getTimeUnit() {
+    return myTimeUnit;
+  }
+
+  abstract protected boolean isMoving();
 
   protected abstract void processNonWorkingTime(Date intervalStart, Date workingIntervalStart);
+
+  protected abstract void processWorkingTime(Date intervalStart, Date nextIntervalStart);
 }

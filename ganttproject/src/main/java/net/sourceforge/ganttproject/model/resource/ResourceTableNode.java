@@ -18,12 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.model.resource;
 
-import java.util.Set;
-
 import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.ui.chart.ResourceDefaultColumn;
-
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+
+import java.util.Set;
 
 /**
  * Common superclass for the resource table nodes.
@@ -38,13 +37,15 @@ public abstract class ResourceTableNode extends DefaultMutableTreeTableNode {
     myColumns = applicableColumns;
   }
 
+  public abstract Object getCustomField(CustomPropertyDefinition def);
+
+  public abstract Object getStandardField(ResourceDefaultColumn def);
+
   public boolean isEditable(ResourceDefaultColumn column) {
     return myColumns.contains(column) && column.isEditable();
   }
 
   public abstract void setCustomField(CustomPropertyDefinition def, Object val);
-  public abstract Object getCustomField(CustomPropertyDefinition def);
 
-  public abstract Object getStandardField(ResourceDefaultColumn def);
   public abstract void setStandardField(ResourceDefaultColumn resourceDefaultColumn, Object value);
 }

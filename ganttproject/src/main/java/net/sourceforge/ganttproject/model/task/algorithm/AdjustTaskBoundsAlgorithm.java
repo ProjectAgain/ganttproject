@@ -18,90 +18,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import net.sourceforge.ganttproject.model.time.GanttCalendar;
-
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskContainmentHierarchyFacade;
 import net.sourceforge.ganttproject.model.task.TaskMutator;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+
+import java.util.*;
 
 /**
  * @author bard
  */
 public abstract class AdjustTaskBoundsAlgorithm extends AlgorithmBase {
-  public void run(Task task) {
-    run(new Task[] { task });
-  }
-
-  public void run(Task[] tasks) {
-    run(Arrays.asList(tasks));
-  }
-
-
-  @Override
-  protected boolean isEnabled() {
-    return false;
-  }
-
-  public void run(Collection<Task> tasks) {
-    if (!isEnabled()) {
-      return;
-    }
-    AlgorithmImpl algorithmImpl = new AlgorithmImpl();
-    algorithmImpl.run(tasks);
-  }
-
-  public void adjustNestedTasks(Task supertask) throws TaskDependencyException {
-    if (!isEnabled()) {
-      return;
-    }
-    TaskContainmentHierarchyFacade containmentFacade = createContainmentFacade();
-    List<Task> nestedTasks = new ArrayList<Task>(Arrays.asList(containmentFacade.getNestedTasks(supertask)));
-    if (nestedTasks.size() == 0) {
-      return;
-    }
-    SortTasksAlgorithm sortAlgorithm = new SortTasksAlgorithm();
-    sortAlgorithm.sortTasksByStartDate(nestedTasks);
-    Set<Task> modifiedTasks = new HashSet<Task>();
-    for (Task nestedTask : nestedTasks) {
-      if (nestedTask.getStart().getTime().before(supertask.getStart().getTime())) {
-        TaskMutator mutator = nestedTask.createMutatorFixingDuration();
-        mutator.setStart(supertask.getStart());
-        mutator.commit();
-
-        modifiedTasks.add(nestedTask);
-      }
-      if (nestedTask.getEnd().getTime().after(supertask.getEnd().getTime())) {
-        TaskMutator mutator = nestedTask.createMutatorFixingDuration();
-        mutator.shift(supertask.getManager().createLength(supertask.getDuration().getTimeUnit(),
-            nestedTask.getEnd().getTime(), supertask.getEnd().getTime()));
-        mutator.commit();
-
-        modifiedTasks.add(nestedTask);
-      }
-    }
-    run(modifiedTasks.toArray(new Task[0]));
-    RecalculateTaskScheduleAlgorithm alg = new RecalculateTaskScheduleAlgorithm(this) {
-      @Override
-      protected TaskContainmentHierarchyFacade createContainmentFacade() {
-        return AdjustTaskBoundsAlgorithm.this.createContainmentFacade();
-      }
-    };
-    alg.run(modifiedTasks);
-  }
-
-  protected abstract TaskContainmentHierarchyFacade createContainmentFacade();
-
   private class AlgorithmImpl {
 
-    private Set<Task> myModifiedTasks = new HashSet<Task>();
+    private final Set<Task> myModifiedTasks = new HashSet<Task>();
 
     public void run(Collection<Task> tasks) {
       HashSet<Task> taskSet = new HashSet<Task>(tasks);
@@ -110,7 +41,7 @@ public abstract class AdjustTaskBoundsAlgorithm extends AlgorithmBase {
       while (!taskSet.isEmpty()) {
         recalculateSupertaskScheduleBottomUp(taskSet, containmentFacade);
         taskSet.clear();
-        for (Task modifiedTask : myModifiedTasks) {
+        for (Task modifiedTask: myModifiedTasks) {
           Task supertask = containmentFacade.getContainer(modifiedTask);
           if (supertask != null) {
             taskSet.add(supertask);
@@ -120,15 +51,10 @@ public abstract class AdjustTaskBoundsAlgorithm extends AlgorithmBase {
       }
     }
 
-    private void recalculateSupertaskScheduleBottomUp(Set<Task> supertasks,
-        TaskContainmentHierarchyFacade containmentFacade) {
-      for (Task supertask : supertasks) {
-        recalculateSupertaskSchedule(supertask, containmentFacade);
-      }
-    }
-
-    private void recalculateSupertaskSchedule(final Task supertask,
-        final TaskContainmentHierarchyFacade containmentFacade) {
+    private void recalculateSupertaskSchedule(
+      final Task supertask,
+      final TaskContainmentHierarchyFacade containmentFacade
+    ) {
       Task[] nestedTasks = containmentFacade.getNestedTasks(supertask);
       if (nestedTasks.length == 0) {
         return;
@@ -136,7 +62,7 @@ public abstract class AdjustTaskBoundsAlgorithm extends AlgorithmBase {
 
       GanttCalendar maxEnd = null;
       GanttCalendar minStart = null;
-      for (Task nestedTask : nestedTasks) {
+      for (Task nestedTask: nestedTasks) {
         GanttCalendar nextStart = nestedTask.getStart();
         if (minStart == null || nextStart.compareTo(minStart) < 0) {
           minStart = nextStart;
@@ -157,5 +83,77 @@ public abstract class AdjustTaskBoundsAlgorithm extends AlgorithmBase {
       }
       mutator.commit();
     }
+
+    private void recalculateSupertaskScheduleBottomUp(
+      Set<Task> supertasks,
+      TaskContainmentHierarchyFacade containmentFacade
+    ) {
+      for (Task supertask: supertasks) {
+        recalculateSupertaskSchedule(supertask, containmentFacade);
+      }
+    }
+  }
+
+  public void adjustNestedTasks(Task supertask) throws TaskDependencyException {
+    if (!isEnabled()) {
+      return;
+    }
+    TaskContainmentHierarchyFacade containmentFacade = createContainmentFacade();
+    List<Task> nestedTasks = new ArrayList<Task>(Arrays.asList(containmentFacade.getNestedTasks(supertask)));
+    if (nestedTasks.size() == 0) {
+      return;
+    }
+    SortTasksAlgorithm sortAlgorithm = new SortTasksAlgorithm();
+    sortAlgorithm.sortTasksByStartDate(nestedTasks);
+    Set<Task> modifiedTasks = new HashSet<Task>();
+    for (Task nestedTask: nestedTasks) {
+      if (nestedTask.getStart().getTime().before(supertask.getStart().getTime())) {
+        TaskMutator mutator = nestedTask.createMutatorFixingDuration();
+        mutator.setStart(supertask.getStart());
+        mutator.commit();
+
+        modifiedTasks.add(nestedTask);
+      }
+      if (nestedTask.getEnd().getTime().after(supertask.getEnd().getTime())) {
+        TaskMutator mutator = nestedTask.createMutatorFixingDuration();
+        mutator.shift(supertask.getManager().createLength(supertask.getDuration().getTimeUnit(),
+                                                          nestedTask.getEnd().getTime(), supertask.getEnd().getTime()
+        ));
+        mutator.commit();
+
+        modifiedTasks.add(nestedTask);
+      }
+    }
+    run(modifiedTasks.toArray(new Task[0]));
+    RecalculateTaskScheduleAlgorithm alg = new RecalculateTaskScheduleAlgorithm(this) {
+      @Override
+      protected TaskContainmentHierarchyFacade createContainmentFacade() {
+        return AdjustTaskBoundsAlgorithm.this.createContainmentFacade();
+      }
+    };
+    alg.run(modifiedTasks);
+  }
+
+  public void run(Task[] tasks) {
+    run(Arrays.asList(tasks));
+  }
+
+  public void run(Collection<Task> tasks) {
+    if (!isEnabled()) {
+      return;
+    }
+    AlgorithmImpl algorithmImpl = new AlgorithmImpl();
+    algorithmImpl.run(tasks);
+  }
+
+  public void run(Task task) {
+    run(new Task[]{task});
+  }
+
+  protected abstract TaskContainmentHierarchyFacade createContainmentFacade();
+
+  @Override
+  protected boolean isEnabled() {
+    return false;
   }
 }

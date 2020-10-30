@@ -25,24 +25,23 @@ import java.util.EventListener;
  */
 public interface TaskListener extends EventListener {
 
-  void taskScheduleChanged(TaskScheduleEvent e);
-
   void dependencyAdded(TaskDependencyEvent e);
-
-  void dependencyRemoved(TaskDependencyEvent e);
 
   void dependencyChanged(TaskDependencyEvent e);
 
+  void dependencyRemoved(TaskDependencyEvent e);
+
   void taskAdded(TaskHierarchyEvent e);
-
-  void taskRemoved(TaskHierarchyEvent e);
-
-  void taskMoved(TaskHierarchyEvent e);
-
-  void taskPropertiesChanged(TaskPropertyEvent e);
-
-  void taskProgressChanged(TaskPropertyEvent e);
 
   void taskModelReset();
 
+  void taskMoved(TaskHierarchyEvent e);
+
+  void taskProgressChanged(TaskPropertyEvent e);
+
+  void taskPropertiesChanged(TaskPropertyEvent e);
+
+  void taskRemoved(TaskHierarchyEvent e);
+
+  void taskScheduleChanged(TaskScheduleEvent e);
 }

@@ -18,8 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package net.sourceforge.ganttproject.model.document;
 
-import javax.swing.Action;
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -29,6 +28,16 @@ import java.io.IOException;
  */
 public interface DocumentStorageUi {
 
+  class Components {
+    public final Action[] actions;
+    public final JComponent contentPane;
+
+    public Components(JComponent contentPane, Action[] actions) {
+      this.contentPane = contentPane;
+      this.actions = actions;
+    }
+  }
+
   /**
    * Receives document descriptors as user changes selection in UI
    */
@@ -36,22 +45,14 @@ public interface DocumentStorageUi {
     void setDocument(Document document) throws IOException, Document.DocumentException;
   }
 
-  class Components {
-    public final JComponent contentPane;
-    public final Action[] actions;
-
-    public Components(JComponent contentPane, Action[] actions) {
-      this.contentPane = contentPane;
-      this.actions = actions;
-    }
-  }
   /**
    * Creates UI to open a document. UI should allow for selecting a document from a list or for typing
    * document access parameters. Every time user changes something, UI should send an updated
    * document descriptor to the receiver
    *
    * @param currentDocument document currently opened in GanttProject
-   * @param receiver receiver of the descriptors of selected documents
+   * @param receiver        receiver of the descriptors of selected documents
+   *
    * @return UI component ready for inserting into a dialog or other component
    */
   Components open(Document currentDocument, DocumentReceiver receiver);
@@ -62,7 +63,8 @@ public interface DocumentStorageUi {
    * document descriptor to the receiver
    *
    * @param currentDocument document currently opened in GanttProject
-   * @param receiver receiver of the descriptors of selected documents
+   * @param receiver        receiver of the descriptors of selected documents
+   *
    * @return UI component ready for inserting into a dialog or other component
    */
   Components save(Document currentDocument, DocumentReceiver receiver);

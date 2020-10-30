@@ -18,5 +18,5 @@ import java.util.Date;
  * @author bard
  */
 public interface TimeUnitFunctionOfDate extends TimeUnit {
-  public TimeUnit createTimeUnit(Date date);
+  TimeUnit createTimeUnit(Date date);
 }

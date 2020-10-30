@@ -23,13 +23,13 @@ public class CalendarActivityImpl implements GPCalendarActivity {
   }
 
   @Override
-  public Date getStart() {
-    return myStartDate;
+  public Date getEnd() {
+    return myEndDate;
   }
 
   @Override
-  public Date getEnd() {
-    return myEndDate;
+  public Date getStart() {
+    return myStartDate;
   }
 
   @Override

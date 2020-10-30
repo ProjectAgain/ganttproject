@@ -1,15 +1,26 @@
 package net.sourceforge.ganttproject.model.calendar;
 
-import java.util.Date;
-import java.util.List;
-
 import net.sourceforge.ganttproject.model.time.TimeDuration;
 import net.sourceforge.ganttproject.model.time.TimeUnit;
 
+import java.util.Date;
+import java.util.List;
+
 public interface GPCalendarCalc extends GPCalendar {
-  public static enum MoveDirection {
+  enum MoveDirection {
     FORWARD, BACKWARD
   }
+
+  String EXTENSION_POINT_ID = "net.sourceforge.ganttproject.calendar";
+  GPCalendarCalc PLAIN = new AlwaysWorkingTimeCalendarImpl();
+
+  GPCalendarCalc copy();
+
+  Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType, Date limit);
+
+  Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType);
+
+  Date findClosestWorkingTime(Date time);
 
   List<GPCalendarActivity> getActivities(Date startDate, Date endDate);
 
@@ -17,18 +28,15 @@ public interface GPCalendarCalc extends GPCalendar {
 
   /**
    * @return true when weekends are only shown and taken into account for the
-   *         task scheduling.
+   * task scheduling.
    */
-  public boolean getOnlyShowWeekends();
+  boolean getOnlyShowWeekends();
 
   /**
-   * @param onlyShowWeekends
-   *          must be set to true if weekends are only shown and not taken into
-   *          account for the task scheduling
+   * @param onlyShowWeekends must be set to true if weekends are only shown and not taken into
+   *                         account for the task scheduling
    */
-  public void setOnlyShowWeekends(boolean onlyShowWeekends);
-
-  Date findClosestWorkingTime(Date time);
+  void setOnlyShowWeekends(boolean onlyShowWeekends);
 
   /**
    * Adds <code>shift</code> period to <code>input</code> date taking into
@@ -38,12 +46,4 @@ public interface GPCalendarCalc extends GPCalendar {
    * midnight of the next Monday
    */
   Date shiftDate(Date input, TimeDuration shift);
-
-  Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType);
-
-  Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType, Date limit);
-  GPCalendarCalc PLAIN = new AlwaysWorkingTimeCalendarImpl();
-  String EXTENSION_POINT_ID = "net.sourceforge.ganttproject.calendar";
-
-  public GPCalendarCalc copy();
 }

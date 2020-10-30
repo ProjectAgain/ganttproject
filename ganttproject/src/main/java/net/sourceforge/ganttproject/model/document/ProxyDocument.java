@@ -18,39 +18,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.document;
 
-import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.ui.viewmodel.option.ListOption;
-import net.sourceforge.ganttproject.ui.table.ColumnList;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import net.sourceforge.ganttproject.model.IGanttProject;
-import net.sourceforge.ganttproject.ui.gui.GPColorChooser;
-import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.io.GPSaver;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.parser.AbstractTagHandler;
-import net.sourceforge.ganttproject.parser.AllocationTagHandler;
-import net.sourceforge.ganttproject.parser.CustomPropertiesTagHandler;
-import net.sourceforge.ganttproject.parser.DefaultWeekTagHandler;
-import net.sourceforge.ganttproject.parser.DependencyTagHandler;
-import net.sourceforge.ganttproject.parser.FileFormatException;
-import net.sourceforge.ganttproject.parser.GPParser;
-import net.sourceforge.ganttproject.parser.HolidayTagHandler;
-import net.sourceforge.ganttproject.parser.OptionTagHandler;
-import net.sourceforge.ganttproject.parser.ParserFactory;
-import net.sourceforge.ganttproject.parser.ParsingListener;
-import net.sourceforge.ganttproject.parser.PreviousStateTasksTagHandler;
-import net.sourceforge.ganttproject.parser.ResourceTagHandler;
-import net.sourceforge.ganttproject.parser.RoleTagHandler;
-import net.sourceforge.ganttproject.parser.TaskDisplayColumnsTagHandler;
-import net.sourceforge.ganttproject.parser.TaskPropertiesTagHandler;
-import net.sourceforge.ganttproject.parser.TaskTagHandler;
-import net.sourceforge.ganttproject.parser.VacationTagHandler;
-import net.sourceforge.ganttproject.parser.ViewTagHandler;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
 import net.sourceforge.ganttproject.model.roles.RoleManager;
 import net.sourceforge.ganttproject.model.task.TaskManager;
 import net.sourceforge.ganttproject.model.task.TaskManagerImpl;
+import net.sourceforge.ganttproject.parser.*;
+import net.sourceforge.ganttproject.ui.gui.GPColorChooser;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ListOption;
 import org.eclipse.core.runtime.IStatus;
 import org.xml.sax.Attributes;
 
@@ -66,24 +48,206 @@ import java.util.Set;
  * @author bard
  */
 public class ProxyDocument implements Document {
-  private Document myPhysicalDocument;
+  private static class OnlyShowWeekendsTagHandler extends AbstractTagHandler {
 
-  private IGanttProject myProject;
+    private final GPCalendarCalc calendar;
 
-  private UIFacade myUIFacade;
+    public OnlyShowWeekendsTagHandler(GPCalendarCalc calendar) {
+      super("only-show-weekends");
+      this.calendar = calendar;
+    }
 
-  private final ParserFactory myParserFactory;
+    @Override
+    protected boolean onStartElement(Attributes attrs) {
+      calendar.setOnlyShowWeekends(Boolean.parseBoolean(attrs.getValue("value")));
+      return true;
+    }
+  }
+
+  class ParsingState {
+    private final FailureState myFailureState;
+
+    private final SuccessState mySuccessState;
+
+    public ParsingState(SuccessState success, FailureState failure) {
+      mySuccessState = success;
+      myFailureState = failure;
+    }
+
+    void enter() throws IOException, DocumentException {
+      GPParser opener = myParserFactory.newParser();
+      HumanResourceManager hrManager = getHumanResourceManager();
+      RoleManager roleManager = getRoleManager();
+      TaskManager taskManager = getTaskManager();
+      ResourceTagHandler resourceHandler = new ResourceTagHandler(hrManager, roleManager,
+                                                                  myProject.getResourceCustomPropertyManager()
+      );
+      DependencyTagHandler dependencyHandler =
+        new DependencyTagHandler(opener.getContext(), taskManager, getUIFacade());
+      AllocationTagHandler allocationHandler = new AllocationTagHandler(hrManager, getTaskManager(), getRoleManager());
+      VacationTagHandler vacationHandler = new VacationTagHandler(hrManager);
+      PreviousStateTasksTagHandler previousStateHandler = new PreviousStateTasksTagHandler(myProject.getBaselines());
+      RoleTagHandler rolesHandler = new RoleTagHandler(roleManager);
+      TaskTagHandler taskHandler = new TaskTagHandler(taskManager, opener.getContext(), myUIFacade.getTaskTree());
+      DefaultWeekTagHandler weekHandler = new DefaultWeekTagHandler(getActiveCalendar());
+      OnlyShowWeekendsTagHandler onlyShowWeekendsHandler = new OnlyShowWeekendsTagHandler(getActiveCalendar());
+
+      TaskPropertiesTagHandler taskPropHandler = new TaskPropertiesTagHandler(myProject.getTaskCustomColumnManager());
+      opener.addTagHandler(taskPropHandler);
+      CustomPropertiesTagHandler customPropHandler = new CustomPropertiesTagHandler(
+        opener.getContext(),
+        getTaskManager()
+      );
+      opener.addTagHandler(customPropHandler);
+
+      TaskDisplayColumnsTagHandler pilsenTaskDisplayHandler = TaskDisplayColumnsTagHandler.createPilsenHandler();
+      TaskDisplayColumnsTagHandler legacyTaskDisplayHandler = TaskDisplayColumnsTagHandler.createLegacyHandler();
+
+      opener.addTagHandler(pilsenTaskDisplayHandler);
+      opener.addTagHandler(legacyTaskDisplayHandler);
+      opener.addParsingListener(
+        TaskDisplayColumnsTagHandler.createTaskDisplayColumnsWrapper(myTaskVisibleFields, pilsenTaskDisplayHandler,
+                                                                     legacyTaskDisplayHandler
+        ));
+      opener.addTagHandler(new ViewTagHandler("gantt-chart", getUIFacade(), pilsenTaskDisplayHandler));
+
+      TaskDisplayColumnsTagHandler resourceFieldsHandler = new TaskDisplayColumnsTagHandler(
+        "field", "id", "order", "width", "visible");
+      opener.addTagHandler(resourceFieldsHandler);
+      opener.addParsingListener(
+        TaskDisplayColumnsTagHandler.createTaskDisplayColumnsWrapper(myResourceVisibleFields, resourceFieldsHandler));
+      opener.addTagHandler(new ViewTagHandler("resource-table", getUIFacade(), resourceFieldsHandler));
+
+      opener.addTagHandler(taskHandler);
+      opener.addParsingListener(taskHandler);
+
+      opener.addParsingListener(customPropHandler);
+
+      opener.addTagHandler(opener.getDefaultTagHandler());
+      opener.addTagHandler(opener.getTimelineTagHandler());
+      opener.addParsingListener((ParsingListener) opener.getTimelineTagHandler());
+      opener.addTagHandler(resourceHandler);
+      opener.addTagHandler(dependencyHandler);
+      opener.addTagHandler(allocationHandler);
+      opener.addParsingListener(allocationHandler);
+      opener.addTagHandler(vacationHandler);
+      opener.addTagHandler(previousStateHandler);
+      opener.addTagHandler(rolesHandler);
+      opener.addTagHandler(weekHandler);
+      opener.addTagHandler(onlyShowWeekendsHandler);
+      opener.addTagHandler(new OptionTagHandler<ListOption<Color>>(GPColorChooser.getRecentColorsOption()));
+      opener.addParsingListener(dependencyHandler);
+      opener.addParsingListener(resourceHandler);
+
+      HolidayTagHandler holidayHandler = new HolidayTagHandler(myProject.getActiveCalendar());
+      opener.addTagHandler(new AbstractTagHandler("calendars") {
+        @Override
+        protected boolean onStartElement(Attributes attrs) {
+          myProject.getActiveCalendar().setBaseCalendarID(attrs.getValue("base-id"));
+          return true;
+        }
+      });
+      opener.addTagHandler(holidayHandler);
+
+      PortfolioTagHandler portfolioHandler = new PortfolioTagHandler();
+      opener.addTagHandler(portfolioHandler);
+      InputStream is;
+      try {
+        is = getInputStream();
+      } catch (IOException e) {
+        myFailureState.enter();
+        throw new DocumentException(GanttLanguage.getInstance().getText("msg8") + ": " + e.getLocalizedMessage(), e);
+      }
+      if (opener.load(is)) {
+        mySuccessState.enter();
+      } else {
+        myFailureState.enter();
+      }
+    }
+  }
+
+  class SuccessState {
+    void enter() {
+    }
+  }
+
+  class FailureState {
+    void enter() {
+    }
+  }
+
+  private class PortfolioImpl implements Portfolio {
+    private Document myDefaultDocument;
+
+    @Override
+    public Document getDefaultDocument() {
+      return myDefaultDocument;
+    }
+
+    void setDefaultDocument(Document document) {
+      if (myDefaultDocument != null) {
+        throw new IllegalStateException("Don't set default document twice");
+      }
+      myDefaultDocument = document;
+    }
+  }
+
+  private class PortfolioTagHandler extends AbstractTagHandler {
+    private static final String LOCATION_ATTR = "location";
+    private static final String PORTFOLIO_TAG = "portfolio";
+    private static final String PROJECT_TAG = "project";
+    private final Set<String> TAGS = ImmutableSet.of(PORTFOLIO_TAG, PROJECT_TAG);
+    private boolean isReadingPortfolio = false;
+
+    public PortfolioTagHandler() {
+      super(null, false);
+    }
+
+    @Override
+    public void endElement(String namespaceURI, String sName, String qName) {
+      if (!TAGS.contains(qName)) {
+        return;
+      }
+      if (PORTFOLIO_TAG.equals(qName)) {
+        isReadingPortfolio = false;
+      }
+      setTagStarted(false);
+    }
+
+    @Override
+    public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
+      throws FileFormatException {
+      if (!TAGS.contains(qName)) {
+        return;
+      }
+      setTagStarted(true);
+      if (PORTFOLIO_TAG.equals(qName)) {
+        isReadingPortfolio = true;
+        return;
+      }
+      if (PROJECT_TAG.equals(qName) && isReadingPortfolio) {
+        String locationAsString = attrs.getValue(LOCATION_ATTR);
+        if (locationAsString != null) {
+          Document document = myCreator.getDocument(locationAsString);
+          getPortfolioImpl().setDefaultDocument(document);
+        }
+      }
+    }
+  }
 
   private final DocumentCreator myCreator;
-
-  private PortfolioImpl myPortfolio;
-
-  private final ColumnList myTaskVisibleFields;
-
+  private final ParserFactory myParserFactory;
   private final ColumnList myResourceVisibleFields;
+  private final ColumnList myTaskVisibleFields;
+  private Document myPhysicalDocument;
+  private PortfolioImpl myPortfolio;
+  private final IGanttProject myProject;
+  private final UIFacade myUIFacade;
 
-  ProxyDocument(DocumentCreator creator, Document physicalDocument, IGanttProject project, UIFacade uiFacade,
-      ColumnList taskVisibleFields, ColumnList resourceVisibleFields, ParserFactory parserFactory) {
+  ProxyDocument(
+    DocumentCreator creator, Document physicalDocument, IGanttProject project, UIFacade uiFacade,
+    ColumnList taskVisibleFields, ColumnList resourceVisibleFields, ParserFactory parserFactory
+  ) {
     myPhysicalDocument = physicalDocument;
     myProject = project;
     myUIFacade = uiFacade;
@@ -93,17 +257,9 @@ public class ProxyDocument implements Document {
     myResourceVisibleFields = resourceVisibleFields;
   }
 
-  public Document getRealDocument() {
-    return myPhysicalDocument;
-  }
   @Override
-  public void setMirror(Document mirrorDocument) {
-    myPhysicalDocument = Preconditions.checkNotNull(mirrorDocument);
-  }
-
-  @Override
-  public String getFileName() {
-    return myPhysicalDocument.getFileName();
+  public boolean acquireLock() {
+    return myPhysicalDocument.acquireLock();
   }
 
   @Override
@@ -117,33 +273,16 @@ public class ProxyDocument implements Document {
   }
 
   @Override
-  public boolean isValidForMRU() {
-    return myPhysicalDocument.isValidForMRU();
+  public boolean equals(Object doc) {
+    if (false == doc instanceof ProxyDocument) {
+      return false;
+    }
+    return getPath().equals(((Document) doc).getPath());
   }
 
   @Override
-  public boolean acquireLock() {
-    return myPhysicalDocument.acquireLock();
-  }
-
-  @Override
-  public void releaseLock() {
-    myPhysicalDocument.releaseLock();
-  }
-
-  @Override
-  public InputStream getInputStream() throws IOException {
-    return myPhysicalDocument.getInputStream();
-  }
-
-  @Override
-  public OutputStream getOutputStream() throws IOException {
-    return myPhysicalDocument.getOutputStream();
-  }
-
-  @Override
-  public String getPath() {
-    return myPhysicalDocument.getPath();
+  public String getFileName() {
+    return myPhysicalDocument.getFileName();
   }
 
   @Override
@@ -160,13 +299,8 @@ public class ProxyDocument implements Document {
   }
 
   @Override
-  public String getUsername() {
-    return myPhysicalDocument.getUsername();
-  }
-
-  @Override
-  public String getPassword() {
-    return myPhysicalDocument.getPassword();
+  public InputStream getInputStream() throws IOException {
+    return myPhysicalDocument.getInputStream();
   }
 
   @Override
@@ -175,62 +309,42 @@ public class ProxyDocument implements Document {
   }
 
   @Override
-  public void read() throws IOException, DocumentException {
-    FailureState failure = new FailureState();
-    SuccessState success = new SuccessState();
-    ParsingState parsing = new ParsingState(success, failure);
-    // OpenCopyConfirmationState confirmation = new OpenCopyConfirmationState(
-    // parsing, failure);
-    // AcquireLockState lock = new AcquireLockState(parsing, confirmation);
-    try {
-      getTaskManager().setEventsEnabled(false);
-      parsing.enter();
-    } finally {
-      getTaskManager().setEventsEnabled(true);
-    }
-    // lock.enter();
+  public OutputStream getOutputStream() throws IOException {
+    return myPhysicalDocument.getOutputStream();
   }
 
   @Override
-  public void write() throws IOException {
-    GPSaver saver = myParserFactory.newSaver();
-    byte[] buffer;
-    try {
-      ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
-      saver.save(bufferStream);
-      bufferStream.flush();
-      buffer = bufferStream.toByteArray();
-    } catch (IOException e) {
-      getUIFacade().showErrorDialog(e);
-      return;
-    }
-    OutputStream output = getOutputStream();
-    try {
-      output.write(buffer);
-      output.flush();
-    } finally {
-      output.close();
-    }
+  public String getPassword() {
+    return myPhysicalDocument.getPassword();
   }
 
-  private TaskManagerImpl getTaskManager() {
-    return (TaskManagerImpl) myProject.getTaskManager();
+  @Override
+  public String getPath() {
+    return myPhysicalDocument.getPath();
   }
 
-  private RoleManager getRoleManager() {
-    return myProject.getRoleManager();
+  @Override
+  public Portfolio getPortfolio() {
+    return myPortfolio;
   }
 
-  private HumanResourceManager getHumanResourceManager() {
-    return myProject.getHumanResourceManager();
+  public Document getRealDocument() {
+    return myPhysicalDocument;
   }
 
-  private GPCalendarCalc getActiveCalendar() {
-    return myProject.getActiveCalendar();
+  @Override
+  public URI getURI() {
+    return myPhysicalDocument.getURI();
   }
 
-  private UIFacade getUIFacade() {
-    return myUIFacade;
+  @Override
+  public String getUsername() {
+    return myPhysicalDocument.getUsername();
+  }
+
+  @Override
+  public boolean isLocal() {
+    return myPhysicalDocument.isLocal();
   }
 
   // class AcquireLockState {
@@ -277,134 +391,66 @@ public class ProxyDocument implements Document {
   // }
   // }
 
-  class ParsingState {
-    private final FailureState myFailureState;
-
-    private final SuccessState mySuccessState;
-
-    public ParsingState(SuccessState success, FailureState failure) {
-      mySuccessState = success;
-      myFailureState = failure;
-    }
-
-    void enter() throws IOException, DocumentException {
-      GPParser opener = myParserFactory.newParser();
-      HumanResourceManager hrManager = getHumanResourceManager();
-      RoleManager roleManager = getRoleManager();
-      TaskManager taskManager = getTaskManager();
-      ResourceTagHandler resourceHandler = new ResourceTagHandler(hrManager, roleManager,
-          myProject.getResourceCustomPropertyManager());
-      DependencyTagHandler dependencyHandler = new DependencyTagHandler(opener.getContext(), taskManager, getUIFacade());
-      AllocationTagHandler allocationHandler = new AllocationTagHandler(hrManager, getTaskManager(), getRoleManager());
-      VacationTagHandler vacationHandler = new VacationTagHandler(hrManager);
-      PreviousStateTasksTagHandler previousStateHandler = new PreviousStateTasksTagHandler(myProject.getBaselines());
-      RoleTagHandler rolesHandler = new RoleTagHandler(roleManager);
-      TaskTagHandler taskHandler = new TaskTagHandler(taskManager, opener.getContext(), myUIFacade.getTaskTree());
-      DefaultWeekTagHandler weekHandler = new DefaultWeekTagHandler(getActiveCalendar());
-      OnlyShowWeekendsTagHandler onlyShowWeekendsHandler = new OnlyShowWeekendsTagHandler(getActiveCalendar());
-
-      TaskPropertiesTagHandler taskPropHandler = new TaskPropertiesTagHandler(myProject.getTaskCustomColumnManager());
-      opener.addTagHandler(taskPropHandler);
-      CustomPropertiesTagHandler customPropHandler = new CustomPropertiesTagHandler(opener.getContext(),
-          getTaskManager());
-      opener.addTagHandler(customPropHandler);
-
-
-      TaskDisplayColumnsTagHandler pilsenTaskDisplayHandler = TaskDisplayColumnsTagHandler.createPilsenHandler();
-      TaskDisplayColumnsTagHandler legacyTaskDisplayHandler = TaskDisplayColumnsTagHandler.createLegacyHandler();
-
-      opener.addTagHandler(pilsenTaskDisplayHandler);
-      opener.addTagHandler(legacyTaskDisplayHandler);
-      opener.addParsingListener(TaskDisplayColumnsTagHandler.createTaskDisplayColumnsWrapper(myTaskVisibleFields, pilsenTaskDisplayHandler, legacyTaskDisplayHandler));
-      opener.addTagHandler(new ViewTagHandler("gantt-chart", getUIFacade(), pilsenTaskDisplayHandler));
-
-
-      TaskDisplayColumnsTagHandler resourceFieldsHandler = new TaskDisplayColumnsTagHandler(
-          "field", "id", "order", "width", "visible");
-      opener.addTagHandler(resourceFieldsHandler);
-      opener.addParsingListener(TaskDisplayColumnsTagHandler.createTaskDisplayColumnsWrapper(myResourceVisibleFields, resourceFieldsHandler));
-      opener.addTagHandler(new ViewTagHandler("resource-table", getUIFacade(), resourceFieldsHandler));
-
-      opener.addTagHandler(taskHandler);
-      opener.addParsingListener(taskHandler);
-
-      opener.addParsingListener(customPropHandler);
-
-      opener.addTagHandler(opener.getDefaultTagHandler());
-      opener.addTagHandler(opener.getTimelineTagHandler());
-      opener.addParsingListener((ParsingListener)opener.getTimelineTagHandler());
-      opener.addTagHandler(resourceHandler);
-      opener.addTagHandler(dependencyHandler);
-      opener.addTagHandler(allocationHandler);
-      opener.addParsingListener(allocationHandler);
-      opener.addTagHandler(vacationHandler);
-      opener.addTagHandler(previousStateHandler);
-      opener.addTagHandler(rolesHandler);
-      opener.addTagHandler(weekHandler);
-      opener.addTagHandler(onlyShowWeekendsHandler);
-      opener.addTagHandler(new OptionTagHandler<ListOption<Color>>(GPColorChooser.getRecentColorsOption()));
-      opener.addParsingListener(dependencyHandler);
-      opener.addParsingListener(resourceHandler);
-
-
-      HolidayTagHandler holidayHandler = new HolidayTagHandler(myProject.getActiveCalendar());
-      opener.addTagHandler(new AbstractTagHandler("calendars") {
-        @Override
-        protected boolean onStartElement(Attributes attrs) {
-          myProject.getActiveCalendar().setBaseCalendarID(attrs.getValue("base-id"));
-          return true;
-        }
-      });
-      opener.addTagHandler(holidayHandler);
-
-      PortfolioTagHandler portfolioHandler = new PortfolioTagHandler();
-      opener.addTagHandler(portfolioHandler);
-      InputStream is;
-      try {
-        is = getInputStream();
-      } catch (IOException e) {
-        myFailureState.enter();
-        throw new DocumentException(GanttLanguage.getInstance().getText("msg8") + ": " + e.getLocalizedMessage(), e);
-      }
-      if (opener.load(is)) {
-        mySuccessState.enter();
-      } else {
-        myFailureState.enter();
-      }
-    }
-  }
-
-  class SuccessState {
-    void enter() {
-    }
-  }
-
-  class FailureState {
-    void enter() {
-    }
+  @Override
+  public boolean isValidForMRU() {
+    return myPhysicalDocument.isValidForMRU();
   }
 
   @Override
-  public URI getURI() {
-    return myPhysicalDocument.getURI();
-  }
-
-  @Override
-  public boolean isLocal() {
-    return myPhysicalDocument.isLocal();
-  }
-
-  @Override
-  public boolean equals(Object doc) {
-    if (false == doc instanceof ProxyDocument) {
-      return false;
+  public void read() throws IOException, DocumentException {
+    FailureState failure = new FailureState();
+    SuccessState success = new SuccessState();
+    ParsingState parsing = new ParsingState(success, failure);
+    // OpenCopyConfirmationState confirmation = new OpenCopyConfirmationState(
+    // parsing, failure);
+    // AcquireLockState lock = new AcquireLockState(parsing, confirmation);
+    try {
+      getTaskManager().setEventsEnabled(false);
+      parsing.enter();
+    } finally {
+      getTaskManager().setEventsEnabled(true);
     }
-    return getPath().equals(((Document) doc).getPath());
+    // lock.enter();
   }
 
   @Override
-  public Portfolio getPortfolio() {
-    return myPortfolio;
+  public void releaseLock() {
+    myPhysicalDocument.releaseLock();
+  }
+
+  @Override
+  public void setMirror(Document mirrorDocument) {
+    myPhysicalDocument = Preconditions.checkNotNull(mirrorDocument);
+  }
+
+  @Override
+  public void write() throws IOException {
+    GPSaver saver = myParserFactory.newSaver();
+    byte[] buffer;
+    try {
+      ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
+      saver.save(bufferStream);
+      bufferStream.flush();
+      buffer = bufferStream.toByteArray();
+    } catch (IOException e) {
+      getUIFacade().showErrorDialog(e);
+      return;
+    }
+    OutputStream output = getOutputStream();
+    try {
+      output.write(buffer);
+      output.flush();
+    } finally {
+      output.close();
+    }
+  }
+
+  private GPCalendarCalc getActiveCalendar() {
+    return myProject.getActiveCalendar();
+  }
+
+  private HumanResourceManager getHumanResourceManager() {
+    return myProject.getHumanResourceManager();
   }
 
   private PortfolioImpl getPortfolioImpl() {
@@ -414,78 +460,15 @@ public class ProxyDocument implements Document {
     return myPortfolio;
   }
 
-  private class PortfolioImpl implements Portfolio {
-    private Document myDefaultDocument;
-
-    @Override
-    public Document getDefaultDocument() {
-      return myDefaultDocument;
-    }
-
-    void setDefaultDocument(Document document) {
-      if (myDefaultDocument != null) {
-        throw new IllegalStateException("Don't set default document twice");
-      }
-      myDefaultDocument = document;
-    }
+  private RoleManager getRoleManager() {
+    return myProject.getRoleManager();
   }
 
-  private class PortfolioTagHandler extends AbstractTagHandler {
-    private static final String PORTFOLIO_TAG = "portfolio";
-    private static final String PROJECT_TAG = "project";
-    private final Set<String> TAGS = ImmutableSet.of(PORTFOLIO_TAG, PROJECT_TAG);
-    private static final String LOCATION_ATTR = "location";
-    private boolean isReadingPortfolio = false;
-
-    public PortfolioTagHandler() {
-      super(null, false);
-    }
-    @Override
-    public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
-        throws FileFormatException {
-      if (!TAGS.contains(qName)) {
-        return;
-      }
-      setTagStarted(true);
-      if (PORTFOLIO_TAG.equals(qName)) {
-        isReadingPortfolio = true;
-        return;
-      }
-      if (PROJECT_TAG.equals(qName) && isReadingPortfolio) {
-        String locationAsString = attrs.getValue(LOCATION_ATTR);
-        if (locationAsString != null) {
-          Document document = myCreator.getDocument(locationAsString);
-          getPortfolioImpl().setDefaultDocument(document);
-        }
-
-      }
-    }
-
-    @Override
-    public void endElement(String namespaceURI, String sName, String qName) {
-      if (!TAGS.contains(qName)) {
-        return;
-      }
-      if (PORTFOLIO_TAG.equals(qName)) {
-        isReadingPortfolio = false;
-      }
-      setTagStarted(false);
-    }
+  private TaskManagerImpl getTaskManager() {
+    return (TaskManagerImpl) myProject.getTaskManager();
   }
 
-  private static class OnlyShowWeekendsTagHandler extends AbstractTagHandler {
-
-    private final GPCalendarCalc calendar;
-
-    public OnlyShowWeekendsTagHandler(GPCalendarCalc calendar) {
-      super("only-show-weekends");
-      this.calendar = calendar;
-    }
-
-    @Override
-    protected boolean onStartElement(Attributes attrs) {
-      calendar.setOnlyShowWeekends(Boolean.parseBoolean(attrs.getValue("value")));
-      return true;
-    }
+  private UIFacade getUIFacade() {
+    return myUIFacade;
   }
 }

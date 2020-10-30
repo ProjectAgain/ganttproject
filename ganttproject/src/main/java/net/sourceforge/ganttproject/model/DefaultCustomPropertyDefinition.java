@@ -27,13 +27,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultCustomPropertyDefinition implements CustomPropertyDefinition {
-  private String myName;
+  private final Map<String, String> myAttributes = new HashMap<>();
   private final String myID;
   private Object myDefaultValue;
   private String myDefaultValueAsString;
+  private String myName;
   private CustomPropertyClass myPropertyClass;
   private String myTypeAsString;
-  private final Map<String, String> myAttributes = new HashMap<>();
 
   public DefaultCustomPropertyDefinition(String name) {
     myName = name;
@@ -54,6 +54,29 @@ public class DefaultCustomPropertyDefinition implements CustomPropertyDefinition
   }
 
   @Override
+  public IStatus canSetPropertyClass(CustomPropertyClass propertyClass) {
+    return Status.OK_STATUS;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj instanceof DefaultCustomPropertyDefinition == false) {
+      return false;
+    }
+    DefaultCustomPropertyDefinition that = (DefaultCustomPropertyDefinition) obj;
+    return this.myID.equals(that.myID);
+  }
+
+  @Nonnull
+  @Override
+  public Map<String, String> getAttributes() {
+    return myAttributes;
+  }
+
+  @Override
   public Object getDefaultValue() {
     return myDefaultValue;
   }
@@ -66,15 +89,9 @@ public class DefaultCustomPropertyDefinition implements CustomPropertyDefinition
   @Override
   public void setDefaultValueAsString(String value) {
     CustomPropertyDefinition stub = CustomPropertyManager.PropertyTypeEncoder.decodeTypeAndDefaultValue(
-        getTypeAsString(), value);
+      getTypeAsString(), value);
     myDefaultValue = stub.getDefaultValue();
     myDefaultValueAsString = stub.getDefaultValueAsString();
-  }
-
-  @Nonnull
-  @Override
-  public Map<String, String> getAttributes() {
-    return myAttributes;
   }
 
   @Override
@@ -93,15 +110,15 @@ public class DefaultCustomPropertyDefinition implements CustomPropertyDefinition
     myName = name;
   }
 
-  @Override
-  public Class<?> getType() {
-    return myPropertyClass.getJavaClass();
-  }
-
   @Nonnull
   @Override
   public CustomPropertyClass getPropertyClass() {
     return myPropertyClass;
+  }
+
+  @Override
+  public Class<?> getType() {
+    return myPropertyClass.getJavaClass();
   }
 
   @Override
@@ -110,8 +127,8 @@ public class DefaultCustomPropertyDefinition implements CustomPropertyDefinition
   }
 
   @Override
-  public IStatus canSetPropertyClass(CustomPropertyClass propertyClass) {
-    return Status.OK_STATUS;
+  public int hashCode() {
+    return myID == null ? myName.hashCode() : myID.hashCode();
   }
 
   @Override
@@ -121,22 +138,4 @@ public class DefaultCustomPropertyDefinition implements CustomPropertyDefinition
     setDefaultValueAsString(getDefaultValueAsString());
     return Status.OK_STATUS;
   }
-
-  @Override
-  public int hashCode() {
-    return myID==null ? myName.hashCode() : myID.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj instanceof DefaultCustomPropertyDefinition == false) {
-      return false;
-    }
-    DefaultCustomPropertyDefinition that = (DefaultCustomPropertyDefinition) obj;
-    return this.myID.equals(that.myID);
-  }
-
 }

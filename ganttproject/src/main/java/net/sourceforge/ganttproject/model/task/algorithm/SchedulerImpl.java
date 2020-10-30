@@ -18,17 +18,13 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
-import net.sourceforge.ganttproject.model.calendar.GPCalendar;
-import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayMask;
-import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.model.time.CalendarFactory;
-import net.sourceforge.ganttproject.model.time.GanttCalendar;
-import net.sourceforge.ganttproject.model.time.TimeDuration;
-import net.sourceforge.ganttproject.model.time.TimeUnit;
 import com.google.common.base.Supplier;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayMask;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskContainmentHierarchyFacade;
 import net.sourceforge.ganttproject.model.task.TaskImpl;
@@ -39,6 +35,10 @@ import net.sourceforge.ganttproject.model.task.algorithm.DependencyGraph.Node;
 import net.sourceforge.ganttproject.model.task.event.TaskDependencyEvent;
 import net.sourceforge.ganttproject.model.task.event.TaskListener;
 import net.sourceforge.ganttproject.model.task.event.TaskListenerAdapter;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeUnit;
 
 import java.util.Collection;
 import java.util.Date;
@@ -53,11 +53,11 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author dbarashev
  */
 public class SchedulerImpl extends AlgorithmBase {
+  private final org.slf4j.Logger log = getLogger(getClass());
   private final DependencyGraph myGraph;
-  private boolean isRunning;
   private final Supplier<TaskContainmentHierarchyFacade> myTaskHierarchy;
   private final TaskListener myTaskListener;
-  private final org.slf4j.Logger log = getLogger(getClass());
+  private boolean isRunning;
 
   public SchedulerImpl(DependencyGraph graph, Supplier<TaskContainmentHierarchyFacade> taskHierarchy) {
     myGraph = graph;
@@ -74,14 +74,6 @@ public class SchedulerImpl extends AlgorithmBase {
         run();
       }
     };
-  }
-
-  @Override
-  public void setEnabled(boolean enabled) {
-    super.setEnabled(enabled);
-    if (isEnabled()) {
-      run();
-    }
   }
 
   public TaskListener getTaskModelListener() {
@@ -101,17 +93,58 @@ public class SchedulerImpl extends AlgorithmBase {
     }
   }
 
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+    if (isEnabled()) {
+      run();
+    }
+  }
+
   private void doRun() {
     int layers = myGraph.checkLayerValidity();
     for (int i = 0; i < layers; i++) {
       Collection<Node> layer = myGraph.getLayer(i);
-      for (Node node : layer) {
+      for (Node node: layer) {
         try {
           schedule(node);
         } catch (IllegalArgumentException e) {
           log.error("{}", e);
         }
       }
+    }
+  }
+
+  private void modifyTaskEnd(Task task, Date newEnd) {
+    if (task.getEnd().getTime().equals(newEnd)) {
+      return;
+    }
+    GanttCalendar newEndCalendar = CalendarFactory.createGanttCalendar(newEnd);
+    if (getDiagnostic() != null) {
+      getDiagnostic().addModifiedTask(task, null, newEnd);
+    }
+    TaskMutator mutator = task.createMutator();
+    mutator.setEnd(newEndCalendar);
+    mutator.commit();
+  }
+
+  private void modifyTaskStart(Task task, Date newStart) {
+    if (task.getStart().getTime().equals(newStart)) {
+      return;
+    }
+    GanttCalendar newStartCalendar = CalendarFactory.createGanttCalendar(newStart);
+    if (getDiagnostic() != null) {
+      getDiagnostic().addModifiedTask(task, newStart, null);
+    }
+    TaskMutator mutator = task.createMutator();
+    if (myTaskHierarchy.get().hasNestedTasks(task)) {
+      mutator.setStart(newStartCalendar);
+      mutator.commit();
+    } else {
+      TimeDuration shift =
+        task.getManager().createLength(task.getDuration().getTimeUnit(), task.getStart().getTime(), newStart);
+      mutator.shift(shift);
+      mutator.commit();
     }
   }
 
@@ -126,7 +159,7 @@ public class SchedulerImpl extends AlgorithmBase {
     List<Date> subtaskRanges = Lists.newArrayList();
     List<DependencyEdge> incoming = node.getIncoming();
     log.debug(".. #incoming edges={}", incoming.size());
-    for (DependencyEdge edge : incoming) {
+    for (DependencyEdge edge: incoming) {
       if (!edge.refresh()) {
         continue;
       }
@@ -148,10 +181,14 @@ public class SchedulerImpl extends AlgorithmBase {
     }
     log.debug("..Ranges: start={} end={} weakStart={} weakEnd={}", startRange, endRange, weakStartRange, weakEndRange);
 
-    Range<Date> subtasksSpan = subtaskRanges.isEmpty() ?
-      Range.closed(node.getTask().getStart().getTime(), node.getTask().getEnd().getTime()) : Range.encloseAll(subtaskRanges);
-    Range<Date> subtreeStartUpwards = subtasksSpan.span(Range.downTo(node.getTask().getStart().getTime(), BoundType.CLOSED));
-    Range<Date> subtreeEndDownwards = subtasksSpan.span(Range.upTo(node.getTask().getEnd().getTime(), BoundType.CLOSED));
+    Range<Date> subtasksSpan = subtaskRanges.isEmpty()
+                               ?
+                               Range.closed(node.getTask().getStart().getTime(), node.getTask().getEnd().getTime())
+                               : Range.encloseAll(subtaskRanges);
+    Range<Date> subtreeStartUpwards =
+      subtasksSpan.span(Range.downTo(node.getTask().getStart().getTime(), BoundType.CLOSED));
+    Range<Date> subtreeEndDownwards =
+      subtasksSpan.span(Range.upTo(node.getTask().getEnd().getTime(), BoundType.CLOSED));
     log.debug("..Subtasks span={}", subtasksSpan);
 
     if (!startRange.equals(Range.all())) {
@@ -188,7 +225,9 @@ public class SchedulerImpl extends AlgorithmBase {
         Date closestWorkingEndDate = cal.findClosest(
           endDate, timeUnit, GPCalendarCalc.MoveDirection.BACKWARD, GPCalendar.DayType.WORKING);
         Date closestNonWorkingEndDate = cal.findClosest(
-          endDate, timeUnit, GPCalendarCalc.MoveDirection.BACKWARD, GPCalendar.DayType.NON_WORKING, closestWorkingEndDate);
+          endDate, timeUnit, GPCalendarCalc.MoveDirection.BACKWARD, GPCalendar.DayType.NON_WORKING,
+          closestWorkingEndDate
+        );
         // If there is a non-working date between current task end and closest working date
         // then we're really just after holidays
         if (closestNonWorkingEndDate != null && closestWorkingEndDate.before(closestNonWorkingEndDate)) {
@@ -200,38 +239,6 @@ public class SchedulerImpl extends AlgorithmBase {
         }
       }
       modifyTaskEnd(node.getTask(), endDate);
-    }
-  }
-
-  private void modifyTaskEnd(Task task, Date newEnd) {
-    if (task.getEnd().getTime().equals(newEnd)) {
-      return;
-    }
-    GanttCalendar newEndCalendar = CalendarFactory.createGanttCalendar(newEnd);
-    if (getDiagnostic() != null) {
-      getDiagnostic().addModifiedTask(task, null, newEnd);
-    }
-    TaskMutator mutator = task.createMutator();
-    mutator.setEnd(newEndCalendar);
-    mutator.commit();
-  }
-
-  private void modifyTaskStart(Task task, Date newStart) {
-    if (task.getStart().getTime().equals(newStart)) {
-      return;
-    }
-    GanttCalendar newStartCalendar = CalendarFactory.createGanttCalendar(newStart);
-    if (getDiagnostic() != null) {
-      getDiagnostic().addModifiedTask(task, newStart, null);
-    }
-    TaskMutator mutator = task.createMutator();
-    if (myTaskHierarchy.get().hasNestedTasks(task)) {
-      mutator.setStart(newStartCalendar);
-      mutator.commit();
-    } else {
-      TimeDuration shift = task.getManager().createLength(task.getDuration().getTimeUnit(), task.getStart().getTime(), newStart);
-      mutator.shift(shift);
-      mutator.commit();
     }
   }
 }

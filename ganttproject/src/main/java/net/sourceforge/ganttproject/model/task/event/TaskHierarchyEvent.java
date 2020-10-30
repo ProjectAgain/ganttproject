@@ -18,16 +18,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.event;
 
-import java.util.EventObject;
-
 import net.sourceforge.ganttproject.model.task.Task;
+
+import java.util.EventObject;
 
 public class TaskHierarchyEvent extends EventObject {
   private final Task myNewContainer;
-
-  private final Task myTask;
-
   private final Task myOldContainer;
+  private final Task myTask;
 
   public TaskHierarchyEvent(Object source, Task myTask, Task myOldContainer, Task myNewContainer) {
     super(source);
@@ -36,15 +34,15 @@ public class TaskHierarchyEvent extends EventObject {
     this.myOldContainer = myOldContainer;
   }
 
-  public Task getTask() {
-    return myTask;
+  public Task getNewContainer() {
+    return myNewContainer;
   }
 
   public Task getOldContainer() {
     return myOldContainer;
   }
 
-  public Task getNewContainer() {
-    return myNewContainer;
+  public Task getTask() {
+    return myTask;
   }
 }

@@ -24,20 +24,13 @@ import java.util.Date;
 import java.util.Locale;
 
 public abstract class CalendarFactory {
-  public static interface LocaleApi {
+  public interface LocaleApi {
     Locale getLocale();
+
     DateFormat getShortDateFormat();
   }
 
   private static LocaleApi ourLocaleApi;
-
-  public static Calendar newCalendar() {
-    return (Calendar) Calendar.getInstance(ourLocaleApi.getLocale()).clone();
-  }
-
-  protected static void setLocaleApi(LocaleApi localeApi) {
-    ourLocaleApi = localeApi;
-  }
 
   public static GanttCalendar createGanttCalendar(Date date) {
     return new GanttCalendar(date, ourLocaleApi);
@@ -49,5 +42,13 @@ public abstract class CalendarFactory {
 
   public static GanttCalendar createGanttCalendar() {
     return new GanttCalendar(ourLocaleApi);
+  }
+
+  public static Calendar newCalendar() {
+    return (Calendar) Calendar.getInstance(ourLocaleApi.getLocale()).clone();
+  }
+
+  protected static void setLocaleApi(LocaleApi localeApi) {
+    ourLocaleApi = localeApi;
   }
 }

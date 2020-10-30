@@ -24,15 +24,13 @@ import net.sourceforge.ganttproject.model.task.Task;
 import java.util.ArrayList;
 
 public class TaskHierarchyItem {
-  private Task myTask;
-
+  private static final TaskHierarchyItem[] EMPTY_ARRAY = new TaskHierarchyItem[0];
   private TaskHierarchyItem myContainerItem;
 
   private TaskHierarchyItem myFirstNestedItem;
 
   private TaskHierarchyItem myNextSiblingItem;
-
-  private static final TaskHierarchyItem[] EMPTY_ARRAY = new TaskHierarchyItem[0];
+  private final Task myTask;
 
   public TaskHierarchyItem(Task myTask, TaskHierarchyItem containerItem) {
     this.myTask = myTask;
@@ -40,32 +38,6 @@ public class TaskHierarchyItem {
     if (myContainerItem != null) {
       myContainerItem.addNestedItem(this, -1);
     }
-  }
-
-  public Task getTask() {
-    return myTask;
-  }
-
-  public TaskHierarchyItem getContainerItem() {
-    return myContainerItem;
-  }
-
-  public TaskHierarchyItem getNextSiblingItem() {
-    return myNextSiblingItem;
-  }
-
-  public TaskHierarchyItem[] getNestedItems() {
-    TaskHierarchyItem[] result;
-    if (myFirstNestedItem == null) {
-      result = EMPTY_ARRAY;
-    } else {
-      ArrayList<TaskHierarchyItem> tempList = new ArrayList<TaskHierarchyItem>();
-      for (TaskHierarchyItem nested = myFirstNestedItem; nested != null; nested = nested.myNextSiblingItem) {
-        tempList.add(nested);
-      }
-      result = Lists.reverse(tempList).toArray(EMPTY_ARRAY);
-    }
-    return result;
   }
 
   public void addNestedItem(TaskHierarchyItem nested, int position) {
@@ -81,7 +53,8 @@ public class TaskHierarchyItem {
         return;
       }
       TaskHierarchyItem nextItem = myFirstNestedItem;
-      for (int idx = curCount - position; nextItem != null && --idx > 0; nextItem = nextItem.getNextSiblingItem());
+      for (int idx = curCount - position; nextItem != null && --idx > 0; nextItem = nextItem.getNextSiblingItem()) {
+      }
       if (nextItem == null) {
         addNestedItem(nested, -1);
       } else {
@@ -98,12 +71,38 @@ public class TaskHierarchyItem {
       if (this == previousSibling) {
         myContainerItem.myFirstNestedItem = myNextSiblingItem;
       } else {
-        for (; previousSibling.myNextSiblingItem != this; previousSibling = previousSibling.myNextSiblingItem)
-          ;
+        for (; previousSibling.myNextSiblingItem != this; previousSibling = previousSibling.myNextSiblingItem) {
+        }
         previousSibling.myNextSiblingItem = myNextSiblingItem;
       }
       myContainerItem = null;
     }
     myNextSiblingItem = null;
+  }
+
+  public TaskHierarchyItem getContainerItem() {
+    return myContainerItem;
+  }
+
+  public TaskHierarchyItem[] getNestedItems() {
+    TaskHierarchyItem[] result;
+    if (myFirstNestedItem == null) {
+      result = EMPTY_ARRAY;
+    } else {
+      ArrayList<TaskHierarchyItem> tempList = new ArrayList<TaskHierarchyItem>();
+      for (TaskHierarchyItem nested = myFirstNestedItem; nested != null; nested = nested.myNextSiblingItem) {
+        tempList.add(nested);
+      }
+      result = Lists.reverse(tempList).toArray(EMPTY_ARRAY);
+    }
+    return result;
+  }
+
+  public TaskHierarchyItem getNextSiblingItem() {
+    return myNextSiblingItem;
+  }
+
+  public Task getTask() {
+    return myTask;
   }
 }

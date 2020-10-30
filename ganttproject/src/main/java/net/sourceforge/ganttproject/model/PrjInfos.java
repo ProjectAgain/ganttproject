@@ -24,16 +24,21 @@ package net.sourceforge.ganttproject.model;
  * @author athomas
  */
 public class PrjInfos {
-  /** The name of the project */
-  private String _sProjectName;
-
-  /** A short description of it */
+  /**
+   * A short description of it
+   */
   private String _sDescription;
-
-  /** The name of the organization */
+  /**
+   * The name of the organization
+   */
   private String _sOrganization;
-
-  /** Web link for the project or for the company */
+  /**
+   * The name of the project
+   */
+  private String _sProjectName;
+  /**
+   * Web link for the project or for the company
+   */
   private String _sWebLink;
 
   public PrjInfos() {
@@ -50,42 +55,58 @@ public class PrjInfos {
     this._sWebLink = sWebLink;
   }
 
-  /** @return the name of the project. */
-  public String getName() {
-    return _sProjectName;
-  }
-
-  /** sets the name of the project. */
-  public void setName(String projectName) {
-    _sProjectName = projectName;
-  }
-
-  /** @return the description of the project. */
+  /**
+   * @return the description of the project.
+   */
   public String getDescription() {
     return _sDescription;
   }
 
-  /** sets the description of the project. */
+  /**
+   * sets the description of the project.
+   */
   public void setDescription(String description) {
     _sDescription = description;
   }
 
-  /** @return the organization of the project. */
+  /**
+   * @return the name of the project.
+   */
+  public String getName() {
+    return _sProjectName;
+  }
+
+  /**
+   * sets the name of the project.
+   */
+  public void setName(String projectName) {
+    _sProjectName = projectName;
+  }
+
+  /**
+   * @return the organization of the project.
+   */
   public String getOrganization() {
     return _sOrganization;
   }
 
-  /** sets the organization of the project. */
+  /**
+   * sets the organization of the project.
+   */
   public void setOrganization(String organization) {
     _sOrganization = organization;
   }
 
-  /** @return the web link for the project or for the company. */
+  /**
+   * @return the web link for the project or for the company.
+   */
   public String getWebLink() {
     return _sWebLink;
   }
 
-  /** sets the web link for the project or for the company. */
+  /**
+   * sets the web link for the project or for the company.
+   */
   public void setWebLink(String webLink) {
     _sWebLink = webLink;
   }

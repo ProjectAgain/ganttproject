@@ -41,41 +41,17 @@ import java.util.List;
  */
 public interface IGanttProject {
 
-  String getProjectName();
+  void addProjectEventListener(ProjectEventListener listener);
 
-  void setProjectName(String projectName);
+  void close();
+
+  GPCalendarCalc getActiveCalendar();
+
+  List<GanttPreviousState> getBaselines();
 
   String getDescription();
 
   void setDescription(String description);
-
-  String getOrganization();
-
-  void setOrganization(String organization);
-
-  String getWebLink();
-
-  void setWebLink(String webLink);
-
-  UIConfiguration getUIConfiguration();
-
-  HumanResourceManager getHumanResourceManager();
-
-  RoleManager getRoleManager();
-
-  TaskManager getTaskManager();
-
-  TaskContainmentHierarchyFacade getTaskContainment();
-
-  GPCalendarCalc getActiveCalendar();
-
-  TimeUnitStack getTimeUnitStack();
-
-  void setModified();
-
-  void setModified(boolean modified);
-
-  void close();
 
   Document getDocument();
 
@@ -83,19 +59,43 @@ public interface IGanttProject {
 
   DocumentManager getDocumentManager();
 
-  void addProjectEventListener(ProjectEventListener listener);
+  HumanResourceManager getHumanResourceManager();
 
-  void removeProjectEventListener(ProjectEventListener listener);
+  String getOrganization();
 
-  boolean isModified();
+  void setOrganization(String organization);
 
-  void open(Document document) throws IOException, DocumentException;
+  String getProjectName();
+
+  void setProjectName(String projectName);
 
   CustomPropertyManager getResourceCustomPropertyManager();
 
+  RoleManager getRoleManager();
+
+  TaskContainmentHierarchyFacade getTaskContainment();
+
   CustomPropertyManager getTaskCustomColumnManager();
+
+  TaskManager getTaskManager();
+
+  TimeUnitStack getTimeUnitStack();
+
+  UIConfiguration getUIConfiguration();
+
+  String getWebLink();
+
+  void setWebLink(String webLink);
+
+  boolean isModified();
+
+  void setModified(boolean modified);
+
+  void open(Document document) throws IOException, DocumentException;
+
+  void removeProjectEventListener(ProjectEventListener listener);
 
   // CustomColumnsStorage getCustomColumnsStorage();
 
-  List<GanttPreviousState> getBaselines();
+  void setModified();
 }

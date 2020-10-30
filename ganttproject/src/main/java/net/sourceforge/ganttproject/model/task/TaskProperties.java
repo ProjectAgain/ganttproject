@@ -18,8 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task;
 
-import net.sourceforge.ganttproject.model.time.GanttCalendar;
-import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -32,25 +30,20 @@ import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint.Type;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_ADVANCEMENT;
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_COORDINATOR;
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_DATES;
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_ID;
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_LENGTH;
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_NAME;
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_PREDECESSORS;
-import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_RESOURCES;
+import static net.sourceforge.ganttproject.ui.chart.scene.gantt.TaskLabelSceneBuilder.*;
+
 /**
  * Class with which one can get any properties (even custom) from any task.
  *
  * @author bbaranne
- *
  */
 public class TaskProperties {
 
@@ -60,24 +53,174 @@ public class TaskProperties {
     myTimeUnitStack = timeUnitStack;
   }
 
-  private void formatDate(GanttCalendar date, StringBuffer buf) {
-    buf.append(GanttLanguage.getInstance().formatShortDate(date));
-    if (myTimeUnitStack.getTimeFormat() != null) {
-      buf.append(" ").append(GanttLanguage.getInstance().formatTime(date));
+  public static String formatCoordinators(Task t) {
+    ResourceAssignment[] assignments = t.getAssignments();
+    Collection<ResourceAssignment> coordinators =
+      Collections2.filter(Arrays.asList(assignments), new Predicate<ResourceAssignment>() {
+        @Override
+        public boolean apply(ResourceAssignment input) {
+          return input.isCoordinator();
+        }
+      });
+    if (coordinators.isEmpty()) {
+      return "";
+    }
+    return formatResources(coordinators);
+  }
+
+  public static String formatPredecessors(Task task, String separator, final boolean addDependencyType) {
+    TaskDependency[] dep = task.getDependenciesAsDependant().toArray();
+    if (dep != null && dep.length > 0) {
+      return Joiner.on(separator).join(Lists.transform(Arrays.asList(dep), new Function<TaskDependency, String>() {
+        @Override
+        public String apply(TaskDependency input) {
+          StringBuilder builder = new StringBuilder(String.valueOf(input.getDependee().getTaskID()));
+          if (!addDependencyType) {
+            return builder.toString();
+          }
+          TaskDependencyConstraint constraint = input.getConstraint();
+          if (constraint.getType() == Type.finishstart && input.getDifference() == 0 &&
+              input.getHardness() == TaskDependency.Hardness.STRONG)
+          {
+            return builder.toString();
+          }
+          builder.append("-").append(constraint.getType().getReadablePersistentValue());
+          if (input.getDifference() == 0 && input.getHardness() == TaskDependency.Hardness.STRONG) {
+            return builder.toString();
+          }
+          if (input.getHardness() == TaskDependency.Hardness.RUBBER) {
+            builder.append(">");
+          } else {
+            builder.append("=");
+          }
+          builder.append(String.format("P%dD", input.getDifference()));
+          return builder.toString();
+        }
+      }));
+    }
+    return "";
+  }
+
+  public static String formatPredecessors(Task task, String separator) {
+    return formatPredecessors(task, separator, false);
+  }
+
+  public static String formatResources(Collection<ResourceAssignment> resources) {
+    return Joiner.on(", ").join(Collections2.transform(resources, new Function<ResourceAssignment, String>() {
+      @Override
+      public String apply(ResourceAssignment input) {
+        return input.getResource().getName();
+      }
+    }));
+  }
+
+  public static Map<Integer, Supplier<TaskDependency>> parseDependencies(
+    Iterable<String> deps, Task successor, Function<Integer, Task> taskIndex
+  ) {
+    Map<Integer, Supplier<TaskDependency>> result = Maps.newLinkedHashMap();
+    for (String spec: deps) {
+      parseDependency(spec, successor, taskIndex, result);
+    }
+    return result;
+  }
+
+  public static void parseDependency(
+    String depSpec, final Task successor, Function<Integer, Task> taskIndex,
+    Map<Integer, Supplier<TaskDependency>> out
+  ) {
+    final TaskManager taskMgr = successor.getManager();
+    int posDash = depSpec.indexOf('-');
+    String maybeId = posDash < 0 ? depSpec : depSpec.substring(0, posDash);
+    final Integer predecessorId;
+    try {
+      predecessorId = Integer.parseInt(maybeId);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException(String.format("%s is not a number", maybeId));
+    }
+    if (posDash < 0) {
+      final Task predecessor = taskIndex.apply(predecessorId);
+      if (predecessor == null) {
+        throw new IllegalArgumentException(String.format("Can't find task with ID=%s", depSpec));
+      }
+      out.put(predecessorId, new Supplier<TaskDependency>() {
+        @Override
+        public TaskDependency get() {
+          if (taskMgr.getDependencyCollection().canCreateDependency(successor, predecessor)) {
+            return taskMgr.getDependencyCollection().createDependency(successor, predecessor);
+          }
+          throw new TaskDependencyException(MessageFormat.format(
+            "Can't create dependency between task {0} and {1}", successor.getName(), predecessor.getName()));
+        }
+      });
+      return;
     }
 
+    if (depSpec.length() < posDash + 3) {
+      throw new IllegalArgumentException(String.format(
+        "Invalid dependency spec '%s'. There must be a two-letter dependency type specification after dash", depSpec));
+    }
+    final Task predecessor = taskIndex.apply(predecessorId);
+    if (predecessor == null) {
+      throw new IllegalArgumentException(String.format("Can't find task with ID=%s", depSpec));
+    }
+    TaskDependencyConstraint.Type depType =
+      TaskDependencyConstraint.Type.fromReadablePersistentValue(depSpec.substring(posDash + 1, posDash + 3));
+    if (depSpec.length() == posDash + 3) {
+      final TaskDependencyConstraint constraint = taskMgr.createConstraint(depType);
+      out.put(predecessorId, new Supplier<TaskDependency>() {
+        @Override
+        public TaskDependency get() {
+          if (taskMgr.getDependencyCollection().canCreateDependency(successor, predecessor)) {
+            return taskMgr.getDependencyCollection().createDependency(successor, predecessor, constraint);
+          }
+          throw new TaskDependencyException(MessageFormat.format(
+            "Can't create dependency between task {0} and {1}", successor.getName(), predecessor.getName()));
+        }
+      });
+      return;
+    }
+
+    char hardnessSpec = depSpec.charAt(posDash + 3);
+    if (hardnessSpec != '=' && hardnessSpec != '>') {
+      throw new IllegalArgumentException(
+        String.format("Invalid dependency spec '%s'. There must be either > or = char after dependency type", depSpec));
+    }
+    if (depSpec.charAt(posDash + 4) != 'P' || depSpec.charAt(depSpec.length() - 1) != 'D') {
+      throw new IllegalArgumentException(String.format(
+        "Invalid dependency spec '%s'. Lag interval is expected to be P*D where * denotes integer value of lag days, e.g. P1D",
+        depSpec
+      ));
+    }
+    final int lag = Integer.parseInt(depSpec.substring(posDash + 5, depSpec.length() - 1));
+    final TaskDependency.Hardness hardness =
+      hardnessSpec == '=' ? TaskDependency.Hardness.STRONG : TaskDependency.Hardness.RUBBER;
+    final TaskDependencyConstraint constraint = taskMgr.createConstraint(depType);
+    out.put(predecessorId, new Supplier<TaskDependency>() {
+      @Override
+      public TaskDependency get() {
+        if (taskMgr.getDependencyCollection().canCreateDependency(successor, predecessor)) {
+          TaskDependency dependency =
+            taskMgr.getDependencyCollection().createDependency(successor, predecessor, constraint, hardness);
+          if (lag != 0) {
+            dependency.setDifference(lag);
+          }
+          return dependency;
+        }
+        throw new TaskDependencyException(MessageFormat.format(
+          "Can't create dependency between task {0} and {1}", successor.getName(), predecessor.getName()));
+      }
+    });
   }
 
   /**
    * Returns the task property specified by <code>propertyID</code>.
    *
-   * @param task
-   *          The task from which we want the property.
-   * @param propertyID
-   *          The property ID which could be <code>ID_TASK_DATES</code>,
-   *          <code>ID_TASK_NAME</code>, ... or a custom column name.
+   * @param task       The task from which we want the property.
+   * @param propertyID The property ID which could be <code>ID_TASK_DATES</code>,
+   *                   <code>ID_TASK_NAME</code>, ... or a custom column name.
+   *
    * @return the task property specified by <code>propertyID</code>. The result
-   *         may be <code>null</code>.
+   * may be <code>null</code>.
    */
   public Object getProperty(Task task, String propertyID) {
     Object res = null;
@@ -156,153 +299,12 @@ public class TaskProperties {
       }
     }
     return res;
-
   }
 
-  public static String formatPredecessors(Task task, String separator) {
-    return formatPredecessors(task, separator, false);
-  }
-
-  public static String formatPredecessors(Task task, String separator, final boolean addDependencyType) {
-    TaskDependency[] dep = task.getDependenciesAsDependant().toArray();
-    if (dep != null && dep.length > 0) {
-      return Joiner.on(separator).join(Lists.transform(Arrays.asList(dep), new Function<TaskDependency, String>() {
-        @Override
-        public String apply(TaskDependency input) {
-          StringBuilder builder = new StringBuilder(String.valueOf(input.getDependee().getTaskID()));
-          if (!addDependencyType) {
-            return builder.toString();
-          }
-          TaskDependencyConstraint constraint = input.getConstraint();
-          if (constraint.getType() == Type.finishstart && input.getDifference() == 0 && input.getHardness() == TaskDependency.Hardness.STRONG) {
-            return builder.toString();
-          }
-          builder.append("-").append(constraint.getType().getReadablePersistentValue());
-          if (input.getDifference() == 0 && input.getHardness() == TaskDependency.Hardness.STRONG) {
-            return builder.toString();
-          }
-          if (input.getHardness() == TaskDependency.Hardness.RUBBER) {
-            builder.append(">");
-          } else {
-            builder.append("=");
-          }
-          builder.append(String.format("P%dD", input.getDifference()));
-          return builder.toString();
-        }
-      }));
+  private void formatDate(GanttCalendar date, StringBuffer buf) {
+    buf.append(GanttLanguage.getInstance().formatShortDate(date));
+    if (myTimeUnitStack.getTimeFormat() != null) {
+      buf.append(" ").append(GanttLanguage.getInstance().formatTime(date));
     }
-    return "";
-  }
-
-  public static Map<Integer, Supplier<TaskDependency>> parseDependencies(
-      Iterable<String> deps, Task successor, Function<Integer, Task> taskIndex) {
-    Map<Integer, Supplier<TaskDependency>> result = Maps.newLinkedHashMap();
-    for (String spec : deps) {
-      parseDependency(spec, successor, taskIndex, result);
-    }
-    return result;
-  }
-
-  public static void parseDependency(String depSpec, final Task successor, Function<Integer, Task> taskIndex,
-                                     Map<Integer, Supplier<TaskDependency>> out) {
-    final TaskManager taskMgr = successor.getManager();
-    int posDash = depSpec.indexOf('-');
-    String maybeId = posDash < 0 ? depSpec : depSpec.substring(0, posDash);
-    final Integer predecessorId;
-    try {
-      predecessorId = Integer.parseInt(maybeId);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException(String.format("%s is not a number", maybeId));
-    }
-    if (posDash < 0) {
-      final Task predecessor = taskIndex.apply(predecessorId);
-      if (predecessor == null) {
-        throw new IllegalArgumentException(String.format("Can't find task with ID=%s", depSpec));
-      }
-      out.put(predecessorId, new Supplier<TaskDependency>() {
-        @Override
-        public TaskDependency get() {
-          if (taskMgr.getDependencyCollection().canCreateDependency(successor, predecessor)) {
-            return taskMgr.getDependencyCollection().createDependency(successor, predecessor);
-          }
-          throw new TaskDependencyException(MessageFormat.format(
-              "Can't create dependency between task {0} and {1}", successor.getName(), predecessor.getName()));
-        }
-      });
-      return;
-    }
-
-
-    if (depSpec.length() < posDash + 3) {
-      throw new IllegalArgumentException(String.format("Invalid dependency spec '%s'. There must be a two-letter dependency type specification after dash", depSpec));
-    }
-    final Task predecessor = taskIndex.apply(predecessorId);
-    if (predecessor == null) {
-      throw new IllegalArgumentException(String.format("Can't find task with ID=%s", depSpec));
-    }
-    TaskDependencyConstraint.Type depType = TaskDependencyConstraint.Type.fromReadablePersistentValue(depSpec.substring(posDash + 1, posDash + 3));
-    if (depSpec.length() == posDash + 3) {
-      final TaskDependencyConstraint constraint = taskMgr.createConstraint(depType);
-      out.put(predecessorId, new Supplier<TaskDependency>() {
-        @Override
-        public TaskDependency get() {
-          if (taskMgr.getDependencyCollection().canCreateDependency(successor, predecessor)) {
-            return taskMgr.getDependencyCollection().createDependency(successor, predecessor, constraint);
-          }
-          throw new TaskDependencyException(MessageFormat.format(
-              "Can't create dependency between task {0} and {1}", successor.getName(), predecessor.getName()));
-        }
-      });
-      return;
-    }
-
-
-    char hardnessSpec = depSpec.charAt(posDash + 3);
-    if (hardnessSpec != '=' && hardnessSpec != '>') {
-      throw new IllegalArgumentException(String.format("Invalid dependency spec '%s'. There must be either > or = char after dependency type", depSpec));
-    }
-    if (depSpec.charAt(posDash + 4) != 'P' || depSpec.charAt(depSpec.length() - 1) != 'D') {
-      throw new IllegalArgumentException(String.format("Invalid dependency spec '%s'. Lag interval is expected to be P*D where * denotes integer value of lag days, e.g. P1D", depSpec));
-    }
-    final int lag = Integer.parseInt(depSpec.substring(posDash + 5, depSpec.length() - 1));
-    final TaskDependency.Hardness hardness = hardnessSpec == '=' ? TaskDependency.Hardness.STRONG : TaskDependency.Hardness.RUBBER;
-    final TaskDependencyConstraint constraint = taskMgr.createConstraint(depType);
-    out.put(predecessorId, new Supplier<TaskDependency>() {
-      @Override
-      public TaskDependency get() {
-        if (taskMgr.getDependencyCollection().canCreateDependency(successor, predecessor)) {
-          TaskDependency dependency = taskMgr.getDependencyCollection().createDependency(successor, predecessor, constraint, hardness);
-          if (lag != 0) {
-            dependency.setDifference(lag);
-          }
-          return dependency;
-        }
-        throw new TaskDependencyException(MessageFormat.format(
-            "Can't create dependency between task {0} and {1}", successor.getName(), predecessor.getName()));
-      }
-    });
-  }
-
-  public static String formatCoordinators(Task t) {
-    ResourceAssignment[] assignments = t.getAssignments();
-    Collection<ResourceAssignment> coordinators = Collections2.filter(Arrays.asList(assignments), new Predicate<ResourceAssignment>() {
-      @Override
-      public boolean apply(ResourceAssignment input) {
-        return input.isCoordinator();
-      }
-    });
-    if (coordinators.isEmpty()) {
-      return "";
-    }
-    return formatResources(coordinators);
-  }
-
-  public static String formatResources(Collection<ResourceAssignment> resources) {
-    return Joiner.on(", ").join(Collections2.transform(resources, new Function<ResourceAssignment, String>() {
-        @Override
-        public String apply(ResourceAssignment input) {
-          return input.getResource().getName();
-        }
-      }));
   }
 }

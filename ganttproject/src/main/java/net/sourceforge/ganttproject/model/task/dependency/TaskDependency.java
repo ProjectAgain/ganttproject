@@ -18,13 +18,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task.dependency;
 
-import java.util.Date;
-
-import net.sourceforge.ganttproject.ui.chart.scene.BarChartConnector;
-
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskActivity;
+import net.sourceforge.ganttproject.ui.chart.scene.BarChartConnector;
+
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA. User: bard Date: 14.02.2004 Time: 2:32:17 To change
@@ -44,6 +43,11 @@ public interface TaskDependency extends BarChartConnector<Task, TaskDependency> 
         return GanttLanguage.getInstance().getText("hardness.strong");
       }
     };
+    private final String myID;
+
+    private Hardness(String id) {
+      myID = id;
+    }
 
     public static Hardness parse(String hardnessAsString) {
       if (hardnessAsString == null) {
@@ -58,36 +62,30 @@ public interface TaskDependency extends BarChartConnector<Task, TaskDependency> 
       throw new IllegalArgumentException("Unexpected hardness string value=" + hardnessAsString);
     }
 
-    private String myID;
-
-    private Hardness(String id) {
-      myID = id;
-    }
-
     public String getIdentifier() {
       return myID;
     }
   }
 
-  Task getDependant();
-
-  Task getDependee();
-
-  void setConstraint(TaskDependencyConstraint constraint);
-
-  TaskDependencyConstraint getConstraint();
-
-  ActivityBinding getActivityBinding();
-
-  void delete();
-
   interface ActivityBinding {
+    Date[] getAlignedBounds();
+
     TaskActivity getDependantActivity();
 
     TaskActivity getDependeeActivity();
-
-    Date[] getAlignedBounds();
   }
+
+  void delete();
+
+  ActivityBinding getActivityBinding();
+
+  TaskDependencyConstraint getConstraint();
+
+  void setConstraint(TaskDependencyConstraint constraint);
+
+  Task getDependant();
+
+  Task getDependee();
 
   int getDifference();
 

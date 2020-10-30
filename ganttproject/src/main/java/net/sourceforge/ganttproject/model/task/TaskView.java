@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package net.sourceforge.ganttproject.model.task;
 
-import java.util.Set;
-
 import com.google.common.collect.Sets;
+
+import java.util.Set;
 
 /**
  * This class keeps task properties which may differ in different views, such as

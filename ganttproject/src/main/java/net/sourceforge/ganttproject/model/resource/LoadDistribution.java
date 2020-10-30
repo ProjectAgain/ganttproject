@@ -5,26 +5,25 @@
  */
 package net.sourceforge.ganttproject.model.resource;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.swing.DefaultListModel;
-
 import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
-
 import net.sourceforge.ganttproject.model.task.ResourceAssignment;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskActivity;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Represents load of of one particular resource in the given time range
  */
 public class LoadDistribution {
   public static class Load {
-    public float load;
-
+    public final Date endDate;
     public final Task refTask;
+    public final Date startDate;
+    public float load;
 
     Load(Date startDate, Date endDate, float load, Task ref) {
       this.load = load;
@@ -33,27 +32,41 @@ public class LoadDistribution {
       this.endDate = endDate;
     }
 
-    @Override
-    public String toString() {
-      return "start=" + this.startDate + " load=" + this.load + " refTask = " + this.refTask;
-    }
-
     public boolean isResourceUnavailable() {
       return load == -1;
     }
 
-    public final Date startDate;
-    public final Date endDate;
+    @Override
+    public String toString() {
+      return "start=" + this.startDate + " load=" + this.load + " refTask = " + this.refTask;
+    }
   }
 
   private final List<Load> myTasksLoads = new ArrayList<Load>();
 
   public LoadDistribution(HumanResource resource) {
     ResourceAssignment[] assignments = resource.getAssignments();
-    for (ResourceAssignment assignment : assignments) {
+    for (ResourceAssignment assignment: assignments) {
       processAssignment(assignment);
     }
     processDaysOff(resource);
+  }
+
+  /**
+   * @return a list of lists of <code>Load</code> instances. Each list contains
+   * a set of <code>Load</code>
+   */
+  public List<Load> getTasksLoads() {
+    return myTasksLoads;
+  }
+
+  private void processAssignment(ResourceAssignment assignment) {
+    Task task = assignment.getTask();
+    for (TaskActivity ta: task.getActivities()) {
+      if (ta.getIntensity() != 0) {
+        myTasksLoads.add(new Load(ta.getStart(), ta.getEnd(), assignment.getLoad(), task));
+      }
+    }
   }
 
   private void processDaysOff(HumanResource resource) {
@@ -66,22 +79,5 @@ public class LoadDistribution {
         myTasksLoads.add(new Load(dayOffStart, dayOffEnd, -1, null));
       }
     }
-  }
-
-  private void processAssignment(ResourceAssignment assignment) {
-    Task task = assignment.getTask();
-    for (TaskActivity ta : task.getActivities()) {
-      if (ta.getIntensity() != 0) {
-        myTasksLoads.add(new Load(ta.getStart(), ta.getEnd(), assignment.getLoad(), task));
-      }
-    }
-  }
-
-  /**
-   * @return a list of lists of <code>Load</code> instances. Each list contains
-   *         a set of <code>Load</code>
-   */
-  public List<Load> getTasksLoads() {
-    return myTasksLoads;
   }
 }

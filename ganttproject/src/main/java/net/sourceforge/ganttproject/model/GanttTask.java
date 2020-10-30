@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model;
 
-import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import net.sourceforge.ganttproject.model.task.TaskImpl;
 import net.sourceforge.ganttproject.model.task.TaskManagerImpl;
 import net.sourceforge.ganttproject.model.task.TaskMutator;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 
 import java.io.Serializable;
 
@@ -31,17 +31,12 @@ import java.io.Serializable;
 public class GanttTask extends TaskImpl implements Serializable {
 
   /**
-   * @param name
-   *          of the new Task
-   * @param start
-   *          date of the new Task
-   * @param length
-   *          of the new Task
-   * @param taskManager
-   *          to use when creating the new task
-   * @param taskID
-   *          contains the id to be used for the new task, or -1 to generate a
-   *          unique one.
+   * @param name        of the new Task
+   * @param start       date of the new Task
+   * @param length      of the new Task
+   * @param taskManager to use when creating the new task
+   * @param taskID      contains the id to be used for the new task, or -1 to generate a
+   *                    unique one.
    */
   public GanttTask(String name, GanttCalendar start, long length, TaskManagerImpl taskManager, int taskID) {
     super(taskManager, taskID);
@@ -56,21 +51,24 @@ public class GanttTask extends TaskImpl implements Serializable {
   /**
    * Will make a copy of the given GanttTask
    *
-   * @param copy
-   *          task to copy
+   * @param copy task to copy
    */
   public GanttTask(TaskManagerImpl manager, TaskImpl copy) {
     super(manager, copy, false);
     enableEvents(true);
   }
 
-  /** @deprecated Use TimeUnit class instead and method getDuration() */
+  /**
+   * @deprecated Use TimeUnit class instead and method getDuration()
+   */
   @Deprecated
   public int getLength() {
     return getDuration().getLength();
   }
 
-  /** @deprecated Use setDuration() */
+  /**
+   * @deprecated Use setDuration()
+   */
   @Deprecated
   public void setLength(int l) {
     if (l <= 0) {

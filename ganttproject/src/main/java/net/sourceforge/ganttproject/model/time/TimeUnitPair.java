@@ -8,13 +8,12 @@ package net.sourceforge.ganttproject.model.time;
  */
 public class TimeUnitPair {
   private final TimeUnit myBottomTimeUnit;
-
-  private final TimeUnit myTopTimeUnit;
-
-  private final TimeUnitStack myTimeUnitStack;
-
-  /** Used scale for this TimeUnit */
+  /**
+   * Used scale for this TimeUnit
+   */
   private final int myDefaultUnitWidth;
+  private final TimeUnitStack myTimeUnitStack;
+  private final TimeUnit myTopTimeUnit;
 
   public TimeUnitPair(TimeUnit topUnit, TimeUnit bottomUnit, TimeUnitStack timeUnitStack, int defaultUnitWidth) {
     myTopTimeUnit = topUnit;
@@ -23,20 +22,22 @@ public class TimeUnitPair {
     myDefaultUnitWidth = defaultUnitWidth;
   }
 
-  public TimeUnit getTopTimeUnit() {
-    return myTopTimeUnit;
-  }
-
   public TimeUnit getBottomTimeUnit() {
     return myBottomTimeUnit;
+  }
+
+  /**
+   * @return the scale for this TimeUnit
+   */
+  public int getDefaultUnitWidth() {
+    return myDefaultUnitWidth;
   }
 
   public TimeUnitStack getTimeUnitStack() {
     return myTimeUnitStack;
   }
 
-  /** @return the scale for this TimeUnit */
-  public int getDefaultUnitWidth() {
-    return myDefaultUnitWidth;
+  public TimeUnit getTopTimeUnit() {
+    return myTopTimeUnit;
   }
 }

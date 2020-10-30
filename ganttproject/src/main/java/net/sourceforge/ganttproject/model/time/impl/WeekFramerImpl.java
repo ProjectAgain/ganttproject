@@ -18,27 +18,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.time.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.model.time.DateFrameable;
 
+import java.util.Calendar;
+import java.util.Date;
 
 public class WeekFramerImpl implements DateFrameable {
-  private final FramerImpl myDayFramer = new FramerImpl(Calendar.DATE);
-  private final ICalendarFactory myCalendarFactory;
-
-  public static interface ICalendarFactory {
-    Calendar newCalendar();
-  }
-
   private static class DefaultCalendarFactory implements ICalendarFactory {
     @Override
     public Calendar newCalendar() {
       return CalendarFactory.newCalendar();
     }
   }
+  public interface ICalendarFactory {
+    Calendar newCalendar();
+  }
+  private final ICalendarFactory myCalendarFactory;
+  private final FramerImpl myDayFramer = new FramerImpl(Calendar.DATE);
 
   public WeekFramerImpl() {
     this(new DefaultCalendarFactory());
@@ -49,22 +46,22 @@ public class WeekFramerImpl implements DateFrameable {
   }
 
   @Override
-  public Date adjustRight(Date baseDate) {
-    Calendar c = myCalendarFactory.newCalendar();
-    do {
-      baseDate = myDayFramer.adjustRight(baseDate);
-      c.setTime(baseDate);
-    } while (c.get(Calendar.DAY_OF_WEEK) != c.getFirstDayOfWeek());
-    return c.getTime();
-  }
-
-  @Override
   public Date adjustLeft(Date baseDate) {
     Calendar c = myCalendarFactory.newCalendar();
     c.setTime(myDayFramer.adjustLeft(baseDate));
     while (c.get(Calendar.DAY_OF_WEEK) != c.getFirstDayOfWeek()) {
       c.setTime(myDayFramer.adjustLeft(myDayFramer.jumpLeft(c.getTime())));
     }
+    return c.getTime();
+  }
+
+  @Override
+  public Date adjustRight(Date baseDate) {
+    Calendar c = myCalendarFactory.newCalendar();
+    do {
+      baseDate = myDayFramer.adjustRight(baseDate);
+      c.setTime(baseDate);
+    } while (c.get(Calendar.DAY_OF_WEEK) != c.getFirstDayOfWeek());
     return c.getTime();
   }
 

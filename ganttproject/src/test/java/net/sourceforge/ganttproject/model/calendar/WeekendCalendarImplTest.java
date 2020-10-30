@@ -41,174 +41,174 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 
 class WeekendCalendarImplTest {
-    private static Function<CalendarEvent, String> GET_TITLE = new Function<CalendarEvent, String>() {
-        @Override
-        public String apply(CalendarEvent e) {
-            return e.getTitle();
-        }
+  private static Function<CalendarEvent, String> GET_TITLE = new Function<CalendarEvent, String>() {
+    @Override
+    public String apply(CalendarEvent e) {
+      return e.getTitle();
+    }
+  };
+  private static List<CalendarEvent> TEST_EVENTS = ImmutableList.of(
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 0, 1).getTime(), true, CalendarEvent.Type.HOLIDAY, "Jan 1", null),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 1, 14).getTime(), false, CalendarEvent.Type.NEUTRAL, "Feb 14",
+      null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), true, CalendarEvent.Type.HOLIDAY, "Mar 8", null),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), false, CalendarEvent.Type.WORKING_DAY,
+      "Mar 8, 2014", null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 2, 9).getTime(), false, CalendarEvent.Type.HOLIDAY, "Mar 9, 2014",
+      null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), true, CalendarEvent.Type.WORKING_DAY, "Apr 12",
+      null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), false, CalendarEvent.Type.HOLIDAY,
+      "Apr 12, 2014", null
+    )
+  );
+  private static List<CalendarEvent> TEST_EVENTS_RECURRING_FIRST = ImmutableList.of(
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 0, 1).getTime(), true, CalendarEvent.Type.HOLIDAY, "Jan 1", null),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), true, CalendarEvent.Type.HOLIDAY, "Mar 8", null),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), true, CalendarEvent.Type.WORKING_DAY, "Apr 12",
+      null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 1, 14).getTime(), false, CalendarEvent.Type.NEUTRAL, "Feb 14",
+      null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), false, CalendarEvent.Type.WORKING_DAY,
+      "Mar 8, 2014", null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 2, 9).getTime(), false, CalendarEvent.Type.HOLIDAY, "Mar 9, 2014",
+      null
+    ),
+    CalendarEvent.newEvent(
+      CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), false, CalendarEvent.Type.HOLIDAY,
+      "Apr 12, 2014", null
+    )
+  );
+
+  @Test
+  public void testOneOffHoliday() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setWeekDayType(Calendar.SATURDAY, DayType.WORKING);
+    calendar.setWeekDayType(Calendar.SUNDAY, DayType.WORKING);
+    calendar.setPublicHolidays(TEST_EVENTS);
+    assertEquals(
+      DayMask.WORKING,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2013, 3, 12).getTime()) & DayMask.WORKING
+    );
+    assertEquals(
+      DayMask.HOLIDAY,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 3, 12).getTime()) & DayMask.HOLIDAY
+    );
+    assertEquals(
+      DayMask.WORKING,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2015, 3, 12).getTime()) & DayMask.WORKING
+    );
+  }
+
+  @Test
+  public void testOneOffWorking() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setWeekDayType(Calendar.SATURDAY, DayType.WORKING);
+    calendar.setWeekDayType(Calendar.SUNDAY, DayType.WORKING);
+    calendar.setPublicHolidays(TEST_EVENTS);
+    assertEquals(
+      DayMask.HOLIDAY,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2013, 2, 8).getTime()) & DayMask.HOLIDAY
+    );
+    assertEquals(
+      DayMask.WORKING,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 2, 8).getTime()) & DayMask.WORKING
+    );
+    assertEquals(
+      DayMask.HOLIDAY,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2015, 2, 8).getTime()) & DayMask.HOLIDAY
+    );
+  }
+
+  @Test
+  public void testOneOffWorkingWeekend() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setPublicHolidays(ImmutableList.of(
+      CalendarEvent.newEvent(
+        CalendarFactory.createGanttCalendar(2014, 0, 4).getTime(), false, CalendarEvent.Type.WORKING_DAY,
+        "Jan 4, Saturday", null
+      )
+    ));
+    assertEquals(
+      DayMask.WORKING,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 4).getTime()) & DayMask.WORKING
+    );
+    assertEquals(
+      0, calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 11).getTime()) & DayMask.WORKING);
+    assertEquals(
+      DayMask.WEEKEND,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 11).getTime()) & DayMask.WEEKEND
+    );
+  }
+
+  @Test
+  public void testRecurringHoliday() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setPublicHolidays(TEST_EVENTS);
+    assertEquals(
+      DayMask.HOLIDAY,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2013, 0, 1).getTime()) & DayMask.HOLIDAY
+    );
+    assertEquals(
+      DayMask.HOLIDAY,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 1).getTime()) & DayMask.HOLIDAY
+    );
+    assertEquals(
+      DayMask.HOLIDAY,
+      calendar.getDayMask(CalendarFactory.createGanttCalendar(2015, 0, 1).getTime()) & DayMask.HOLIDAY
+    );
+    assertEquals(
+      CalendarEvent.Type.HOLIDAY,
+      calendar.getEvent(CalendarFactory.createGanttCalendar(2015, 0, 1).getTime()).getType()
+    );
+  }
+
+  @Test
+  public void testSetEvents() {
+    WeekendCalendarImpl calendar = new WeekendCalendarImpl();
+    calendar.setPublicHolidays(TEST_EVENTS);
+    assertEquals(TEST_EVENTS_RECURRING_FIRST, calendar.getPublicHolidays());
+    assertEquals(
+      ImmutableList.of("Jan 1", "Mar 8", "Apr 12", "Feb 14", "Mar 8, 2014", "Mar 9, 2014", "Apr 12, 2014"),
+      Lists.newArrayList(Collections2.transform(calendar.getPublicHolidays(), GET_TITLE))
+    );
+  }
+
+  static {
+    new CalendarFactory() {
+      {
+        setLocaleApi(new LocaleApi() {
+          @Override
+          public Locale getLocale() {
+            return Locale.US;
+          }
+
+          @Override
+          public DateFormat getShortDateFormat() {
+            return DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+          }
+        });
+      }
     };
-    private static List<CalendarEvent> TEST_EVENTS = ImmutableList.of(
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 0, 1).getTime(), true, CalendarEvent.Type.HOLIDAY, "Jan 1", null),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 1, 14).getTime(), false, CalendarEvent.Type.NEUTRAL, "Feb 14",
-            null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), true, CalendarEvent.Type.HOLIDAY, "Mar 8", null),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), false, CalendarEvent.Type.WORKING_DAY,
-            "Mar 8, 2014", null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 2, 9).getTime(), false, CalendarEvent.Type.HOLIDAY, "Mar 9, 2014",
-            null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), true, CalendarEvent.Type.WORKING_DAY, "Apr 12",
-            null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), false, CalendarEvent.Type.HOLIDAY,
-            "Apr 12, 2014", null
-        )
-    );
-    private static List<CalendarEvent> TEST_EVENTS_RECURRING_FIRST = ImmutableList.of(
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 0, 1).getTime(), true, CalendarEvent.Type.HOLIDAY, "Jan 1", null),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), true, CalendarEvent.Type.HOLIDAY, "Mar 8", null),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), true, CalendarEvent.Type.WORKING_DAY, "Apr 12",
-            null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 1, 14).getTime(), false, CalendarEvent.Type.NEUTRAL, "Feb 14",
-            null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 2, 8).getTime(), false, CalendarEvent.Type.WORKING_DAY,
-            "Mar 8, 2014", null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 2, 9).getTime(), false, CalendarEvent.Type.HOLIDAY, "Mar 9, 2014",
-            null
-        ),
-        CalendarEvent.newEvent(
-            CalendarFactory.createGanttCalendar(2014, 3, 12).getTime(), false, CalendarEvent.Type.HOLIDAY,
-            "Apr 12, 2014", null
-        )
-    );
-
-    @Test
-    public void testOneOffHoliday() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setWeekDayType(Calendar.SATURDAY, DayType.WORKING);
-        calendar.setWeekDayType(Calendar.SUNDAY, DayType.WORKING);
-        calendar.setPublicHolidays(TEST_EVENTS);
-        assertEquals(
-            DayMask.WORKING,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2013, 3, 12).getTime()) & DayMask.WORKING
-        );
-        assertEquals(
-            DayMask.HOLIDAY,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 3, 12).getTime()) & DayMask.HOLIDAY
-        );
-        assertEquals(
-            DayMask.WORKING,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2015, 3, 12).getTime()) & DayMask.WORKING
-        );
-    }
-
-    @Test
-    public void testOneOffWorking() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setWeekDayType(Calendar.SATURDAY, DayType.WORKING);
-        calendar.setWeekDayType(Calendar.SUNDAY, DayType.WORKING);
-        calendar.setPublicHolidays(TEST_EVENTS);
-        assertEquals(
-            DayMask.HOLIDAY,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2013, 2, 8).getTime()) & DayMask.HOLIDAY
-        );
-        assertEquals(
-            DayMask.WORKING,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 2, 8).getTime()) & DayMask.WORKING
-        );
-        assertEquals(
-            DayMask.HOLIDAY,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2015, 2, 8).getTime()) & DayMask.HOLIDAY
-        );
-    }
-
-    @Test
-    public void testOneOffWorkingWeekend() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setPublicHolidays(ImmutableList.of(
-            CalendarEvent.newEvent(
-                CalendarFactory.createGanttCalendar(2014, 0, 4).getTime(), false, CalendarEvent.Type.WORKING_DAY,
-                "Jan 4, Saturday", null
-            )
-        ));
-        assertEquals(
-            DayMask.WORKING,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 4).getTime()) & DayMask.WORKING
-        );
-        assertEquals(
-            0, calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 11).getTime()) & DayMask.WORKING);
-        assertEquals(
-            DayMask.WEEKEND,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 11).getTime()) & DayMask.WEEKEND
-        );
-    }
-
-    @Test
-    public void testRecurringHoliday() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setPublicHolidays(TEST_EVENTS);
-        assertEquals(
-            DayMask.HOLIDAY,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2013, 0, 1).getTime()) & DayMask.HOLIDAY
-        );
-        assertEquals(
-            DayMask.HOLIDAY,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2014, 0, 1).getTime()) & DayMask.HOLIDAY
-        );
-        assertEquals(
-            DayMask.HOLIDAY,
-            calendar.getDayMask(CalendarFactory.createGanttCalendar(2015, 0, 1).getTime()) & DayMask.HOLIDAY
-        );
-        assertEquals(
-            CalendarEvent.Type.HOLIDAY,
-            calendar.getEvent(CalendarFactory.createGanttCalendar(2015, 0, 1).getTime()).getType()
-        );
-    }
-
-    @Test
-    public void testSetEvents() {
-        WeekendCalendarImpl calendar = new WeekendCalendarImpl();
-        calendar.setPublicHolidays(TEST_EVENTS);
-        assertEquals(TEST_EVENTS_RECURRING_FIRST, calendar.getPublicHolidays());
-        assertEquals(
-            ImmutableList.of("Jan 1", "Mar 8", "Apr 12", "Feb 14", "Mar 8, 2014", "Mar 9, 2014", "Apr 12, 2014"),
-            Lists.newArrayList(Collections2.transform(calendar.getPublicHolidays(), GET_TITLE))
-        );
-    }
-
-    static {
-        new CalendarFactory() {
-            {
-                setLocaleApi(new LocaleApi() {
-                    @Override
-                    public Locale getLocale() {
-                        return Locale.US;
-                    }
-
-                    @Override
-                    public DateFormat getShortDateFormat() {
-                        return DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
-                    }
-                });
-            }
-        };
-    }
+  }
 }

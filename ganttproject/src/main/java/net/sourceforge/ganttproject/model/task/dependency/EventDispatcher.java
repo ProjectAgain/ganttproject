@@ -24,7 +24,7 @@ package net.sourceforge.ganttproject.model.task.dependency;
 public interface EventDispatcher {
   void fireDependencyAdded(TaskDependency dep);
 
-  void fireDependencyRemoved(TaskDependency dep);
-
   void fireDependencyChanged(TaskDependency dependency);
+
+  void fireDependencyRemoved(TaskDependency dep);
 }

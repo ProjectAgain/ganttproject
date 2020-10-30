@@ -18,20 +18,17 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.time;
 
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.time.TimeUnitGraph.Composition;
 
+import java.util.Date;
 
 /**
  * @author bard Date: 01.02.2004
  */
 public class TimeUnitImpl implements TimeUnit {
-  private final String myName;
-
-  private final TimeUnitGraph myGraph;
-
   private final TimeUnit myDirectAtomUnit;
+  private final TimeUnitGraph myGraph;
+  private final String myName;
 
   public TimeUnitImpl(String name, TimeUnitGraph graph, TimeUnit directAtomUnit) {
     myName = name;
@@ -40,13 +37,22 @@ public class TimeUnitImpl implements TimeUnit {
   }
 
   @Override
-  public String getName() {
-    return myName;
+  public Date adjustLeft(Date baseDate) {
+    throw new UnsupportedOperationException("Time unit=" + this + " doesnt support this operation");
   }
 
   @Override
-  public boolean isConstructedFrom(TimeUnit atomUnit) {
-    return myGraph.getComposition(this, atomUnit) != null;
+  public Date adjustRight(Date baseDate) {
+    throw new UnsupportedOperationException("Time unit=" + this + " doesnt support this operation");
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (false == obj instanceof TimeUnitImpl) {
+      return false;
+    }
+    TimeUnitImpl that = (TimeUnitImpl) obj;
+    return this.myName.equals(that.myName);
   }
 
   @Override
@@ -64,18 +70,18 @@ public class TimeUnitImpl implements TimeUnit {
   }
 
   @Override
-  public String toString() {
-    return getName() + " hash=" + hashCode();
+  public String getName() {
+    return myName;
   }
 
   @Override
-  public Date adjustRight(Date baseDate) {
-    throw new UnsupportedOperationException("Time unit=" + this + " doesnt support this operation");
+  public int hashCode() {
+    return myName.hashCode();
   }
 
   @Override
-  public Date adjustLeft(Date baseDate) {
-    throw new UnsupportedOperationException("Time unit=" + this + " doesnt support this operation");
+  public boolean isConstructedFrom(TimeUnit atomUnit) {
+    return myGraph.getComposition(this, atomUnit) != null;
   }
 
   @Override
@@ -84,17 +90,7 @@ public class TimeUnitImpl implements TimeUnit {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (false == obj instanceof TimeUnitImpl) {
-      return false;
-    }
-    TimeUnitImpl that = (TimeUnitImpl) obj;
-    return this.myName.equals(that.myName);
+  public String toString() {
+    return getName() + " hash=" + hashCode();
   }
-
-  @Override
-  public int hashCode() {
-    return myName.hashCode();
-  }
-
 }

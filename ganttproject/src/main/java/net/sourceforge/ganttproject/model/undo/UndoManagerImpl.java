@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.undo;
 
-import net.sourceforge.ganttproject.model.IGanttProject;
-import net.sourceforge.ganttproject.model.document.DocumentManager;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.language.GanttLanguage.Event;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.document.DocumentManager;
 import net.sourceforge.ganttproject.parser.ParserFactory;
 import org.slf4j.Logger;
 
@@ -42,16 +42,11 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class UndoManagerImpl implements GPUndoManager {
   private final Logger log = getLogger(getClass());
-  private UndoableEditSupport myUndoEventDispatcher;
-
-  private UndoManager mySwingUndoManager;
-
-  private DocumentManager myDocumentManager;
-
-  private ParserFactory myParserFactory;
-
-  private IGanttProject myProject;
-
+  private final DocumentManager myDocumentManager;
+  private final ParserFactory myParserFactory;
+  private final IGanttProject myProject;
+  private final UndoManager mySwingUndoManager;
+  private final UndoableEditSupport myUndoEventDispatcher;
   private UndoableEditImpl swingEditImpl;
 
   public UndoManagerImpl(IGanttProject project, ParserFactory parserFactory, DocumentManager documentManager) {
@@ -69,6 +64,58 @@ public class UndoManagerImpl implements GPUndoManager {
   }
 
   @Override
+  public void addUndoableEditListener(GPUndoListener listener) {
+    myUndoEventDispatcher.addUndoableEditListener(listener);
+  }
+
+  @Override
+  public boolean canRedo() {
+    return mySwingUndoManager.canRedo();
+  }
+
+  @Override
+  public boolean canUndo() {
+    return mySwingUndoManager.canUndo();
+  }
+
+  @Override
+  public void die() {
+    if (swingEditImpl != null) {
+      swingEditImpl.die();
+    }
+    if (mySwingUndoManager != null) {
+      mySwingUndoManager.discardAllEdits();
+    }
+  }
+
+  @Override
+  public String getRedoPresentationName() {
+    return mySwingUndoManager.getRedoPresentationName();
+  }
+
+  @Override
+  public String getUndoPresentationName() {
+    return mySwingUndoManager.getUndoPresentationName();
+  }
+
+  @Override
+  public void redo() throws CannotRedoException {
+    mySwingUndoManager.redo();
+    fireUndoOrRedoHappened();
+  }
+
+  @Override
+  public void removeUndoableEditListener(GPUndoListener listener) {
+    myUndoEventDispatcher.removeUndoableEditListener(listener);
+  }
+
+  @Override
+  public void undo() throws CannotUndoException {
+    mySwingUndoManager.undo();
+    fireUndoOrRedoHappened();
+  }
+
+  @Override
   public void undoableEdit(String localizedName, Runnable editImpl) {
 
     try {
@@ -80,8 +127,16 @@ public class UndoManagerImpl implements GPUndoManager {
     }
   }
 
-  private void fireUndoableEditHappened(UndoableEditImpl swingEditImpl) {
-    myUndoEventDispatcher.postEdit(swingEditImpl);
+  protected ParserFactory getParserFactory() {
+    return myParserFactory;
+  }
+
+  DocumentManager getDocumentManager() {
+    return myDocumentManager;
+  }
+
+  IGanttProject getProject() {
+    return myProject;
   }
 
   private void fireUndoOrRedoHappened() {
@@ -91,67 +146,7 @@ public class UndoManagerImpl implements GPUndoManager {
     }
   }
 
-  DocumentManager getDocumentManager() {
-    return myDocumentManager;
-  }
-
-  protected ParserFactory getParserFactory() {
-    return myParserFactory;
-  }
-
-  IGanttProject getProject() {
-    return myProject;
-  }
-
-  @Override
-  public boolean canUndo() {
-    return mySwingUndoManager.canUndo();
-  }
-
-  @Override
-  public boolean canRedo() {
-    return mySwingUndoManager.canRedo();
-  }
-
-  @Override
-  public void undo() throws CannotUndoException {
-    mySwingUndoManager.undo();
-    fireUndoOrRedoHappened();
-  }
-
-  @Override
-  public void redo() throws CannotRedoException {
-    mySwingUndoManager.redo();
-    fireUndoOrRedoHappened();
-  }
-
-  @Override
-  public String getUndoPresentationName() {
-    return mySwingUndoManager.getUndoPresentationName();
-  }
-
-  @Override
-  public String getRedoPresentationName() {
-    return mySwingUndoManager.getRedoPresentationName();
-  }
-
-  @Override
-  public void addUndoableEditListener(GPUndoListener listener) {
-    myUndoEventDispatcher.addUndoableEditListener(listener);
-  }
-
-  @Override
-  public void removeUndoableEditListener(GPUndoListener listener) {
-    myUndoEventDispatcher.removeUndoableEditListener(listener);
-  }
-
-  @Override
-  public void die() {
-    if (swingEditImpl != null) {
-      swingEditImpl.die();
-    }
-    if (mySwingUndoManager != null) {
-      mySwingUndoManager.discardAllEdits();
-    }
+  private void fireUndoableEditHappened(UndoableEditImpl swingEditImpl) {
+    myUndoEventDispatcher.postEdit(swingEditImpl);
   }
 }

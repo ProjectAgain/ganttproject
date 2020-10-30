@@ -29,8 +29,11 @@ public interface MutableTaskDependencyCollection {
   TaskDependency createDependency(Task dependant, Task dependee) throws TaskDependencyException;
 
   TaskDependency createDependency(Task dependant, Task dependee, TaskDependencyConstraint constraint)
-      throws TaskDependencyException;
+    throws TaskDependencyException;
 
-  TaskDependency createDependency(Task dependant, Task dependee, TaskDependencyConstraint constraint, TaskDependency.Hardness hardness) throws TaskDependencyException;
+  TaskDependency createDependency(
+    Task dependant, Task dependee, TaskDependencyConstraint constraint, TaskDependency.Hardness hardness
+  ) throws TaskDependencyException;
+
   void deleteDependency(TaskDependency dependency);
 }

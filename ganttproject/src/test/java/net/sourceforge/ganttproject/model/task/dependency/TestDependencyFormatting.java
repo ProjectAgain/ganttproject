@@ -39,165 +39,165 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dbarashev (Dmitry Barashev)
  */
 public class TestDependencyFormatting extends TaskTestCase {
-    private static Function<Integer, Task> createTaskIndex(final TaskManager taskManager) {
-        return taskManager::getTask;
+  private static Function<Integer, Task> createTaskIndex(final TaskManager taskManager) {
+    return taskManager::getTask;
+  }
+
+  private static TaskDependency parseDependency(
+    String depSpec, final Task successor, Function<Integer, Task> taskIndex
+  ) {
+    Map<Integer, Supplier<TaskDependency>> out = Maps.newHashMap();
+    TaskProperties.parseDependency(depSpec, successor, taskIndex, out);
+    return out.values().iterator().next().get();
+  }
+
+  @Test
+  public void testBasicDependencyFormatting() {
+    Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+    Task successor = createTask(TestSetupHelper.newWednesday(), 2);
+    getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
+    assertEquals(
+      String.format("%d", predecessor.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+
+    Task predecessor2 = createTask(TestSetupHelper.newTuesday(), 1);
+    getTaskManager().getDependencyCollection().createDependency(successor, predecessor2);
+    assertEquals(
+      String.format("%d;%d", predecessor.getTaskID(), predecessor2.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+  }
+
+  @Test
+  public void testBasicDependencyParsing() {
+    Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+    Task successor = createTask(TestSetupHelper.newWednesday(), 2);
+
+    TaskDependency dependency = parseDependency(
+      String.format("%d", predecessor.getTaskID()), successor,
+      createTaskIndex(getTaskManager())
+    );
+    assertEquals(successor, dependency.getDependant());
+    assertEquals(predecessor, dependency.getDependee());
+    assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
+    assertEquals(0, dependency.getDifference());
+    assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
+  }
+
+  @Test
+  public void testDependencyTypeFormatting() {
+    Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+    Task successor = createTask(TestSetupHelper.newWednesday(), 2);
+    getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
+    assertEquals(
+      String.format("%d", predecessor.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+
+    Task predecessor2 = createTask(TestSetupHelper.newWednesday(), 1);
+    getTaskManager().getDependencyCollection()
+                    .createDependency(successor, predecessor2, new FinishFinishConstraintImpl());
+    assertEquals(
+      String.format("%d;%d-FF", predecessor.getTaskID(), predecessor2.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+  }
+
+  @Test
+  public void testDependencyTypeParsing() {
+    Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+    Task successor = createTask(TestSetupHelper.newWednesday(), 2);
+
+    TaskDependency dependency = parseDependency(
+      String.format("%d-FF", predecessor.getTaskID()), successor,
+      createTaskIndex(getTaskManager())
+    );
+    assertEquals(successor, dependency.getDependant());
+    assertEquals(predecessor, dependency.getDependee());
+    assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
+    assertEquals(0, dependency.getDifference());
+    assertEquals(TaskDependencyConstraint.Type.finishfinish, dependency.getConstraint().getType());
+  }
+
+  @Test
+  public void testFullDependencyFormatting() {
+    Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+    Task successor = createTask(TestSetupHelper.newWednesday(), 2);
+    getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
+    assertEquals(
+      String.format("%d", predecessor.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+
+    Task predecessor2 = createTask(TestSetupHelper.newMonday(), 1);
+    TaskDependency dep2 = getTaskManager().getDependencyCollection().createDependency(successor, predecessor2);
+    dep2.setDifference(1);
+    assertEquals(
+      String.format("%d;%d-FS=P1D", predecessor.getTaskID(), predecessor2.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+
+    Task predecessor3 = createTask(TestSetupHelper.newWednesday(), 1);
+    getTaskManager().getDependencyCollection()
+                    .createDependency(successor, predecessor3, new FinishFinishConstraintImpl(),
+                                      TaskDependency.Hardness.RUBBER
+                    );
+    assertEquals(
+      String.format(
+        "%d;%d-FS=P1D;%d-FF>P0D", predecessor.getTaskID(), predecessor2.getTaskID(), predecessor3.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+
+    dep2.setHardness(TaskDependency.Hardness.RUBBER);
+    assertEquals(
+      String.format(
+        "%d;%d-FS>P1D;%d-FF>P0D", predecessor.getTaskID(), predecessor2.getTaskID(), predecessor3.getTaskID()),
+      TaskProperties.formatPredecessors(successor, ";", true)
+    );
+  }
+
+  @Test
+  public void testFullDependencyParsing() {
+    Task successor = createTask(TestSetupHelper.newWednesday(), 2);
+    {
+      Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+
+      TaskDependency dependency = parseDependency(
+        String.format("%d-FS=P0D", predecessor.getTaskID()), successor,
+        createTaskIndex(getTaskManager())
+      );
+      assertEquals(successor, dependency.getDependant());
+      assertEquals(predecessor, dependency.getDependee());
+      assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
+      assertEquals(0, dependency.getDifference());
+      assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
     }
+    {
+      Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
 
-    private static TaskDependency parseDependency(
-        String depSpec, final Task successor, Function<Integer, Task> taskIndex
-    ) {
-        Map<Integer, Supplier<TaskDependency>> out = Maps.newHashMap();
-        TaskProperties.parseDependency(depSpec, successor, taskIndex, out);
-        return out.values().iterator().next().get();
+      TaskDependency dependency = parseDependency(
+        String.format("%d-FS=P1D", predecessor.getTaskID()), successor,
+        createTaskIndex(getTaskManager())
+      );
+      assertEquals(successor, dependency.getDependant());
+      assertEquals(predecessor, dependency.getDependee());
+      assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
+      assertEquals(1, dependency.getDifference());
+      assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
     }
+    {
+      Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
 
-    @Test
-    public void testBasicDependencyFormatting() {
-        Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-        Task successor = createTask(TestSetupHelper.newWednesday(), 2);
-        getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
-        assertEquals(
-            String.format("%d", predecessor.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
-
-        Task predecessor2 = createTask(TestSetupHelper.newTuesday(), 1);
-        getTaskManager().getDependencyCollection().createDependency(successor, predecessor2);
-        assertEquals(
-            String.format("%d;%d", predecessor.getTaskID(), predecessor2.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
+      TaskDependency dependency = parseDependency(
+        String.format("%d-FS>P1D", predecessor.getTaskID()), successor,
+        createTaskIndex(getTaskManager())
+      );
+      assertEquals(successor, dependency.getDependant());
+      assertEquals(predecessor, dependency.getDependee());
+      assertEquals(TaskDependency.Hardness.RUBBER, dependency.getHardness());
+      assertEquals(1, dependency.getDifference());
+      assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
     }
-
-    @Test
-    public void testBasicDependencyParsing() {
-        Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-        Task successor = createTask(TestSetupHelper.newWednesday(), 2);
-
-        TaskDependency dependency = parseDependency(
-            String.format("%d", predecessor.getTaskID()), successor,
-            createTaskIndex(getTaskManager())
-        );
-        assertEquals(successor, dependency.getDependant());
-        assertEquals(predecessor, dependency.getDependee());
-        assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
-        assertEquals(0, dependency.getDifference());
-        assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
-    }
-
-    @Test
-    public void testDependencyTypeFormatting() {
-        Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-        Task successor = createTask(TestSetupHelper.newWednesday(), 2);
-        getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
-        assertEquals(
-            String.format("%d", predecessor.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
-
-        Task predecessor2 = createTask(TestSetupHelper.newWednesday(), 1);
-        getTaskManager().getDependencyCollection()
-                        .createDependency(successor, predecessor2, new FinishFinishConstraintImpl());
-        assertEquals(
-            String.format("%d;%d-FF", predecessor.getTaskID(), predecessor2.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
-    }
-
-    @Test
-    public void testDependencyTypeParsing() {
-        Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-        Task successor = createTask(TestSetupHelper.newWednesday(), 2);
-
-        TaskDependency dependency = parseDependency(
-            String.format("%d-FF", predecessor.getTaskID()), successor,
-            createTaskIndex(getTaskManager())
-        );
-        assertEquals(successor, dependency.getDependant());
-        assertEquals(predecessor, dependency.getDependee());
-        assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
-        assertEquals(0, dependency.getDifference());
-        assertEquals(TaskDependencyConstraint.Type.finishfinish, dependency.getConstraint().getType());
-    }
-
-    @Test
-    public void testFullDependencyFormatting() {
-        Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-        Task successor = createTask(TestSetupHelper.newWednesday(), 2);
-        getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
-        assertEquals(
-            String.format("%d", predecessor.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
-
-        Task predecessor2 = createTask(TestSetupHelper.newMonday(), 1);
-        TaskDependency dep2 = getTaskManager().getDependencyCollection().createDependency(successor, predecessor2);
-        dep2.setDifference(1);
-        assertEquals(
-            String.format("%d;%d-FS=P1D", predecessor.getTaskID(), predecessor2.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
-
-        Task predecessor3 = createTask(TestSetupHelper.newWednesday(), 1);
-        getTaskManager().getDependencyCollection()
-                        .createDependency(successor, predecessor3, new FinishFinishConstraintImpl(),
-                                          TaskDependency.Hardness.RUBBER
-                        );
-        assertEquals(
-            String.format(
-                "%d;%d-FS=P1D;%d-FF>P0D", predecessor.getTaskID(), predecessor2.getTaskID(), predecessor3.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
-
-        dep2.setHardness(TaskDependency.Hardness.RUBBER);
-        assertEquals(
-            String.format(
-                "%d;%d-FS>P1D;%d-FF>P0D", predecessor.getTaskID(), predecessor2.getTaskID(), predecessor3.getTaskID()),
-            TaskProperties.formatPredecessors(successor, ";", true)
-        );
-    }
-
-    @Test
-    public void testFullDependencyParsing() {
-        Task successor = createTask(TestSetupHelper.newWednesday(), 2);
-        {
-            Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-
-            TaskDependency dependency = parseDependency(
-                String.format("%d-FS=P0D", predecessor.getTaskID()), successor,
-                createTaskIndex(getTaskManager())
-            );
-            assertEquals(successor, dependency.getDependant());
-            assertEquals(predecessor, dependency.getDependee());
-            assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
-            assertEquals(0, dependency.getDifference());
-            assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
-        }
-        {
-            Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-
-            TaskDependency dependency = parseDependency(
-                String.format("%d-FS=P1D", predecessor.getTaskID()), successor,
-                createTaskIndex(getTaskManager())
-            );
-            assertEquals(successor, dependency.getDependant());
-            assertEquals(predecessor, dependency.getDependee());
-            assertEquals(TaskDependency.Hardness.STRONG, dependency.getHardness());
-            assertEquals(1, dependency.getDifference());
-            assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
-        }
-        {
-            Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-
-            TaskDependency dependency = parseDependency(
-                String.format("%d-FS>P1D", predecessor.getTaskID()), successor,
-                createTaskIndex(getTaskManager())
-            );
-            assertEquals(successor, dependency.getDependant());
-            assertEquals(predecessor, dependency.getDependee());
-            assertEquals(TaskDependency.Hardness.RUBBER, dependency.getHardness());
-            assertEquals(1, dependency.getDifference());
-            assertEquals(TaskDependencyConstraint.Type.finishstart, dependency.getConstraint().getType());
-        }
-    }
+  }
 }

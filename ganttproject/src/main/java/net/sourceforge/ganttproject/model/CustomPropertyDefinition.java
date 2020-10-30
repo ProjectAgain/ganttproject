@@ -24,30 +24,30 @@ import javax.annotation.Nonnull;
 import java.util.Map;
 
 public interface CustomPropertyDefinition {
-  @Nonnull
-  CustomPropertyClass getPropertyClass();
-
   IStatus canSetPropertyClass(CustomPropertyClass propertyClass);
 
-  IStatus setPropertyClass(CustomPropertyClass propertyClass);
-
-  Class<?> getType();
-
-  String getTypeAsString();
-
-  String getID();
+  @Nonnull
+  Map<String, String> getAttributes();
 
   Object getDefaultValue();
+
+  String getDefaultValueAsString();
+
+  void setDefaultValueAsString(String value);
+
+  String getID();
 
   @Nonnull
   String getName();
 
   void setName(String name);
 
-  String getDefaultValueAsString();
-
-  void setDefaultValueAsString(String value);
-
   @Nonnull
-  Map<String, String> getAttributes();
+  CustomPropertyClass getPropertyClass();
+
+  Class<?> getType();
+
+  String getTypeAsString();
+
+  IStatus setPropertyClass(CustomPropertyClass propertyClass);
 }

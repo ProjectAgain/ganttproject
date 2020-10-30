@@ -18,24 +18,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.resource;
 
-import java.util.Map;
-
 import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
 
+import java.util.Map;
 
 public interface HumanResourceMerger {
-  void merge(Map<HumanResource, HumanResource> existing2imported);
+  class MergeResourcesOption extends DefaultEnumerationOption<Object> {
+    public static final String BY_EMAIL = "mergeresources_by_email";
+    public static final String BY_ID = "mergeresources_by_id";
+    public static final String BY_NAME = "mergeresources_by_name";
+    public static final String NO = "mergeresources_no";
+
+    public MergeResourcesOption() {
+      super("impex.ganttprojectFiles.mergeResources", new String[]{NO, BY_ID, BY_EMAIL, BY_NAME});
+    }
+  }
 
   HumanResource findNative(HumanResource foreign, HumanResourceManager nativeMgr);
 
-  public static class MergeResourcesOption extends DefaultEnumerationOption<Object> {
-    public static final String NO = "mergeresources_no";
-    public static final String BY_ID = "mergeresources_by_id";
-    public static final String BY_EMAIL = "mergeresources_by_email";
-    public static final String BY_NAME = "mergeresources_by_name";
-
-    public MergeResourcesOption() {
-      super("impex.ganttprojectFiles.mergeResources", new String[] { NO, BY_ID, BY_EMAIL, BY_NAME });
-    }
-  }
+  void merge(Map<HumanResource, HumanResource> existing2imported);
 }

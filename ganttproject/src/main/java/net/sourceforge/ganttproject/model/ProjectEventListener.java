@@ -19,27 +19,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.model;
 
 public interface ProjectEventListener {
-  void projectModified();
-
-  void projectSaved();
-
-  void projectClosed();
-
-  void projectOpened();
-
-  void projectCreated();
-
   class Stub implements ProjectEventListener {
     @Override
-    public void projectModified() {
-    }
-
-    @Override
-    public void projectSaved() {
-    }
-
-    @Override
     public void projectClosed() {
+    }
+
+    @Override
+    public void projectCreated() {
+    }
+
+    @Override
+    public void projectModified() {
     }
 
     @Override
@@ -47,7 +37,17 @@ public interface ProjectEventListener {
     }
 
     @Override
-    public void projectCreated() {
+    public void projectSaved() {
     }
   }
+
+  void projectClosed();
+
+  void projectCreated();
+
+  void projectModified();
+
+  void projectOpened();
+
+  void projectSaved();
 }

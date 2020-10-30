@@ -24,6 +24,77 @@ import java.util.Date;
  * @author bard
  */
 public class TimeUnitFunctionOfDateImpl extends TimeUnitDateFrameableImpl implements TimeUnitFunctionOfDate {
+  private class ParameterizedTimeUnitImpl implements TimeUnit {
+    private final Date myLeftDate;
+    private final Date myRightDate;
+    private int myAtomCount = -1;
+
+    public ParameterizedTimeUnitImpl(Date myBaseDate) {
+      this.myRightDate = TimeUnitFunctionOfDateImpl.this.adjustRight(myBaseDate);
+      this.myLeftDate = TimeUnitFunctionOfDateImpl.this.adjustLeft(myBaseDate);
+    }
+
+    @Override
+    public Date adjustLeft(Date baseDate) {
+      return TimeUnitFunctionOfDateImpl.this.adjustLeft(baseDate);
+    }
+
+    @Override
+    public Date adjustRight(Date baseDate) {
+      return TimeUnitFunctionOfDateImpl.this.adjustRight(baseDate);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      return TimeUnitFunctionOfDateImpl.this.equals(o);
+    }
+
+    @Override
+    public int getAtomCount(TimeUnit atomUnit) {
+      if (atomUnit == TimeUnitFunctionOfDateImpl.this || atomUnit == this) {
+        return 1;
+      }
+      int directAtomCount = getDirectAtomCount();
+      return directAtomCount * getDirectAtomUnit().getAtomCount(atomUnit);
+    }
+
+    @Override
+    public TimeUnit getDirectAtomUnit() {
+      return TimeUnitFunctionOfDateImpl.this.getDirectAtomUnit();
+    }
+
+    @Override
+    public String getName() {
+      return TimeUnitFunctionOfDateImpl.this.getName();
+    }
+
+    @Override
+    public int hashCode() {
+      return super.hashCode();
+    }
+
+    @Override
+    public boolean isConstructedFrom(TimeUnit unit) {
+      return TimeUnitFunctionOfDateImpl.this.isConstructedFrom(unit);
+    }
+
+    @Override
+    public Date jumpLeft(Date baseDate) {
+      return TimeUnitFunctionOfDateImpl.this.jumpLeft(baseDate);
+    }
+
+    private int getDirectAtomCount() {
+      if (myAtomCount == -1) {
+        myAtomCount = 0;
+        for (Date leftDate = TimeUnitFunctionOfDateImpl.this.myDirectFrameable.jumpLeft(myRightDate);
+             leftDate.compareTo(myLeftDate) >= 0; myAtomCount++) {
+
+          leftDate = TimeUnitFunctionOfDateImpl.this.myDirectFrameable.jumpLeft(leftDate);
+        }
+      }
+      return myAtomCount;
+    }
+  }
   private final DateFrameable myDirectFrameable;
 
   public TimeUnitFunctionOfDateImpl(String name, TimeUnitGraph graph, TimeUnit directAtomUnit, DateFrameable framer) {
@@ -41,80 +112,6 @@ public class TimeUnitFunctionOfDateImpl extends TimeUnitDateFrameableImpl implem
   @Override
   public int getAtomCount(TimeUnit atomUnit) {
     throw new UnsupportedOperationException(
-        "This time unit is function of date. Use method createTimeUnit() to create a parameterized instance.");
-  }
-
-  private class ParameterizedTimeUnitImpl implements TimeUnit {
-    private final Date myRightDate;
-
-    private final Date myLeftDate;
-
-    private int myAtomCount = -1;
-
-    public ParameterizedTimeUnitImpl(Date myBaseDate) {
-      this.myRightDate = TimeUnitFunctionOfDateImpl.this.adjustRight(myBaseDate);
-      this.myLeftDate = TimeUnitFunctionOfDateImpl.this.adjustLeft(myBaseDate);
-    }
-
-    @Override
-    public String getName() {
-      return TimeUnitFunctionOfDateImpl.this.getName();
-    }
-
-    @Override
-    public boolean isConstructedFrom(TimeUnit unit) {
-      return TimeUnitFunctionOfDateImpl.this.isConstructedFrom(unit);
-    }
-
-    @Override
-    public int getAtomCount(TimeUnit atomUnit) {
-      if (atomUnit == TimeUnitFunctionOfDateImpl.this || atomUnit == this) {
-        return 1;
-      }
-      int directAtomCount = getDirectAtomCount();
-      return directAtomCount * getDirectAtomUnit().getAtomCount(atomUnit);
-    }
-
-    private int getDirectAtomCount() {
-      if (myAtomCount == -1) {
-        myAtomCount = 0;
-        for (Date leftDate = TimeUnitFunctionOfDateImpl.this.myDirectFrameable.jumpLeft(myRightDate); leftDate.compareTo(myLeftDate) >= 0; myAtomCount++) {
-
-          leftDate = TimeUnitFunctionOfDateImpl.this.myDirectFrameable.jumpLeft(leftDate);
-        }
-      }
-      return myAtomCount;
-    }
-
-    @Override
-    public TimeUnit getDirectAtomUnit() {
-      return TimeUnitFunctionOfDateImpl.this.getDirectAtomUnit();
-    }
-
-    @Override
-    public Date adjustRight(Date baseDate) {
-      return TimeUnitFunctionOfDateImpl.this.adjustRight(baseDate);
-    }
-
-    @Override
-    public Date adjustLeft(Date baseDate) {
-      return TimeUnitFunctionOfDateImpl.this.adjustLeft(baseDate);
-    }
-
-    @Override
-    public Date jumpLeft(Date baseDate) {
-      return TimeUnitFunctionOfDateImpl.this.jumpLeft(baseDate);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      return TimeUnitFunctionOfDateImpl.this.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-      return super.hashCode();
-    }
-
+      "This time unit is function of date. Use method createTimeUnit() to create a parameterized instance.");
   }
 }

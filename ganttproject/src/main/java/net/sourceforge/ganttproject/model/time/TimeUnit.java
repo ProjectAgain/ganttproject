@@ -24,19 +24,21 @@ package net.sourceforge.ganttproject.model.time;
  * @author bard Date: 31.01.2004
  */
 public interface TimeUnit extends DateFrameable {
-  public String getName();
-
-  public boolean isConstructedFrom(TimeUnit unit);
+  int DAY = 0;
 
   /**
    * @return number of atoms used to create current TimeUnit
-   * @throws UnsupportedOperationException
-   *           if current TimeUnit does not have constant number of atoms
+   *
+   * @throws UnsupportedOperationException if current TimeUnit does not have constant number of atoms
    */
-  public int getAtomCount(TimeUnit atomUnit);
+  int getAtomCount(TimeUnit atomUnit);
 
-  /** @return the TimeUnit which is used to build the current TimeUnit */
-  public TimeUnit getDirectAtomUnit();
+  /**
+   * @return the TimeUnit which is used to build the current TimeUnit
+   */
+  TimeUnit getDirectAtomUnit();
 
-  public int DAY = 0;
+  String getName();
+
+  boolean isConstructedFrom(TimeUnit unit);
 }

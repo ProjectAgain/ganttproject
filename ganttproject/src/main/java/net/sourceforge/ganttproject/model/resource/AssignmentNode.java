@@ -18,14 +18,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.resource;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.ui.chart.ResourceDefaultColumn;
 import net.sourceforge.ganttproject.model.roles.Role;
 import net.sourceforge.ganttproject.model.task.ResourceAssignment;
 import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.ui.chart.ResourceDefaultColumn;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 public class AssignmentNode extends ResourceTableNode {
   private static final Set<ResourceDefaultColumn> ourApplicableColumns = EnumSet.of(ResourceDefaultColumn.ROLE_IN_TASK);
@@ -40,6 +40,11 @@ public class AssignmentNode extends ResourceTableNode {
     return resourceAssignment;
   }
 
+  @Override
+  public Object getCustomField(CustomPropertyDefinition def) {
+    return null;
+  }
+
   public Role getRoleForAssigment() {
     return resourceAssignment.getRoleForAssignment();
   }
@@ -48,13 +53,20 @@ public class AssignmentNode extends ResourceTableNode {
     resourceAssignment.setRoleForAssignment(role);
   }
 
-  public Task getTask() {
-    return resourceAssignment.getTask();
+  @Override
+  public Object getStandardField(ResourceDefaultColumn def) {
+    switch (def) {
+      case NAME:
+        return getTask().getName();
+      case ROLE_IN_TASK:
+        return getRoleForAssigment();
+      default:
+        return "";
+    }
   }
 
-  @Override
-  public String toString() {
-    return resourceAssignment.getTask().getName();
+  public Task getTask() {
+    return resourceAssignment.getTask();
   }
 
   @Override
@@ -62,25 +74,16 @@ public class AssignmentNode extends ResourceTableNode {
   }
 
   @Override
-  public Object getCustomField(CustomPropertyDefinition def) {
-    return null;
-  }
-
-  @Override
-  public Object getStandardField(ResourceDefaultColumn def) {
-    switch (def) {
-    case NAME: return getTask().getName();
-    case ROLE_IN_TASK: return getRoleForAssigment();
-    default: return "";
-    }
-  }
-
-  @Override
   public void setStandardField(ResourceDefaultColumn def, Object value) {
     switch (def) {
-    case ROLE_IN_TASK:
-      setRoleForAssigment((Role) value);
-      return;
+      case ROLE_IN_TASK:
+        setRoleForAssigment((Role) value);
+        return;
     }
+  }
+
+  @Override
+  public String toString() {
+    return resourceAssignment.getTask().getName();
   }
 }

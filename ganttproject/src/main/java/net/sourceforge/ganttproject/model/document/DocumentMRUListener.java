@@ -24,6 +24,8 @@ import java.util.Collection;
  * Listener for Most Recent Used related things
  */
 public interface DocumentMRUListener {
-  /** Fired when the MRU list is changed */
+  /**
+   * Fired when the MRU list is changed
+   */
   void mruListChanged(Collection<String> newMRUList);
 }

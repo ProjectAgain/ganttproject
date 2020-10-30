@@ -18,11 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task;
 
-import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
-
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import net.sourceforge.ganttproject.model.time.TimeDuration;
-
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 
 /**
  * This class is used to describe the hierarchy of the tasks.
@@ -38,73 +36,51 @@ public class TaskNode extends DefaultMutableTreeTableNode {
   /**
    * Creates an instance of TaskNode with the given task as reference.
    *
-   * @param t
-   *          Task of reference.
+   * @param t Task of reference.
    */
   public TaskNode(Task t) {
     super(t);
     task = t;
   }
 
-  /** @return the priority of the task. */
-  public Task.Priority getPriority() {
-    return task.getPriority();
+  public void applyThirdDateConstraint() {
+    if (task.getThird() != null) {
+      switch (task.getThirdDateConstraint()) {
+        case TaskImpl.EARLIESTBEGIN:
+          if (task.getThird().after(getStart())) {
+            task.setStart(task.getThird().clone());
+          }
+      }
+    }
   }
 
   /**
-   * Sets the name of the task.
-   *
-   * @param newName
-   *          The name to be set.
+   * @return the completion percentage of the task.
    */
-  public void setName(String newName) {
-    task.setName(newName);
-  }
-
-  /** @return the name of the task. */
-  public String getName() {
-    return task.getName();
+  public int getCompletionPercentage() {
+    return task.getCompletionPercentage();
   }
 
   /**
-   * Sets the start date of the task.
+   * Sets the completion percentage of the task.
    *
-   * @param startDate
-   *          The start date of the task to be set.
+   * @param percentage The percentage to be set.
    */
-  public void setStart(GanttCalendar startDate) {
-    TaskMutator mutator = task.createMutatorFixingDuration();
-    mutator.setStart(startDate);
-    mutator.commit();
-  }
-
-  /** @return the start date of the task. */
-  public GanttCalendar getStart() {
-    return task.getStart();
+  public void setCompletionPercentage(int percentage) {
+    task.setCompletionPercentage(percentage);
   }
 
   /**
-   * Sets the end date of the task.
-   *
-   * @param endDate
-   *          The end date of the task to be set.
+   * @return the duration of the task.
    */
-  public void setEnd(GanttCalendar endDate) {
-    TaskMutator mutator = task.createMutator();
-    mutator.setEnd(endDate);
-    mutator.commit();
-  }
-
-  /** @return the end date of the task. */
-  public GanttCalendar getEnd() {
-    return task.getEnd();
+  public int getDuration() {
+    return (int) task.getDuration().getValue();
   }
 
   /**
    * Sets the duration of the task.
    *
-   * @param length
-   *          The duration to be set.
+   * @param length The duration to be set.
    */
   public void setDuration(TimeDuration length) {
     TaskMutator mutator = task.createMutator();
@@ -112,37 +88,71 @@ public class TaskNode extends DefaultMutableTreeTableNode {
     mutator.commit();
   }
 
-  /** @return the duration of the task. */
-  public int getDuration() {
-    return (int) task.getDuration().getValue();
+  /**
+   * @return the end date of the task.
+   */
+  public GanttCalendar getEnd() {
+    return task.getEnd();
   }
 
   /**
-   * Sets the completion percentage of the task.
+   * Sets the end date of the task.
    *
-   * @param percentage
-   *          The percentage to be set.
+   * @param endDate The end date of the task to be set.
    */
-  public void setCompletionPercentage(int percentage) {
-    task.setCompletionPercentage(percentage);
+  public void setEnd(GanttCalendar endDate) {
+    TaskMutator mutator = task.createMutator();
+    mutator.setEnd(endDate);
+    mutator.commit();
   }
 
-  /** @return the completion percentage of the task. */
-  public int getCompletionPercentage() {
-    return task.getCompletionPercentage();
+  /**
+   * @return the name of the task.
+   */
+  public String getName() {
+    return task.getName();
   }
 
-  public void setTaskInfo(TaskInfo info) {
-    task.setTaskInfo(info);
+  /**
+   * Sets the name of the task.
+   *
+   * @param newName The name to be set.
+   */
+  public void setName(String newName) {
+    task.setName(newName);
+  }
+
+  /**
+   * @return the priority of the task.
+   */
+  public Task.Priority getPriority() {
+    return task.getPriority();
+  }
+
+  /**
+   * @return the start date of the task.
+   */
+  public GanttCalendar getStart() {
+    return task.getStart();
+  }
+
+  /**
+   * Sets the start date of the task.
+   *
+   * @param startDate The start date of the task to be set.
+   */
+  public void setStart(GanttCalendar startDate) {
+    TaskMutator mutator = task.createMutatorFixingDuration();
+    mutator.setStart(startDate);
+    mutator.commit();
   }
 
   public TaskInfo getTaskInfo() {
     return task.getTaskInfo();
   }
 
-  @Override
-  public String toString() {
-    return task.getName();
+  public void setTaskInfo(TaskInfo info) {
+    task.setTaskInfo(info);
   }
 
   @Override
@@ -150,13 +160,8 @@ public class TaskNode extends DefaultMutableTreeTableNode {
     return task;
   }
 
-  public void applyThirdDateConstraint() {
-    if (task.getThird() != null)
-      switch (task.getThirdDateConstraint()) {
-      case TaskImpl.EARLIESTBEGIN:
-        if (task.getThird().after(getStart())) {
-          task.setStart(task.getThird().clone());
-        }
-      }
+  @Override
+  public String toString() {
+    return task.getName();
   }
 }

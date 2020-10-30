@@ -18,26 +18,24 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.event;
 
-import java.util.EventObject;
-
+import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
 
-import net.sourceforge.ganttproject.model.task.Task;
+import java.util.EventObject;
 
 /**
  * Created by IntelliJ IDEA. User: bard
  */
 public class TaskScheduleEvent extends EventObject {
+  private final GanttCalendar myNewFinishDate;
+  private final GanttCalendar myNewStartDate;
+  private final GanttCalendar myOldFinishDate;
   private final GanttCalendar myOldStartDate;
 
-  private final GanttCalendar myOldFinishDate;
-
-  private final GanttCalendar myNewStartDate;
-
-  private final GanttCalendar myNewFinishDate;
-
-  public TaskScheduleEvent(Task source, GanttCalendar oldStartDate, GanttCalendar oldFinishDate,
-      GanttCalendar newStartDate, GanttCalendar newFinishDate) {
+  public TaskScheduleEvent(
+    Task source, GanttCalendar oldStartDate, GanttCalendar oldFinishDate,
+    GanttCalendar newStartDate, GanttCalendar newFinishDate
+  ) {
     super(source);
     myOldStartDate = oldStartDate;
     myOldFinishDate = oldFinishDate;
@@ -45,23 +43,23 @@ public class TaskScheduleEvent extends EventObject {
     myNewFinishDate = newFinishDate;
   }
 
-  public Task getTask() {
-    return (Task) getSource();
-  }
-
-  public GanttCalendar getOldStartDate() {
-    return myOldStartDate;
-  }
-
-  public GanttCalendar getOldFinishDate() {
-    return myOldFinishDate;
+  public GanttCalendar getNewFinishDate() {
+    return myNewFinishDate;
   }
 
   public GanttCalendar getNewStartDate() {
     return myNewStartDate;
   }
 
-  public GanttCalendar getNewFinishDate() {
-    return myNewFinishDate;
+  public GanttCalendar getOldFinishDate() {
+    return myOldFinishDate;
+  }
+
+  public GanttCalendar getOldStartDate() {
+    return myOldStartDate;
+  }
+
+  public Task getTask() {
+    return (Task) getSource();
   }
 }

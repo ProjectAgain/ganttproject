@@ -18,20 +18,20 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Sets;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Sets;
 
 /**
  * Examines the given array of nodes and retains only those
  * whose parents are not in the input array.
  *
- * @author dbarashev
- *
  * @param <T> Node type
+ *
+ * @author dbarashev
  */
 public class RetainRootsAlgorithm<T> {
   public void run(T[] nodes, Function<T, T> getParent, Collection<T> output) {
@@ -40,7 +40,7 @@ public class RetainRootsAlgorithm<T> {
 
   public void run(Collection<T> nodes, Function<T, T> getParent, Collection<T> output) {
     final Set<T> set = Sets.newHashSet(nodes);
-    for (T node : nodes) {
+    for (T node: nodes) {
       for (T parent = getParent.apply(node); parent != null; parent = getParent.apply(parent)) {
         if (set.contains(parent)) {
           set.remove(node);

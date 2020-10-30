@@ -29,6 +29,8 @@ package net.sourceforge.ganttproject.model.resource;
  * @author dbarashev
  */
 public interface ResourceContext {
-  /** @return Resources selected at the moment */
-  public HumanResource[] getResources();
+  /**
+   * @return Resources selected at the moment
+   */
+  HumanResource[] getResources();
 }

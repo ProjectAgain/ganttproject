@@ -8,29 +8,28 @@ package net.sourceforge.ganttproject.model.roles;
  * @author bard
  */
 public interface RoleSet {
+  String DEFAULT = "Default";
   String SOFTWARE_DEVELOPMENT = "SoftwareDevelopment";
 
-  String DEFAULT = "Default";
+  void changeRole(String name, int roleID);
+
+  void clear();
+
+  Role createRole(String name);
+
+  Role createRole(String name, int persistentID);
+
+  void deleteRole(Role role);
+
+  Role findRole(int roleID);
 
   String getName();
 
   Role[] getRoles();
 
-  Role createRole(String name);
-  Role createRole(String name, int persistentID);
-
-  void deleteRole(Role role);
-
-  void changeRole(String name, int roleID);
-
-  Role findRole(int roleID);
+  boolean isEmpty();
 
   boolean isEnabled();
 
   void setEnabled(boolean isEnabled);
-
-  boolean isEmpty();
-
-  void clear();
-
 }

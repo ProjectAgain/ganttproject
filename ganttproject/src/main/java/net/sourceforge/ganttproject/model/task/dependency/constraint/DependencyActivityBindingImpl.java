@@ -3,27 +3,29 @@
  */
 package net.sourceforge.ganttproject.model.task.dependency.constraint;
 
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.task.TaskActivity;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+
+import java.util.Date;
 
 /**
  * @author bard
  */
 class DependencyActivityBindingImpl implements TaskDependency.ActivityBinding {
 
-  private final TaskActivity myDependeeActivity;
-
-  private final TaskActivity myDependantActivity;
-
   private final Date[] myAlignedBounds;
+  private final TaskActivity myDependantActivity;
+  private final TaskActivity myDependeeActivity;
 
   DependencyActivityBindingImpl(TaskActivity dependantActivity, TaskActivity dependeeActivity, Date[] alignedBounds) {
     myDependantActivity = dependantActivity;
     myDependeeActivity = dependeeActivity;
     myAlignedBounds = alignedBounds;
+  }
 
+  @Override
+  public Date[] getAlignedBounds() {
+    return myAlignedBounds;
   }
 
   @Override
@@ -35,10 +37,4 @@ class DependencyActivityBindingImpl implements TaskDependency.ActivityBinding {
   public TaskActivity getDependeeActivity() {
     return myDependeeActivity;
   }
-
-  @Override
-  public Date[] getAlignedBounds() {
-    return myAlignedBounds;
-  }
-
 }

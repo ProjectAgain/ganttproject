@@ -32,11 +32,9 @@ import java.net.URISyntaxException;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-
 public class FtpDocument extends AbstractURLDocument {
-  private final Logger log = getLogger(getClass());
-
   private static final Object EMPTY_STRING = "";
+  private final Logger log = getLogger(getClass());
   private final URI myURI;
 
   FtpDocument(String urlAsString, StringOption ftpUser, StringOption ftpPassword) {
@@ -53,7 +51,8 @@ public class FtpDocument extends AbstractURLDocument {
           buf.append(':').append(ftpPassword.getValue());
         }
         myURI = new URI("ftp", buf.toString(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(),
-            url.getFragment());
+                        url.getFragment()
+        );
       } else {
         myURI = url;
       }
@@ -72,12 +71,6 @@ public class FtpDocument extends AbstractURLDocument {
   }
 
   @Override
-  public String getFileName() {
-    // TODO return filename instead of complete URI?
-    return myURI.toString();
-  }
-
-  @Override
   public boolean canRead() {
     return true;
   }
@@ -88,8 +81,9 @@ public class FtpDocument extends AbstractURLDocument {
   }
 
   @Override
-  public boolean isValidForMRU() {
-    return true;
+  public String getFileName() {
+    // TODO return filename instead of complete URI?
+    return myURI.toString();
   }
 
   @Override
@@ -108,11 +102,6 @@ public class FtpDocument extends AbstractURLDocument {
   }
 
   @Override
-  public void write() throws IOException {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public URI getURI() {
     return myURI;
   }
@@ -120,5 +109,15 @@ public class FtpDocument extends AbstractURLDocument {
   @Override
   public boolean isLocal() {
     return false;
+  }
+
+  @Override
+  public boolean isValidForMRU() {
+    return true;
+  }
+
+  @Override
+  public void write() throws IOException {
+    throw new UnsupportedOperationException();
   }
 }

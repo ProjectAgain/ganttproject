@@ -25,23 +25,23 @@ import javax.swing.undo.CannotUndoException;
  * @author bard
  */
 public interface GPUndoManager {
-  void undoableEdit(String localizedName, Runnable runnableEdit);
-
-  boolean canUndo();
+  void addUndoableEditListener(GPUndoListener listener);
 
   boolean canRedo();
 
-  void undo() throws CannotUndoException;
+  boolean canUndo();
 
-  void redo() throws CannotRedoException;
-
-  String getUndoPresentationName();
+  void die();
 
   String getRedoPresentationName();
 
-  void addUndoableEditListener(GPUndoListener listener);
+  String getUndoPresentationName();
+
+  void redo() throws CannotRedoException;
 
   void removeUndoableEditListener(GPUndoListener listener);
 
-  void die();
+  void undo() throws CannotUndoException;
+
+  void undoableEdit(String localizedName, Runnable runnableEdit);
 }

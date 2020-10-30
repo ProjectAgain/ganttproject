@@ -26,46 +26,23 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-
 /**
  * @author bard
  */
 public interface DocumentManager {
-  Document newUntitledDocument() throws IOException;
-  Document newDocument(String path) throws IOException;
-  Document newAutosaveDocument() throws IOException;
-
-  Document getLastAutosaveDocument(Document priorTo) throws IOException;
-
-  Document getDocument(String path);
-
-  Document getProxyDocument(Document physicalDocument);
-
-  void changeWorkingDirectory(File parentFile);
-
-  String getWorkingDirectory();
-
-  GPOptionGroup getOptionGroup();
-
-  FTPOptions getFTPOptions();
-
-  GPOptionGroup[] getNetworkOptionGroups();
-
   abstract class FTPOptions extends GPOptionGroup {
     public FTPOptions(String id, GPOption<?>[] options) {
       super(id, options);
     }
 
-    public abstract StringOption getServerName();
-
-    public abstract StringOption getUserName();
-
     public abstract StringOption getDirectoryName();
 
     public abstract StringOption getPassword();
-  }
 
-  List<String> getRecentDocuments();
+    public abstract StringOption getServerName();
+
+    public abstract StringOption getUserName();
+  }
 
   void addListener(DocumentMRUListener listener);
 
@@ -73,5 +50,29 @@ public interface DocumentManager {
 
   void addToRecentDocuments(String value);
 
+  void changeWorkingDirectory(File parentFile);
+
   void clearRecentDocuments();
+
+  Document getDocument(String path);
+
+  FTPOptions getFTPOptions();
+
+  Document getLastAutosaveDocument(Document priorTo) throws IOException;
+
+  GPOptionGroup[] getNetworkOptionGroups();
+
+  GPOptionGroup getOptionGroup();
+
+  Document getProxyDocument(Document physicalDocument);
+
+  List<String> getRecentDocuments();
+
+  String getWorkingDirectory();
+
+  Document newAutosaveDocument() throws IOException;
+
+  Document newDocument(String path) throws IOException;
+
+  Document newUntitledDocument() throws IOException;
 }

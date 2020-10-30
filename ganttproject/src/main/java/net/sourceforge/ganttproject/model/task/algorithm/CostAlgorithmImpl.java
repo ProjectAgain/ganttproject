@@ -18,12 +18,12 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
-import java.math.BigDecimal;
-
 import net.sourceforge.ganttproject.model.resource.HumanResource;
 import net.sourceforge.ganttproject.model.task.ResourceAssignment;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskContainmentHierarchyFacade;
+
+import java.math.BigDecimal;
 
 /**
  * Algorithm for calculating task cost
@@ -35,16 +35,16 @@ public class CostAlgorithmImpl {
     BigDecimal total = BigDecimal.ZERO;
     TaskContainmentHierarchyFacade taskHierarchy = t.getManager().getTaskHierarchy();
     if (taskHierarchy.hasNestedTasks(t)) {
-      for (Task child : taskHierarchy.getNestedTasks(t)) {
+      for (Task child: taskHierarchy.getNestedTasks(t)) {
         total = total.add(child.getCost().getValue());
       }
     }
-    for (ResourceAssignment assignment : t.getAssignments()) {
+    for (ResourceAssignment assignment: t.getAssignments()) {
       HumanResource resource = assignment.getResource();
       total = total.add(resource.getStandardPayRate()
-          .multiply(BigDecimal.valueOf(assignment.getLoad()))
-          .divide(BigDecimal.valueOf(100))
-          .multiply(BigDecimal.valueOf(t.getDuration().getLength())));
+                                .multiply(BigDecimal.valueOf(assignment.getLoad()))
+                                .divide(BigDecimal.valueOf(100))
+                                .multiply(BigDecimal.valueOf(t.getDuration().getLength())));
     }
     return total;
   }

@@ -21,7 +21,6 @@ package net.sourceforge.ganttproject.model.calendar;
 import java.util.Collection;
 import java.util.Date;
 
-
 /**
  * Represents a project calendar in GanttProject. Allows for managing weekend days
  * and public holidays.
@@ -29,6 +28,10 @@ import java.util.Date;
  * @author dbarashev (Dmitry Barashev)
  */
 public interface GPCalendar {
+  enum DayType {
+    WORKING, NON_WORKING, WEEKEND, HOLIDAY
+  }
+
   /**
    * Flags corresponding to particular features of a calendar day.
    * A day can be working, in the sense that tasks can run at this day,
@@ -36,41 +39,42 @@ public interface GPCalendar {
    * Weekend is normally a non-working day, however, it can be made working
    * if project owner decides to.
    */
-  public static interface DayMask {
-    int WORKING = 1;
-    int WEEKEND = 2;
+  interface DayMask {
     int HOLIDAY = 4;
+    int WEEKEND = 2;
+    int WORKING = 1;
   }
 
-  public enum DayType {
-    WORKING, NON_WORKING, WEEKEND, HOLIDAY
-  }
+  void addListener(GPCalendarListener listener);
 
-  void setWeekDayType(int day, DayType type);
+  String getBaseCalendarID();
 
-  DayType getWeekDayType(int day);
+  void setBaseCalendarID(String id);
 
-  CalendarEvent getEvent(Date date);
-  public int getDayMask(Date date);
+  int getDayMask(Date date);
 
   //public boolean isNonWorkingDay(Date curDayStart);
 
-  public void setPublicHolidays(Collection<CalendarEvent> holidays);
+  CalendarEvent getEvent(Date date);
 
+  String getID();
 
-  /** @return an unmodifiable collection of (public) holidays */
-  public Collection<CalendarEvent> getPublicHolidays();
+  void setID(String id);
+
+  String getName();
+
+  void setName(String name);
+
+  /**
+   * @return an unmodifiable collection of (public) holidays
+   */
+  Collection<CalendarEvent> getPublicHolidays();
+
+  void setPublicHolidays(Collection<CalendarEvent> holidays);
+
+  DayType getWeekDayType(int day);
 
   void importCalendar(GPCalendar calendar, ImportCalendarOption importOption);
 
-  public String getBaseCalendarID();
-
-  public void setBaseCalendarID(String id);
-
-  public void addListener(GPCalendarListener listener);
-
-  public String getID();
-  public String getName();
-  public void setName(String name);
-  public void setID(String id);
+  void setWeekDayType(int day, DayType type);
 }

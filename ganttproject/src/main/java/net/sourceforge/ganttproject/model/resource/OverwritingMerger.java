@@ -18,50 +18,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.resource;
 
+import net.sourceforge.ganttproject.model.CustomProperty;
+import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.ui.viewmodel.option.EnumerationOption;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
-import net.sourceforge.ganttproject.ui.viewmodel.option.EnumerationOption;
-
-import net.sourceforge.ganttproject.model.CustomProperty;
-
 public class OverwritingMerger implements HumanResourceMerger {
-  private final EnumerationOption myMergeOption;
   private final Map<String, HumanResource> myCache = new HashMap<String, HumanResource>();
+  private final EnumerationOption myMergeOption;
 
   public OverwritingMerger(EnumerationOption mergeOption) {
     myMergeOption = mergeOption;
-  }
-
-  @Override
-  public void merge(Map<HumanResource, HumanResource> foreign2native) {
-    for (Iterator<Entry<HumanResource, HumanResource>> entries = foreign2native.entrySet().iterator(); entries.hasNext();) {
-      Map.Entry<HumanResource, HumanResource> entry = entries.next();
-      merge(entry.getKey(), entry.getValue());
-    }
-  }
-
-  private void merge(HumanResource mergeFrom, HumanResource mergeTo) {
-    if (mergeFrom.getDaysOff() != null) {
-      for (int i = 0; i < mergeFrom.getDaysOff().size(); i++) {
-        mergeTo.addDaysOff(GanttDaysOff.create((GanttDaysOff) mergeFrom.getDaysOff().get(i)));
-      }
-    }
-    mergeTo.setName(mergeFrom.getName());
-    mergeTo.setDescription(mergeFrom.getDescription());
-    mergeTo.setMail(mergeFrom.getMail());
-    mergeTo.setPhone(mergeFrom.getPhone());
-    mergeTo.setRole(mergeFrom.getRole());
-    mergeTo.setStandardPayRate(mergeFrom.getStandardPayRate());
-    List<CustomProperty> customProperties = mergeFrom.getCustomProperties();
-    for (int i = 0; i < customProperties.size(); i++) {
-      CustomProperty nextProperty = customProperties.get(i);
-      mergeTo.addCustomProperty(nextProperty.getDefinition(), nextProperty.getValueAsString());
-    }
   }
 
   @Override
@@ -88,11 +60,12 @@ public class OverwritingMerger implements HumanResourceMerger {
     return null;
   }
 
-  private void buildNameCache(HumanResourceManager nativeMgr) {
-    List<HumanResource> resources = nativeMgr.getResources();
-    for (int i = 0; i < resources.size(); i++) {
-      HumanResource hr = resources.get(i);
-      myCache.put(hr.getName(), hr);
+  @Override
+  public void merge(Map<HumanResource, HumanResource> foreign2native) {
+    for (Iterator<Entry<HumanResource, HumanResource>> entries =
+         foreign2native.entrySet().iterator(); entries.hasNext(); ) {
+      Map.Entry<HumanResource, HumanResource> entry = entries.next();
+      merge(entry.getKey(), entry.getValue());
     }
   }
 
@@ -101,6 +74,33 @@ public class OverwritingMerger implements HumanResourceMerger {
     for (int i = 0; i < resources.size(); i++) {
       HumanResource hr = resources.get(i);
       myCache.put(hr.getMail(), hr);
+    }
+  }
+
+  private void buildNameCache(HumanResourceManager nativeMgr) {
+    List<HumanResource> resources = nativeMgr.getResources();
+    for (int i = 0; i < resources.size(); i++) {
+      HumanResource hr = resources.get(i);
+      myCache.put(hr.getName(), hr);
+    }
+  }
+
+  private void merge(HumanResource mergeFrom, HumanResource mergeTo) {
+    if (mergeFrom.getDaysOff() != null) {
+      for (int i = 0; i < mergeFrom.getDaysOff().size(); i++) {
+        mergeTo.addDaysOff(GanttDaysOff.create(mergeFrom.getDaysOff().get(i)));
+      }
+    }
+    mergeTo.setName(mergeFrom.getName());
+    mergeTo.setDescription(mergeFrom.getDescription());
+    mergeTo.setMail(mergeFrom.getMail());
+    mergeTo.setPhone(mergeFrom.getPhone());
+    mergeTo.setRole(mergeFrom.getRole());
+    mergeTo.setStandardPayRate(mergeFrom.getStandardPayRate());
+    List<CustomProperty> customProperties = mergeFrom.getCustomProperties();
+    for (int i = 0; i < customProperties.size(); i++) {
+      CustomProperty nextProperty = customProperties.get(i);
+      mergeTo.addCustomProperty(nextProperty.getDefinition(), nextProperty.getValueAsString());
     }
   }
 }

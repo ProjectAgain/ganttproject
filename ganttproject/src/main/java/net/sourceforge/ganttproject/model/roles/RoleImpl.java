@@ -23,15 +23,13 @@ import net.sourceforge.ganttproject.language.GanttLanguage.Event;
 
 /**
  * Created by IntelliJ IDEA.
- * 
+ *
  * @author bard Date: 25.01.2004
  */
 public class RoleImpl implements Role {
-  private String myName;
-
   private final int myID;
-
   private final RoleSet myRoleSet;
+  private String myName;
 
   public RoleImpl(int id, String name, RoleSet roleSet) {
     myID = id;
@@ -75,5 +73,4 @@ public class RoleImpl implements Role {
   public String toString() {
     return getName();
   }
-
 }

@@ -40,8 +40,8 @@ public class ReadOnlyProxyDocument implements Document {
   }
 
   @Override
-  public String getFileName() {
-    return myDelegate.getFileName();
+  public boolean acquireLock() {
+    return true;
   }
 
   @Override
@@ -55,32 +55,8 @@ public class ReadOnlyProxyDocument implements Document {
   }
 
   @Override
-  public boolean isValidForMRU() {
-    return false;
-  }
-
-  @Override
-  public boolean acquireLock() {
-    return true;
-  }
-
-  @Override
-  public void releaseLock() {
-  }
-
-  @Override
-  public InputStream getInputStream() throws IOException {
-    return myDelegate.getInputStream();
-  }
-
-  @Override
-  public OutputStream getOutputStream() throws IOException {
-    return null;
-  }
-
-  @Override
-  public String getPath() {
-    return myDelegate.getPath();
+  public String getFileName() {
+    return myDelegate.getFileName();
   }
 
   @Override
@@ -89,13 +65,8 @@ public class ReadOnlyProxyDocument implements Document {
   }
 
   @Override
-  public String getUsername() {
-    return myDelegate.getUsername();
-  }
-
-  @Override
-  public String getPassword() {
-    return myDelegate.getPassword();
+  public InputStream getInputStream() throws IOException {
+    return myDelegate.getInputStream();
   }
 
   @Override
@@ -104,18 +75,18 @@ public class ReadOnlyProxyDocument implements Document {
   }
 
   @Override
-  public void read() throws IOException, DocumentException {
-    myDelegate.read();
+  public OutputStream getOutputStream() throws IOException {
+    return null;
   }
 
   @Override
-  public void write() throws IOException {
-    throw new IOException("You can't write a read-only document");
+  public String getPassword() {
+    return myDelegate.getPassword();
   }
 
   @Override
-  public URI getURI() {
-    return myDelegate.getURI();
+  public String getPath() {
+    return myDelegate.getPath();
   }
 
   @Override
@@ -124,12 +95,41 @@ public class ReadOnlyProxyDocument implements Document {
   }
 
   @Override
+  public URI getURI() {
+    return myDelegate.getURI();
+  }
+
+  @Override
+  public String getUsername() {
+    return myDelegate.getUsername();
+  }
+
+  @Override
   public boolean isLocal() {
     return myDelegate.isLocal();
   }
 
   @Override
+  public boolean isValidForMRU() {
+    return false;
+  }
+
+  @Override
+  public void read() throws IOException, DocumentException {
+    myDelegate.read();
+  }
+
+  @Override
+  public void releaseLock() {
+  }
+
+  @Override
   public void setMirror(Document mirrorDocument) {
     throw new UnsupportedOperationException("Read only document doesn't support mirroring");
+  }
+
+  @Override
+  public void write() throws IOException {
+    throw new IOException("You can't write a read-only document");
   }
 }

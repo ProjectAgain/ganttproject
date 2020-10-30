@@ -32,207 +32,207 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestCriticalPath extends TaskTestCase {
-    class LaggedDependencyChainCriticalPathTester {
-        private final HashSet<Task> criticalTasks;
-        private final Task t1;
-        private final Task t2;
-        private final Task t3;
+  class LaggedDependencyChainCriticalPathTester {
+    private final HashSet<Task> criticalTasks;
+    private final Task t1;
+    private final Task t2;
+    private final Task t3;
 
-        public LaggedDependencyChainCriticalPathTester(TaskDependencyConstraint constraint) throws Exception {
-            TaskManager mgr = getTaskManager();
-            t1 = createTask();
-            t2 = createTask();
-            t3 = createTask();
-            TaskDependency dep_3_2 = createDependency(t3, t2);
-            dep_3_2.setConstraint((TaskDependencyConstraint) constraint.clone());
+    public LaggedDependencyChainCriticalPathTester(TaskDependencyConstraint constraint) throws Exception {
+      TaskManager mgr = getTaskManager();
+      t1 = createTask();
+      t2 = createTask();
+      t3 = createTask();
+      TaskDependency dep_3_2 = createDependency(t3, t2);
+      dep_3_2.setConstraint((TaskDependencyConstraint) constraint.clone());
 
-            TaskDependency dep_2_1 = createDependency(t2, t1);
-            dep_2_1.setConstraint((TaskDependencyConstraint) constraint.clone());
-            dep_2_1.setDifference(2);
+      TaskDependency dep_2_1 = createDependency(t2, t1);
+      dep_2_1.setConstraint((TaskDependencyConstraint) constraint.clone());
+      dep_2_1.setDifference(2);
 
-            mgr.getAlgorithmCollection().getRecalculateTaskScheduleAlgorithm().run();
-            criticalTasks = new HashSet<Task>(Arrays.asList(
-                mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        }
-
-        public void runDefaultAsserts() {
-            assertTrue(criticalTasks.contains(t1));
-            assertTrue(criticalTasks.contains(t2));
-            assertTrue(criticalTasks.contains(t3));
-        }
+      mgr.getAlgorithmCollection().getRecalculateTaskScheduleAlgorithm().run();
+      criticalTasks = new HashSet<Task>(Arrays.asList(
+        mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
     }
 
-    @Test
-    public void testCriticalPathInsideCriticalSupertask() throws Exception {
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
-        createDependency(t3, t2);
-        createDependency(t2, t1);
-
-        Task n1 = createTask();
-        n1.move(t2);
-        Task n2 = createTask();
-        n2.move(t2);
-        createDependency(n2, n1);
-
-        TaskManager mgr = getTaskManager();
-
-        Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
-            mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        assertTrue(criticalTasks.contains(t1));
-        assertTrue(criticalTasks.contains(t2));
-        assertTrue(criticalTasks.contains(t3));
-
-        assertTrue(criticalTasks.contains(n1));
-        assertTrue(criticalTasks.contains(n2));
+    public void runDefaultAsserts() {
+      assertTrue(criticalTasks.contains(t1));
+      assertTrue(criticalTasks.contains(t2));
+      assertTrue(criticalTasks.contains(t3));
     }
+  }
 
-    @Test
-    public void testEqualPathsAreBothCritical() throws Exception {
-        TaskManager mgr = getTaskManager();
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
-        Task t4 = createTask();
-        createDependency(t4, t2);
-        createDependency(t4, t3);
-        createDependency(t2, t1);
-        createDependency(t3, t1);
+  @Test
+  public void testCriticalPathInsideCriticalSupertask() throws Exception {
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
+    createDependency(t3, t2);
+    createDependency(t2, t1);
 
-        Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
-            mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        assertTrue(criticalTasks.contains(t1));
-        assertTrue(criticalTasks.contains(t2));
-        assertTrue(criticalTasks.contains(t3));
-        assertTrue(criticalTasks.contains(t4));
-    }
+    Task n1 = createTask();
+    n1.move(t2);
+    Task n2 = createTask();
+    n2.move(t2);
+    createDependency(n2, n1);
 
-    @Test
-    public void testFinishFinishConstraint() throws Exception {
-        LaggedDependencyChainCriticalPathTester tester =
-            new LaggedDependencyChainCriticalPathTester(new FinishFinishConstraintImpl());
-        tester.runDefaultAsserts();
-    }
+    TaskManager mgr = getTaskManager();
 
-    @Test
-    public void testLag() throws Exception {
-        TaskManager mgr = getTaskManager();
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
-        createDependency(t3, t2);
-        TaskDependency dep = createDependency(t2, t1);
-        dep.setDifference(2);
+    Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
+      mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
+    assertTrue(criticalTasks.contains(t1));
+    assertTrue(criticalTasks.contains(t2));
+    assertTrue(criticalTasks.contains(t3));
 
-        Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
-            mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        assertTrue(criticalTasks.contains(t1));
-        assertTrue(criticalTasks.contains(t2));
-        assertTrue(criticalTasks.contains(t3));
-    }
+    assertTrue(criticalTasks.contains(n1));
+    assertTrue(criticalTasks.contains(n2));
+  }
 
-    @Test
-    public void testLongerPathIsCritical() throws Exception {
-        TaskManager mgr = getTaskManager();
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
-        Task t4 = createTask();
-        Task t5 = createTask();
-        createDependency(t4, t3);
-        createDependency(t3, t2);
-        createDependency(t2, t1);
-        createDependency(t4, t5);
-        createDependency(t5, t1);
-        Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
-            mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        assertTrue(criticalTasks.contains(t1));
-        assertTrue(criticalTasks.contains(t2));
-        assertTrue(criticalTasks.contains(t3));
-        assertTrue(criticalTasks.contains(t4));
-        assertFalse(criticalTasks.contains(t5));
-    }
+  @Test
+  public void testEqualPathsAreBothCritical() throws Exception {
+    TaskManager mgr = getTaskManager();
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
+    Task t4 = createTask();
+    createDependency(t4, t2);
+    createDependency(t4, t3);
+    createDependency(t2, t1);
+    createDependency(t3, t1);
 
-    @Test
-    public void testSinglePathIsCritical() throws Exception {
-        TaskManager mgr = getTaskManager();
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
-        createDependency(t3, t2);
-        createDependency(t2, t1);
-        Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
-            mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        assertTrue(criticalTasks.contains(t1));
-        assertTrue(criticalTasks.contains(t2));
-        assertTrue(criticalTasks.contains(t3));
-    }
+    Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
+      mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
+    assertTrue(criticalTasks.contains(t1));
+    assertTrue(criticalTasks.contains(t2));
+    assertTrue(criticalTasks.contains(t3));
+    assertTrue(criticalTasks.contains(t4));
+  }
 
-    @Test
-    public void testStartFinishConstraint() throws Exception {
-        LaggedDependencyChainCriticalPathTester tester =
-            new LaggedDependencyChainCriticalPathTester(new StartStartConstraintImpl());
-        assertTrue(tester.criticalTasks.contains(tester.t1));
-        assertTrue(tester.criticalTasks.contains(tester.t2));
-    }
+  @Test
+  public void testFinishFinishConstraint() throws Exception {
+    LaggedDependencyChainCriticalPathTester tester =
+      new LaggedDependencyChainCriticalPathTester(new FinishFinishConstraintImpl());
+    tester.runDefaultAsserts();
+  }
 
-    @Test
-    public void testStartStartConstraint() throws Exception {
-        LaggedDependencyChainCriticalPathTester tester =
-            new LaggedDependencyChainCriticalPathTester(new StartStartConstraintImpl());
-        tester.runDefaultAsserts();
-    }
+  @Test
+  public void testLag() throws Exception {
+    TaskManager mgr = getTaskManager();
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
+    createDependency(t3, t2);
+    TaskDependency dep = createDependency(t2, t1);
+    dep.setDifference(2);
 
-    @Test
-    public void testTaskBeforeNonCriticalIsNonCritical() throws Exception {
-        TaskManager mgr = getTaskManager();
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
-        Task t4 = createTask();
-        Task t5 = createTask();
-        Task t6 = createTask();
-        createDependency(t2, t1);
-        createDependency(t4, t3);
-        createDependency(t5, t4);
-        createDependency(t6, t5);
-        createDependency(t6, t2);
+    Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
+      mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
+    assertTrue(criticalTasks.contains(t1));
+    assertTrue(criticalTasks.contains(t2));
+    assertTrue(criticalTasks.contains(t3));
+  }
 
-        Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
-            mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        assertTrue(criticalTasks.contains(t3));
-        assertTrue(criticalTasks.contains(t4));
-        assertTrue(criticalTasks.contains(t5));
-        assertTrue(criticalTasks.contains(t6));
-        assertFalse(criticalTasks.contains(t1));
-        assertFalse(criticalTasks.contains(t2));
-    }
+  @Test
+  public void testLongerPathIsCritical() throws Exception {
+    TaskManager mgr = getTaskManager();
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
+    Task t4 = createTask();
+    Task t5 = createTask();
+    createDependency(t4, t3);
+    createDependency(t3, t2);
+    createDependency(t2, t1);
+    createDependency(t4, t5);
+    createDependency(t5, t1);
+    Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
+      mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
+    assertTrue(criticalTasks.contains(t1));
+    assertTrue(criticalTasks.contains(t2));
+    assertTrue(criticalTasks.contains(t3));
+    assertTrue(criticalTasks.contains(t4));
+    assertFalse(criticalTasks.contains(t5));
+  }
 
-    public void testUnlinkedTaskICriticalIfEndsAtTheProjectEnd() throws Exception {
-        TaskManager mgr = getTaskManager();
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
-        createDependency(t3, t2);
-        createDependency(t2, t1);
+  @Test
+  public void testSinglePathIsCritical() throws Exception {
+    TaskManager mgr = getTaskManager();
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
+    createDependency(t3, t2);
+    createDependency(t2, t1);
+    Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
+      mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
+    assertTrue(criticalTasks.contains(t1));
+    assertTrue(criticalTasks.contains(t2));
+    assertTrue(criticalTasks.contains(t3));
+  }
 
-        Task u1 = createTask();
-        TaskMutator mu1 = u1.createMutatorFixingDuration();
-        mu1.setStart(t3.getStart());
-        mu1.commit();
+  @Test
+  public void testStartFinishConstraint() throws Exception {
+    LaggedDependencyChainCriticalPathTester tester =
+      new LaggedDependencyChainCriticalPathTester(new StartStartConstraintImpl());
+    assertTrue(tester.criticalTasks.contains(tester.t1));
+    assertTrue(tester.criticalTasks.contains(tester.t2));
+  }
 
-        Task u2 = createTask();
-        TaskMutator mu2 = u2.createMutatorFixingDuration();
-        mu2.setStart(t2.getStart());
-        mu2.commit();
+  @Test
+  public void testStartStartConstraint() throws Exception {
+    LaggedDependencyChainCriticalPathTester tester =
+      new LaggedDependencyChainCriticalPathTester(new StartStartConstraintImpl());
+    tester.runDefaultAsserts();
+  }
 
-        Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
-            mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
-        assertTrue(criticalTasks.contains(t1));
-        assertTrue(criticalTasks.contains(t2));
-        assertTrue(criticalTasks.contains(t3));
-        assertTrue(criticalTasks.contains(u1));
-        assertFalse(criticalTasks.contains(u2));
-    }
+  @Test
+  public void testTaskBeforeNonCriticalIsNonCritical() throws Exception {
+    TaskManager mgr = getTaskManager();
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
+    Task t4 = createTask();
+    Task t5 = createTask();
+    Task t6 = createTask();
+    createDependency(t2, t1);
+    createDependency(t4, t3);
+    createDependency(t5, t4);
+    createDependency(t6, t5);
+    createDependency(t6, t2);
+
+    Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
+      mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
+    assertTrue(criticalTasks.contains(t3));
+    assertTrue(criticalTasks.contains(t4));
+    assertTrue(criticalTasks.contains(t5));
+    assertTrue(criticalTasks.contains(t6));
+    assertFalse(criticalTasks.contains(t1));
+    assertFalse(criticalTasks.contains(t2));
+  }
+
+  public void testUnlinkedTaskICriticalIfEndsAtTheProjectEnd() throws Exception {
+    TaskManager mgr = getTaskManager();
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
+    createDependency(t3, t2);
+    createDependency(t2, t1);
+
+    Task u1 = createTask();
+    TaskMutator mu1 = u1.createMutatorFixingDuration();
+    mu1.setStart(t3.getStart());
+    mu1.commit();
+
+    Task u2 = createTask();
+    TaskMutator mu2 = u2.createMutatorFixingDuration();
+    mu2.setStart(t2.getStart());
+    mu2.commit();
+
+    Set<Task> criticalTasks = new HashSet<Task>(Arrays.asList(
+      mgr.getAlgorithmCollection().getCriticalPathAlgorithm().getCriticalTasks()));
+    assertTrue(criticalTasks.contains(t1));
+    assertTrue(criticalTasks.contains(t2));
+    assertTrue(criticalTasks.contains(t3));
+    assertTrue(criticalTasks.contains(u1));
+    assertFalse(criticalTasks.contains(u2));
+  }
 }

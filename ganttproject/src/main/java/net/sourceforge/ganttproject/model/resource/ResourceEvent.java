@@ -10,6 +10,10 @@ import java.util.EventObject;
  * @author bard
  */
 public class ResourceEvent extends EventObject {
+  private final HumanResourceManager myManager;
+  private final HumanResource myResource;
+  private final HumanResource[] myResources;
+
   /**
    * @param source
    */
@@ -17,7 +21,7 @@ public class ResourceEvent extends EventObject {
     super(mgr);
     myManager = mgr;
     myResource = resource;
-    myResources = new HumanResource[] { myResource };
+    myResources = new HumanResource[]{myResource};
   }
 
   public ResourceEvent(HumanResourceManager mgr, HumanResource[] resources) {
@@ -38,11 +42,4 @@ public class ResourceEvent extends EventObject {
   public HumanResource[] getResources() {
     return myResources;
   }
-
-  private HumanResource[] myResources;
-
-  private HumanResourceManager myManager;
-
-  private HumanResource myResource;
-
 }

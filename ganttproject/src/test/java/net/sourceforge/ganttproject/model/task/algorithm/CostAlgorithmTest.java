@@ -36,75 +36,75 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dbarashev (Dmitry Barashev)
  */
 public class CostAlgorithmTest extends TaskTestCase {
-    @Test
-    public void testResourceCost() {
-        TaskManagerBuilder builder = TestSetupHelper.newTaskManagerBuilder();
-        setTaskManager(builder.build());
-        HumanResource joe = new HumanResource("Joe", 1, builder.getResourceManager());
-        joe.setStandardPayRate(BigDecimal.valueOf(5));
+  @Test
+  public void testResourceCost() {
+    TaskManagerBuilder builder = TestSetupHelper.newTaskManagerBuilder();
+    setTaskManager(builder.build());
+    HumanResource joe = new HumanResource("Joe", 1, builder.getResourceManager());
+    joe.setStandardPayRate(BigDecimal.valueOf(5));
 
-        HumanResource jane = new HumanResource("Jane", 2, builder.getResourceManager());
-        jane.setStandardPayRate(BigDecimal.valueOf(10));
+    HumanResource jane = new HumanResource("Jane", 2, builder.getResourceManager());
+    jane.setStandardPayRate(BigDecimal.valueOf(10));
 
-        builder.getResourceManager().add(joe);
-        builder.getResourceManager().add(jane);
+    builder.getResourceManager().add(joe);
+    builder.getResourceManager().add(jane);
 
-        Task t = createTask();
-        t.setDuration(t.getManager().createLength(2));
-        t.getAssignmentCollection().addAssignment(joe).setLoad(100f);
-        t.getAssignmentCollection().addAssignment(jane).setLoad(50f);
-        t.getCost().setCalculated(true);
-        assertEquals(BigDecimal.valueOf(20f), t.getCost().getValue());
+    Task t = createTask();
+    t.setDuration(t.getManager().createLength(2));
+    t.getAssignmentCollection().addAssignment(joe).setLoad(100f);
+    t.getAssignmentCollection().addAssignment(jane).setLoad(50f);
+    t.getCost().setCalculated(true);
+    assertEquals(BigDecimal.valueOf(20f), t.getCost().getValue());
 
-        t.getCost().setCalculated(false);
-        t.getCost().setValue(BigDecimal.valueOf(10));
-        assertEquals(BigDecimal.valueOf(10), t.getCost().getValue());
-    }
+    t.getCost().setCalculated(false);
+    t.getCost().setValue(BigDecimal.valueOf(10));
+    assertEquals(BigDecimal.valueOf(10), t.getCost().getValue());
+  }
 
-    @Test
-    public void testResourceTotalCost() {
-        TaskManagerBuilder builder = TestSetupHelper.newTaskManagerBuilder();
-        setTaskManager(builder.build());
-        HumanResource joe = new HumanResource("Joe", 1, builder.getResourceManager());
-        joe.setStandardPayRate(BigDecimal.valueOf(5));
+  @Test
+  public void testResourceTotalCost() {
+    TaskManagerBuilder builder = TestSetupHelper.newTaskManagerBuilder();
+    setTaskManager(builder.build());
+    HumanResource joe = new HumanResource("Joe", 1, builder.getResourceManager());
+    joe.setStandardPayRate(BigDecimal.valueOf(5));
 
-        assertEquals(BigDecimal.ZERO, joe.getTotalCost());
+    assertEquals(BigDecimal.ZERO, joe.getTotalCost());
 
-        builder.getResourceManager().add(joe);
+    builder.getResourceManager().add(joe);
 
-        Task t = createTask();
-        t.setDuration(t.getManager().createLength(2));
-        t.getAssignmentCollection().addAssignment(joe).setLoad(100f);
-        assertEquals(BigDecimal.valueOf(10), joe.getTotalCost());
+    Task t = createTask();
+    t.setDuration(t.getManager().createLength(2));
+    t.getAssignmentCollection().addAssignment(joe).setLoad(100f);
+    assertEquals(BigDecimal.valueOf(10), joe.getTotalCost());
 
-        t = createTask();
-        t.setDuration(t.getManager().createLength(4));
-        t.getAssignmentCollection().addAssignment(joe).setLoad(50f);
-        assertEquals(BigDecimal.valueOf(20), joe.getTotalCost());
+    t = createTask();
+    t.setDuration(t.getManager().createLength(4));
+    t.getAssignmentCollection().addAssignment(joe).setLoad(50f);
+    assertEquals(BigDecimal.valueOf(20), joe.getTotalCost());
 
-        t = createTask();
-        t.setDuration(t.getManager().createLength(10));
-        t.getAssignmentCollection().addAssignment(joe).setLoad(0f);
-        assertEquals(BigDecimal.valueOf(20), joe.getTotalCost());
-    }
+    t = createTask();
+    t.setDuration(t.getManager().createLength(10));
+    t.getAssignmentCollection().addAssignment(joe).setLoad(0f);
+    assertEquals(BigDecimal.valueOf(20), joe.getTotalCost());
+  }
 
-    @Test
-    public void testSupertaskCost() {
-        Task supertask = createTask();
-        Task subtask1 = createTask();
-        Task subtask2 = createTask();
-        TaskContainmentHierarchyFacade hierarchy = getTaskManager().getTaskHierarchy();
-        hierarchy.move(subtask1, supertask);
-        hierarchy.move(subtask2, supertask);
-        supertask.getCost().setCalculated(true);
-        subtask1.getCost().setCalculated(false);
-        subtask1.getCost().setValue(BigDecimal.valueOf(5));
-        subtask2.getCost().setCalculated(false);
-        subtask2.getCost().setValue(BigDecimal.valueOf(15));
-        assertEquals(BigDecimal.valueOf(20), supertask.getCost().getValue());
+  @Test
+  public void testSupertaskCost() {
+    Task supertask = createTask();
+    Task subtask1 = createTask();
+    Task subtask2 = createTask();
+    TaskContainmentHierarchyFacade hierarchy = getTaskManager().getTaskHierarchy();
+    hierarchy.move(subtask1, supertask);
+    hierarchy.move(subtask2, supertask);
+    supertask.getCost().setCalculated(true);
+    subtask1.getCost().setCalculated(false);
+    subtask1.getCost().setValue(BigDecimal.valueOf(5));
+    subtask2.getCost().setCalculated(false);
+    subtask2.getCost().setValue(BigDecimal.valueOf(15));
+    assertEquals(BigDecimal.valueOf(20), supertask.getCost().getValue());
 
-        supertask.getCost().setCalculated(false);
-        supertask.getCost().setValue(BigDecimal.valueOf(10));
-        assertEquals(BigDecimal.valueOf(10), supertask.getCost().getValue());
-    }
+    supertask.getCost().setCalculated(false);
+    supertask.getCost().setValue(BigDecimal.valueOf(10));
+    assertEquals(BigDecimal.valueOf(10), supertask.getCost().getValue());
+  }
 }

@@ -27,22 +27,24 @@ import net.sourceforge.ganttproject.model.roles.Role;
  * @author bard Date: 05.02.2004
  */
 public interface ResourceAssignment {
-  Task getTask();
-
-  HumanResource getResource();
+  /**
+   * Deletes this assignment
+   */
+  void delete();
 
   float getLoad();
 
   void setLoad(float load);
 
-  /** Deletes this assignment */
-  void delete();
-
-  void setCoordinator(boolean responsible);
-
-  boolean isCoordinator();
+  HumanResource getResource();
 
   Role getRoleForAssignment();
 
   void setRoleForAssignment(Role role);
+
+  Task getTask();
+
+  boolean isCoordinator();
+
+  void setCoordinator(boolean responsible);
 }

@@ -18,13 +18,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.calendar.walker;
 
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.time.TimeDuration;
 import net.sourceforge.ganttproject.model.time.TimeDurationImpl;
 import net.sourceforge.ganttproject.model.time.TimeUnit;
 
+import java.util.Date;
 
 /**
  * This class walks forward and counts the number of steps which start at
@@ -33,30 +32,13 @@ import net.sourceforge.ganttproject.model.time.TimeUnit;
  * @author dbarashev (Dmitry Barashev)
  */
 public class WorkingUnitCounter extends ForwardTimeWalker {
-  private Date myEndDate;
   private boolean isMoving = true;
-  private int myWorkingUnitCounter;
+  private Date myEndDate;
   private int myNonWorkingUnitCounter;
+  private int myWorkingUnitCounter;
 
   public WorkingUnitCounter(GPCalendarCalc calendar, TimeUnit timeUnit) {
     super(calendar, timeUnit);
-  }
-
-  @Override
-  protected boolean isMoving() {
-    return isMoving;
-  }
-
-  @Override
-  protected void processNonWorkingTime(Date intervalStart, Date workingIntervalStart) {
-    myNonWorkingUnitCounter++;
-    isMoving = workingIntervalStart.before(myEndDate);
-  }
-
-  @Override
-  protected void processWorkingTime(Date intervalStart, Date nextIntervalStart) {
-    myWorkingUnitCounter++;
-    isMoving = nextIntervalStart.before(myEndDate);
   }
 
   public TimeDuration getNonWorkingTime() {
@@ -75,5 +57,22 @@ public class WorkingUnitCounter extends ForwardTimeWalker {
     myEndDate = endDate;
     walk(startDate);
     return new TimeDurationImpl(getTimeUnit(), myWorkingUnitCounter);
+  }
+
+  @Override
+  protected boolean isMoving() {
+    return isMoving;
+  }
+
+  @Override
+  protected void processNonWorkingTime(Date intervalStart, Date workingIntervalStart) {
+    myNonWorkingUnitCounter++;
+    isMoving = workingIntervalStart.before(myEndDate);
+  }
+
+  @Override
+  protected void processWorkingTime(Date intervalStart, Date nextIntervalStart) {
+    myWorkingUnitCounter++;
+    isMoving = nextIntervalStart.before(myEndDate);
   }
 }

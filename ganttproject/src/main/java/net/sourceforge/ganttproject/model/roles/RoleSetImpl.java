@@ -25,12 +25,9 @@ import java.util.ArrayList;
  */
 public class RoleSetImpl implements RoleSet {
   private final String myName;
-
-  private final ArrayList<RoleImpl> myRoles = new ArrayList<RoleImpl>();
-
-  private boolean isEnabled;
-
   private final RoleManagerImpl myRoleManager;
+  private final ArrayList<RoleImpl> myRoles = new ArrayList<RoleImpl>();
+  private boolean isEnabled;
 
   public RoleSetImpl(String name, RoleManagerImpl roleManager) {
     myName = name;
@@ -38,19 +35,22 @@ public class RoleSetImpl implements RoleSet {
   }
 
   @Override
-  public String getName() {
-    return myName;
+  public void changeRole(String name, int roleID) {
+    Role role = findRole(roleID);
+    if (role != null) {
+      role.setName(name);
+    }
   }
 
   @Override
-  public Role[] getRoles() {
-    return myRoles.toArray(new Role[0]);
+  public void clear() {
+    myRoles.clear();
   }
 
   @Override
   public Role createRole(String name) {
     int maxId = 0;
-    for (Role role : myRoles) {
+    for (Role role: myRoles) {
       if (role.getID() > maxId) {
         maxId = role.getID();
       }
@@ -73,14 +73,6 @@ public class RoleSetImpl implements RoleSet {
   }
 
   @Override
-  public void changeRole(String name, int roleID) {
-    Role role = findRole(roleID);
-    if (role != null) {
-      role.setName(name);
-    }
-  }
-
-  @Override
   public Role findRole(int roleID) {
     Role result = null;
     for (int i = 0; i < myRoles.size(); i++) {
@@ -94,13 +86,23 @@ public class RoleSetImpl implements RoleSet {
   }
 
   @Override
-  public boolean isEnabled() {
-    return isEnabled;
+  public String getName() {
+    return myName;
   }
 
   @Override
-  public String toString() {
-    return getName();
+  public Role[] getRoles() {
+    return myRoles.toArray(new Role[0]);
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return myRoles.isEmpty();
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return isEnabled;
   }
 
   @Override
@@ -110,13 +112,8 @@ public class RoleSetImpl implements RoleSet {
   }
 
   @Override
-  public boolean isEmpty() {
-    return myRoles.isEmpty();
-  }
-
-  @Override
-  public void clear() {
-    myRoles.clear();
+  public String toString() {
+    return getName();
   }
 
   void importData(RoleSet original) {

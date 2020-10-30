@@ -18,11 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
+import net.sourceforge.ganttproject.model.task.Task;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-
-import net.sourceforge.ganttproject.model.task.Task;
 
 public class ProjectBoundsAlgorithm {
   public static class Result {
@@ -39,7 +39,7 @@ public class ProjectBoundsAlgorithm {
   public Result getBounds(Collection/* <Task> */<Task> tasks) {
     Date lowerBound = null;
     Date upperBound = null;
-    for (Iterator<Task> it = tasks.iterator(); it.hasNext();) {
+    for (Iterator<Task> it = tasks.iterator(); it.hasNext(); ) {
       Task next = it.next();
       Date start = next.getStart().getTime();
       Date end = next.getEnd().getTime();

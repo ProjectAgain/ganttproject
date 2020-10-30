@@ -39,115 +39,115 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dbarashev@bardsoftware.com
  */
 public class CustomPropertyMappingTest extends TaskTestCase {
-    /**
-     * Tests mapping of custom properties with special attribute which is created by import from MS Project
-     * in GP >= 2.8.5
-     */
-    @Test
-    public void testMsProjectType() throws MPXJException {
-        TaskManager taskManager = getTaskManager();
-        CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col5", null);
-        col5.getAttributes().put(CustomPropertyMapping.MSPROJECT_TYPE, "NUMBER1");
+  /**
+   * Tests mapping of custom properties with special attribute which is created by import from MS Project
+   * in GP >= 2.8.5
+   */
+  @Test
+  public void testMsProjectType() throws MPXJException {
+    TaskManager taskManager = getTaskManager();
+    CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col5", null);
+    col5.getAttributes().put(CustomPropertyMapping.MSPROJECT_TYPE, "NUMBER1");
 
-        CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col4", null);
+    CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col4", null);
 
-        CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col3", null);
-        col3.getAttributes().put(CustomPropertyMapping.MSPROJECT_TYPE, "COST10");
+    CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col3", null);
+    col3.getAttributes().put(CustomPropertyMapping.MSPROJECT_TYPE, "COST10");
 
-        CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col2", null);
-        CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col1", null);
-        col1.getAttributes().put(CustomPropertyMapping.MSPROJECT_TYPE, "NUMBER3");
+    CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col2", null);
+    CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col1", null);
+    col1.getAttributes().put(CustomPropertyMapping.MSPROJECT_TYPE, "NUMBER3");
 
-        Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
-        assertEquals(TaskField.NUMBER3, mapping.get(col1));
-        assertEquals(TaskField.NUMBER4, mapping.get(col2));
-        assertEquals(TaskField.COST10, mapping.get(col3));
-        assertEquals(TaskField.NUMBER2, mapping.get(col4));
-        assertEquals(TaskField.NUMBER1, mapping.get(col5));
-    }
+    Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
+    assertEquals(TaskField.NUMBER3, mapping.get(col1));
+    assertEquals(TaskField.NUMBER4, mapping.get(col2));
+    assertEquals(TaskField.COST10, mapping.get(col3));
+    assertEquals(TaskField.NUMBER2, mapping.get(col4));
+    assertEquals(TaskField.NUMBER1, mapping.get(col5));
+  }
 
-    /**
-     * Tests that custom properties are sequentially mapped to increasing <PROPERTYTYPE>N fields in the order
-     * of their creation in CustomPropertyManager
-     */
-    @Test
-    public void testSequentialNumbers() throws MPXJException {
-        TaskManager taskManager = getTaskManager();
-        CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col5", null);
-        CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col4", null);
-        CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col3", null);
-        CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col2", null);
-        CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col1", null);
+  /**
+   * Tests that custom properties are sequentially mapped to increasing <PROPERTYTYPE>N fields in the order
+   * of their creation in CustomPropertyManager
+   */
+  @Test
+  public void testSequentialNumbers() throws MPXJException {
+    TaskManager taskManager = getTaskManager();
+    CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col5", null);
+    CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col4", null);
+    CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col3", null);
+    CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col2", null);
+    CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col1", null);
 
-        Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
-        assertEquals(TaskField.TEXT1, mapping.get(col5));
-        assertEquals(TaskField.TEXT2, mapping.get(col4));
-        assertEquals(TaskField.TEXT3, mapping.get(col3));
-        assertEquals(TaskField.TEXT4, mapping.get(col2));
-        assertEquals(TaskField.TEXT5, mapping.get(col1));
-    }
+    Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
+    assertEquals(TaskField.TEXT1, mapping.get(col5));
+    assertEquals(TaskField.TEXT2, mapping.get(col4));
+    assertEquals(TaskField.TEXT3, mapping.get(col3));
+    assertEquals(TaskField.TEXT4, mapping.get(col2));
+    assertEquals(TaskField.TEXT5, mapping.get(col1));
+  }
 
-    /**
-     * Basic test which maps custom properties from simple project created directly in GP
-     */
-    @Test
-    public void testSimpleTypeMapping() throws MPXJException {
-        TaskManager taskManager = getTaskManager();
-        CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col1", null);
-        CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Boolean.class), "col2", null);
-        CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col3", null);
-        CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Double.class), "col4", null);
-        CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(GanttCalendar.class), "col5", null);
+  /**
+   * Basic test which maps custom properties from simple project created directly in GP
+   */
+  @Test
+  public void testSimpleTypeMapping() throws MPXJException {
+    TaskManager taskManager = getTaskManager();
+    CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "col1", null);
+    CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Boolean.class), "col2", null);
+    CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "col3", null);
+    CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Double.class), "col4", null);
+    CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(GanttCalendar.class), "col5", null);
 
-        Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
-        assertEquals(TaskField.TEXT1, mapping.get(col1));
-        assertEquals(TaskField.FLAG1, mapping.get(col2));
-        assertEquals(TaskField.NUMBER1, mapping.get(col3));
-        assertEquals(TaskField.NUMBER2, mapping.get(col4));
-        assertEquals(TaskField.DATE1, mapping.get(col5));
-    }
+    Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
+    assertEquals(TaskField.TEXT1, mapping.get(col1));
+    assertEquals(TaskField.FLAG1, mapping.get(col2));
+    assertEquals(TaskField.NUMBER1, mapping.get(col3));
+    assertEquals(TaskField.NUMBER2, mapping.get(col4));
+    assertEquals(TaskField.DATE1, mapping.get(col5));
+  }
 
-    /**
-     * Tests custom properties with 'special' names. Such names could be created by import from MS Project
-     * in GP < 2.8.5
-     */
-    @Test
-    public void testSpecialNames() throws MPXJException {
-        TaskManager taskManager = getTaskManager();
-        CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "Text1", null);
-        CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Boolean.class), "Flag2", null);
-        CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "Number3", null);
-        CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Double.class), "Number4", null);
-        CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(GanttCalendar.class), "Date5", null);
-        CustomPropertyDefinition col6 = taskManager.getCustomPropertyManager().createDefinition(
-            CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "Cost6", null);
+  /**
+   * Tests custom properties with 'special' names. Such names could be created by import from MS Project
+   * in GP < 2.8.5
+   */
+  @Test
+  public void testSpecialNames() throws MPXJException {
+    TaskManager taskManager = getTaskManager();
+    CustomPropertyDefinition col1 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(String.class), "Text1", null);
+    CustomPropertyDefinition col2 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Boolean.class), "Flag2", null);
+    CustomPropertyDefinition col3 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "Number3", null);
+    CustomPropertyDefinition col4 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Double.class), "Number4", null);
+    CustomPropertyDefinition col5 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(GanttCalendar.class), "Date5", null);
+    CustomPropertyDefinition col6 = taskManager.getCustomPropertyManager().createDefinition(
+      CustomPropertyManager.PropertyTypeEncoder.encodeFieldType(Integer.class), "Cost6", null);
 
-        Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
-        assertEquals(TaskField.TEXT1, mapping.get(col1));
-        assertEquals(TaskField.FLAG2, mapping.get(col2));
-        assertEquals(TaskField.NUMBER3, mapping.get(col3));
-        assertEquals(TaskField.NUMBER4, mapping.get(col4));
-        assertEquals(TaskField.DATE5, mapping.get(col5));
-        assertEquals(TaskField.COST6, mapping.get(col6));
-    }
+    Map<CustomPropertyDefinition, FieldType> mapping = CustomPropertyMapping.buildMapping(taskManager);
+    assertEquals(TaskField.TEXT1, mapping.get(col1));
+    assertEquals(TaskField.FLAG2, mapping.get(col2));
+    assertEquals(TaskField.NUMBER3, mapping.get(col3));
+    assertEquals(TaskField.NUMBER4, mapping.get(col4));
+    assertEquals(TaskField.DATE5, mapping.get(col5));
+    assertEquals(TaskField.COST6, mapping.get(col6));
+  }
 }

@@ -18,12 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task;
 
-import java.util.Date;
-import java.util.List;
-
 import net.sourceforge.ganttproject.model.calendar.GPCalendarActivity;
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 
+import java.util.Date;
+import java.util.List;
 
 public class TaskActivitiesAlgorithm {
   private final GPCalendarCalc myCalendar;

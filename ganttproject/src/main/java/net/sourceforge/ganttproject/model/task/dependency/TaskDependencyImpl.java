@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task.dependency;
 
-import net.sourceforge.ganttproject.ui.chart.scene.gantt.Connector;
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskActivity;
 import net.sourceforge.ganttproject.ui.chart.scene.BarChartActivity;
+import net.sourceforge.ganttproject.ui.chart.scene.gantt.Connector;
 
 import java.awt.*;
 
@@ -29,37 +29,35 @@ import java.awt.*;
  * @author bard
  */
 public class TaskDependencyImpl implements TaskDependency {
-  private TaskDependencyConstraint myConstraint;
-
-  private int myDifference;
-
   private final Task myDependant;
-
   private final Task myDependee;
-
-  private Hardness myHardness;
-
-  private TaskDependencyCollectionImpl myCollection;
-
-  private BarChartActivity<Task> myStartActivity;
-
+  private final TaskDependencyCollectionImpl myCollection;
+  private TaskDependencyConstraint myConstraint;
+  private int myDifference;
   private TaskActivity myEndActivity;
+  private Hardness myHardness;
+  private BarChartActivity<Task> myStartActivity;
 
   public TaskDependencyImpl(Task dependant, Task dependee, TaskDependencyCollectionImpl collection) {
     this(dependant, dependee, collection, null);
   }
 
-  TaskDependencyImpl(Task dependant, Task dependee, TaskDependencyCollectionImpl collection, TaskDependencyConstraint constraint) {
+  TaskDependencyImpl(
+    Task dependant, Task dependee, TaskDependencyCollectionImpl collection, TaskDependencyConstraint constraint
+  ) {
     this(dependant, dependee, collection, constraint, Hardness.STRONG, 0);
   }
 
-  public TaskDependencyImpl(Task dependant, Task dependee, TaskDependencyCollectionImpl collection, TaskDependencyConstraint constraint, Hardness hardness, int lag) {
+  public TaskDependencyImpl(
+    Task dependant, Task dependee, TaskDependencyCollectionImpl collection, TaskDependencyConstraint constraint,
+    Hardness hardness, int lag
+  ) {
     myDependant = dependant;
     myDependee = dependee;
     myCollection = collection;
     if (dependee == null || dependant == null) {
       throw new IllegalArgumentException("invalid participants of dependency: dependee=" + dependee + " dependant="
-          + dependant);
+                                         + dependant);
     }
     myDifference = lag;
     myHardness = hardness;
@@ -67,35 +65,6 @@ public class TaskDependencyImpl implements TaskDependency {
     if (constraint != null) {
       constraint.setTaskDependency(this);
     }
-  }
-
-  @Override
-  public Task getDependant() {
-    return myDependant;
-  }
-
-  @Override
-  public Task getDependee() {
-    return myDependee;
-  }
-
-  @Override
-  public void setConstraint(TaskDependencyConstraint constraint) {
-    myStartActivity = null;
-    myEndActivity = null;
-    myConstraint = constraint;
-    constraint.setTaskDependency(this);
-    myCollection.fireChanged(this);
-  }
-
-  @Override
-  public TaskDependencyConstraint getConstraint() {
-    return myConstraint;
-  }
-
-  @Override
-  public ActivityBinding getActivityBinding() {
-    return getConstraint().getActivityBinding();
   }
 
   @Override
@@ -114,14 +83,32 @@ public class TaskDependencyImpl implements TaskDependency {
   }
 
   @Override
-  public int hashCode() {
-    return 7 * myDependant.hashCode() + 9 * myDependee.hashCode();
+  public ActivityBinding getActivityBinding() {
+    return getConstraint().getActivityBinding();
   }
 
   @Override
-  public void setDifference(int difference) {
-    myDifference = difference;
+  public TaskDependencyConstraint getConstraint() {
+    return myConstraint;
+  }
+
+  @Override
+  public void setConstraint(TaskDependencyConstraint constraint) {
+    myStartActivity = null;
+    myEndActivity = null;
+    myConstraint = constraint;
+    constraint.setTaskDependency(this);
     myCollection.fireChanged(this);
+  }
+
+  @Override
+  public Task getDependant() {
+    return myDependant;
+  }
+
+  @Override
+  public Task getDependee() {
+    return myDependee;
   }
 
   @Override
@@ -130,43 +117,16 @@ public class TaskDependencyImpl implements TaskDependency {
   }
 
   @Override
-  public Hardness getHardness() {
-    return myHardness;
-  }
-
-  @Override
-  public void setHardness(Hardness hardness) {
-    myHardness = hardness;
-  }
-
-  @Override
-  public String toString() {
-    return myDependee + "->" + myDependant;
-  }
-
-  public BarChartActivity<Task> getStart() {
-//    if (myStartActivity == null) {
-      ActivityBinding activityBinding = getConstraint().getActivityBinding();
-      return activityBinding == null ? null : activityBinding.getDependeeActivity();
-      //myStartActivity = dependeeActivity.getOwner().isMilestone() ? new MilestoneTaskFakeActivity(dependeeActivity.getOwner()) : dependeeActivity;
-//    }
-//    return myStartActivity;
-  }
-
-  @Override
-  public Dimension getStartVector() {
-    TaskDependencyConstraint.Type type = getConstraint().getType();
-    if (type == TaskDependencyConstraint.Type.finishfinish || type == TaskDependencyConstraint.Type.finishstart) {
-      return Connector.Vector.EAST;
-    }
-    return Connector.Vector.WEST;
+  public void setDifference(int difference) {
+    myDifference = difference;
+    myCollection.fireChanged(this);
   }
 
   public BarChartActivity<Task> getEnd() {
 //    if (myEndActivity == null) {
-      ActivityBinding activityBinding = getConstraint().getActivityBinding();
-      return activityBinding == null ? null : activityBinding.getDependantActivity();
-      //myEndActivity = dependantActivity.getOwner().isMilestone() ? new MilestoneTaskFakeActivity(dependantActivity.getOwner()) : dependantActivity;
+    ActivityBinding activityBinding = getConstraint().getActivityBinding();
+    return activityBinding == null ? null : activityBinding.getDependantActivity();
+    //myEndActivity = dependantActivity.getOwner().isMilestone() ? new MilestoneTaskFakeActivity(dependantActivity.getOwner()) : dependantActivity;
 //    }
 //    return myEndActivity;
   }
@@ -180,8 +140,45 @@ public class TaskDependencyImpl implements TaskDependency {
     return Connector.Vector.WEST;
   }
 
+  @Override
+  public Hardness getHardness() {
+    return myHardness;
+  }
+
+  @Override
+  public void setHardness(Hardness hardness) {
+    myHardness = hardness;
+  }
+
   public TaskDependency getImpl() {
     return this;
   }
 
+  public BarChartActivity<Task> getStart() {
+//    if (myStartActivity == null) {
+    ActivityBinding activityBinding = getConstraint().getActivityBinding();
+    return activityBinding == null ? null : activityBinding.getDependeeActivity();
+    //myStartActivity = dependeeActivity.getOwner().isMilestone() ? new MilestoneTaskFakeActivity(dependeeActivity.getOwner()) : dependeeActivity;
+//    }
+//    return myStartActivity;
+  }
+
+  @Override
+  public Dimension getStartVector() {
+    TaskDependencyConstraint.Type type = getConstraint().getType();
+    if (type == TaskDependencyConstraint.Type.finishfinish || type == TaskDependencyConstraint.Type.finishstart) {
+      return Connector.Vector.EAST;
+    }
+    return Connector.Vector.WEST;
+  }
+
+  @Override
+  public int hashCode() {
+    return 7 * myDependant.hashCode() + 9 * myDependee.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return myDependee + "->" + myDependant;
+  }
 }

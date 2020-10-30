@@ -23,15 +23,7 @@ package net.sourceforge.ganttproject.model.task.event;
  */
 public abstract class TaskListenerAdapter implements TaskListener {
   @Override
-  public void taskScheduleChanged(TaskScheduleEvent e) {
-  }
-
-  @Override
   public void dependencyAdded(TaskDependencyEvent e) {
-  }
-
-  @Override
-  public void dependencyRemoved(TaskDependencyEvent e) {
   }
 
   @Override
@@ -39,11 +31,15 @@ public abstract class TaskListenerAdapter implements TaskListener {
   }
 
   @Override
+  public void dependencyRemoved(TaskDependencyEvent e) {
+  }
+
+  @Override
   public void taskAdded(TaskHierarchyEvent e) {
   }
 
   @Override
-  public void taskRemoved(TaskHierarchyEvent e) {
+  public void taskModelReset() {
   }
 
   @Override
@@ -51,15 +47,18 @@ public abstract class TaskListenerAdapter implements TaskListener {
   }
 
   @Override
-  public void taskPropertiesChanged(TaskPropertyEvent e) {
-  }
-
-  @Override
   public void taskProgressChanged(TaskPropertyEvent e) {
   }
 
   @Override
-  public void taskModelReset() {
+  public void taskPropertiesChanged(TaskPropertyEvent e) {
   }
 
+  @Override
+  public void taskRemoved(TaskHierarchyEvent e) {
+  }
+
+  @Override
+  public void taskScheduleChanged(TaskScheduleEvent e) {
+  }
 }

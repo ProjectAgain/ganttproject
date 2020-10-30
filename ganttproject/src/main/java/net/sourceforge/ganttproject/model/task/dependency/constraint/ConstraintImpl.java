@@ -18,23 +18,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task.dependency.constraint;
 
-import java.util.Date;
-
-import net.sourceforge.ganttproject.model.time.GanttCalendar;
-
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint.Type;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+
+import java.util.Date;
 
 /**
  * @author bard
  */
 public abstract class ConstraintImpl implements Cloneable {
   private final String myName;
-
-  private TaskDependency myDependency;
-
   private final Type myType;
+  private TaskDependency myDependency;
 
   public ConstraintImpl(TaskDependencyConstraint.Type type, String myName) {
     myType = type;
@@ -46,16 +43,22 @@ public abstract class ConstraintImpl implements Cloneable {
     return super.clone();
   }
 
-  protected TaskDependency getDependency() {
-    return myDependency;
+  public TaskDependencyConstraint.Collision getBackwardCollision(Date dependantStart) {
+    return null;
+  }
+
+  public abstract TaskDependencyConstraint.Collision getCollision();
+
+  public String getName() {
+    return myName;
+  }
+
+  public Type getType() {
+    return myType;
   }
 
   public void setTaskDependency(TaskDependency dependency) {
     myDependency = dependency;
-  }
-
-  public String getName() {
-    return myName;
   }
 
   @Override
@@ -63,8 +66,23 @@ public abstract class ConstraintImpl implements Cloneable {
     return getName();
   }
 
-  public Type getType() {
-    return myType;
+  protected void addDelay(GanttCalendar calendar) {
+    shift(calendar, myDependency.getDifference());
+  }
+
+  protected TaskDependency getDependency() {
+    return myDependency;
+  }
+
+  protected Date shift(Date date, int shift) {
+    if (shift == 0) {
+      // No shifting is required
+      return date;
+    }
+    return myDependency.getDependant().getManager().getCalendar().shiftDate(
+      date,
+      myDependency.getDependant().getManager().createLength(shift)
+    );
   }
 
   protected void shift(GanttCalendar calendar, int shift) {
@@ -73,23 +91,4 @@ public abstract class ConstraintImpl implements Cloneable {
       calendar.setTime(shifted);
     }
   }
-
-  protected Date shift(Date date, int shift) {
-    if (shift == 0) {
-      // No shifting is required
-      return date;
-    }
-    return myDependency.getDependant().getManager().getCalendar().shiftDate(date,
-        myDependency.getDependant().getManager().createLength(shift));
-  }
-
-  protected void addDelay(GanttCalendar calendar) {
-    shift(calendar, myDependency.getDifference());
-  }
-
-  public TaskDependencyConstraint.Collision getBackwardCollision(Date dependantStart) {
-    return null;
-  }
-
-  public abstract TaskDependencyConstraint.Collision getCollision();
 }

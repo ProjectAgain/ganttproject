@@ -40,26 +40,6 @@ import java.util.List;
  * @author nbohn
  */
 public class GanttPreviousState {
-  private final List<GanttPreviousStateTask> myTasks;
-
-  private String myName;
-
-  private File myFile;
-
-  public GanttPreviousState(String name, List<GanttPreviousStateTask> tasks) {
-    myName = name;
-    myTasks = tasks;
-  }
-
-  public void init() throws IOException {
-    myFile = createTemporaryFile();
-    myFile.deleteOnExit();
-  }
-
-  public void setName(String name) {
-    myName = name;
-  }
-
   private class BaselineSaver extends SaverBase {
     void save(File file, List<GanttPreviousStateTask> tasks) throws TransformerConfigurationException, SAXException {
       StreamResult result = new StreamResult(file);
@@ -70,16 +50,25 @@ public class GanttPreviousState {
       handler.endDocument();
     }
   }
+  private final List<GanttPreviousStateTask> myTasks;
+  private File myFile;
+  private String myName;
 
-  public void saveFile() throws IOException {
-    BaselineSaver saver = new BaselineSaver();
-    try {
-      saver.save(myFile, myTasks);
-    } catch (TransformerConfigurationException e) {
-      throw new IOException(e);
-    } catch (SAXException e) {
-      throw new IOException(e);
+  public GanttPreviousState(String name, List<GanttPreviousStateTask> tasks) {
+    myName = name;
+    myTasks = tasks;
+  }
+
+  public static List<GanttPreviousStateTask> createTasks(TaskManager taskManager) {
+    List<GanttPreviousStateTask> result = new ArrayList<GanttPreviousStateTask>();
+    for (Task t: taskManager.getTasks()) {
+      GanttPreviousStateTask baselineTask = new GanttPreviousStateTask(t.getTaskID(), t.getStart(),
+                                                                       t.getDuration().getLength(), t.isMilestone(),
+                                                                       taskManager.getTaskHierarchy().hasNestedTasks(t)
+      );
+      result.add(baselineTask);
     }
+    return result;
   }
 
   private static File createTemporaryFile() throws IOException {
@@ -91,8 +80,13 @@ public class GanttPreviousState {
     return myName;
   }
 
-  public void remove() {
-    myFile.delete();
+  public void setName(String name) {
+    myName = name;
+  }
+
+  public void init() throws IOException {
+    myFile = createTemporaryFile();
+    myFile.deleteOnExit();
   }
 
   public List<GanttPreviousStateTask> load() {
@@ -116,13 +110,18 @@ public class GanttPreviousState {
     return tasks;
   }
 
-  public static List<GanttPreviousStateTask> createTasks(TaskManager taskManager) {
-    List<GanttPreviousStateTask> result = new ArrayList<GanttPreviousStateTask>();
-    for (Task t : taskManager.getTasks()) {
-      GanttPreviousStateTask baselineTask = new GanttPreviousStateTask(t.getTaskID(), t.getStart(),
-          t.getDuration().getLength(), t.isMilestone(), taskManager.getTaskHierarchy().hasNestedTasks(t));
-      result.add(baselineTask);
+  public void remove() {
+    myFile.delete();
+  }
+
+  public void saveFile() throws IOException {
+    BaselineSaver saver = new BaselineSaver();
+    try {
+      saver.save(myFile, myTasks);
+    } catch (TransformerConfigurationException e) {
+      throw new IOException(e);
+    } catch (SAXException e) {
+      throw new IOException(e);
     }
-    return result;
   }
 }

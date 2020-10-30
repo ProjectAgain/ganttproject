@@ -18,18 +18,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.resource;
 
+import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.model.roles.Role;
+import net.sourceforge.ganttproject.ui.chart.ResourceDefaultColumn;
+import net.sourceforge.ganttproject.ui.chart.TreeUtil;
+
 import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.Set;
 
-import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.ui.chart.ResourceDefaultColumn;
-import net.sourceforge.ganttproject.ui.chart.TreeUtil;
-import net.sourceforge.ganttproject.model.roles.Role;
-
 public class ResourceNode extends ResourceTableNode {
   private static final Set<ResourceDefaultColumn> ourApplicableColumns = EnumSet.complementOf(
-      EnumSet.of(ResourceDefaultColumn.ROLE_IN_TASK));
+    EnumSet.of(ResourceDefaultColumn.ROLE_IN_TASK));
   private static final long serialVersionUID = 3834033541318392117L;
 
   private final HumanResource resource;
@@ -38,97 +38,6 @@ public class ResourceNode extends ResourceTableNode {
     super(res, ourApplicableColumns);
     assert res != null;
     resource = res;
-  }
-
-  public void setName(String name) {
-    resource.setName(name);
-  }
-
-  public String getName() {
-    return resource.getName();
-  }
-
-  public void setPhone(String phoneNumber) {
-    resource.setPhone(phoneNumber);
-  }
-
-  public String getPhone() {
-    return resource.getPhone();
-  }
-
-  public void setEMail(String email) {
-    resource.setMail(email);
-  }
-
-  public String getEMail() {
-    return resource.getMail();
-  }
-
-  public void setDefaultRole(Role defRole) {
-    resource.setRole(defRole);
-  }
-
-  public Role getDefaultRole() {
-    return resource.getRole();
-  }
-
-  @Override
-  public Object getStandardField(ResourceDefaultColumn def) {
-    switch (def) {
-    case NAME: return getName();
-    case ROLE: return getDefaultRole();
-    case EMAIL: return getEMail();
-    case PHONE: return getPhone();
-    case STANDARD_RATE: return getResource().getStandardPayRate();
-    case TOTAL_COST: return getResource().getTotalCost();
-    case TOTAL_LOAD: return getResource().getTotalLoad();
-    default: return "";
-    }
-  }
-
-  @Override
-  public void setStandardField(ResourceDefaultColumn def, Object value) {
-    switch (def) {
-    case NAME:
-      setName(value.toString());
-      return;
-    case EMAIL:
-      setEMail(value.toString());
-      return;
-    case PHONE:
-      setPhone(value.toString());
-      return;
-    case ROLE:
-      setDefaultRole((Role) value);
-      return;
-    case STANDARD_RATE:
-      assert value instanceof Double : "Rate accepts numeric values";
-      getResource().setStandardPayRate(BigDecimal.valueOf((Double)value));
-    }
-  }
-
-  /** @return the value of a custom field referenced by its title */
-  @Override
-  public Object getCustomField(CustomPropertyDefinition def) {
-    return resource.getCustomField(def);
-  }
-
-  /** sets the new value to the custom field referenced by its title */
-  @Override
-  public void setCustomField(CustomPropertyDefinition def, Object val) {
-    resource.setCustomField(def, val);
-  }
-
-  @Override
-  public String toString() {
-    if (resource != null) {
-      return resource.getName();
-    }
-    return "-";
-  }
-
-  public HumanResource getResource() {
-    return resource;
   }
 
   @Override
@@ -144,7 +53,110 @@ public class ResourceNode extends ResourceTableNode {
     return res;
   }
 
+  /**
+   * @return the value of a custom field referenced by its title
+   */
+  @Override
+  public Object getCustomField(CustomPropertyDefinition def) {
+    return resource.getCustomField(def);
+  }
+
+  public Role getDefaultRole() {
+    return resource.getRole();
+  }
+
+  public void setDefaultRole(Role defRole) {
+    resource.setRole(defRole);
+  }
+
+  public String getEMail() {
+    return resource.getMail();
+  }
+
+  public void setEMail(String email) {
+    resource.setMail(email);
+  }
+
+  public String getName() {
+    return resource.getName();
+  }
+
+  public void setName(String name) {
+    resource.setName(name);
+  }
+
+  public String getPhone() {
+    return resource.getPhone();
+  }
+
+  public void setPhone(String phoneNumber) {
+    resource.setPhone(phoneNumber);
+  }
+
+  public HumanResource getResource() {
+    return resource;
+  }
+
+  @Override
+  public Object getStandardField(ResourceDefaultColumn def) {
+    switch (def) {
+      case NAME:
+        return getName();
+      case ROLE:
+        return getDefaultRole();
+      case EMAIL:
+        return getEMail();
+      case PHONE:
+        return getPhone();
+      case STANDARD_RATE:
+        return getResource().getStandardPayRate();
+      case TOTAL_COST:
+        return getResource().getTotalCost();
+      case TOTAL_LOAD:
+        return getResource().getTotalLoad();
+      default:
+        return "";
+    }
+  }
+
   public void removeAllChildren() {
     TreeUtil.removeAllChildren(this);
+  }
+
+  /**
+   * sets the new value to the custom field referenced by its title
+   */
+  @Override
+  public void setCustomField(CustomPropertyDefinition def, Object val) {
+    resource.setCustomField(def, val);
+  }
+
+  @Override
+  public void setStandardField(ResourceDefaultColumn def, Object value) {
+    switch (def) {
+      case NAME:
+        setName(value.toString());
+        return;
+      case EMAIL:
+        setEMail(value.toString());
+        return;
+      case PHONE:
+        setPhone(value.toString());
+        return;
+      case ROLE:
+        setDefaultRole((Role) value);
+        return;
+      case STANDARD_RATE:
+        assert value instanceof Double : "Rate accepts numeric values";
+        getResource().setStandardPayRate(BigDecimal.valueOf((Double) value));
+    }
+  }
+
+  @Override
+  public String toString() {
+    if (resource != null) {
+      return resource.getName();
+    }
+    return "-";
   }
 }

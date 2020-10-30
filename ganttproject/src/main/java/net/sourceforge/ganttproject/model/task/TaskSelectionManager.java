@@ -18,16 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.task;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.common.base.Supplier;
-
 import net.sourceforge.ganttproject.ui.gui.TaskSelectionContext;
+
+import java.util.*;
 
 /**
  * This class manages the selected tasks.
@@ -40,14 +34,13 @@ public class TaskSelectionManager implements TaskSelectionContext {
 
     void userInputConsumerChanged(Object newConsumer);
   }
-
+  private final List<Listener> myListeners = new ArrayList<Listener>();
+  private final Supplier<TaskManager> myTaskManager;
   /**
    * List of the selected tasks.
    */
   private final List<Task> selectedTasks = new ArrayList<Task>();
-  private final List<Listener> myListeners = new ArrayList<Listener>();
   private Object myUserInputConsumer;
-  private final Supplier<TaskManager> myTaskManager;
 
   /**
    * Creates an instance of TaskSelectionManager
@@ -56,18 +49,14 @@ public class TaskSelectionManager implements TaskSelectionContext {
     myTaskManager = taskManager;
   }
 
-  public void setUserInputConsumer(Object consumer) {
-    if (consumer != myUserInputConsumer) {
-      fireUserInputConsumerChanged();
-    }
-    myUserInputConsumer = consumer;
+  public void addSelectionListener(Listener listener) {
+    myListeners.add(listener);
   }
 
   /**
    * Adds <code>task</code> to the selected tasks.
    *
-   * @param task
-   *          A task to add to the selected tasks.
+   * @param task A task to add to the selected tasks.
    */
   public void addTask(Task task) {
     if (!selectedTasks.contains(task)) {
@@ -77,20 +66,67 @@ public class TaskSelectionManager implements TaskSelectionContext {
   }
 
   /**
-   * Removes <code>task</code> from the selected tasks;
-   *
-   * @param task
-   *          A task to remove from the selected tasks.
+   * Clears the selected tasks list.
    */
-  public void removeTask(Task task) {
-    if (selectedTasks.contains(task)) {
-      selectedTasks.remove(task);
-      fireSelectionChanged();
+  public void clear() {
+    selectedTasks.clear();
+    fireSelectionChanged();
+  }
+
+  public void fireSelectionChanged() {
+    for (int i = 0; i < myListeners.size(); i++) {
+      Listener next = myListeners.get(i);
+      next.selectionChanged(Collections.unmodifiableList(selectedTasks));
     }
   }
 
-  private TaskContainmentHierarchyFacade getTaskHierarchy() {
-    return myTaskManager.get().getTaskHierarchy();
+  /**
+   * @return The earliest start date.
+   */
+  public Date getEarliestStart() {
+    Date res = null;
+    Iterator<Task> it = selectedTasks.iterator();
+    while (it.hasNext()) {
+
+      Task task = it.next();
+      Date d = task.getStart().getTime();
+      if (res == null) {
+        res = d;
+        continue;
+      }
+      if (d.before(res)) {
+        res = d;
+      }
+    }
+    return res;
+  }
+
+  /**
+   * @return The latest end date.
+   */
+  public Date getLatestEnd() {
+    Date res = null;
+    Iterator<Task> it = selectedTasks.iterator();
+    while (it.hasNext()) {
+      Task task = it.next();
+      Date d = task.getEnd().getTime();
+      if (res == null) {
+        res = d;
+        continue;
+      }
+      if (d.after(res)) {
+        res = d;
+      }
+    }
+    return res;
+  }
+
+  /**
+   * @return The selected tasks list.
+   */
+  @Override
+  public List<Task> getSelectedTasks() {
+    return Collections.unmodifiableList(selectedTasks);
   }
 
   public void setSelectedTasks(List<Task> tasks) {
@@ -105,80 +141,42 @@ public class TaskSelectionManager implements TaskSelectionContext {
       }
     });
     clear();
-    for (Task t : tasks) {
+    for (Task t: tasks) {
       addTask(t);
     }
   }
+
   /**
-   * @param task
-   *          The task to test.
+   * @param task The task to test.
+   *
    * @return <code>true</code> if <code>task</code> is selected,
-   *         <code>false</code> otherwise.
+   * <code>false</code> otherwise.
    */
   public boolean isTaskSelected(Task task) {
     return selectedTasks.contains(task);
-  }
-
-  /** @return The selected tasks list. */
-  @Override
-  public List<Task> getSelectedTasks() {
-    return Collections.unmodifiableList(selectedTasks);
-  }
-
-  /** @return The earliest start date. */
-  public Date getEarliestStart() {
-    Date res = null;
-    Iterator<Task> it = selectedTasks.iterator();
-    while (it.hasNext()) {
-
-      Task task = it.next();
-      Date d = task.getStart().getTime();
-      if (res == null) {
-        res = d;
-        continue;
-      }
-      if (d.before(res))
-        res = d;
-    }
-    return res;
-  }
-
-  /** @return The latest end date. */
-  public Date getLatestEnd() {
-    Date res = null;
-    Iterator<Task> it = selectedTasks.iterator();
-    while (it.hasNext()) {
-      Task task = it.next();
-      Date d = task.getEnd().getTime();
-      if (res == null) {
-        res = d;
-        continue;
-      }
-      if (d.after(res))
-        res = d;
-    }
-    return res;
-  }
-
-  /** Clears the selected tasks list. */
-  public void clear() {
-    selectedTasks.clear();
-    fireSelectionChanged();
-  }
-
-  public void addSelectionListener(Listener listener) {
-    myListeners.add(listener);
   }
 
   public void removeSelectionListener(Listener listener) {
     myListeners.remove(listener);
   }
 
-  public void fireSelectionChanged() {
-    for (int i = 0; i < myListeners.size(); i++) {
-      Listener next = myListeners.get(i);
-      next.selectionChanged(Collections.unmodifiableList(selectedTasks));
+  /**
+   * Removes <code>task</code> from the selected tasks;
+   *
+   * @param task A task to remove from the selected tasks.
+   */
+  public void removeTask(Task task) {
+    if (selectedTasks.contains(task)) {
+      selectedTasks.remove(task);
+      fireSelectionChanged();
     }
+  }
+
+  public void setUserInputConsumer(Object consumer) {
+    if (consumer != myUserInputConsumer) {
+      fireUserInputConsumerChanged();
+    }
+    myUserInputConsumer = consumer;
   }
 
   private void fireUserInputConsumerChanged() {
@@ -186,5 +184,9 @@ public class TaskSelectionManager implements TaskSelectionContext {
       Listener next = myListeners.get(i);
       next.userInputConsumerChanged(myUserInputConsumer);
     }
+  }
+
+  private TaskContainmentHierarchyFacade getTaskHierarchy() {
+    return myTaskManager.get().getTaskHierarchy();
   }
 }

@@ -18,65 +18,30 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task;
 
-import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.CustomPropertyClass;
+import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.model.CustomPropertyListener;
 import net.sourceforge.ganttproject.model.time.CalendarFactory;
-import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.util.DateParser;
+import net.sourceforge.ganttproject.util.InvalidDateException;
 import net.sourceforge.ganttproject.util.StringUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import net.sourceforge.ganttproject.util.DateParser;
-import net.sourceforge.ganttproject.util.InvalidDateException;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface CustomPropertyManager {
-  List<CustomPropertyDefinition> getDefinitions();
-
-  CustomPropertyDefinition createDefinition(String id, String typeAsString, String name, String defaultValueAsString);
-
-  CustomPropertyDefinition createDefinition(String typeAsString, String colName, String defValue);
-
-  CustomPropertyDefinition getCustomPropertyDefinition(String id);
-
-  void deleteDefinition(CustomPropertyDefinition def);
-
-  Map<CustomPropertyDefinition, CustomPropertyDefinition> importData(CustomPropertyManager source);
-
-  void addListener(CustomPropertyListener listener);
-
-  void reset();
-
   class PropertyTypeEncoder {
-    public static String encodeFieldType(Class<?> fieldType) {
-      String result = null;
-      if (fieldType.equals(String.class)) {
-        result = "text";
-      } else if (fieldType.equals(Boolean.class)) {
-        result = "boolean";
-      } else if (fieldType.equals(Integer.class)) {
-        result = "int";
-      } else if (fieldType.equals(Double.class)) {
-        result = "double";
-      } else if (GregorianCalendar.class.isAssignableFrom(fieldType)) {
-        result = "date";
-      }
-      return result;
-    }
-
     public static CustomPropertyDefinition decodeTypeAndDefaultValue(
-        final String typeAsString, final String valueAsString) {
+      final String typeAsString, final String valueAsString
+    ) {
       final CustomPropertyClass propertyClass;
       final Object defaultValue;
       if (typeAsString.equals("text")) {
         propertyClass = CustomPropertyClass.TEXT;
-        defaultValue = valueAsString == null ? null : valueAsString.toString();
+        defaultValue = valueAsString == null ? null : valueAsString;
       } else if (typeAsString.equals("boolean")) {
         propertyClass = CustomPropertyClass.BOOLEAN;
         defaultValue = valueAsString == null ? null : Boolean.valueOf(valueAsString);
@@ -117,6 +82,17 @@ public interface CustomPropertyManager {
       }
       return new CustomPropertyDefinition() {
         @Override
+        public IStatus canSetPropertyClass(CustomPropertyClass propertyClass) {
+          return Status.CANCEL_STATUS;
+        }
+
+        @Nonnull
+        @Override
+        public Map<String, String> getAttributes() {
+          return Collections.emptyMap();
+        }
+
+        @Override
         public Object getDefaultValue() {
           return defaultValue;
         }
@@ -129,12 +105,6 @@ public interface CustomPropertyManager {
         @Override
         public void setDefaultValueAsString(String value) {
           throw new UnsupportedOperationException();
-        }
-
-        @Nonnull
-        @Override
-        public Map<String, String> getAttributes() {
-          return Collections.emptyMap();
         }
 
         @Override
@@ -153,6 +123,12 @@ public interface CustomPropertyManager {
           throw new UnsupportedOperationException();
         }
 
+        @Nonnull
+        @Override
+        public CustomPropertyClass getPropertyClass() {
+          return propertyClass;
+        }
+
         @Override
         public Class<?> getType() {
           return propertyClass.getJavaClass();
@@ -163,17 +139,6 @@ public interface CustomPropertyManager {
           return typeAsString;
         }
 
-        @Nonnull
-        @Override
-        public CustomPropertyClass getPropertyClass() {
-          return propertyClass;
-        }
-
-        @Override
-        public IStatus canSetPropertyClass(CustomPropertyClass propertyClass) {
-          return Status.CANCEL_STATUS;
-        }
-
         @Override
         public IStatus setPropertyClass(CustomPropertyClass propertyClass) {
           throw new UnsupportedOperationException();
@@ -181,5 +146,36 @@ public interface CustomPropertyManager {
       };
     }
 
+    public static String encodeFieldType(Class<?> fieldType) {
+      String result = null;
+      if (fieldType.equals(String.class)) {
+        result = "text";
+      } else if (fieldType.equals(Boolean.class)) {
+        result = "boolean";
+      } else if (fieldType.equals(Integer.class)) {
+        result = "int";
+      } else if (fieldType.equals(Double.class)) {
+        result = "double";
+      } else if (GregorianCalendar.class.isAssignableFrom(fieldType)) {
+        result = "date";
+      }
+      return result;
+    }
   }
+
+  void addListener(CustomPropertyListener listener);
+
+  CustomPropertyDefinition createDefinition(String typeAsString, String colName, String defValue);
+
+  CustomPropertyDefinition createDefinition(String id, String typeAsString, String name, String defaultValueAsString);
+
+  void deleteDefinition(CustomPropertyDefinition def);
+
+  CustomPropertyDefinition getCustomPropertyDefinition(String id);
+
+  List<CustomPropertyDefinition> getDefinitions();
+
+  Map<CustomPropertyDefinition, CustomPropertyDefinition> importData(CustomPropertyManager source);
+
+  void reset();
 }

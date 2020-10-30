@@ -29,12 +29,12 @@ import net.sourceforge.ganttproject.model.task.TaskSelectionManager;
 public class Mediator {
   private static TaskSelectionManager taskSelectionManager = null;
 
-  public static void registerTaskSelectionManager(TaskSelectionManager taskSelection) {
-    taskSelectionManager = taskSelection;
-  }
-
   @Deprecated
   public static TaskSelectionManager getTaskSelectionManager() {
     return taskSelectionManager;
+  }
+
+  public static void registerTaskSelectionManager(TaskSelectionManager taskSelection) {
+    taskSelectionManager = taskSelection;
   }
 }

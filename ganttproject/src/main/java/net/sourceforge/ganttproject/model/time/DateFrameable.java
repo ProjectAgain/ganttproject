@@ -18,9 +18,9 @@ import java.util.Date;
  * @author bard
  */
 public interface DateFrameable {
-  Date adjustRight(Date baseDate);
-
   Date adjustLeft(Date baseDate);
+
+  Date adjustRight(Date baseDate);
 
   Date jumpLeft(Date baseDate);
 }

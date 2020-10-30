@@ -18,27 +18,57 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.calendar;
 
-import java.util.Date;
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import net.sourceforge.ganttproject.model.time.DateFrameable;
 import net.sourceforge.ganttproject.model.time.TimeDuration;
 import net.sourceforge.ganttproject.model.time.TimeUnit;
 
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author bard
  */
 abstract class GPCalendarBase implements GPCalendarCalc {
   private final List<GPCalendarListener> myListeners = Lists.newArrayList();
-  private String myName;
   private String myId;
+  private String myName;
+
+  @Override
+  public void addListener(GPCalendarListener listener) {
+    myListeners.add(listener);
+  }
+
+  public Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType, Date limit) {
+    return doFindClosest(time, timeUnit, direction, dayType, limit);
+  }
+
+  public Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType) {
+    return findClosest(time, timeUnit, direction, dayType, null);
+  }
+
+  public List<GPCalendarActivity> getActivities(Date startingFrom, TimeDuration period) {
+    return getActivities(startingFrom, period.getTimeUnit(), period.getLength());
+  }
+
+  public List<GPCalendarActivity> getActivities(Date startDate, TimeUnit timeUnit, long unitCount) {
+    return unitCount > 0 ? getActivitiesForward(startDate, timeUnit, unitCount) : getActivitiesBackward(
+      startDate,
+      timeUnit,
+      -unitCount
+    );
+  }
+
+  public abstract int getDayMask(Date date);
 
   @Override
   public String getID() {
     return myId == null ? myName : myId;
+  }
+
+  @Override
+  public void setID(String id) {
+    myId = id;
   }
 
   @Override
@@ -51,11 +81,6 @@ abstract class GPCalendarBase implements GPCalendarCalc {
     myName = name;
   }
 
-  @Override
-  public void setID(String id) {
-    myId = id;
-  }
-
   public Date shiftDate(Date input, TimeDuration shift) {
     if (shift.getLength() == 0) {
       return input;
@@ -63,7 +88,7 @@ abstract class GPCalendarBase implements GPCalendarCalc {
     List<GPCalendarActivity> activities = getActivities(input, shift);
     if (activities.isEmpty()) {
       throw new RuntimeException("FIXME: Failed to compute calendar activities in time period=" + shift
-          + " starting from " + input);
+                                 + " starting from " + input);
     }
     Date result;
     if (shift.getValue() >= 0) {
@@ -76,64 +101,38 @@ abstract class GPCalendarBase implements GPCalendarCalc {
     return result;
   }
 
-  public List<GPCalendarActivity> getActivities(Date startDate, TimeUnit timeUnit, long unitCount) {
-    return unitCount > 0 ? getActivitiesForward(startDate, timeUnit, unitCount) : getActivitiesBackward(startDate,
-        timeUnit, -unitCount);
-  }
-
-  protected abstract List<GPCalendarActivity> getActivitiesBackward(Date startDate, TimeUnit timeUnit, long unitCount);
-
-  protected abstract List<GPCalendarActivity> getActivitiesForward(Date startDate, TimeUnit timeUnit, long unitCount);
-
-  public List<GPCalendarActivity> getActivities(Date startingFrom, TimeDuration period) {
-    return getActivities(startingFrom, period.getTimeUnit(), period.getLength());
-  }
-
-  public Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType) {
-    return findClosest(time, timeUnit, direction, dayType, null);
-  }
-
-  public Date findClosest(Date time, TimeUnit timeUnit, MoveDirection direction, DayType dayType, Date limit) {
-    return doFindClosest(time, timeUnit, direction, dayType, limit);
-  }
-
   protected Date doFindClosest(Date time, DateFrameable framer, MoveDirection direction, DayType dayType, Date limit) {
     Date nextUnitStart = direction == GPCalendarCalc.MoveDirection.FORWARD ? framer.adjustRight(time)
-        : framer.jumpLeft(time);
+                                                                           : framer.jumpLeft(time);
     int nextUnitMask = getDayMask(nextUnitStart);
     switch (dayType) {
-    case WORKING:
-      if ((nextUnitMask & DayMask.WORKING) == DayMask.WORKING) {
-        return nextUnitStart;
-      }
-      break;
-    case WEEKEND:
-    case HOLIDAY:
-    case NON_WORKING:
-      if ((nextUnitMask & DayMask.WORKING) == 0) {
-        return nextUnitStart;
-      }
-      break;
-    default:
-      assert false : "Should not be here";
+      case WORKING:
+        if ((nextUnitMask & DayMask.WORKING) == DayMask.WORKING) {
+          return nextUnitStart;
+        }
+        break;
+      case WEEKEND:
+      case HOLIDAY:
+      case NON_WORKING:
+        if ((nextUnitMask & DayMask.WORKING) == 0) {
+          return nextUnitStart;
+        }
+        break;
+      default:
+        assert false : "Should not be here";
     }
     if (limit != null) {
       if (direction == MoveDirection.FORWARD && nextUnitStart.compareTo(limit) >= 0
-          || direction == MoveDirection.BACKWARD && nextUnitStart.compareTo(limit) <= 0) {
+          || direction == MoveDirection.BACKWARD && nextUnitStart.compareTo(limit) <= 0)
+      {
         return null;
       }
     }
     return doFindClosest(nextUnitStart, framer, direction, dayType, limit);
   }
 
-
-  @Override
-  public void addListener(GPCalendarListener listener) {
-    myListeners.add(listener);
-  }
-
   protected void fireCalendarChanged() {
-    for (GPCalendarListener l : myListeners) {
+    for (GPCalendarListener l: myListeners) {
       try {
         l.onCalendarChange();
       } catch (Throwable e) {
@@ -141,5 +140,8 @@ abstract class GPCalendarBase implements GPCalendarCalc {
       }
     }
   }
-  public abstract int getDayMask(Date date);
+
+  protected abstract List<GPCalendarActivity> getActivitiesBackward(Date startDate, TimeUnit timeUnit, long unitCount);
+
+  protected abstract List<GPCalendarActivity> getActivitiesForward(Date startDate, TimeUnit timeUnit, long unitCount);
 }

@@ -32,64 +32,64 @@ import java.util.Locale;
  * Created by IntelliJ IDEA. User: bard
  */
 public abstract class TaskTestCase {
-    private TaskManager myTaskManager;
+  private TaskManager myTaskManager;
 
-    protected TaskDependency createDependency(Task dependant, Task dependee) throws TaskDependencyException {
-        return getTaskManager().getDependencyCollection().createDependency(dependant, dependee);
-    }
+  protected TaskDependency createDependency(Task dependant, Task dependee) throws TaskDependencyException {
+    return getTaskManager().getDependencyCollection().createDependency(dependant, dependee);
+  }
 
-    protected Task createTask(GanttCalendar start) {
-        return createTask(start, 1);
-    }
+  protected Task createTask(GanttCalendar start) {
+    return createTask(start, 1);
+  }
 
-    protected Task createTask(GanttCalendar start, int duration) {
-        Task result = createTask();
-        result.setStart(start);
-        result.setDuration(getTaskManager().createLength(duration));
-        return result;
-    }
+  protected Task createTask(GanttCalendar start, int duration) {
+    Task result = createTask();
+    result.setStart(start);
+    result.setDuration(getTaskManager().createLength(duration));
+    return result;
+  }
 
-    protected Task createTask() {
-        Task result = getTaskManager().createTask();
-        result.move(getTaskManager().getRootTask());
-        result.setName(String.valueOf(result.getTaskID()));
-        return result;
-    }
+  protected Task createTask() {
+    Task result = getTaskManager().createTask();
+    result.move(getTaskManager().getRootTask());
+    result.setName(String.valueOf(result.getTaskID()));
+    return result;
+  }
 
-    protected TaskManager getTaskManager() {
-        return myTaskManager;
-    }
+  protected TaskManager getTaskManager() {
+    return myTaskManager;
+  }
 
-    protected void setTaskManager(TaskManager taskManager) {
-        myTaskManager = taskManager;
-    }
+  protected void setTaskManager(TaskManager taskManager) {
+    myTaskManager = taskManager;
+  }
 
-    protected TaskManager newTaskManager() {
-        return TestSetupHelper.newTaskManagerBuilder().build();
-    }
+  protected TaskManager newTaskManager() {
+    return TestSetupHelper.newTaskManagerBuilder().build();
+  }
 
-    @BeforeEach
-    protected void setUp() throws Exception {
-        myTaskManager = newTaskManager();
-    }
+  @BeforeEach
+  protected void setUp() throws Exception {
+    myTaskManager = newTaskManager();
+  }
 
-    protected void tearDown() throws Exception {
-        myTaskManager = null;
-    }
+  protected void tearDown() throws Exception {
+    myTaskManager = null;
+  }
 
-    static {
-        new CalendarFactory() {
-            {
-                setLocaleApi(new LocaleApi() {
-                    public Locale getLocale() {
-                        return Locale.US;
-                    }
+  static {
+    new CalendarFactory() {
+      {
+        setLocaleApi(new LocaleApi() {
+          public Locale getLocale() {
+            return Locale.US;
+          }
 
-                    public DateFormat getShortDateFormat() {
-                        return DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
-                    }
-                });
-            }
-        };
-    }
+          public DateFormat getShortDateFormat() {
+            return DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+          }
+        });
+      }
+    };
+  }
 }

@@ -31,16 +31,15 @@ class CustomPropertyListenerImpl implements CustomPropertyListener {
   @Override
   public void customPropertyChange(CustomPropertyEvent event) {
     switch (event.getType()) {
-    case CustomPropertyEvent.EVENT_REMOVE:
-      removeCustomPropertyValues(event.getDefinition());
-      break;
+      case CustomPropertyEvent.EVENT_REMOVE:
+        removeCustomPropertyValues(event.getDefinition());
+        break;
     }
   }
 
   private void removeCustomPropertyValues(CustomPropertyDefinition definition) {
-    for (Task t : myTaskManager.getTasks()) {
+    for (Task t: myTaskManager.getTasks()) {
       t.getCustomValues().removeCustomColumn(definition);
     }
   }
-
 }

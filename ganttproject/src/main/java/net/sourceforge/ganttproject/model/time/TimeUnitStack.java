@@ -3,7 +3,6 @@
  */
 package net.sourceforge.ganttproject.model.time;
 
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -14,28 +13,10 @@ import java.util.Iterator;
  * @author bard
  */
 public interface TimeUnitStack {
-  TimeUnit getDefaultTimeUnit();
-
-  TimeUnitPair[] getTimeUnitPairs();
-
-  String getName();
-
-  DateFormat[] getDateFormats();
-
-  DateFormat getTimeFormat();
-
-  TimeUnit findTimeUnit(String code);
-
-  String encode(TimeUnit timeUnit);
-
-  TimeDuration createDuration(TimeUnit timeUnit, int count);
-  TimeDuration createDuration(TimeUnit timeUnit, Date startDate, Date endDate);
-
-  TimeDuration parseDuration(String duration) throws ParseException;
   class Util {
     /**
      * @return a common TimeUnit for the given units or null if none if found
-     *         (should not happen since all should be derived from atom)
+     * (should not happen since all should be derived from atom)
      */
     public static TimeUnit findCommonUnit(TimeUnit unit1, TimeUnit unit2) {
 
@@ -61,4 +42,24 @@ public interface TimeUnitStack {
       return null;
     }
   }
+
+  TimeDuration createDuration(TimeUnit timeUnit, int count);
+
+  TimeDuration createDuration(TimeUnit timeUnit, Date startDate, Date endDate);
+
+  String encode(TimeUnit timeUnit);
+
+  TimeUnit findTimeUnit(String code);
+
+  DateFormat[] getDateFormats();
+
+  TimeUnit getDefaultTimeUnit();
+
+  String getName();
+
+  DateFormat getTimeFormat();
+
+  TimeUnitPair[] getTimeUnitPairs();
+
+  TimeDuration parseDuration(String duration) throws ParseException;
 }

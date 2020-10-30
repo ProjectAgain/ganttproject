@@ -10,11 +10,11 @@
  */
 package net.sourceforge.ganttproject.model.time.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.model.time.DateFrameable;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,21 +26,6 @@ public class FramerImpl implements DateFrameable {
 
   public FramerImpl(int calendarField) {
     myCalendarField = calendarField;
-  }
-
-  @Override
-  public Date adjustRight(Date baseDate) {
-    Calendar c = CalendarFactory.newCalendar();
-    c.setTime(baseDate);
-    clearFields(c);
-    c.add(myCalendarField, 1);
-    return c.getTime();
-  }
-
-  private void clearFields(Calendar c) {
-    for (int i = myCalendarField + 1; i <= Calendar.MILLISECOND; i++) {
-      c.clear(i);
-    }
   }
 
   @Override
@@ -56,10 +41,25 @@ public class FramerImpl implements DateFrameable {
   }
 
   @Override
+  public Date adjustRight(Date baseDate) {
+    Calendar c = CalendarFactory.newCalendar();
+    c.setTime(baseDate);
+    clearFields(c);
+    c.add(myCalendarField, 1);
+    return c.getTime();
+  }
+
+  @Override
   public Date jumpLeft(Date baseDate) {
     Calendar c = CalendarFactory.newCalendar();
     c.setTime(baseDate);
     c.add(myCalendarField, -1);
     return c.getTime();
+  }
+
+  private void clearFields(Calendar c) {
+    for (int i = myCalendarField + 1; i <= Calendar.MILLISECOND; i++) {
+      c.clear(i);
+    }
   }
 }

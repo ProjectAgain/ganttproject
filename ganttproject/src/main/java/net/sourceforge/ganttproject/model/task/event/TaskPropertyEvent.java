@@ -18,13 +18,13 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.event;
 
-import java.util.EventObject;
-
 import net.sourceforge.ganttproject.model.task.Task;
+
+import java.util.EventObject;
 
 public class TaskPropertyEvent extends EventObject {
 
-  private Task myTask;
+  private final Task myTask;
 
   public TaskPropertyEvent(Object source) {
     super(source);
@@ -34,5 +34,4 @@ public class TaskPropertyEvent extends EventObject {
   public Task getTask() {
     return myTask;
   }
-
 }

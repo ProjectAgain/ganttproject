@@ -22,6 +22,16 @@ import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskContainmentHierarchyFacade;
 
 public abstract class RecalculateTaskCompletionPercentageAlgorithm extends AlgorithmBase {
+  static private class SubtreeCompletion {
+    public final long myCompletedDays;
+    public final long myPlannedDays;
+
+    SubtreeCompletion(long completedDays, long plannedDays) {
+      myCompletedDays = completedDays;
+      myPlannedDays = plannedDays;
+    }
+  }
+
   @Override
   public void run() {
     if (!isEnabled()) {
@@ -31,15 +41,7 @@ public abstract class RecalculateTaskCompletionPercentageAlgorithm extends Algor
     recalculateSupertaskCompletionPercentage(facade.getRootTask(), facade);
   }
 
-  static private class SubtreeCompletion {
-    public final long myCompletedDays;
-    public final long myPlannedDays;
-
-    SubtreeCompletion(long completedDays, long plannedDays) {
-      myCompletedDays = completedDays;
-      myPlannedDays = plannedDays;
-    };
-  }
+  protected abstract TaskContainmentHierarchyFacade createContainmentFacade();
 
   private SubtreeCompletion recalculateSupertaskCompletionPercentage(Task task, TaskContainmentHierarchyFacade facade) {
 
@@ -64,9 +66,5 @@ public abstract class RecalculateTaskCompletionPercentageAlgorithm extends Algor
     task.setCompletionPercentage(completionPercentage);
 
     return new SubtreeCompletion(completedDays, plannedDays);
-
   }
-
-  protected abstract TaskContainmentHierarchyFacade createContainmentFacade();
-
 }

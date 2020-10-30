@@ -23,7 +23,7 @@ import net.sourceforge.ganttproject.model.task.Task;
 public interface CriticalPathAlgorithm {
   /**
    * @return All tasks which are included in any critical path (if there are
-   *         many of them).
+   * many of them).
    */
-  public Task[] getCriticalTasks();
+  Task[] getCriticalTasks();
 }

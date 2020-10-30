@@ -21,13 +21,7 @@ package net.sourceforge.ganttproject.model.document;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 
 /**
@@ -37,18 +31,29 @@ import java.net.URI;
  * @author Michael Haeusler (michael at akatose.de)
  */
 public class FileDocument extends AbstractDocument {
-  private File file;
+  private final File file;
   private long myLastAccessTimestamp;
 
   public FileDocument(File file) {
     this.file = file;
   }
 
-  public File getFile() { return this.file; }
-
-  @Override
-  public String getFileName() {
-    return file.getName();
+  private static IStatus canCreate(File f) {
+    File parentFile = f.getParentFile();
+    if (parentFile.exists()) {
+      if (!parentFile.isDirectory()) {
+        return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.PARENT_IS_NOT_DIRECTORY.ordinal(),
+                          parentFile.getAbsolutePath(), null
+        );
+      }
+      if (!parentFile.canWrite()) {
+        return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.PARENT_IS_NOT_WRITABLE.ordinal(),
+                          parentFile.getAbsolutePath(), null
+        );
+      }
+      return Status.OK_STATUS;
+    }
+    return canCreate(parentFile);
   }
 
   @Override
@@ -61,42 +66,39 @@ public class FileDocument extends AbstractDocument {
     return (file.exists()) ? canOverwrite() : canCreate(file);
   }
 
-  private IStatus canOverwrite() {
-    if (file.isDirectory()) {
-      return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.IS_DIRECTORY.ordinal(), "", null);
+  public void create() throws IOException {
+    if (file.exists()) {
+      return;
     }
-    if (!file.canWrite()) {
-      return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.NOT_WRITABLE.ordinal(), "", null);
+    if (!file.getParentFile().exists()) {
+      boolean result = file.getParentFile().mkdirs();
+      if (!result) {
+        throw new IOException("Failed to create parent directories to file " + file.getPath());
+      }
     }
-    if (getLastAccessTimestamp() != 0 && file.lastModified() > getLastAccessTimestamp()) {
-      return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.LOST_UPDATE.ordinal(), "", null);
-    }
-    return Status.OK_STATUS;
+    file.createNewFile();
   }
 
-  private long getLastAccessTimestamp() {
-    return myLastAccessTimestamp;
+  public void delete() throws IOException {
+    if (file.exists()) {
+      if (!file.delete()) {
+        throw new IOException("Failed to delete file " + file.getPath());
+      }
+    }
   }
 
-  private static IStatus canCreate(File f) {
-    File parentFile = f.getParentFile();
-    if (parentFile.exists()) {
-      if (!parentFile.isDirectory()) {
-        return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.PARENT_IS_NOT_DIRECTORY.ordinal(),
-            parentFile.getAbsolutePath(), null);
-      }
-      if (!parentFile.canWrite()) {
-        return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.PARENT_IS_NOT_WRITABLE.ordinal(),
-            parentFile.getAbsolutePath(), null);
-      }
-      return Status.OK_STATUS;
-    }
-    return canCreate(parentFile);
+  public File getFile() {
+    return this.file;
   }
 
   @Override
-  public boolean isValidForMRU() {
-    return file.exists();
+  public String getFileName() {
+    return file.getName();
+  }
+
+  @Override
+  public String getFilePath() {
+    return getPath();
   }
 
   @Override
@@ -122,8 +124,18 @@ public class FileDocument extends AbstractDocument {
   }
 
   @Override
-  public String getFilePath() {
-    return getPath();
+  public URI getURI() {
+    return file.toURI();
+  }
+
+  @Override
+  public boolean isLocal() {
+    return true;
+  }
+
+  @Override
+  public boolean isValidForMRU() {
+    return file.exists();
   }
 
   public void open() {
@@ -135,34 +147,20 @@ public class FileDocument extends AbstractDocument {
     // Method is not used
   }
 
-  @Override
-  public URI getURI() {
-    return file.toURI();
+  private IStatus canOverwrite() {
+    if (file.isDirectory()) {
+      return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.IS_DIRECTORY.ordinal(), "", null);
+    }
+    if (!file.canWrite()) {
+      return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.NOT_WRITABLE.ordinal(), "", null);
+    }
+    if (getLastAccessTimestamp() != 0 && file.lastModified() > getLastAccessTimestamp()) {
+      return new Status(IStatus.ERROR, PLUGIN_ID, Document.ErrorCode.LOST_UPDATE.ordinal(), "", null);
+    }
+    return Status.OK_STATUS;
   }
 
-  @Override
-  public boolean isLocal() {
-    return true;
-  }
-
-  public void create() throws IOException {
-    if (file.exists()) {
-      return;
-    }
-    if (!file.getParentFile().exists()) {
-      boolean result = file.getParentFile().mkdirs();
-      if (!result) {
-        throw new IOException("Failed to create parent directories to file " + file.getPath());
-      }
-    }
-    file.createNewFile();
-  }
-
-  public void delete() throws IOException {
-    if (file.exists()) {
-      if (!file.delete()) {
-        throw new IOException("Failed to delete file " + file.getPath());
-      }
-    }
+  private long getLastAccessTimestamp() {
+    return myLastAccessTimestamp;
   }
 }

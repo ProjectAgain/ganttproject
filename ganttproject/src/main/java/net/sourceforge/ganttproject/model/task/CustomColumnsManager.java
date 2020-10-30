@@ -38,26 +38,20 @@ public class CustomColumnsManager implements CustomPropertyManager {
     myStorage = new CustomColumnsStorage(this);
   }
 
-  private void addNewCustomColumn(CustomColumn customColumn) {
-    assert customColumn != null;
-    myStorage.addCustomColumn(customColumn);
-  }
-
   @Override
   public void addListener(CustomPropertyListener listener) {
     myStorage.addCustomColumnsListener(listener);
   }
 
   @Override
-  public List<CustomPropertyDefinition> getDefinitions() {
-    return new ArrayList<CustomPropertyDefinition>(myStorage.getCustomColums());
-  }
-
-  @Override
-  public CustomPropertyDefinition createDefinition(String id, String typeAsString, String name,
-      String defaultValueAsString) {
-    CustomPropertyDefinition stub = CustomPropertyManager.PropertyTypeEncoder.decodeTypeAndDefaultValue(typeAsString,
-        defaultValueAsString);
+  public CustomPropertyDefinition createDefinition(
+    String id, String typeAsString, String name,
+    String defaultValueAsString
+  ) {
+    CustomPropertyDefinition stub = CustomPropertyManager.PropertyTypeEncoder.decodeTypeAndDefaultValue(
+      typeAsString,
+      defaultValueAsString
+    );
     CustomColumn result = new CustomColumn(this, name, stub.getPropertyClass(), stub.getDefaultValue());
     result.setId(id);
     addNewCustomColumn(result);
@@ -70,8 +64,8 @@ public class CustomColumnsManager implements CustomPropertyManager {
   }
 
   @Override
-  public Map<CustomPropertyDefinition, CustomPropertyDefinition> importData(CustomPropertyManager source) {
-    return myStorage.importData(((CustomColumnsManager) source).myStorage);
+  public void deleteDefinition(CustomPropertyDefinition def) {
+    myStorage.removeCustomColumn(def);
   }
 
   @Override
@@ -80,8 +74,18 @@ public class CustomColumnsManager implements CustomPropertyManager {
   }
 
   @Override
-  public void deleteDefinition(CustomPropertyDefinition def) {
-    myStorage.removeCustomColumn(def);
+  public List<CustomPropertyDefinition> getDefinitions() {
+    return new ArrayList<CustomPropertyDefinition>(myStorage.getCustomColums());
+  }
+
+  @Override
+  public Map<CustomPropertyDefinition, CustomPropertyDefinition> importData(CustomPropertyManager source) {
+    return myStorage.importData(((CustomColumnsManager) source).myStorage);
+  }
+
+  @Override
+  public void reset() {
+    myStorage.reset();
   }
 
   void fireDefinitionChanged(int event, CustomPropertyDefinition def, CustomPropertyDefinition oldDef) {
@@ -92,8 +96,8 @@ public class CustomColumnsManager implements CustomPropertyManager {
     myStorage.fireDefinitionChanged(def, oldName);
   }
 
-  @Override
-  public void reset() {
-    myStorage.reset();
+  private void addNewCustomColumn(CustomColumn customColumn) {
+    assert customColumn != null;
+    myStorage.addCustomColumn(customColumn);
   }
 }

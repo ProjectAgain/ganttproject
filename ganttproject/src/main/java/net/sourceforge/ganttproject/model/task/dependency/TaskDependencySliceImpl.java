@@ -18,38 +18,24 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.dependency;
 
-import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
-
 import net.sourceforge.ganttproject.model.task.Task;
 
+import java.util.List;
+
 public class TaskDependencySliceImpl implements TaskDependencySlice {
+  private final TaskDependencyCollection myDependencyCollection;
+  private final Function<Task, TaskDependencySlice> myTargetDepSliceFxn;
   private final Task myTask;
 
-  private final TaskDependencyCollection myDependencyCollection;
-
-  private final Function<Task, TaskDependencySlice> myTargetDepSliceFxn;
-
-  public TaskDependencySliceImpl(Task task, TaskDependencyCollection dependencyCollection, Function<Task, TaskDependencySlice> getTargetSlice) {
+  public TaskDependencySliceImpl(
+    Task task, TaskDependencyCollection dependencyCollection, Function<Task, TaskDependencySlice> getTargetSlice
+  ) {
     myTask = task;
     myDependencyCollection = dependencyCollection;
     myTargetDepSliceFxn = getTargetSlice;
-  }
-
-  @Override
-  public TaskDependency[] toArray() {
-    return myDependencyCollection.getDependencies(myTask);
-  }
-
-  @Override
-  public TaskDependency getDependency(Task target) {
-    TaskDependencySlice targetDepSlice = myTargetDepSliceFxn.apply(target);
-    SetView<TaskDependency> intersection = Sets.intersection(Sets.newHashSet(toArray()), Sets.newHashSet(targetDepSlice.toArray()));
-    assert intersection.size() <= 1 : "Intersection of dependency sets between two tasks can't contain more than 1 dependency. But we get:" + intersection;
-    return intersection.isEmpty() ? null : intersection.iterator().next();
   }
 
   @Override
@@ -75,6 +61,17 @@ public class TaskDependencySliceImpl implements TaskDependencySlice {
   }
 
   @Override
+  public TaskDependency getDependency(Task target) {
+    TaskDependencySlice targetDepSlice = myTargetDepSliceFxn.apply(target);
+    SetView<TaskDependency> intersection =
+      Sets.intersection(Sets.newHashSet(toArray()), Sets.newHashSet(targetDepSlice.toArray()));
+    assert intersection.size() <= 1 :
+      "Intersection of dependency sets between two tasks can't contain more than 1 dependency. But we get:" +
+      intersection;
+    return intersection.isEmpty() ? null : intersection.iterator().next();
+  }
+
+  @Override
   public boolean hasLinks(List<Task> selection) {
     TaskDependency[] deps = toArray();
     for (int i = 0; i < deps.length; i++) {
@@ -85,11 +82,16 @@ public class TaskDependencySliceImpl implements TaskDependencySlice {
     return false;
   }
 
-  protected Task getTask() {
-    return myTask;
+  @Override
+  public TaskDependency[] toArray() {
+    return myDependencyCollection.getDependencies(myTask);
   }
 
   protected TaskDependencyCollection getDependencyCollection() {
     return myDependencyCollection;
+  }
+
+  protected Task getTask() {
+    return myTask;
   }
 }

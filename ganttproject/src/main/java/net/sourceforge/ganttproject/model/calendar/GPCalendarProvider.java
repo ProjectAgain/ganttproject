@@ -24,8 +24,6 @@ import net.projectagain.ganttplanner.app.App;
 import net.sourceforge.ganttproject.io.XmlParser;
 import net.sourceforge.ganttproject.parser.AbstractTagHandler;
 import net.sourceforge.ganttproject.parser.HolidayTagHandler;
-import net.sourceforge.ganttproject.parser.ParsingListener;
-import net.sourceforge.ganttproject.parser.TagHandler;
 import net.sourceforge.ganttproject.util.FileUtil;
 import org.slf4j.Logger;
 import org.springframework.core.io.Resource;
@@ -48,8 +46,6 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author dbarashev (Dmitry Barashev)
  */
 public class GPCalendarProvider {
-  private static final Logger log = getLogger(GPCalendarProvider.class);
-
   private static class CalendarTagHandler extends AbstractTagHandler {
     private final GPCalendarCalc myCalendar;
     private final HolidayTagHandler myHolidayHandler;
@@ -61,20 +57,35 @@ public class GPCalendarProvider {
     }
 
     @Override
+    protected void onEndElement() {
+      myHolidayHandler.onCalendarLoaded();
+    }
+
+    @Override
     protected boolean onStartElement(Attributes attrs) {
       myCalendar.setName(attrs.getValue("name"));
       myCalendar.setID(attrs.getValue("id"));
       myCalendar.setBaseCalendarID(attrs.getValue("base-id"));
       return true;
     }
-
-    @Override
-    protected void onEndElement() {
-      myHolidayHandler.onCalendarLoaded();
-    }
   }
 
+  private static final Logger log = getLogger(GPCalendarProvider.class);
   private static GPCalendarProvider ourInstance;
+  private final List<GPCalendar> myCalendars;
+
+  private GPCalendarProvider(List<GPCalendar> calendars) {
+    myCalendars = calendars;
+  }
+
+  public static synchronized GPCalendarProvider getInstance() {
+    if (ourInstance == null) {
+      List<GPCalendar> calendars = readCalendars();
+      Collections.sort(calendars, Comparator.comparing(GPCalendar::getName));
+      ourInstance = new GPCalendarProvider(calendars);
+    }
+    return ourInstance;
+  }
 
   private static GPCalendar readCalendar(File resource) {
     WeekendCalendarImpl calendar = new WeekendCalendarImpl();
@@ -82,8 +93,9 @@ public class GPCalendarProvider {
     HolidayTagHandler holidayHandler = new HolidayTagHandler(calendar);
     CalendarTagHandler calendarHandler = new CalendarTagHandler(calendar, holidayHandler);
     XmlParser parser = new XmlParser(
-        ImmutableList.<TagHandler>of(calendarHandler, holidayHandler),
-        ImmutableList.<ParsingListener>of());
+      ImmutableList.of(calendarHandler, holidayHandler),
+      ImmutableList.of()
+    );
     try {
       parser.parse(new BufferedInputStream(new FileInputStream(resource)));
       return calendar;
@@ -105,7 +117,7 @@ public class GPCalendarProvider {
       File dir = new File(resolved.getFile());
       if (dir.exists() && dir.isDirectory() && dir.canRead()) {
         List<GPCalendar> calendars = Lists.newArrayList();
-        for (File f : dir.listFiles()) {
+        for (File f: dir.listFiles()) {
           if ("calendar".equalsIgnoreCase(FileUtil.getExtension(f))) {
             try {
               GPCalendar calendar = readCalendar(f);
@@ -123,20 +135,6 @@ public class GPCalendarProvider {
       log.error("Exception", e);
     }
     return Collections.emptyList();
-  }
-
-  public static synchronized GPCalendarProvider getInstance() {
-    if (ourInstance == null) {
-      List<GPCalendar> calendars = readCalendars();
-      Collections.sort(calendars, Comparator.comparing(GPCalendar::getName));
-      ourInstance = new GPCalendarProvider(calendars);
-    }
-    return ourInstance;
-  }
-  private final List<GPCalendar> myCalendars;
-
-  private GPCalendarProvider(List<GPCalendar> calendars) {
-    myCalendars = calendars;
   }
 
   public List<GPCalendar> getCalendars() {

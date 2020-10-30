@@ -24,62 +24,62 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Created by IntelliJ IDEA. User: bard
  */
 public class TestTaskDependencyEvent extends TaskTestCase {
-    private static class TaskListenerImpl extends TaskListenerAdapter {
-        private boolean hasBeenCalled;
+  private static class TaskListenerImpl extends TaskListenerAdapter {
+    private boolean hasBeenCalled;
 
-        protected void setHasBeenCalled(boolean called) {
-            hasBeenCalled = called;
-        }
-
-        boolean hasBeenCalled() {
-            return hasBeenCalled;
-        }
+    protected void setHasBeenCalled(boolean called) {
+      hasBeenCalled = called;
     }
 
-    @Test
-    public void testDependencyEventIsSentOnDependencyCreation()
-        throws TaskDependencyException {
-        TaskManager taskManager = getTaskManager();
-        TaskListenerImpl listener = new TaskListenerImpl() {
-            @Override
-            public void dependencyAdded(TaskDependencyEvent e) {
-                setHasBeenCalled(true);
-            }
-        };
-        taskManager.addTaskListener(listener);
-        Task task1 = taskManager.createTask();
-        Task task2 = taskManager.createTask();
-        //
-        taskManager.getDependencyCollection().createDependency(task2, task1,
-                                                               new FinishStartConstraintImpl()
-        );
-        assertTrue(
-            listener.hasBeenCalled(),
-            "Listener is expected to be called when dependency is added"
-        );
+    boolean hasBeenCalled() {
+      return hasBeenCalled;
     }
+  }
 
-    @Test
-    public void testDependencyEventIsSentOnDependencyRemoval()
-        throws TaskDependencyException {
-        TaskManager taskManager = getTaskManager();
-        TaskListenerImpl listener = new TaskListenerImpl() {
-            @Override
-            public void dependencyRemoved(TaskDependencyEvent e) {
-                setHasBeenCalled(true);
-            }
-        };
-        taskManager.addTaskListener(listener);
-        Task task1 = taskManager.createTask();
-        Task task2 = taskManager.createTask();
-        //
-        TaskDependency dep = taskManager
-            .getDependencyCollection()
-            .createDependency(task2, task1, new FinishStartConstraintImpl());
-        dep.delete();
-        assertTrue(
-            listener.hasBeenCalled(),
-            "Listener is expected to be called when dependency is deleted"
-        );
-    }
+  @Test
+  public void testDependencyEventIsSentOnDependencyCreation()
+    throws TaskDependencyException {
+    TaskManager taskManager = getTaskManager();
+    TaskListenerImpl listener = new TaskListenerImpl() {
+      @Override
+      public void dependencyAdded(TaskDependencyEvent e) {
+        setHasBeenCalled(true);
+      }
+    };
+    taskManager.addTaskListener(listener);
+    Task task1 = taskManager.createTask();
+    Task task2 = taskManager.createTask();
+    //
+    taskManager.getDependencyCollection().createDependency(task2, task1,
+                                                           new FinishStartConstraintImpl()
+    );
+    assertTrue(
+      listener.hasBeenCalled(),
+      "Listener is expected to be called when dependency is added"
+    );
+  }
+
+  @Test
+  public void testDependencyEventIsSentOnDependencyRemoval()
+    throws TaskDependencyException {
+    TaskManager taskManager = getTaskManager();
+    TaskListenerImpl listener = new TaskListenerImpl() {
+      @Override
+      public void dependencyRemoved(TaskDependencyEvent e) {
+        setHasBeenCalled(true);
+      }
+    };
+    taskManager.addTaskListener(listener);
+    Task task1 = taskManager.createTask();
+    Task task2 = taskManager.createTask();
+    //
+    TaskDependency dep = taskManager
+      .getDependencyCollection()
+      .createDependency(task2, task1, new FinishStartConstraintImpl());
+    dep.delete();
+    assertTrue(
+      listener.hasBeenCalled(),
+      "Listener is expected to be called when dependency is deleted"
+    );
+  }
 }

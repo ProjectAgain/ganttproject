@@ -24,15 +24,15 @@ import net.sourceforge.ganttproject.model.resource.HumanResource;
  * @author bard
  */
 public interface ResourceAssignmentCollection extends MutableResourceAssignmentCollection {
-  ResourceAssignment[] getAssignments();
-
-  ResourceAssignment getAssignment(HumanResource resource);
+  void clear();
 
   ResourceAssignmentMutator createMutator();
 
-  HumanResource getCoordinator();
+  ResourceAssignment getAssignment(HumanResource resource);
 
-  void clear();
+  ResourceAssignment[] getAssignments();
+
+  HumanResource getCoordinator();
 }
 
 interface MutableResourceAssignmentCollection {

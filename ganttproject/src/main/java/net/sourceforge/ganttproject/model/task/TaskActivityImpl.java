@@ -3,26 +3,21 @@
  */
 package net.sourceforge.ganttproject.model.task;
 
-import java.util.Date;
-import java.util.List;
-
 import net.sourceforge.ganttproject.model.time.TimeDuration;
 
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author bard
  */
 class TaskActivityImpl implements TaskActivity {
 
-  private final Date myEndDate;
-
-  private final Date myStartDate;
-
   private final TimeDuration myDuration;
-
-  private float myIntensity;
-
+  private final Date myEndDate;
+  private final Date myStartDate;
   private final Task myTask;
+  private final float myIntensity;
 
   TaskActivityImpl(Task task, Date startDate, Date endDate) {
     this(task, startDate, endDate, 1.0f);
@@ -36,16 +31,12 @@ class TaskActivityImpl implements TaskActivity {
     myTask = task;
   }
 
-  public Date getStart() {
-    return myStartDate;
+  public TimeDuration getDuration() {
+    return myDuration;
   }
 
   public Date getEnd() {
     return myEndDate;
-  }
-
-  public TimeDuration getDuration() {
-    return myDuration;
   }
 
   @Override
@@ -53,13 +44,12 @@ class TaskActivityImpl implements TaskActivity {
     return myIntensity;
   }
 
-  @Override
-  public String toString() {
-    return myTask.toString() + "[" + getStart() + ", " + getEnd() + "]";
-  }
-
   public Task getOwner() {
     return myTask;
+  }
+
+  public Date getStart() {
+    return myStartDate;
   }
 
   @Override
@@ -71,5 +61,10 @@ class TaskActivityImpl implements TaskActivity {
   public boolean isLast() {
     List<TaskActivity> all = getOwner().getActivities();
     return this == all.get(all.size() - 1);
+  }
+
+  @Override
+  public String toString() {
+    return myTask.toString() + "[" + getStart() + ", " + getEnd() + "]";
   }
 }

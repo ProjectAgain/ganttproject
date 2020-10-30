@@ -18,22 +18,20 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.model.task.algorithm;
 
-import java.util.Collections;
-import java.util.List;
-
-import net.sourceforge.ganttproject.model.time.TimeDuration;
-
 import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.model.task.TaskManagerImpl;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ShiftTaskTreeAlgorithm {
   public static final boolean DEEP = true;
 
   public static final boolean SHALLOW = false;
-
-  private final TaskManagerImpl myTaskManager;
   private final RecalculateTaskScheduleAlgorithm myRescheduleAlgorithm;
+  private final TaskManagerImpl myTaskManager;
 
   public ShiftTaskTreeAlgorithm(TaskManagerImpl taskManager, RecalculateTaskScheduleAlgorithm rescheduleAlgorithm) {
     myTaskManager = taskManager;
@@ -43,7 +41,7 @@ public class ShiftTaskTreeAlgorithm {
   public void run(List<Task> tasks, TimeDuration shift, boolean deep) throws AlgorithmException {
     myTaskManager.setEventsEnabled(false);
     try {
-      for (Task t : tasks) {
+      for (Task t: tasks) {
         shiftTask(t, shift, deep);
       }
       try {

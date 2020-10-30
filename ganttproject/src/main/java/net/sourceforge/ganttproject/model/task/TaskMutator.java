@@ -24,17 +24,16 @@ import net.sourceforge.ganttproject.model.time.GanttCalendar;
  * @author bard Date: 27.01.2004
  */
 public interface TaskMutator extends MutableTask {
-  int READ_UNCOMMITED = 0;
-
   int READ_COMMITED = 1;
-
-  void setIsolationLevel(int level);
+  int READ_UNCOMMITED = 0;
 
   void commit();
 
-  void shift(float unitCount);
-
   int getCompletionPercentage();
 
+  void setIsolationLevel(int level);
+
   void setThird(GanttCalendar third, int thirdDateConstraint);
+
+  void shift(float unitCount);
 }

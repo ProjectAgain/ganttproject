@@ -29,54 +29,54 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author dbarashev (Dmitry Barashev)
  */
 public class RoleSetTest {
-    private RoleManagerImpl myRoleManager;
+  private RoleManagerImpl myRoleManager;
 
-    @Test
-    public void testAutoIdsAreUnique() {
-        RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
-        roleSet.createRole("role1", 1);
-        Role role2 = roleSet.createRole("role2", 2);
-        roleSet.createRole("role3", 3);
-        roleSet.deleteRole(role2);
+  @Test
+  public void testAutoIdsAreUnique() {
+    RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
+    roleSet.createRole("role1", 1);
+    Role role2 = roleSet.createRole("role2", 2);
+    roleSet.createRole("role3", 3);
+    roleSet.deleteRole(role2);
 
-        Role role4 = roleSet.createRole("role4");
-        assertEquals(4, role4.getID());
-    }
+    Role role4 = roleSet.createRole("role4");
+    assertEquals(4, role4.getID());
+  }
 
-    @Test
-    public void testCreateRole() {
-        RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
-        roleSet.createRole("role1");
-        assertFalse(roleSet.isEmpty());
-        assertEquals(1, roleSet.getRoles().length);
-        assertEquals("role1", roleSet.getRoles()[0].getName());
-        assertEquals("test:1", roleSet.getRoles()[0].getPersistentID());
+  @Test
+  public void testCreateRole() {
+    RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
+    roleSet.createRole("role1");
+    assertFalse(roleSet.isEmpty());
+    assertEquals(1, roleSet.getRoles().length);
+    assertEquals("role1", roleSet.getRoles()[0].getName());
+    assertEquals("test:1", roleSet.getRoles()[0].getPersistentID());
 
-        roleSet.createRole("role2", 5);
-        assertEquals(2, roleSet.getRoles().length);
-        assertEquals("role2", roleSet.getRoles()[1].getName());
-        assertEquals(5, roleSet.getRoles()[1].getID());
-        assertEquals("test:5", roleSet.getRoles()[1].getPersistentID());
-    }
+    roleSet.createRole("role2", 5);
+    assertEquals(2, roleSet.getRoles().length);
+    assertEquals("role2", roleSet.getRoles()[1].getName());
+    assertEquals(5, roleSet.getRoles()[1].getID());
+    assertEquals("test:5", roleSet.getRoles()[1].getPersistentID());
+  }
 
-    @Test
-    public void testDeleteRole() {
-        RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
-        Role role = roleSet.createRole("role1");
-        roleSet.deleteRole(role);
-        assertTrue(roleSet.isEmpty());
-        assertEquals(0, roleSet.getRoles().length);
-    }
+  @Test
+  public void testDeleteRole() {
+    RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
+    Role role = roleSet.createRole("role1");
+    roleSet.deleteRole(role);
+    assertTrue(roleSet.isEmpty());
+    assertEquals(0, roleSet.getRoles().length);
+  }
 
-    @Test
-    public void testEmpty() {
-        RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
-        assertTrue(roleSet.isEmpty());
-        assertEquals(0, roleSet.getRoles().length);
-    }
+  @Test
+  public void testEmpty() {
+    RoleSet roleSet = new RoleSetImpl("test", myRoleManager);
+    assertTrue(roleSet.isEmpty());
+    assertEquals(0, roleSet.getRoles().length);
+  }
 
-    @BeforeEach
-    protected void setUp() throws Exception {
-        myRoleManager = new RoleManagerImpl();
-    }
+  @BeforeEach
+  protected void setUp() throws Exception {
+    myRoleManager = new RoleManagerImpl();
+  }
 }

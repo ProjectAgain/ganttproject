@@ -39,62 +39,62 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dbarashev (Dmitry Barashev)
  */
 public class TestTaskHierarchy extends TaskTestCase {
-    @Test
-    public void testBreadthFirstSearch() {
-        Task task1 = getTaskManager().createTask();
-        Task task2 = getTaskManager().createTask();
-        Task task3 = getTaskManager().createTask();
-        Task task4 = getTaskManager().createTask();
-        Task task5 = getTaskManager().createTask();
-        final Task task6 = getTaskManager().createTask();
-        Task task7 = getTaskManager().createTask();
+  @Test
+  public void testBreadthFirstSearch() {
+    Task task1 = getTaskManager().createTask();
+    Task task2 = getTaskManager().createTask();
+    Task task3 = getTaskManager().createTask();
+    Task task4 = getTaskManager().createTask();
+    Task task5 = getTaskManager().createTask();
+    final Task task6 = getTaskManager().createTask();
+    Task task7 = getTaskManager().createTask();
 
-        task6.move(task7);
-        task5.move(task7);
-        task4.move(task6);
-        task3.move(task6);
-        task2.move(task5);
-        task1.move(task5);
+    task6.move(task7);
+    task5.move(task7);
+    task4.move(task6);
+    task3.move(task6);
+    task2.move(task5);
+    task1.move(task5);
 
-        assertEquals(
-            ImmutableList.of(task7, task6, task5, task4, task3, task2, task1),
-            getTaskManager().getTaskHierarchy().breadthFirstSearch(null, false)
-        );
-        assertEquals(
-            ImmutableList.of(task6, task4, task3),
-            getTaskManager().getTaskHierarchy().breadthFirstSearch(task6, true)
-        );
-        assertEquals(
-            ImmutableList.of(task2, task1),
-            getTaskManager().getTaskHierarchy().breadthFirstSearch(task5, false)
-        );
+    assertEquals(
+      ImmutableList.of(task7, task6, task5, task4, task3, task2, task1),
+      getTaskManager().getTaskHierarchy().breadthFirstSearch(null, false)
+    );
+    assertEquals(
+      ImmutableList.of(task6, task4, task3),
+      getTaskManager().getTaskHierarchy().breadthFirstSearch(task6, true)
+    );
+    assertEquals(
+      ImmutableList.of(task2, task1),
+      getTaskManager().getTaskHierarchy().breadthFirstSearch(task5, false)
+    );
 
-        final List<Task> filteredBfs = Lists.newArrayList();
-        getTaskManager().getTaskHierarchy()
-                        .breadthFirstSearch(getTaskManager().getRootTask(), new Predicate<Pair<Task, Task>>() {
-                            @Override
-                            public boolean apply(Pair<Task, Task> parent_child) {
-                                filteredBfs.add(parent_child.second());
-                                return parent_child.second() != task6;
-                            }
-                        });
-        assertEquals(ImmutableList.of(getTaskManager().getRootTask(), task7, task6, task5, task2, task1), filteredBfs);
-    }
+    final List<Task> filteredBfs = Lists.newArrayList();
+    getTaskManager().getTaskHierarchy()
+                    .breadthFirstSearch(getTaskManager().getRootTask(), new Predicate<Pair<Task, Task>>() {
+                      @Override
+                      public boolean apply(Pair<Task, Task> parent_child) {
+                        filteredBfs.add(parent_child.second());
+                        return parent_child.second() != task6;
+                      }
+                    });
+    assertEquals(ImmutableList.of(getTaskManager().getRootTask(), task7, task6, task5, task2, task1), filteredBfs);
+  }
 
-    @Test
-    public void testCreateSimpleHierarchy() {
-        Task task1 = getTaskManager().createTask();
-        Task task2 = getTaskManager().createTask();
-        task2.move(task1);
-        assertEquals(
-            task1,
-            task2.getSupertask(),
-            "Unexpected supertask of task=" + task2
-        );
-        assertEquals(
-            Arrays.asList(task2),
-            Arrays.asList(task1.getNestedTasks()),
-            "Unexpected nested tasks of task=" + task1
-        );
-    }
+  @Test
+  public void testCreateSimpleHierarchy() {
+    Task task1 = getTaskManager().createTask();
+    Task task2 = getTaskManager().createTask();
+    task2.move(task1);
+    assertEquals(
+      task1,
+      task2.getSupertask(),
+      "Unexpected supertask of task=" + task2
+    );
+    assertEquals(
+      Arrays.asList(task2),
+      Arrays.asList(task1.getNestedTasks()),
+      "Unexpected nested tasks of task=" + task1
+    );
+  }
 }

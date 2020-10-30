@@ -18,13 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.document;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.common.collect.Lists;
+
+import java.util.*;
 
 /**
  * List of Documents MRU (<b>M</b>ost <b>R</b>ecently <b>U</b>sed)
@@ -33,15 +29,13 @@ import com.google.common.collect.Lists;
  */
 public class DocumentsMRU {
 
-  private int maxSize;
-
-  private List<String> documents;
-
-  private final ArrayList<DocumentMRUListener> myListeners = new ArrayList<DocumentMRUListener>();
-
   interface Listener {
     void MRUChanged();
   }
+
+  private final ArrayList<DocumentMRUListener> myListeners = new ArrayList<DocumentMRUListener>();
+  private final List<String> documents;
+  private final int maxSize;
 
   public DocumentsMRU(int maxSize) {
     assert maxSize > 0 : "maxSize must be larger than zero (" + maxSize + ")";
@@ -53,8 +47,8 @@ public class DocumentsMRU {
    * Adds a Document at the top of the list of Documents MRU. If the list is
    * already full, an old entry is removed, to make place for this new document.
    *
-   * @param document
-   *          the Document that should be added
+   * @param document the Document that should be added
+   *
    * @return true when the list has changed through the addition
    */
   public boolean add(String document, boolean toHead) {
@@ -65,8 +59,9 @@ public class DocumentsMRU {
     int i = documents.indexOf(document);
     // if the document is already on the top,
     // nothing needs to change.
-    if (0 == i)
+    if (0 == i) {
       return false;
+    }
 
     if (0 < i) {
       documents.remove(i);
@@ -76,24 +71,13 @@ public class DocumentsMRU {
       }
     }
     if (toHead) {
-    	documents.add(0, document);
+      documents.add(0, document);
     } else {
-    	documents.add(document);
+      documents.add(document);
     }
     fireMRUListChanged();
 
     return true;
-  }
-
-  /** clears the list of Documents MRU */
-  public void clear() {
-    documents.clear();
-    fireMRUListChanged();
-  }
-
-  /** @return an Iterator over the entries of the list of Documents MRU */
-  public Iterator<String> iterator() {
-    return documents.iterator();
   }
 
   public void addListener(DocumentMRUListener listener) {
@@ -101,6 +85,21 @@ public class DocumentsMRU {
     // Fire event for listener to give it a possibility on getting access to the
     // current MRU list
     listener.mruListChanged(Collections.unmodifiableCollection(documents));
+  }
+
+  /**
+   * clears the list of Documents MRU
+   */
+  public void clear() {
+    documents.clear();
+    fireMRUListChanged();
+  }
+
+  /**
+   * @return an Iterator over the entries of the list of Documents MRU
+   */
+  public Iterator<String> iterator() {
+    return documents.iterator();
   }
 
   private void fireMRUListChanged() {

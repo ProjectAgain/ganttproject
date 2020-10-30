@@ -3,7 +3,7 @@ package net.sourceforge.ganttproject.model.calendar;
 import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
 
 public class ImportCalendarOption extends DefaultEnumerationOption<ImportCalendarOption.Values> {
-  public static enum Values {
+  public enum Values {
     NO, REPLACE, MERGE;
 
     @Override

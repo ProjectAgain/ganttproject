@@ -21,5 +21,5 @@ package net.sourceforge.ganttproject.model.resource;
 import net.sourceforge.ganttproject.model.task.ResourceAssignment;
 
 public interface AssignmentContext {
-  public ResourceAssignment[] getResourceAssignments();
+  ResourceAssignment[] getResourceAssignments();
 }

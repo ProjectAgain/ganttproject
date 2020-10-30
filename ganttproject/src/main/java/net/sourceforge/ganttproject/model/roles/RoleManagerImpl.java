@@ -18,26 +18,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.model.roles;
 
+import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.language.GanttLanguage.Event;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.language.GanttLanguage.Event;
-
 /**
  * @author athomas
  */
 public class RoleManagerImpl implements RoleManager {
-  private final List<Listener> myListeners = new ArrayList<Listener>();
-
-  private final RoleSetImpl myProjectRoleSet = new RoleSetImpl(null, this);
-
-  private final ArrayList<RoleSet> myRoleSets = new ArrayList<RoleSet>();
-
-  private final RoleSetImpl SOFTWARE_DEVELOPMENT_ROLE_SET;
   private final RoleSetImpl DEFAULT_ROLE_SET;
+  private final RoleSetImpl SOFTWARE_DEVELOPMENT_ROLE_SET;
+  private final List<Listener> myListeners = new ArrayList<Listener>();
+  private final RoleSetImpl myProjectRoleSet = new RoleSetImpl(null, this);
+  private final ArrayList<RoleSet> myRoleSets = new ArrayList<RoleSet>();
 
   public RoleManagerImpl() {
     DEFAULT_ROLE_SET = new RoleSetImpl(RoleSet.DEFAULT, this);
@@ -58,6 +55,11 @@ public class RoleManagerImpl implements RoleManager {
   }
 
   @Override
+  public void addRoleListener(Listener listener) {
+    myListeners.add(listener);
+  }
+
+  @Override
   public void clear() {
     myProjectRoleSet.clear();
     for (int i = 0; i < myRoleSets.size(); i++) {
@@ -70,16 +72,6 @@ public class RoleManagerImpl implements RoleManager {
   }
 
   @Override
-  public Role[] getProjectLevelRoles() {
-    return myProjectRoleSet.getRoles();
-  }
-
-  @Override
-  public RoleSet[] getRoleSets() {
-    return myRoleSets.toArray(new RoleSet[0]);
-  }
-
-  @Override
   public RoleSet createRoleSet(String name) {
     RoleSet result = new RoleSetImpl(name, this);
     myRoleSets.add(result);
@@ -89,21 +81,8 @@ public class RoleManagerImpl implements RoleManager {
   }
 
   @Override
-  public RoleSet getProjectRoleSet() {
-    return myProjectRoleSet;
-  }
-
-  @Override
-  public RoleSet getRoleSet(String rolesetName) {
-    RoleSet result = null;
-    RoleSet[] roleSets = getRoleSets();
-    for (int i = 0; i < roleSets.length; i++) {
-      if (roleSets[i].getName().equals(rolesetName)) {
-        result = roleSets[i];
-        break;
-      }
-    }
-    return result;
+  public Role getDefaultRole() {
+    return DEFAULT_ROLE_SET.findRole(0);
   }
 
   @Override
@@ -120,8 +99,13 @@ public class RoleManagerImpl implements RoleManager {
   }
 
   @Override
-  public Role getDefaultRole() {
-    return DEFAULT_ROLE_SET.findRole(0);
+  public Role[] getProjectLevelRoles() {
+    return myProjectRoleSet.getRoles();
+  }
+
+  @Override
+  public RoleSet getProjectRoleSet() {
+    return myProjectRoleSet;
   }
 
   @Override
@@ -133,6 +117,24 @@ public class RoleManagerImpl implements RoleManager {
       }
     }
     return null;
+  }
+
+  @Override
+  public RoleSet getRoleSet(String rolesetName) {
+    RoleSet result = null;
+    RoleSet[] roleSets = getRoleSets();
+    for (int i = 0; i < roleSets.length; i++) {
+      if (roleSets[i].getName().equals(rolesetName)) {
+        result = roleSets[i];
+        break;
+      }
+    }
+    return result;
+  }
+
+  @Override
+  public RoleSet[] getRoleSets() {
+    return myRoleSets.toArray(new RoleSet[0]);
   }
 
   @Override
@@ -154,11 +156,6 @@ public class RoleManagerImpl implements RoleManager {
   }
 
   @Override
-  public void addRoleListener(Listener listener) {
-    myListeners.add(listener);
-  }
-
-  @Override
   public void removeRoleListener(Listener listener) {
     myListeners.remove(listener);
   }
@@ -169,6 +166,22 @@ public class RoleManagerImpl implements RoleManager {
       Listener next = myListeners.get(i);
       next.rolesChanged(event);
     }
+  }
+
+  private void changeRoleSet() {
+    GanttLanguage language = GanttLanguage.getInstance();
+
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resDeveloper"), 2);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resDocWriter"), 3);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resTester"), 4);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resGraphicDesigner"), 5);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resDocTranslator"), 6);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resPackager"), 7);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resAnalysis"), 8);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resWebDesigner"), 9);
+    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resNoSpecificRole"), 10);
+    DEFAULT_ROLE_SET.changeRole(language.getText("resUndefined"), 0);
+    DEFAULT_ROLE_SET.changeRole(language.getText("resProjectManager"), 1);
   }
 
   private void createRoleSet() {
@@ -188,21 +201,5 @@ public class RoleManagerImpl implements RoleManager {
     DEFAULT_ROLE_SET.createRole(language.getText("resUndefined"), 0);
     DEFAULT_ROLE_SET.createRole(language.getText("resProjectManager"), 1);
     DEFAULT_ROLE_SET.setEnabled(true);
-  }
-
-  private void changeRoleSet() {
-    GanttLanguage language = GanttLanguage.getInstance();
-
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resDeveloper"), 2);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resDocWriter"), 3);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resTester"), 4);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resGraphicDesigner"), 5);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resDocTranslator"), 6);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resPackager"), 7);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resAnalysis"), 8);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resWebDesigner"), 9);
-    SOFTWARE_DEVELOPMENT_ROLE_SET.changeRole(language.getText("resNoSpecificRole"), 10);
-    DEFAULT_ROLE_SET.changeRole(language.getText("resUndefined"), 0);
-    DEFAULT_ROLE_SET.changeRole(language.getText("resProjectManager"), 1);
   }
 }

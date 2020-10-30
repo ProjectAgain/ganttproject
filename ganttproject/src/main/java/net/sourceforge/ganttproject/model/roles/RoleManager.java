@@ -25,49 +25,16 @@ import java.util.EventObject;
  * @author athomas
  */
 public interface RoleManager {
-  public RoleSet createRoleSet(String name);
+  class Access {
+    private static final RoleManager ourInstance = new RoleManagerImpl();
 
-  public RoleSet[] getRoleSets();
-
-  /** Clear the role list */
-  public void clear();
-
-  /** Return all roles except the default roles */
-  // public String [] getRolesShort();
-  public Role[] getProjectLevelRoles();
-
-  public class Access {
     public static RoleManager getInstance() {
       return ourInstance;
     }
-
-    private static RoleManager ourInstance = new RoleManagerImpl();
   }
 
-  public static int DEFAULT_ROLES_NUMBER = 11;
-
-  public RoleSet getProjectRoleSet();
-
-  public RoleSet getRoleSet(String rolesetName);
-
-  public Role[] getEnabledRoles();
-
-  public Role getDefaultRole();
-
-  public Role getRole(String persistentID);
-
-  public void importData(RoleManager roleManager);
-
-  public void addRoleListener(Listener listener);
-
-  public void removeRoleListener(Listener listener);
-
-  public interface Listener extends EventListener {
-    public void rolesChanged(RoleEvent e);
-  }
-
-  public class RoleEvent extends EventObject {
-    private RoleSet myChangedRoleSet;
+  class RoleEvent extends EventObject {
+    private final RoleSet myChangedRoleSet;
 
     public RoleEvent(RoleManager source, RoleSet changedRoleSet) {
       super(source);
@@ -78,4 +45,40 @@ public interface RoleManager {
       return myChangedRoleSet;
     }
   }
+
+  interface Listener extends EventListener {
+    void rolesChanged(RoleEvent e);
+  }
+  int DEFAULT_ROLES_NUMBER = 11;
+
+  void addRoleListener(Listener listener);
+
+  /**
+   * Clear the role list
+   */
+  void clear();
+
+  RoleSet createRoleSet(String name);
+
+  Role getDefaultRole();
+
+  Role[] getEnabledRoles();
+
+  /**
+   * Return all roles except the default roles
+   */
+  // public String [] getRolesShort();
+  Role[] getProjectLevelRoles();
+
+  RoleSet getProjectRoleSet();
+
+  Role getRole(String persistentID);
+
+  RoleSet getRoleSet(String rolesetName);
+
+  RoleSet[] getRoleSets();
+
+  void importData(RoleManager roleManager);
+
+  void removeRoleListener(Listener listener);
 }

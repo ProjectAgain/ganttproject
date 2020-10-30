@@ -25,14 +25,13 @@ public interface ResourceView {
   /**
    * This method is called whenever new resource appears in the resource manager
    *
-   * @param event
-   *          Resource event object
+   * @param event Resource event object
    */
-  public void resourceAdded(ResourceEvent event);
+  void resourceAdded(ResourceEvent event);
 
-  public void resourcesRemoved(ResourceEvent event);
+  void resourceAssignmentsChanged(ResourceEvent e);
 
-  public void resourceChanged(ResourceEvent e);
+  void resourceChanged(ResourceEvent e);
 
-  public void resourceAssignmentsChanged(ResourceEvent e);
+  void resourcesRemoved(ResourceEvent event);
 }

@@ -21,15 +21,14 @@ package net.sourceforge.ganttproject.model.task.hierarchy;
 import net.sourceforge.ganttproject.model.task.Task;
 
 public class TaskHierarchyManagerImpl {
-  private TaskHierarchyItem myRootItem = new TaskHierarchyItem(null, null);
-
-  public TaskHierarchyItem getRootItem() {
-    return myRootItem;
-  }
+  private final TaskHierarchyItem myRootItem = new TaskHierarchyItem(null, null);
 
   public TaskHierarchyItem createItem(Task task) {
     TaskHierarchyItem result = new TaskHierarchyItem(task, myRootItem);
     return result;
   }
 
+  public TaskHierarchyItem getRootItem() {
+    return myRootItem;
+  }
 }

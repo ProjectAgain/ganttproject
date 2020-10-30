@@ -20,7 +20,6 @@ package net.sourceforge.ganttproject.model.time;
 
 import com.google.common.base.Objects;
 
-
 /**
  * @author bard
  */
@@ -44,8 +43,12 @@ public class TimeDurationImpl implements TimeDuration {
   }
 
   @Override
-  public float getValue() {
-    return myCount;
+  public boolean equals(Object obj) {
+    if (obj instanceof TimeDurationImpl == false) {
+      return false;
+    }
+    TimeDurationImpl that = (TimeDurationImpl) obj;
+    return myCount == that.myCount && myUnit.equals(that.myUnit);
   }
 
   @Override
@@ -54,8 +57,35 @@ public class TimeDurationImpl implements TimeDuration {
   }
 
   @Override
+  public float getLength(TimeUnit unit) {
+    if (myUnit.isConstructedFrom(unit)) {
+      return myCount * myUnit.getAtomCount(unit);
+    } else if (unit.isConstructedFrom(myUnit)) {
+      return myCount / unit.getAtomCount(myUnit);
+    } else if (!unit.equals(myUnit)) {
+      throw new IllegalArgumentException("Can't convert unit=" + unit + " to my unit=" + myUnit);
+    }
+    return myCount;
+  }
+
+  @Override
   public TimeUnit getTimeUnit() {
     return myUnit;
+  }
+
+  @Override
+  public float getValue() {
+    return myCount;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(myCount, myUnit);
+  }
+
+  @Override
+  public TimeDuration reverse() {
+    return new TimeDurationImpl(getTimeUnit(), -getLength());
   }
 
   public void setLength(TimeUnit unit, long length) {
@@ -66,20 +96,8 @@ public class TimeDurationImpl implements TimeDuration {
   }
 
   @Override
-  public float getLength(TimeUnit unit) {
-    if (myUnit.isConstructedFrom(unit)) {
-      return (float) myCount * myUnit.getAtomCount(unit);
-    } else if (unit.isConstructedFrom(myUnit)) {
-      return (float) myCount / unit.getAtomCount(myUnit);
-    } else if (!unit.equals(myUnit)) {
-      throw new IllegalArgumentException("Can't convert unit=" + unit + " to my unit=" + myUnit);
-    }
-    return myCount;
-  }
-
-  @Override
-  public TimeDuration reverse() {
-    return new TimeDurationImpl(getTimeUnit(), -getLength());
+  public String toString() {
+    return "" + myCount + " " + myUnit.getName();
   }
 
   @Override
@@ -87,25 +105,4 @@ public class TimeDurationImpl implements TimeDuration {
     float translatedLength = getLength(toUnit);
     return new TimeDurationImpl(toUnit, translatedLength);
   }
-
-  @Override
-  public String toString() {
-    return "" + myCount + " " + myUnit.getName();
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(myCount, myUnit);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof TimeDurationImpl == false) {
-      return false;
-    }
-    TimeDurationImpl that = (TimeDurationImpl) obj;
-    return myCount == that.myCount && myUnit.equals(that.myUnit);
-  }
-
-
 }

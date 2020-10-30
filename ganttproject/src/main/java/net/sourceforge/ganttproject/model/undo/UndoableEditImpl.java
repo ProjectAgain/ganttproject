@@ -35,14 +35,10 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 class UndoableEditImpl extends AbstractUndoableEdit {
   private final Logger log = getLogger(getClass());
-
-  private String myPresentationName;
-
-  private Document myDocumentBefore;
-
-  private Document myDocumentAfter;
-
-  private UndoManagerImpl myManager;
+  private final Document myDocumentAfter;
+  private final Document myDocumentBefore;
+  private final UndoManagerImpl myManager;
+  private final String myPresentationName;
 
   UndoableEditImpl(String localizedName, Runnable editImpl, UndoManagerImpl manager) throws IOException {
     myManager = manager;
@@ -52,10 +48,9 @@ class UndoableEditImpl extends AbstractUndoableEdit {
     myDocumentAfter = saveFile();
   }
 
-  private Document saveFile() throws IOException {
-    Document doc = myManager.getDocumentManager().newAutosaveDocument();
-    doc.write();
-    return doc;
+  @Override
+  public boolean canRedo() {
+    return myDocumentAfter.canRead();
   }
 
   @Override
@@ -64,8 +59,8 @@ class UndoableEditImpl extends AbstractUndoableEdit {
   }
 
   @Override
-  public boolean canRedo() {
-    return myDocumentAfter.canRead();
+  public String getPresentationName() {
+    return myPresentationName;
   }
 
   @Override
@@ -105,12 +100,12 @@ class UndoableEditImpl extends AbstractUndoableEdit {
       algs.getScheduler().setEnabled(true);
     }
     myManager.getProject().setDocument(projectDocument);
-
   }
 
-  @Override
-  public String getPresentationName() {
-    return myPresentationName;
+  private Document saveFile() throws IOException {
+    Document doc = myManager.getDocumentManager().newAutosaveDocument();
+    doc.write();
+    return doc;
   }
 
   private void undoRedoExceptionHandler(Exception e) {

@@ -35,51 +35,51 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author dbarashev
  */
 public class TestFinishFinishDependency extends TaskTestCase {
-    @Test
-    public void testDependencyWithLag() throws Exception {
-        getTaskManager().getAlgorithmCollection().getScheduler().setEnabled(false);
-        Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-        Task successor = createTask(TestSetupHelper.newFriday(), 2);
-        TaskDependency dep = createDependency(successor, predecessor);
-        dep.setDifference(2);
+  @Test
+  public void testDependencyWithLag() throws Exception {
+    getTaskManager().getAlgorithmCollection().getScheduler().setEnabled(false);
+    Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+    Task successor = createTask(TestSetupHelper.newFriday(), 2);
+    TaskDependency dep = createDependency(successor, predecessor);
+    dep.setDifference(2);
 
-        FinishFinishConstraintImpl constraint = new FinishFinishConstraintImpl();
-        constraint.setTaskDependency(dep);
-        Collision collision = constraint.getCollision();
-        assertTrue(collision.isActive());
-        assertEquals(TestSetupHelper.newWednesday(), collision.getAcceptableStart());
-        assertEquals(Collision.START_LATER_VARIATION, collision.getVariation());
-    }
+    FinishFinishConstraintImpl constraint = new FinishFinishConstraintImpl();
+    constraint.setTaskDependency(dep);
+    Collision collision = constraint.getCollision();
+    assertTrue(collision.isActive());
+    assertEquals(TestSetupHelper.newWednesday(), collision.getAcceptableStart());
+    assertEquals(Collision.START_LATER_VARIATION, collision.getVariation());
+  }
 
-    @Test
-    public void testDependencyWithLagCrossingWeekend() throws Exception {
-        setTaskManager(TestSetupHelper.newTaskManagerBuilder().withCalendar(new WeekendCalendarImpl()).build());
-        getTaskManager().getAlgorithmCollection().getScheduler().setEnabled(false);
-        Task predecessor = createTask(TestSetupHelper.newFriday(), 1);
-        Task successor = createTask(TestSetupHelper.newFriday(), 1);
-        TaskDependency dep = createDependency(successor, predecessor);
-        dep.setDifference(2);
+  @Test
+  public void testDependencyWithLagCrossingWeekend() throws Exception {
+    setTaskManager(TestSetupHelper.newTaskManagerBuilder().withCalendar(new WeekendCalendarImpl()).build());
+    getTaskManager().getAlgorithmCollection().getScheduler().setEnabled(false);
+    Task predecessor = createTask(TestSetupHelper.newFriday(), 1);
+    Task successor = createTask(TestSetupHelper.newFriday(), 1);
+    TaskDependency dep = createDependency(successor, predecessor);
+    dep.setDifference(2);
 
-        FinishFinishConstraintImpl constraint = new FinishFinishConstraintImpl();
-        constraint.setTaskDependency(dep);
-        Collision collision = constraint.getCollision();
-        assertTrue(collision.isActive());
-        assertEquals(TestSetupHelper.newTuesday(), collision.getAcceptableStart());
-        assertEquals(Collision.START_LATER_VARIATION, collision.getVariation());
-    }
+    FinishFinishConstraintImpl constraint = new FinishFinishConstraintImpl();
+    constraint.setTaskDependency(dep);
+    Collision collision = constraint.getCollision();
+    assertTrue(collision.isActive());
+    assertEquals(TestSetupHelper.newTuesday(), collision.getAcceptableStart());
+    assertEquals(Collision.START_LATER_VARIATION, collision.getVariation());
+  }
 
-    @Test
-    public void testNoLagDependency() throws Exception {
-        getTaskManager().getAlgorithmCollection().getScheduler().setEnabled(false);
-        Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
-        Task successor = createTask(TestSetupHelper.newFriday(), 2);
-        TaskDependency dep = getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
+  @Test
+  public void testNoLagDependency() throws Exception {
+    getTaskManager().getAlgorithmCollection().getScheduler().setEnabled(false);
+    Task predecessor = createTask(TestSetupHelper.newTuesday(), 1);
+    Task successor = createTask(TestSetupHelper.newFriday(), 2);
+    TaskDependency dep = getTaskManager().getDependencyCollection().createDependency(successor, predecessor);
 
-        FinishFinishConstraintImpl constraint = new FinishFinishConstraintImpl();
-        constraint.setTaskDependency(dep);
-        Collision collision = constraint.getCollision();
-        assertTrue(collision.isActive());
-        assertEquals(TestSetupHelper.newMonday(), collision.getAcceptableStart());
-        assertEquals(Collision.START_LATER_VARIATION, collision.getVariation());
-    }
+    FinishFinishConstraintImpl constraint = new FinishFinishConstraintImpl();
+    constraint.setTaskDependency(dep);
+    Collision collision = constraint.getCollision();
+    assertTrue(collision.isActive());
+    assertEquals(TestSetupHelper.newMonday(), collision.getAcceptableStart());
+    assertEquals(Collision.START_LATER_VARIATION, collision.getVariation());
+  }
 }

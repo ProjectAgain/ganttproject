@@ -11,10 +11,10 @@
 package net.sourceforge.ganttproject.model.task;
 
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
 import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 import net.sourceforge.ganttproject.ui.gui.NotificationManager;
-import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
 
 import java.awt.*;
 import java.net.URL;
@@ -23,17 +23,17 @@ import java.net.URL;
  * Created by IntelliJ IDEA. User: bard
  */
 public interface TaskManagerConfig {
+  GPCalendarCalc getCalendar();
+
   Color getDefaultColor();
 
   ColorOption getDefaultColorOption();
 
-  GPCalendarCalc getCalendar();
-
-  TimeUnitStack getTimeUnitStack();
-
-  HumanResourceManager getResourceManager();
+  NotificationManager getNotificationManager();
 
   URL getProjectDocumentURL();
 
-  NotificationManager getNotificationManager();
+  HumanResourceManager getResourceManager();
+
+  TimeUnitStack getTimeUnitStack();
 }

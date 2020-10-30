@@ -10,10 +10,10 @@
  */
 package net.sourceforge.ganttproject.model.task.event;
 
-import java.util.EventObject;
-
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyCollection;
+
+import java.util.EventObject;
 
 /**
  * Created by IntelliJ IDEA. User: bard

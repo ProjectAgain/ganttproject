@@ -28,47 +28,47 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestStartFinishDepedency extends TaskTestCase {
-    @Test
-    public void testFinishStartDependencyWithLag() throws Exception {
-        Task t1 = createTask();
-        Task t2 = createTask();
+  @Test
+  public void testFinishStartDependencyWithLag() throws Exception {
+    Task t1 = createTask();
+    Task t2 = createTask();
 
-        GanttCalendar dependeeStart = TestSetupHelper.newFriday();
-        t1.setStart(dependeeStart);
-        TaskDependency dep = createDependency(t2, t1);
-        dep.setDifference(3);
-        dep.setConstraint(new StartFinishConstraintImpl());
+    GanttCalendar dependeeStart = TestSetupHelper.newFriday();
+    t1.setStart(dependeeStart);
+    TaskDependency dep = createDependency(t2, t1);
+    dep.setDifference(3);
+    dep.setConstraint(new StartFinishConstraintImpl());
 
-        assertEquals(TestSetupHelper.newMonday(), t2.getEnd());
-    }
+    assertEquals(TestSetupHelper.newMonday(), t2.getEnd());
+  }
 
-    @Test
-    public void testSFChain() throws Exception {
-        Task t1 = createTask();
-        Task t2 = createTask();
-        Task t3 = createTask();
+  @Test
+  public void testSFChain() throws Exception {
+    Task t1 = createTask();
+    Task t2 = createTask();
+    Task t3 = createTask();
 
-        t1.setStart(TestSetupHelper.newMonday());
-        TaskDependency dep_t2_t1 = createDependency(t2, t1);
-        dep_t2_t1.setConstraint(new StartFinishConstraintImpl());
+    t1.setStart(TestSetupHelper.newMonday());
+    TaskDependency dep_t2_t1 = createDependency(t2, t1);
+    dep_t2_t1.setConstraint(new StartFinishConstraintImpl());
 
-        TaskDependency dep_t3_t2 = createDependency(t3, t2);
-        dep_t3_t2.setConstraint(new StartFinishConstraintImpl());
+    TaskDependency dep_t3_t2 = createDependency(t3, t2);
+    dep_t3_t2.setConstraint(new StartFinishConstraintImpl());
 
-        assertEquals(TestSetupHelper.newSunday(), t2.getStart());
-        assertEquals(TestSetupHelper.newSaturday(), t3.getStart());
-    }
+    assertEquals(TestSetupHelper.newSunday(), t2.getStart());
+    assertEquals(TestSetupHelper.newSaturday(), t3.getStart());
+  }
 
-    @Test
-    public void testSimpleFinishStartDependency() throws Exception {
-        Task t1 = createTask();
-        Task t2 = createTask();
+  @Test
+  public void testSimpleFinishStartDependency() throws Exception {
+    Task t1 = createTask();
+    Task t2 = createTask();
 
-        GanttCalendar dependeeStart = TestSetupHelper.newFriday();
-        t1.setStart(dependeeStart);
-        TaskDependency dep = createDependency(t2, t1);
-        dep.setConstraint(new StartFinishConstraintImpl());
+    GanttCalendar dependeeStart = TestSetupHelper.newFriday();
+    t1.setStart(dependeeStart);
+    TaskDependency dep = createDependency(t2, t1);
+    dep.setConstraint(new StartFinishConstraintImpl());
 
-        assertEquals(dependeeStart, t2.getEnd());
-    }
+    assertEquals(dependeeStart, t2.getEnd());
+  }
 }
