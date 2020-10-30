@@ -18,11 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.overview;
 
-import biz.ganttproject.core.chart.render.TextLengthCalculatorImpl;
-import biz.ganttproject.core.option.ChangeValueEvent;
-import biz.ganttproject.core.option.ChangeValueListener;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.core.chart.render.TextLengthCalculatorImpl;
+import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.IntegerOption;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;

@@ -30,8 +30,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import static biz.ganttproject.app.SplashKt.SPLASH_HEIGHT;
-import static biz.ganttproject.app.SplashKt.SPLASH_WIDTH;
+import static net.sourceforge.ganttproject.app.SplashKt.SPLASH_HEIGHT;
+import static net.sourceforge.ganttproject.app.SplashKt.SPLASH_WIDTH;
 
 @Service
 @DependsOn("pluginManager")

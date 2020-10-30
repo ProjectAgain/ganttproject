@@ -16,11 +16,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
-package biz.ganttproject.impex.csv;
+package net.sourceforge.ganttproject.impex.csv;
 
-import biz.ganttproject.app.DefaultLocalizer;
-import biz.ganttproject.app.InternationalizationKt;
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.app.DefaultLocalizer;
+import net.sourceforge.ganttproject.app.InternationalizationKt;
+import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
@@ -55,8 +55,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static biz.ganttproject.impex.csv.SpreadsheetFormat.CSV;
-import static biz.ganttproject.impex.csv.SpreadsheetFormat.XLS;
+import static net.sourceforge.ganttproject.impex.csv.SpreadsheetFormat.CSV;
+import static net.sourceforge.ganttproject.impex.csv.SpreadsheetFormat.XLS;
 
 /**
  * Tests spreadsheet (CSV and XLS) import with GP semantics.

@@ -18,11 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.option.ColorOption;
-import biz.ganttproject.core.option.DefaultColorOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.option.ColorOption;
+import net.sourceforge.ganttproject.core.option.DefaultColorOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 import net.sourceforge.ganttproject.gui.UIConfiguration;
 import net.sourceforge.ganttproject.gui.options.model.GP1XOptionConverter;
 import net.sourceforge.ganttproject.resource.HumanResource;

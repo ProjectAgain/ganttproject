@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.List;
 
-import biz.ganttproject.core.chart.render.TextLengthCalculatorImpl;
+import net.sourceforge.ganttproject.core.chart.render.TextLengthCalculatorImpl;
 
 import net.sourceforge.ganttproject.font.Fonts;
 import net.sourceforge.ganttproject.resource.HumanResource;

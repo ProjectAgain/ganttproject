@@ -19,14 +19,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.gui
 
-import biz.ganttproject.app.OptionElementData
-import biz.ganttproject.app.OptionPaneBuilder
-import biz.ganttproject.app.RootLocalizer
-import biz.ganttproject.core.option.DefaultEnumerationOption
-import biz.ganttproject.core.time.TimeDuration
-import biz.ganttproject.storage.FetchResult
-import biz.ganttproject.storage.asOnlineDocument
-import biz.ganttproject.storage.checksum
+import net.sourceforge.ganttproject.app.OptionElementData
+import net.sourceforge.ganttproject.app.OptionPaneBuilder
+import net.sourceforge.ganttproject.app.RootLocalizer
+import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption
+import net.sourceforge.ganttproject.core.time.TimeDuration
+import net.sourceforge.ganttproject.storage.FetchResult
+import net.sourceforge.ganttproject.storage.asOnlineDocument
+import net.sourceforge.ganttproject.storage.checksum
 import com.google.common.base.Preconditions
 import com.google.common.collect.Lists
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon

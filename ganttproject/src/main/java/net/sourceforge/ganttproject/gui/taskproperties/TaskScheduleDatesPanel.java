@@ -18,13 +18,13 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.gui.taskproperties;
 
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.option.BooleanOption;
-import biz.ganttproject.core.option.ChangeValueEvent;
-import biz.ganttproject.core.option.ChangeValueListener;
-import biz.ganttproject.core.option.DefaultBooleanOption;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.option.BooleanOption;
+import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import com.google.common.collect.ImmutableList;
 import net.sourceforge.ganttproject.action.GPAction;
 import net.sourceforge.ganttproject.gui.UIFacade;

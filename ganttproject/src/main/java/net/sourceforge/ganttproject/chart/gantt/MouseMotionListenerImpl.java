@@ -24,8 +24,8 @@ import java.util.Date;
 
 import com.google.common.base.Strings;
 
-import biz.ganttproject.core.calendar.CalendarEvent;
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 import net.sourceforge.ganttproject.ChartComponentBase;
 import net.sourceforge.ganttproject.GanttGraphicArea;
 import net.sourceforge.ganttproject.chart.ChartModelImpl;

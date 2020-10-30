@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.action.scroll;
 
 import java.awt.event.ActionEvent;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.action.GPAction;

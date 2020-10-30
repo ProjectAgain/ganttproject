@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export.htmlpdf;
 
-import biz.ganttproject.core.option.DefaultEnumerationOption;
-import biz.ganttproject.core.option.EnumerationOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.core.option.EnumerationOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.export.ExporterBase;
 import net.sourceforge.ganttproject.gui.UIFacade;

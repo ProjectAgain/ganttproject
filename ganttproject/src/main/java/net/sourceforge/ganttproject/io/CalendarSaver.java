@@ -34,8 +34,8 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import com.google.common.base.Strings;
 
-import biz.ganttproject.core.calendar.GPCalendar;
-import biz.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
 
 public class CalendarSaver extends SaverBase {
   private SimpleDateFormat myShortFormat = new SimpleDateFormat("EEE", Locale.ENGLISH);

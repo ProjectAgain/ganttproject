@@ -21,8 +21,8 @@ package net.sourceforge.ganttproject.task;
 import java.util.Date;
 import java.util.List;
 
-import biz.ganttproject.core.calendar.GPCalendarActivity;
-import biz.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarActivity;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
 
 
 public class TaskActivitiesAlgorithm {

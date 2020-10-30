@@ -9,8 +9,8 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 
-import biz.ganttproject.core.option.EnumerationOption;
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.EnumerationOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 
 import net.sourceforge.ganttproject.language.GanttLanguage;
 

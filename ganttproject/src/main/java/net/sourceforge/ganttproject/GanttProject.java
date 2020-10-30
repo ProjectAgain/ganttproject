@@ -18,17 +18,17 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.app.FXSearchUi;
-import biz.ganttproject.app.FXToolbar;
-import biz.ganttproject.app.FXToolbarBuilder;
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.calendar.GPCalendarListener;
-import biz.ganttproject.core.calendar.WeekendCalendarImpl;
-import biz.ganttproject.core.option.ChangeValueEvent;
-import biz.ganttproject.core.option.ChangeValueListener;
-import biz.ganttproject.core.option.ColorOption;
-import biz.ganttproject.core.option.DefaultColorOption;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.app.FXSearchUi;
+import net.sourceforge.ganttproject.app.FXToolbar;
+import net.sourceforge.ganttproject.app.FXToolbarBuilder;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarListener;
+import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.core.option.ColorOption;
+import net.sourceforge.ganttproject.core.option.DefaultColorOption;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.google.common.collect.Lists;

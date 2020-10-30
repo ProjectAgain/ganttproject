@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.task.dependency;
 
 import java.util.Date;
 
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 
 /**
  * Created by IntelliJ IDEA. User: bard Date: 14.02.2004 Time: 2:35:20 To change

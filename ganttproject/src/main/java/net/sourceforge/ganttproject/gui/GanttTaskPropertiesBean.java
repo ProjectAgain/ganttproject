@@ -18,12 +18,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui;
 
-import biz.ganttproject.core.chart.render.ShapeConstants;
-import biz.ganttproject.core.chart.render.ShapePaint;
-import biz.ganttproject.core.option.ColorOption;
-import biz.ganttproject.core.option.DefaultColorOption;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.chart.render.ShapeConstants;
+import net.sourceforge.ganttproject.core.chart.render.ShapePaint;
+import net.sourceforge.ganttproject.core.option.ColorOption;
+import net.sourceforge.ganttproject.core.option.DefaultColorOption;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import net.sourceforge.ganttproject.GanttProject;

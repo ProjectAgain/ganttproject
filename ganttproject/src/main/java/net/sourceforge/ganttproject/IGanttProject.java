@@ -21,8 +21,8 @@ package net.sourceforge.ganttproject;
 import java.io.IOException;
 import java.util.List;
 
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 import net.sourceforge.ganttproject.document.Document;
 import net.sourceforge.ganttproject.document.DocumentManager;
 import net.sourceforge.ganttproject.document.Document.DocumentException;

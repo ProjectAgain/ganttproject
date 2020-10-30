@@ -18,10 +18,10 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.document;
 
-import biz.ganttproject.core.option.ChangeValueEvent;
-import biz.ganttproject.core.option.ChangeValueListener;
-import biz.ganttproject.core.option.DefaultStringOption;
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.core.option.DefaultStringOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.action.OkAction;
 import net.sourceforge.ganttproject.export.WebPublisher;

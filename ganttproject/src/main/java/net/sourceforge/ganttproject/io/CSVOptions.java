@@ -18,9 +18,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.io;
 
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
-import biz.ganttproject.core.option.BooleanOption;
-import biz.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.core.option.BooleanOption;
+import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;

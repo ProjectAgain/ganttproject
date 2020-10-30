@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.task;
 
-import biz.ganttproject.core.time.GanttCalendar;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -38,14 +38,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_ADVANCEMENT;
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_COORDINATOR;
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_DATES;
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_ID;
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_LENGTH;
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_NAME;
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_PREDECESSORS;
-import static biz.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_RESOURCES;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_ADVANCEMENT;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_COORDINATOR;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_DATES;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_ID;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_LENGTH;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_NAME;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_PREDECESSORS;
+import static net.sourceforge.ganttproject.core.chart.scene.gantt.TaskLabelSceneBuilder.ID_TASK_RESOURCES;
 /**
  * Class with which one can get any properties (even custom) from any task.
  *

@@ -3,7 +3,7 @@
  */
 package net.sourceforge.ganttproject.test.task.calendar;
 
-import biz.ganttproject.core.time.impl.GregorianTimeUnitStack;
+import net.sourceforge.ganttproject.core.time.impl.GregorianTimeUnitStack;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.task.Task;
 

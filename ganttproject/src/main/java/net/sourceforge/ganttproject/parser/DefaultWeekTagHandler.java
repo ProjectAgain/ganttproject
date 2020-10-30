@@ -25,7 +25,7 @@ import java.util.Locale;
 
 import org.xml.sax.Attributes;
 
-import biz.ganttproject.core.calendar.GPCalendar;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar;
 
 public class DefaultWeekTagHandler extends AbstractTagHandler {
 

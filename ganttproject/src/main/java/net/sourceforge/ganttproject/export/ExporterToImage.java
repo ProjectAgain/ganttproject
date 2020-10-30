@@ -18,10 +18,10 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.export;
 
-import biz.ganttproject.core.option.EnumerationOption;
-import biz.ganttproject.core.option.GPAbstractOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.EnumerationOption;
+import net.sourceforge.ganttproject.core.option.GPAbstractOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.language.GanttLanguage;

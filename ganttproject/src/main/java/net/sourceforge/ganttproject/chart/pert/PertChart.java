@@ -18,12 +18,12 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart.pert;
 
-import biz.ganttproject.core.option.ChangeValueEvent;
-import biz.ganttproject.core.option.ChangeValueListener;
-import biz.ganttproject.core.option.FontOption;
-import biz.ganttproject.core.option.FontSpec;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.core.option.FontOption;
+import net.sourceforge.ganttproject.core.option.FontSpec;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.IntegerOption;
 import com.google.common.base.Preconditions;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.chart.Chart;

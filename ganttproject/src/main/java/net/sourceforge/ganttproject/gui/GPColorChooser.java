@@ -42,7 +42,7 @@ import javax.swing.event.ChangeListener;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.painter.Painter;
 
-import biz.ganttproject.core.option.ListOption;
+import net.sourceforge.ganttproject.core.option.ListOption;
 
 import com.google.common.collect.Lists;
 

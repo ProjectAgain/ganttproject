@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.chart.gantt;
 
-import biz.ganttproject.core.option.StringOption;
+import net.sourceforge.ganttproject.core.option.StringOption;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 

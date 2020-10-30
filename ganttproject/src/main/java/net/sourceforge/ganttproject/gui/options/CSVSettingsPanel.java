@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui.options;
 
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
-import biz.ganttproject.core.option.BooleanOption;
+import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.core.option.BooleanOption;
 import com.google.common.collect.Lists;
 import net.sourceforge.ganttproject.ResourceDefaultColumn;
 import net.sourceforge.ganttproject.gui.UIFacade;

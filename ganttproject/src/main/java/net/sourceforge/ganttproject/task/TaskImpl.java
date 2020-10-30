@@ -18,17 +18,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.task;
 
-import biz.ganttproject.core.calendar.AlwaysWorkingTimeCalendarImpl;
-import biz.ganttproject.core.calendar.GPCalendar.DayMask;
-import biz.ganttproject.core.calendar.GPCalendar.DayType;
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.calendar.GPCalendarCalc.MoveDirection;
-import biz.ganttproject.core.chart.render.ShapePaint;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.GanttCalendar;
-import biz.ganttproject.core.time.TimeDuration;
-import biz.ganttproject.core.time.TimeDurationImpl;
-import biz.ganttproject.core.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.core.calendar.AlwaysWorkingTimeCalendarImpl;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayMask;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayType;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc.MoveDirection;
+import net.sourceforge.ganttproject.core.chart.render.ShapePaint;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDurationImpl;
+import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import com.google.common.collect.ImmutableList;
 import net.sourceforge.ganttproject.chart.MilestoneTaskFakeActivity;
 import net.sourceforge.ganttproject.document.AbstractURLDocument;

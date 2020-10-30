@@ -18,11 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.chart.grid.Offset;
-import biz.ganttproject.core.chart.grid.OffsetList;
-import biz.ganttproject.core.chart.scene.SceneBuilder;
-import biz.ganttproject.core.time.TimeUnit;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.chart.grid.Offset;
+import net.sourceforge.ganttproject.core.chart.grid.OffsetList;
+import net.sourceforge.ganttproject.core.chart.scene.SceneBuilder;
+import net.sourceforge.ganttproject.core.time.TimeUnit;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 import net.sourceforge.ganttproject.chart.ChartModelBase.OptionEventDispatcher;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;

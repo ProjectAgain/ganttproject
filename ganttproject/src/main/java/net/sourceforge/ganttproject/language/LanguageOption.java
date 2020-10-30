@@ -3,7 +3,7 @@ package net.sourceforge.ganttproject.language;
 import java.util.Locale;
 
 import net.sourceforge.ganttproject.gui.options.model.GP1XOptionConverter;
-import biz.ganttproject.core.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
 
 public abstract class LanguageOption extends DefaultEnumerationOption<Locale> implements GP1XOptionConverter {
   public LanguageOption() {

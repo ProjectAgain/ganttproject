@@ -18,10 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
-import biz.ganttproject.core.option.ValidationException;
-import biz.ganttproject.core.table.ColumnList;
-import biz.ganttproject.core.table.ColumnList.Column;
+import net.sourceforge.ganttproject.core.option.ValidationException;
+import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.core.table.ColumnList.Column;
 import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;

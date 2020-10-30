@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.document;
 
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.option.ListOption;
-import biz.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.option.ListOption;
+import net.sourceforge.ganttproject.core.table.ColumnList;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import net.sourceforge.ganttproject.IGanttProject;

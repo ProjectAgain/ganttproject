@@ -25,7 +25,7 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.border.EmptyBorder;
 
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 
 import net.sourceforge.ganttproject.ChartComponentBase;
 import net.sourceforge.ganttproject.action.CancelAction;

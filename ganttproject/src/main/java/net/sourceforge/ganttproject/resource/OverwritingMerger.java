@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import biz.ganttproject.core.calendar.GanttDaysOff;
-import biz.ganttproject.core.option.EnumerationOption;
+import net.sourceforge.ganttproject.core.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.core.option.EnumerationOption;
 
 import net.sourceforge.ganttproject.CustomProperty;
 

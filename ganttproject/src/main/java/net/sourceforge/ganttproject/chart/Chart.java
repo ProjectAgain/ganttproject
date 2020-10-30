@@ -18,9 +18,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.option.FontOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.core.option.FontOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.IntegerOption;
 import net.sourceforge.ganttproject.GanttExportSettings;
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.chart.export.ChartImageVisitor;

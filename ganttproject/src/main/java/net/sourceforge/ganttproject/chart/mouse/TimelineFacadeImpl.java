@@ -20,11 +20,11 @@ package net.sourceforge.ganttproject.chart.mouse;
 
 import java.util.Date;
 
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.calendar.walker.WorkingUnitCounter;
-import biz.ganttproject.core.time.TimeDuration;
-import biz.ganttproject.core.time.TimeUnit;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.calendar.walker.WorkingUnitCounter;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeUnit;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 import net.sourceforge.ganttproject.chart.ChartModelBase;
 import net.sourceforge.ganttproject.chart.ChartModelBase.ScrollingSession;
 import net.sourceforge.ganttproject.chart.TimelineChart.VScrollController;

@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.mouse;
 
-import biz.ganttproject.core.calendar.walker.WorkingUnitCounter;
+import net.sourceforge.ganttproject.core.calendar.walker.WorkingUnitCounter;
 import net.sourceforge.ganttproject.chart.TaskChartModelFacade;
 import net.sourceforge.ganttproject.chart.TaskInteractionHintRenderer;
 import net.sourceforge.ganttproject.chart.item.TaskProgressChartItem;

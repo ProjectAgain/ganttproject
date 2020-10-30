@@ -16,16 +16,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
-package biz.ganttproject.core.calendar;
+package net.sourceforge.ganttproject.core.calendar;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import biz.ganttproject.core.calendar.GPCalendar.DayMask;
-import biz.ganttproject.core.calendar.GPCalendar.DayType;
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayMask;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayType;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;

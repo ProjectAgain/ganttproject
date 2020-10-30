@@ -21,7 +21,7 @@ package net.sourceforge.ganttproject.task.algorithm;
 import java.util.Collections;
 import java.util.List;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManagerImpl;

@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.chart.render.TextLengthCalculatorImpl;
+import net.sourceforge.ganttproject.core.chart.render.TextLengthCalculatorImpl;
 
 import java.awt.*;
 

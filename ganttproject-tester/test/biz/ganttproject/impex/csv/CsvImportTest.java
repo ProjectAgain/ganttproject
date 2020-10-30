@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package biz.ganttproject.impex.csv;
+package net.sourceforge.ganttproject.impex.csv;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
@@ -33,8 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static biz.ganttproject.impex.csv.SpreadsheetFormat.CSV;
-import static biz.ganttproject.impex.csv.SpreadsheetFormat.XLS;
+import static net.sourceforge.ganttproject.impex.csv.SpreadsheetFormat.CSV;
+import static net.sourceforge.ganttproject.impex.csv.SpreadsheetFormat.XLS;
 
 /**
  * Tests for spreadsheet (CSV and XLS) import.

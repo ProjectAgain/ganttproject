@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.test.task;
 
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import junit.framework.TestCase;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.task.Task;

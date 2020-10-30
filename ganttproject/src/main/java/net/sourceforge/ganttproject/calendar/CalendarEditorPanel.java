@@ -19,12 +19,12 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 
 package net.sourceforge.ganttproject.calendar;
 
-import biz.ganttproject.core.calendar.CalendarEvent;
-import biz.ganttproject.core.calendar.CalendarEvent.Type;
-import biz.ganttproject.core.calendar.GPCalendar;
-import biz.ganttproject.core.option.DefaultColorOption;
-import biz.ganttproject.core.option.ValidationException;
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent.Type;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar;
+import net.sourceforge.ganttproject.core.option.DefaultColorOption;
+import net.sourceforge.ganttproject.core.option.ValidationException;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;

@@ -20,8 +20,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 
 package net.sourceforge.ganttproject.action.project
 
-import biz.ganttproject.storage.StorageDialogAction
-import biz.ganttproject.storage.StorageDialogBuilder
+import net.sourceforge.ganttproject.storage.StorageDialogAction
+import net.sourceforge.ganttproject.storage.StorageDialogBuilder
 import net.sourceforge.ganttproject.GanttProject
 import net.sourceforge.ganttproject.action.GPAction
 import javax.swing.Action

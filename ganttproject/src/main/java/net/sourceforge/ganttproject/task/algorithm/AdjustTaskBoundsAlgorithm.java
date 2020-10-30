@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;

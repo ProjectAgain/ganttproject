@@ -30,9 +30,9 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import biz.ganttproject.core.calendar.walker.WorkingUnitCounter;
-import biz.ganttproject.core.time.GanttCalendar;
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.calendar.walker.WorkingUnitCounter;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;

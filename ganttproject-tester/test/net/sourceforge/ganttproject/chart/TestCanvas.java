@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.chart.canvas.Canvas;
-import biz.ganttproject.core.chart.canvas.Canvas.Label;
-import biz.ganttproject.core.chart.canvas.Canvas.Text;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Label;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Text;
 import junit.framework.TestCase;
 
 /**

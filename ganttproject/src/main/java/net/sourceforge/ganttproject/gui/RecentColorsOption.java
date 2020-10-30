@@ -21,10 +21,10 @@ package net.sourceforge.ganttproject.gui;
 import java.awt.Color;
 import java.util.List;
 
-import biz.ganttproject.core.option.ColorOption.Util;
-import biz.ganttproject.core.option.EnumerationOption;
-import biz.ganttproject.core.option.GPAbstractOption;
-import biz.ganttproject.core.option.ListOption;
+import net.sourceforge.ganttproject.core.option.ColorOption.Util;
+import net.sourceforge.ganttproject.core.option.EnumerationOption;
+import net.sourceforge.ganttproject.core.option.GPAbstractOption;
+import net.sourceforge.ganttproject.core.option.ListOption;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;

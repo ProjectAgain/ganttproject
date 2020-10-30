@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.util.StringUtils;
 import org.eclipse.core.runtime.IStatus;

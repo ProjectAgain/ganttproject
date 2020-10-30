@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.option.ValidationException;
+import net.sourceforge.ganttproject.core.option.ValidationException;
 import net.sourceforge.ganttproject.gui.UIUtil;
 import org.slf4j.Logger;
 

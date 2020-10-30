@@ -18,9 +18,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.task.algorithm;
 
-import biz.ganttproject.core.calendar.GPCalendar;
-import biz.ganttproject.core.calendar.GPCalendar.DayMask;
-import biz.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayMask;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;

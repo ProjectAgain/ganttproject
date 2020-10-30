@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import biz.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.core.table.ColumnList;
 
 import net.sourceforge.ganttproject.CustomProperty;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;

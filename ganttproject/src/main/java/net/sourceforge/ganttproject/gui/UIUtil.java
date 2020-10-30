@@ -18,11 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.gui;
 
-import biz.ganttproject.core.calendar.CalendarEvent;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.ValidationException;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.ValidationException;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;

@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.gui.projectwizard
 
-import biz.ganttproject.core.calendar.GPCalendar
+import net.sourceforge.ganttproject.core.calendar.GPCalendar
 import com.google.common.collect.Lists
 import java.awt.event.ActionEvent
 import java.util.*

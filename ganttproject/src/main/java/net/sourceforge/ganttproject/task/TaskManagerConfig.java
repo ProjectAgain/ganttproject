@@ -10,9 +10,9 @@
  */
 package net.sourceforge.ganttproject.task;
 
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.option.ColorOption;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.option.ColorOption;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 import net.sourceforge.ganttproject.gui.NotificationManager;
 import net.sourceforge.ganttproject.resource.HumanResourceManager;
 

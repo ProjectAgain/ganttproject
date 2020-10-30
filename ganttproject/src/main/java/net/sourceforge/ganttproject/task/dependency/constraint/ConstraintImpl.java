@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.task.dependency.constraint;
 
 import java.util.Date;
 
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;

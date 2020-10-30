@@ -22,7 +22,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 import net.sourceforge.ganttproject.chart.mouse.MouseInteraction.TimelineFacade;
 
@@ -48,7 +48,7 @@ abstract class MouseInteractionBase {
 
   /**
    * Method to show the visible cues of the interaction
-   * 
+   *
    * @param g
    *          is the graphics context
    */

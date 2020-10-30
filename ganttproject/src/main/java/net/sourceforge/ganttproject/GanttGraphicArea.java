@@ -18,14 +18,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.calendar.CalendarEvent;
-import biz.ganttproject.core.calendar.GPCalendar;
-import biz.ganttproject.core.option.ColorOption;
-import biz.ganttproject.core.option.DefaultColorOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionChangeListener;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar;
+import net.sourceforge.ganttproject.core.option.ColorOption;
+import net.sourceforge.ganttproject.core.option.DefaultColorOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.GPOptionChangeListener;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 import com.google.common.collect.Lists;
 import net.sourceforge.ganttproject.chart.ChartModelBase;
 import net.sourceforge.ganttproject.chart.ChartModelImpl;

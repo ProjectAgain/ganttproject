@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.task.dependency;
 
 import java.util.Date;
 
-import biz.ganttproject.core.chart.scene.BarChartConnector;
+import net.sourceforge.ganttproject.core.chart.scene.BarChartConnector;
 
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.task.Task;

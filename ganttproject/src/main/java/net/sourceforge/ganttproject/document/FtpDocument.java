@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.document;
 
-import biz.ganttproject.core.option.StringOption;
+import net.sourceforge.ganttproject.core.option.StringOption;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;

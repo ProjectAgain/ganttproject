@@ -1,10 +1,10 @@
 // Copyright (C) 2018 BarD Software
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.app.AboutKt;
-import biz.ganttproject.desktop.DesktopAdapter;
-import biz.ganttproject.desktop.GanttProjectApi;
-import biz.ganttproject.desktop.QuitResponse;
+import net.sourceforge.ganttproject.app.AboutKt;
+import net.sourceforge.ganttproject.desktop.DesktopAdapter;
+import net.sourceforge.ganttproject.desktop.GanttProjectApi;
+import net.sourceforge.ganttproject.desktop.QuitResponse;
 import net.sourceforge.ganttproject.action.edit.SettingsDialogAction;
 import net.sourceforge.ganttproject.document.Document;
 import net.sourceforge.ganttproject.gui.ProjectUIFacade;

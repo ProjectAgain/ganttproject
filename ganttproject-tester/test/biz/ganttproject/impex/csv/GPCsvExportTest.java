@@ -1,8 +1,8 @@
 // Copyright (C) 2017 BarD Software
-package biz.ganttproject.impex.csv;
+package net.sourceforge.ganttproject.impex.csv;
 
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
-import biz.ganttproject.core.option.BooleanOption;
+import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.core.option.BooleanOption;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
-import static biz.ganttproject.impex.csv.SpreadsheetFormat.CSV;
+import static net.sourceforge.ganttproject.impex.csv.SpreadsheetFormat.CSV;
 
 /**
  * @author dbarashev@bardsoftware.com

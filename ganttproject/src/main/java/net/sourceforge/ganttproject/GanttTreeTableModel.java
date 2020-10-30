@@ -18,13 +18,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
-import biz.ganttproject.core.option.DefaultBooleanOption;
-import biz.ganttproject.core.option.ValidationException;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.GanttCalendar;
-import biz.ganttproject.core.time.TimeDuration;
-import biz.ganttproject.core.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.core.option.ValidationException;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import com.google.common.base.Objects;
 import com.google.common.base.*;
 import com.google.common.collect.Lists;

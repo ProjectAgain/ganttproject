@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import biz.ganttproject.core.chart.canvas.Canvas.Rectangle;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 import net.sourceforge.ganttproject.chart.TaskChartModelFacade;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskActivity;

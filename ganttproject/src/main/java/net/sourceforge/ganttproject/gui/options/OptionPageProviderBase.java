@@ -22,7 +22,7 @@ import java.awt.Component;
 
 import javax.swing.JComponent;
 
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.gui.UIFacade;

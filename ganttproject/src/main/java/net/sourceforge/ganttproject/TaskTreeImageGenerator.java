@@ -32,7 +32,7 @@ import java.util.Stack;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import biz.ganttproject.core.chart.render.TextLengthCalculatorImpl;
+import net.sourceforge.ganttproject.core.chart.render.TextLengthCalculatorImpl;
 
 import net.sourceforge.ganttproject.font.Fonts;
 import net.sourceforge.ganttproject.gui.UIConfiguration;

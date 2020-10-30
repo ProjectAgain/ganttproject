@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.io;
 
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 
 import net.sourceforge.ganttproject.GPVersion;
 import net.sourceforge.ganttproject.GanttGraphicArea;

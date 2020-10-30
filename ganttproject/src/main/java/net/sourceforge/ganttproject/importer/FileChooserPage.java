@@ -27,7 +27,7 @@ import org.osgi.service.prefs.Preferences;
 
 import com.google.common.base.Objects;
 
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 import net.sourceforge.ganttproject.filter.ExtensionBasedFileFilter;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;

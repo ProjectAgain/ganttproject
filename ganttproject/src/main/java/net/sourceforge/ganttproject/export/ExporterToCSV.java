@@ -18,12 +18,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import biz.ganttproject.core.option.DefaultEnumerationOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.impex.csv.GanttCSVExport;
-import biz.ganttproject.impex.csv.SpreadsheetFormat;
-import biz.ganttproject.impex.csv.SpreadsheetWriter;
+import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.impex.csv.GanttCSVExport;
+import net.sourceforge.ganttproject.impex.csv.SpreadsheetFormat;
+import net.sourceforge.ganttproject.impex.csv.SpreadsheetWriter;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.io.CSVOptions;

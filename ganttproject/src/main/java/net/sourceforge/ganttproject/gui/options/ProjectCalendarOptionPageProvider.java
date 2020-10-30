@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui.options;
 
-import biz.ganttproject.core.option.DefaultDateOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.option.DefaultDateOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.gui.UIUtil;
 import net.sourceforge.ganttproject.language.GanttLanguage;

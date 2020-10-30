@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.option.*;
-import biz.ganttproject.core.option.FontSpec.Size;
+import net.sourceforge.ganttproject.core.option.*;
+import net.sourceforge.ganttproject.core.option.FontSpec.Size;
 import com.google.common.base.Objects;
 import com.google.common.base.*;
 import com.google.common.collect.Lists;

@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.chart.render.AlphaRenderingOption;
-import biz.ganttproject.core.option.EnumerationOption;
-import biz.ganttproject.core.option.KeyValueOption;
-import biz.ganttproject.core.option.ListOption;
+import net.sourceforge.ganttproject.core.chart.render.AlphaRenderingOption;
+import net.sourceforge.ganttproject.core.option.EnumerationOption;
+import net.sourceforge.ganttproject.core.option.KeyValueOption;
+import net.sourceforge.ganttproject.core.option.ListOption;
 import net.sourceforge.ganttproject.font.Fonts;
 import net.sourceforge.ganttproject.gui.UIConfiguration;
 

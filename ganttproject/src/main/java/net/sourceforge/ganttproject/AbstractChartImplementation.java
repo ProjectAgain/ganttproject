@@ -18,14 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.chart.grid.Offset;
-import biz.ganttproject.core.option.FontOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.option.IntegerOption;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.TimeDuration;
-import biz.ganttproject.core.time.TimeUnit;
-import biz.ganttproject.core.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.core.chart.grid.Offset;
+import net.sourceforge.ganttproject.core.option.FontOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeUnit;
+import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.chart.ChartModel;
 import net.sourceforge.ganttproject.chart.ChartModelBase;

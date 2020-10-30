@@ -39,7 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-import static biz.ganttproject.app.AboutKt.showAboutDialog;
+import static net.sourceforge.ganttproject.app.AboutKt.showAboutDialog;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**

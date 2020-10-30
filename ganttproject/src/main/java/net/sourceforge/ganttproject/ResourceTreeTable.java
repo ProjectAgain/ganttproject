@@ -42,7 +42,7 @@ import org.jdesktop.swingx.table.TableColumnExt;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 
-import biz.ganttproject.core.table.ColumnList.Column;
+import net.sourceforge.ganttproject.core.table.ColumnList.Column;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -159,7 +159,7 @@ public class ResourceTreeTable extends GPTreeTableBase {
                 comparator = new AscendingNameComparator();
               }
 
-              List<HumanResource> sorted = new ArrayList<>(getProject().getHumanResourceManager().getResources());  
+              List<HumanResource> sorted = new ArrayList<>(getProject().getHumanResourceManager().getResources());
               sorted.sort(comparator);
               myResourceTreeModel.updateResources(sorted);
             }

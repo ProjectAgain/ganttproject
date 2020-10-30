@@ -23,7 +23,7 @@ import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 
 public class TestSupertaskAdjustment extends TaskTestCase {
     public void testSupetaskDurationGrowsWhenNestedTasksGrow() throws Exception {

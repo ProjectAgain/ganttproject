@@ -18,16 +18,16 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.gui.tableView;
 
-import biz.ganttproject.core.option.ChangeValueEvent;
-import biz.ganttproject.core.option.ChangeValueListener;
-import biz.ganttproject.core.option.DefaultBooleanOption;
-import biz.ganttproject.core.option.DefaultEnumerationOption;
-import biz.ganttproject.core.option.DefaultStringOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.option.ValidationException;
-import biz.ganttproject.core.table.ColumnList;
-import biz.ganttproject.core.table.ColumnList.Column;
+import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.core.option.DefaultStringOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.ValidationException;
+import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.core.table.ColumnList.Column;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;

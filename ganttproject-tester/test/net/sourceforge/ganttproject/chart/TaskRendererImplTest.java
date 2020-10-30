@@ -18,11 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.chart.canvas.Canvas;
-import biz.ganttproject.core.option.DefaultFontOption;
-import biz.ganttproject.core.option.DefaultIntegerOption;
-import biz.ganttproject.core.option.FontSpec;
-import biz.ganttproject.core.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.core.option.DefaultFontOption;
+import net.sourceforge.ganttproject.core.option.DefaultIntegerOption;
+import net.sourceforge.ganttproject.core.option.FontSpec;
+import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import com.google.common.collect.Lists;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.chart.TaskRendererImpl2.VerticalPartitioning;

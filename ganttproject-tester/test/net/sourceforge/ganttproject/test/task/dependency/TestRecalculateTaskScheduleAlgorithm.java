@@ -1,8 +1,8 @@
 package net.sourceforge.ganttproject.test.task.dependency;
 
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.TimeDuration;
-import biz.ganttproject.core.time.impl.GregorianTimeUnitStack;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.impl.GregorianTimeUnitStack;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.task.Task;

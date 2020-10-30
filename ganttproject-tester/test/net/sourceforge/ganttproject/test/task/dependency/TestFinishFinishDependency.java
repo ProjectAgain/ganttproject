@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.test.task.dependency;
 
-import biz.ganttproject.core.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.dependency.TaskDependency;

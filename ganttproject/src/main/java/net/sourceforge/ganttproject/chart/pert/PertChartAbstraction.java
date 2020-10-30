@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskManager;

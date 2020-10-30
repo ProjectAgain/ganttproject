@@ -22,12 +22,12 @@ import java.util.Date;
 
 import net.sourceforge.ganttproject.util.DateParser;
 
-import biz.ganttproject.core.option.DefaultBooleanOption;
-import biz.ganttproject.core.option.DefaultDateOption;
-import biz.ganttproject.core.option.DefaultDoubleOption;
-import biz.ganttproject.core.option.DefaultIntegerOption;
-import biz.ganttproject.core.option.DefaultStringOption;
-import biz.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.core.option.DefaultDateOption;
+import net.sourceforge.ganttproject.core.option.DefaultDoubleOption;
+import net.sourceforge.ganttproject.core.option.DefaultIntegerOption;
+import net.sourceforge.ganttproject.core.option.DefaultStringOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
 
 import net.sourceforge.ganttproject.CustomPropertyClass;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;

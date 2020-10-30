@@ -1,10 +1,10 @@
 package net.sourceforge.ganttproject.test.task;
 
-import biz.ganttproject.core.calendar.AlwaysWorkingTimeCalendarImpl;
-import biz.ganttproject.core.calendar.GPCalendarCalc;
-import biz.ganttproject.core.option.ColorOption;
-import biz.ganttproject.core.time.TimeUnitStack;
-import biz.ganttproject.core.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.core.calendar.AlwaysWorkingTimeCalendarImpl;
+import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.core.option.ColorOption;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import junit.framework.TestCase;
 import net.sourceforge.ganttproject.gui.NotificationManager;
 import net.sourceforge.ganttproject.resource.HumanResource;

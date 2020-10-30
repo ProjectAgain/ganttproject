@@ -5,7 +5,7 @@ package net.sourceforge.ganttproject.gui.scrolling;
 
 import java.util.Date;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 
 /**
@@ -14,7 +14,7 @@ import biz.ganttproject.core.time.TimeDuration;
 public interface ScrollingManager {
   /**
    * Scrolls the view by a number of days
-   * 
+   *
    * @param taskLength
    *          are the number of days to scroll. If days < 0 it scrolls to the
    *          right otherwise to the left.

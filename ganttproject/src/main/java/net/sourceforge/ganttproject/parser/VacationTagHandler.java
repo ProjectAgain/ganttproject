@@ -23,8 +23,8 @@ import net.sourceforge.ganttproject.resource.HumanResourceManager;
 
 import org.xml.sax.Attributes;
 
-import biz.ganttproject.core.calendar.GanttDaysOff;
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 
 /**
  * @author nbohn

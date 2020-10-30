@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.task.algorithm;
 
 import com.google.common.base.Suppliers;
 
-import biz.ganttproject.core.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskImpl;

@@ -1,6 +1,6 @@
 package net.sourceforge.ganttproject.test.time;
 
-import biz.ganttproject.core.time.impl.GregorianTimeUnitStack;
+import net.sourceforge.ganttproject.core.time.impl.GregorianTimeUnitStack;
 import junit.framework.TestCase;
 
 /**

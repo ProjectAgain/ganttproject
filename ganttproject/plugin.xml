@@ -37,7 +37,7 @@
         <exporter class="net.sourceforge.ganttproject.export.ExporterToCSV"/>
         <exporter class="net.sourceforge.ganttproject.export.htmlpdf.ExporterToHTML"/>
         <exporter class="net.sourceforge.ganttproject.export.htmlpdf.ExporterToPDF"/>
-        <exporter class="biz.ganttproject.impex.msproject2.ExporterToMsProjectFile"/>
+        <exporter class="net.sourceforge.ganttproject.impex.msproject2.ExporterToMsProjectFile"/>
     </extension>
 
     <extension point="net.sourceforge.ganttproject.export.htmlpdf.HTMLStylesheet">
@@ -59,12 +59,12 @@
             point="net.sourceforge.ganttproject.importer">
         <importer class="net.sourceforge.ganttproject.importer.ImporterFromGanttFile"/>
         <importer class="net.sourceforge.ganttproject.importer.ImporterFromTxtFile"/>
-        <importer class="biz.ganttproject.impex.csv.ImporterFromCsvFile"/>
-        <importer class="biz.ganttproject.impex.ical.IcsFileImporter"/>
-        <importer class="biz.ganttproject.impex.msproject2.ImporterFromMsProjectFile"/>
+        <importer class="net.sourceforge.ganttproject.impex.csv.ImporterFromCsvFile"/>
+        <importer class="net.sourceforge.ganttproject.impex.ical.IcsFileImporter"/>
+        <importer class="net.sourceforge.ganttproject.impex.msproject2.ImporterFromMsProjectFile"/>
     </extension>
     <extension point="net.sourceforge.ganttproject.OptionPageProvider">
-        <optionpageprovider class="biz.ganttproject.storage.cloud.ProjectPropertiesPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.storage.cloud.ProjectPropertiesPageProvider"/>
         <optionpageprovider class="biz.ganttproject.platform.PlatformOptionPageProvider"/>
         <optionpageprovider class="net.sourceforge.ganttproject.gui.options.ExportCsvOptionPageProvider"/>
         <optionpageprovider class="net.sourceforge.ganttproject.gui.options.GanttChartOptionPageProvider"/>

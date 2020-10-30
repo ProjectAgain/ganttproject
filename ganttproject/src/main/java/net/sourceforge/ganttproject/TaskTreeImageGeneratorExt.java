@@ -31,11 +31,11 @@ import javax.swing.ImageIcon;
 import javax.swing.table.JTableHeader;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import biz.ganttproject.core.chart.canvas.TextMetrics;
-import biz.ganttproject.core.chart.render.TextLengthCalculatorImpl;
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
-import biz.ganttproject.core.table.ColumnList;
-import biz.ganttproject.core.table.ColumnList.Column;
+import net.sourceforge.ganttproject.core.chart.canvas.TextMetrics;
+import net.sourceforge.ganttproject.core.chart.render.TextLengthCalculatorImpl;
+import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.core.table.ColumnList.Column;
 
 import net.sourceforge.ganttproject.gui.UIConfiguration;
 import net.sourceforge.ganttproject.task.Task;

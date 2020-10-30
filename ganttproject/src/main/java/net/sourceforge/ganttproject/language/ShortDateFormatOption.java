@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.language;
 
-import biz.ganttproject.core.option.DefaultStringOption;
-import biz.ganttproject.core.option.ValidationException;
+import net.sourceforge.ganttproject.core.option.DefaultStringOption;
+import net.sourceforge.ganttproject.core.option.ValidationException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

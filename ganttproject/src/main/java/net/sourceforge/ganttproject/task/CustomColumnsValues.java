@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 
 import net.sourceforge.ganttproject.CustomProperty;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
@@ -34,7 +34,7 @@ import net.sourceforge.ganttproject.language.GanttLanguage;
 
 /**
  * Keeps a map of custom property ID to value.
- * 
+ *
  * @author bbaranne Mar 2, 2005 -- initial code
  * @auuthor dbarashev (Dmitry Barashev) -- complete rewrite
  */

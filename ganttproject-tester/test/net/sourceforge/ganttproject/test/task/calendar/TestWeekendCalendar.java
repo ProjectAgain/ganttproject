@@ -3,11 +3,11 @@
  */
 package net.sourceforge.ganttproject.test.task.calendar;
 
-import biz.ganttproject.core.calendar.CalendarEvent;
-import biz.ganttproject.core.calendar.GPCalendar;
-import biz.ganttproject.core.calendar.WeekendCalendarImpl;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.core.time.impl.GregorianTimeUnitStack;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar;
+import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.time.impl.GregorianTimeUnitStack;
 import com.google.common.collect.ImmutableList;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.task.Task;

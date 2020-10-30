@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.resource;
 
-import biz.ganttproject.core.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.core.calendar.GanttDaysOff;
 import com.google.common.base.Strings;
 import net.sourceforge.ganttproject.CustomProperty;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;

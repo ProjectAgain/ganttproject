@@ -18,10 +18,10 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.calendar.CalendarEvent;
-import biz.ganttproject.core.calendar.CalendarEvent.Type;
-import biz.ganttproject.core.calendar.GPCalendar;
-import biz.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.core.calendar.CalendarEvent.Type;
+import net.sourceforge.ganttproject.core.calendar.GPCalendar;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import net.sourceforge.ganttproject.action.GPAction;

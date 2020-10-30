@@ -19,11 +19,10 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.gui
 
-import biz.ganttproject.app.OptionElementData
-import biz.ganttproject.app.OptionPaneBuilder
-import biz.ganttproject.app.RootLocalizer
-import biz.ganttproject.core.option.GPOptionGroup
-import biz.ganttproject.storage.*
+import net.sourceforge.ganttproject.app.OptionElementData
+import net.sourceforge.ganttproject.app.OptionPaneBuilder
+import net.sourceforge.ganttproject.app.RootLocalizer
+import net.sourceforge.ganttproject.core.option.GPOptionGroup
 import com.google.common.collect.Lists
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
@@ -38,13 +37,17 @@ import net.sourceforge.ganttproject.document.DocumentManager
 import net.sourceforge.ganttproject.filter.GanttXMLFileFilter
 import net.sourceforge.ganttproject.gui.projectwizard.NewProjectWizard
 import net.sourceforge.ganttproject.language.GanttLanguage
+import net.sourceforge.ganttproject.storage.StorageDialogAction
+import net.sourceforge.ganttproject.storage.StorageDialogBuilder
+import net.sourceforge.ganttproject.storage.VersionMismatchException
+import net.sourceforge.ganttproject.storage.asLocalDocument
+import net.sourceforge.ganttproject.storage.asOnlineDocument
+import net.sourceforge.ganttproject.storage.checkWellFormed
 import net.sourceforge.ganttproject.undo.GPUndoManager
-import org.eclipse.core.runtime.IStatus
 import org.slf4j.LoggerFactory
 import org.xml.sax.SAXException
 import java.io.File
 import java.io.IOException
-import java.util.logging.Level
 import javax.swing.JFileChooser
 import javax.swing.SwingUtilities
 

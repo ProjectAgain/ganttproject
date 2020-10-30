@@ -18,11 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.gui;
 
-import biz.ganttproject.core.chart.render.AlphaRenderingOption;
-import biz.ganttproject.core.option.BooleanOption;
-import biz.ganttproject.core.option.DefaultBooleanOption;
-import biz.ganttproject.core.option.FontOption;
-import biz.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.core.chart.render.AlphaRenderingOption;
+import net.sourceforge.ganttproject.core.option.BooleanOption;
+import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.core.option.FontOption;
+import net.sourceforge.ganttproject.core.option.IntegerOption;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import net.sourceforge.ganttproject.gui.options.model.GP1XOptionConverter;

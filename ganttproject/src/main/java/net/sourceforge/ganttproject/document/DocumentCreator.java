@@ -4,13 +4,12 @@
  */
 package net.sourceforge.ganttproject.document;
 
-import biz.ganttproject.core.option.DefaultStringOption;
-import biz.ganttproject.core.option.GPOption;
-import biz.ganttproject.core.option.GPOptionGroup;
-import biz.ganttproject.core.option.StringOption;
-import biz.ganttproject.core.table.ColumnList;
-import biz.ganttproject.core.time.CalendarFactory;
-import biz.ganttproject.storage.DocumentKt;
+import net.sourceforge.ganttproject.core.option.DefaultStringOption;
+import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.StringOption;
+import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.core.time.CalendarFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.sourceforge.ganttproject.GanttOptions;
@@ -19,6 +18,7 @@ import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.model.GP1XOptionConverter;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.parser.ParserFactory;
+import net.sourceforge.ganttproject.storage.DocumentKt;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 

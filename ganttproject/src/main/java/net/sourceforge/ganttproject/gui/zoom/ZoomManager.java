@@ -21,8 +21,8 @@ package net.sourceforge.ganttproject.gui.zoom;
 import java.util.ArrayList;
 import java.util.List;
 
-import biz.ganttproject.core.time.TimeUnitPair;
-import biz.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.core.time.TimeUnitPair;
+import net.sourceforge.ganttproject.core.time.TimeUnitStack;
 
 
 /**
@@ -127,7 +127,7 @@ public class ZoomManager {
    * Find persistentName in the available ZoomStates or add new States until it
    * is found. Or the maximum allowed ZoomState is reached, in this case the
    * ZoomState is not changed.
-   * 
+   *
    * @param persistentName
    *          is the ZoomState name to find
    */

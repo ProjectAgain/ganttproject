@@ -22,9 +22,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import biz.ganttproject.core.time.TimeDuration;
-import biz.ganttproject.core.time.TimeDurationImpl;
-import biz.ganttproject.core.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDurationImpl;
+import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import junit.framework.TestCase;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.chart.TaskChartModelFacade;
@@ -34,9 +34,9 @@ import net.sourceforge.ganttproject.task.TaskManager;
 
 import org.easymock.EasyMock;
 
-import biz.ganttproject.core.calendar.WeekendCalendarImpl;
-import biz.ganttproject.core.chart.canvas.Canvas;
-import biz.ganttproject.core.chart.canvas.Canvas.Rectangle;
+import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
 
 /**
  * Tests for {@link ChangeTaskProgressRuler}.

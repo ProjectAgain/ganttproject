@@ -3,7 +3,7 @@
  */
 package net.sourceforge.ganttproject.chart;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 import com.google.common.base.Preconditions;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskActivity;

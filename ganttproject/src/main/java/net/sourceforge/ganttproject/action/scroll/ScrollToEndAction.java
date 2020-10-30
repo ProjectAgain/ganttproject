@@ -21,7 +21,7 @@ package net.sourceforge.ganttproject.action.scroll;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 import net.sourceforge.ganttproject.IGanttProject;
 import net.sourceforge.ganttproject.action.GPAction;

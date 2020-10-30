@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.parser;
 
-import biz.ganttproject.core.chart.render.ShapePaint;
-import biz.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.chart.render.ShapePaint;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import com.google.common.base.Charsets;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;

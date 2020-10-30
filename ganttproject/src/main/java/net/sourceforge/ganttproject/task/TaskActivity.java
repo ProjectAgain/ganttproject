@@ -2,7 +2,7 @@
  */
 package net.sourceforge.ganttproject.task;
 
-import biz.ganttproject.core.chart.scene.BarChartActivity;
+import net.sourceforge.ganttproject.core.chart.scene.BarChartActivity;
 
 /**
  * @author bard

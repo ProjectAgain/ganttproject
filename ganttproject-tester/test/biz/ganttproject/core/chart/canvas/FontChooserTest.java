@@ -1,4 +1,4 @@
-package biz.ganttproject.core.chart.canvas;
+package net.sourceforge.ganttproject.core.chart.canvas;
 
 import java.awt.Font;
 import java.util.Properties;

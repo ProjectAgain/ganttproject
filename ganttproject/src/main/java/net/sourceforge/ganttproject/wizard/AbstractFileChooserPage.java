@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.wizard;
 
-import biz.ganttproject.core.option.DefaultBooleanOption;
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 import com.google.common.base.MoreObjects;
 import net.sourceforge.ganttproject.gui.TextFieldAndFileChooserComponent;
 import net.sourceforge.ganttproject.gui.UIFacade;

@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.export.htmlpdf;
 
-import biz.ganttproject.core.model.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
 import com.google.common.base.Joiner;
 import net.sourceforge.ganttproject.CustomProperty;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;

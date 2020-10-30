@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.gantt;
 
-import biz.ganttproject.core.chart.canvas.Canvas.Rectangle;
+import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
 import com.google.common.collect.Lists;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.CustomBalloonTip;

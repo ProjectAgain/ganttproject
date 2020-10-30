@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.task.algorithm;
 
-import biz.ganttproject.core.chart.scene.gantt.ChartBoundsAlgorithm;
+import net.sourceforge.ganttproject.core.chart.scene.gantt.ChartBoundsAlgorithm;
 import net.sourceforge.ganttproject.task.TaskManagerImpl;
 
 /**

@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject;
 
-import biz.ganttproject.core.table.ColumnList;
-import biz.ganttproject.core.table.ColumnList.Column;
+import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.core.table.ColumnList.Column;
 import com.google.common.base.MoreObjects;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 

@@ -1,9 +1,9 @@
 // Copyright (C) 2017 BarD Software
 package net.sourceforge.ganttproject.chart.overview;
 
-import biz.ganttproject.core.option.ChangeValueEvent;
-import biz.ganttproject.core.option.ChangeValueListener;
-import biz.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.core.option.IntegerOption;
 import com.google.common.base.Preconditions;
 import net.sourceforge.ganttproject.gui.TestGanttRolloverButton;
 import net.sourceforge.ganttproject.gui.UIFacade;

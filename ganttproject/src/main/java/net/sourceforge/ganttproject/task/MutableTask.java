@@ -20,9 +20,9 @@ package net.sourceforge.ganttproject.task;
 
 import java.awt.Color;
 
-import biz.ganttproject.core.chart.render.ShapePaint;
-import biz.ganttproject.core.time.GanttCalendar;
-import biz.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.core.chart.render.ShapePaint;
+import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.core.time.TimeDuration;
 
 
 /**
@@ -67,7 +67,7 @@ public interface MutableTask {
    * having run a CriticalPathAlgorithm to set the critical tasks. When painted,
    * the tasks are rendered as critical using Task.isCritical(). So, a task is
    * set as critical only if critical path is displayed.
-   * 
+   *
    * @param critical
    *          <code>true</code> if this is critical, <code>false</code>
    *          otherwise.

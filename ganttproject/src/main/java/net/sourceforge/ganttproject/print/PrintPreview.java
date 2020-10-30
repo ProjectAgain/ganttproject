@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.print;
 
-import biz.ganttproject.core.option.DateOption;
-import biz.ganttproject.core.option.DefaultDateOption;
+import net.sourceforge.ganttproject.core.option.DateOption;
+import net.sourceforge.ganttproject.core.option.DefaultDateOption;
 import net.sourceforge.ganttproject.GanttExportSettings;
 import net.sourceforge.ganttproject.GanttProject;
 import net.sourceforge.ganttproject.IGanttProject;

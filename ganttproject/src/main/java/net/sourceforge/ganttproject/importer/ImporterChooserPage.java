@@ -18,7 +18,6 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.importer;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import javax.swing.JComponent;
 
 import org.osgi.service.prefs.Preferences;
 
-import biz.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.core.option.GPOptionGroup;
 import net.sourceforge.ganttproject.gui.UIFacade;
 import net.sourceforge.ganttproject.gui.options.GPOptionChoicePanel;
 import net.sourceforge.ganttproject.language.GanttLanguage;

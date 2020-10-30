@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.task.dependency;
 
-import biz.ganttproject.core.chart.scene.gantt.Connector;
+import net.sourceforge.ganttproject.core.chart.scene.gantt.Connector;
 import net.sourceforge.ganttproject.task.Task;
 import net.sourceforge.ganttproject.task.TaskActivity;
-import biz.ganttproject.core.chart.scene.BarChartActivity;
+import net.sourceforge.ganttproject.core.chart.scene.BarChartActivity;
 
 import java.awt.*;
 
