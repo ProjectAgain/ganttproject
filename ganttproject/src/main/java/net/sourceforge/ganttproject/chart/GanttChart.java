@@ -18,9 +18,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.GanttPreviousState;
-import net.sourceforge.ganttproject.core.option.ColorOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.model.GanttPreviousState;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
 
 public interface GanttChart extends TimelineChart {
   void setBaseline(GanttPreviousState ganttPreviousState);

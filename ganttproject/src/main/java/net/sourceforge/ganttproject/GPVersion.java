@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject;
 
-public abstract class GPVersion {
+public final class GPVersion {
   public static String BUILD = "2906"; // BUILD NUMBER
   public static String V2_0_1 = "2.0.1";
   public static String V2_0_2 = "2.0.2";

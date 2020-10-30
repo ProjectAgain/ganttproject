@@ -22,7 +22,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 
-import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
 
 import net.sourceforge.ganttproject.chart.mouse.MouseInteraction.TimelineFacade;
 

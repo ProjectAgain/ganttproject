@@ -28,18 +28,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import net.sourceforge.ganttproject.core.chart.render.*;
+import net.sourceforge.ganttproject.ui.chart.render.*;
 import com.google.common.base.Supplier;
 
 import net.sourceforge.ganttproject.util.PropertiesUtil;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Line;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Text;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.TextGroup;
-import net.sourceforge.ganttproject.core.chart.canvas.Painter;
-import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
-import net.sourceforge.ganttproject.core.option.ChangeValueListener;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Line;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Rectangle;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Text;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.TextGroup;
+import net.sourceforge.ganttproject.ui.chart.canvas.Painter;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
 
 /**
  * Implements styled painters for the available primitives (see

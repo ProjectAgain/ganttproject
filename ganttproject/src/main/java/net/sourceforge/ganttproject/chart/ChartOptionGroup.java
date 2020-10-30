@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
 import net.sourceforge.ganttproject.chart.ChartModelBase.OptionEventDispatcher;
 
 public class ChartOptionGroup extends GPOptionGroup {

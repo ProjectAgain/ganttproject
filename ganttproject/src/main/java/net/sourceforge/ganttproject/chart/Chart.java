@@ -18,11 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.option.FontOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.core.option.IntegerOption;
-import net.sourceforge.ganttproject.GanttExportSettings;
-import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.ui.viewmodel.option.FontOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.IntegerOption;
+import net.sourceforge.ganttproject.ui.GanttExportSettings;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.chart.export.ChartImageVisitor;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;

@@ -1,9 +1,9 @@
 package net.sourceforge.ganttproject.test.task.event;
 
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.event.TaskHierarchyEvent;
+import net.sourceforge.ganttproject.model.task.event.TaskListenerAdapter;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.event.TaskListenerAdapter;
-import net.sourceforge.ganttproject.task.event.TaskHierarchyEvent;
 
 public class TestTaskHierarchyEvent extends TaskTestCase {
     public void testEventIsSentOnCreatingNewTask() {

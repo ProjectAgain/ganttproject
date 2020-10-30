@@ -1,22 +1,21 @@
 package net.sourceforge.ganttproject;
 
-import net.sourceforge.ganttproject.core.calendar.AlwaysWorkingTimeCalendarImpl;
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.option.ColorOption;
-import net.sourceforge.ganttproject.core.option.DefaultColorOption;
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
-import net.sourceforge.ganttproject.core.time.TimeUnitStack;
-import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
-import net.sourceforge.ganttproject.gui.NotificationManager;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.roles.RoleManager;
-import net.sourceforge.ganttproject.roles.RoleManagerImpl;
-import net.sourceforge.ganttproject.task.CustomColumnsManager;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.TaskManagerConfig;
+import net.sourceforge.ganttproject.model.calendar.AlwaysWorkingTimeCalendarImpl;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.model.roles.RoleManagerImpl;
+import net.sourceforge.ganttproject.model.task.CustomColumnsManager;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManagerConfig;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.ui.gui.NotificationManager;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultColorOption;
 
-import java.awt.*;
 import java.net.URL;
 
 public class TestSetupHelper {

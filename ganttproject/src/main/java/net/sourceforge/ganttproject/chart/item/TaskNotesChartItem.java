@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.chart.item;
 
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 
 /**
  * Chart item representing task notes

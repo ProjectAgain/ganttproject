@@ -19,11 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.importer;
 
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.GanttOptions;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.io.GanttOptions;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.wizard.AbstractWizard;
+import net.sourceforge.ganttproject.ui.wizard.AbstractWizard;
 
 import java.util.ArrayList;
 import java.util.List;

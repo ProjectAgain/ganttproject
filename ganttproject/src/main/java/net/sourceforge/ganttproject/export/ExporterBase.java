@@ -18,14 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import net.sourceforge.ganttproject.core.option.DefaultDateOption;
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.GanttExportSettings;
-import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultDateOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.GanttExportSettings;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.chart.Chart;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.zoom.ZoomManager.ZoomState;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.zoom.ZoomManager.ZoomState;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

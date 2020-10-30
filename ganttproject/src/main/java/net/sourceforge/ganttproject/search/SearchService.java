@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.search;
 
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import org.pf4j.ExtensionPoint;
 
 import java.util.List;

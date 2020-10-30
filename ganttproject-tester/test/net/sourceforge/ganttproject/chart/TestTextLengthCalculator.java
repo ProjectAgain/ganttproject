@@ -18,9 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.chart.canvas.TextMetrics;
-
-import java.awt.*;
+import net.sourceforge.ganttproject.ui.chart.canvas.TextMetrics;
 
 /**
  * Simple text length calculator which considers all characters occupying a square block

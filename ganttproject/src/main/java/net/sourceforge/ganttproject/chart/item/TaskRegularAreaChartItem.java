@@ -3,7 +3,7 @@
  */
 package net.sourceforge.ganttproject.chart.item;
 
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 
 /**
  * @author bard

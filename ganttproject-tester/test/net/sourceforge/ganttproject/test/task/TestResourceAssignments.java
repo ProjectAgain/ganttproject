@@ -1,22 +1,16 @@
 package net.sourceforge.ganttproject.test.task;
 
-import net.sourceforge.ganttproject.core.calendar.AlwaysWorkingTimeCalendarImpl;
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.option.ColorOption;
-import net.sourceforge.ganttproject.core.time.TimeUnitStack;
-import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import junit.framework.TestCase;
-import net.sourceforge.ganttproject.gui.NotificationManager;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.roles.RoleManager;
-import net.sourceforge.ganttproject.task.ResourceAssignment;
-import net.sourceforge.ganttproject.task.ResourceAssignmentMutator;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.TaskManagerConfig;
+import net.sourceforge.ganttproject.model.calendar.AlwaysWorkingTimeCalendarImpl;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.ui.gui.NotificationManager;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;

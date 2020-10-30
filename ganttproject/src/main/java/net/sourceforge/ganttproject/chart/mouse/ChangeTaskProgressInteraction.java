@@ -18,14 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.mouse;
 
-import net.sourceforge.ganttproject.core.calendar.walker.WorkingUnitCounter;
+import net.sourceforge.ganttproject.model.calendar.walker.WorkingUnitCounter;
 import net.sourceforge.ganttproject.chart.TaskChartModelFacade;
 import net.sourceforge.ganttproject.chart.TaskInteractionHintRenderer;
 import net.sourceforge.ganttproject.chart.item.TaskProgressChartItem;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskMutator;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskMutator;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

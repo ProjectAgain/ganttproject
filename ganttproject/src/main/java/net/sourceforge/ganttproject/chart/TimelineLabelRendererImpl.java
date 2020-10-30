@@ -18,17 +18,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.HAlignment;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Label;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Text;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.VAlignment;
-import net.sourceforge.ganttproject.core.chart.canvas.TextMetrics;
-import net.sourceforge.ganttproject.core.chart.canvas.TextSelector;
-import net.sourceforge.ganttproject.core.chart.grid.Offset;
-import net.sourceforge.ganttproject.core.chart.grid.OffsetLookup;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskActivity;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.HAlignment;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Label;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Text;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.VAlignment;
+import net.sourceforge.ganttproject.ui.chart.canvas.TextMetrics;
+import net.sourceforge.ganttproject.ui.chart.canvas.TextSelector;
+import net.sourceforge.ganttproject.ui.chart.grid.Offset;
+import net.sourceforge.ganttproject.ui.chart.grid.OffsetLookup;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
 
 import java.util.Collection;
 import java.util.Date;

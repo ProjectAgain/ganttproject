@@ -18,19 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.chart.gantt;
 
-import net.sourceforge.ganttproject.core.option.StringOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.StringOption;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.task.ResourceAssignment;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.TaskManager.TaskBuilder;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.task.ResourceAssignment;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskContainmentHierarchyFacade;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManager.TaskBuilder;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
 import org.slf4j.Logger;
 
 import java.text.MessageFormat;

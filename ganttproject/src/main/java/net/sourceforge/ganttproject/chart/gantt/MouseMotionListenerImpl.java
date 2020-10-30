@@ -24,10 +24,10 @@ import java.util.Date;
 
 import com.google.common.base.Strings;
 
-import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.ChartComponentBase;
-import net.sourceforge.ganttproject.GanttGraphicArea;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
+import net.sourceforge.ganttproject.ui.chart.ChartComponentBase;
+import net.sourceforge.ganttproject.ui.chart.GanttGraphicArea;
 import net.sourceforge.ganttproject.chart.ChartModelImpl;
 import net.sourceforge.ganttproject.chart.item.CalendarChartItem;
 import net.sourceforge.ganttproject.chart.item.ChartItem;
@@ -35,9 +35,9 @@ import net.sourceforge.ganttproject.chart.item.TaskBoundaryChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskNotesChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskProgressChartItem;
 import net.sourceforge.ganttproject.chart.mouse.MouseMotionListenerBase;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 
 class MouseMotionListenerImpl extends MouseMotionListenerBase {
   private final ChartComponentBase myChartComponent;

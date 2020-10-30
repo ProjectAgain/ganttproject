@@ -18,20 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.test.task.dependency;
 
-import java.util.Map;
-
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
-
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.TaskProperties;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishFinishConstraintImpl;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskProperties;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishFinishConstraintImpl;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
+
+import java.util.Map;
 
 /**
  * Tests utilities for formatting task dependency into a string.

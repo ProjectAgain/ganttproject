@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package net.sourceforge.ganttproject.gui.taskproperties;
+package net.sourceforge.ganttproject.ui.gui.taskproperties;
 
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 /**

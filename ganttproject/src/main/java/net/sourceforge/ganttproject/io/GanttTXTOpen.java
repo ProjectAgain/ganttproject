@@ -26,7 +26,7 @@ import java.io.InputStreamReader;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 
 public class GanttTXTOpen {
   private final TaskManager myTaskManager;

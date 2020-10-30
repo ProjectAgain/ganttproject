@@ -18,23 +18,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export.htmlpdf;
 
-import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
-import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.ui.table.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
 import com.google.common.base.Joiner;
-import net.sourceforge.ganttproject.CustomProperty;
-import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.document.Document;
+import net.sourceforge.ganttproject.model.CustomProperty;
+import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.export.ExportException;
 import net.sourceforge.ganttproject.export.TaskVisitor;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.io.SaverBase;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.task.CustomColumnsValues;
-import net.sourceforge.ganttproject.task.ResourceAssignment;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.task.CustomColumnsValues;
+import net.sourceforge.ganttproject.model.task.ResourceAssignment;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 

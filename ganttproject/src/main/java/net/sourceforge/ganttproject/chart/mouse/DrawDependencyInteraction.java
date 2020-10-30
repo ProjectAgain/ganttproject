@@ -23,15 +23,15 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import net.sourceforge.ganttproject.ChartComponentBase;
+import net.sourceforge.ganttproject.ui.chart.ChartComponentBase;
 import net.sourceforge.ganttproject.chart.DependencyInteractionRenderer;
 import net.sourceforge.ganttproject.chart.item.TaskRegularAreaChartItem;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyCollection;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyCollection;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishStartConstraintImpl;
 
 public class DrawDependencyInteraction extends MouseInteractionBase implements MouseInteraction {
 

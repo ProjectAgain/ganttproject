@@ -18,12 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.impex.ical;
 
-import net.sourceforge.ganttproject.app.DefaultLocalizer;
-import net.sourceforge.ganttproject.app.InternationalizationKt;
-import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.ui.DefaultLocalizer;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
 import com.google.common.collect.Lists;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
@@ -34,10 +33,11 @@ import net.fortuna.ical4j.model.property.RRule;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.util.CompatibilityHints;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.calendar.CalendarEditorPanel;
+import net.sourceforge.ganttproject.ui.calendar.CalendarEditorPanel;
 import net.sourceforge.ganttproject.importer.ImporterBase;
-import net.sourceforge.ganttproject.wizard.AbstractWizard;
-import net.sourceforge.ganttproject.wizard.WizardPage;
+import net.sourceforge.ganttproject.ui.InternationalizationKt;
+import net.sourceforge.ganttproject.ui.wizard.AbstractWizard;
+import net.sourceforge.ganttproject.ui.wizard.WizardPage;
 import org.slf4j.Logger;
 
 import javax.swing.*;

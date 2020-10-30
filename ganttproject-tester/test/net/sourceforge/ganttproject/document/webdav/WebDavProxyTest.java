@@ -1,8 +1,8 @@
-package net.sourceforge.ganttproject.document.webdav;
+package net.sourceforge.ganttproject.model.document.webdav;
 
 import io.milton.httpclient.ProxyDetails;
-import net.sourceforge.ganttproject.core.option.DefaultStringOption;
 import junit.framework.TestCase;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultStringOption;
 
 public class WebDavProxyTest extends TestCase {
   public void testProxyOptionParsing() {

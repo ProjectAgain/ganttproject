@@ -18,25 +18,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package net.sourceforge.ganttproject.chart.mouse;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.core.time.TimeDurationImpl;
-import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import junit.framework.TestCase;
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.chart.TaskChartModelFacade;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskActivity;
-import net.sourceforge.ganttproject.task.TaskManager;
-
+import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeDurationImpl;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Rectangle;
 import org.easymock.EasyMock;
 
-import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Tests for {@link ChangeTaskProgressRuler}.

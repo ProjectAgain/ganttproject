@@ -2,10 +2,10 @@
 package net.sourceforge.ganttproject.test.task.hierarchy;
 
 import com.google.common.collect.ImmutableList;
-import net.sourceforge.ganttproject.action.task.TaskIndentAction;
-import net.sourceforge.ganttproject.action.task.TaskUnindentAction;
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
+import net.sourceforge.ganttproject.ui.action.task.TaskIndentAction;
+import net.sourceforge.ganttproject.ui.action.task.TaskUnindentAction;
 
 import java.util.Arrays;
 

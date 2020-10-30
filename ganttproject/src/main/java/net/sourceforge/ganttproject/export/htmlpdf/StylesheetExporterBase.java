@@ -18,13 +18,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export.htmlpdf;
 
-import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
-import net.sourceforge.ganttproject.core.option.EnumerationOption;
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.EnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.export.ExporterBase;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import org.osgi.service.prefs.Preferences;
 import org.slf4j.Logger;
 

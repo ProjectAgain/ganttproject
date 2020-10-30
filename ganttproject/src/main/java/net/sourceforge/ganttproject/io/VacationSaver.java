@@ -23,10 +23,10 @@ import javax.xml.transform.sax.TransformerHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import net.sourceforge.ganttproject.core.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
 
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.resource.HumanResource;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
 
 class VacationSaver extends SaverBase {
   void save(IGanttProject project, TransformerHandler handler) throws SAXException {

@@ -18,16 +18,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.impex.msproject2;
 
-import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
-import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayType;
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.calendar.GanttDaysOff;
-import net.sourceforge.ganttproject.core.calendar.walker.WorkingUnitCounter;
-import net.sourceforge.ganttproject.core.table.ColumnList;
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
-import net.sourceforge.ganttproject.core.time.impl.GregorianTimeUnitStack;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayType;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.model.calendar.walker.WorkingUnitCounter;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.model.time.impl.GregorianTimeUnitStack;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
@@ -53,24 +53,24 @@ import net.sf.mpxj.mpp.MPPReader;
 import net.sf.mpxj.mpx.MPXReader;
 import net.sf.mpxj.mspdi.MSPDIReader;
 import net.sf.mpxj.reader.ProjectReader;
-import net.sourceforge.ganttproject.CustomPropertyClass;
-import net.sourceforge.ganttproject.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.model.CustomPropertyClass;
+import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
 
-import net.sourceforge.ganttproject.GanttTask;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.gui.TaskTreeUIFacade;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.task.CustomColumnsException;
-import net.sourceforge.ganttproject.task.Task.Priority;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.TaskManager.TaskBuilder;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishFinishConstraintImpl;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
-import net.sourceforge.ganttproject.task.dependency.constraint.StartFinishConstraintImpl;
-import net.sourceforge.ganttproject.task.dependency.constraint.StartStartConstraintImpl;
+import net.sourceforge.ganttproject.model.GanttTask;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.gui.TaskTreeUIFacade;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.task.CustomColumnsException;
+import net.sourceforge.ganttproject.model.task.Task.Priority;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManager.TaskBuilder;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishFinishConstraintImpl;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.StartFinishConstraintImpl;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.StartStartConstraintImpl;
 import net.sourceforge.ganttproject.util.collect.Pair;
 import org.slf4j.Logger;
 
@@ -213,7 +213,7 @@ class ProjectFileImporter {
     importTasks(pf, foreignId2nativeTask, myNativeTask2foreignStart);
     hideCustomProperties();
     importDependencies(pf, foreignId2nativeTask);
-    List<net.sourceforge.ganttproject.task.Task> leafTasks = Lists.newArrayList();
+    List<net.sourceforge.ganttproject.model.task.Task> leafTasks = Lists.newArrayList();
     for (GanttTask task : foreignId2nativeTask.values()) {
       if (!getTaskManager().getTaskHierarchy().hasNestedTasks(task)) {
         leafTasks.add(task);
@@ -432,7 +432,7 @@ class ProjectFileImporter {
   }
 
 
-  private void importTask(ProjectFile foreignProject, Task t, net.sourceforge.ganttproject.task.Task supertask,
+  private void importTask(ProjectFile foreignProject, Task t, net.sourceforge.ganttproject.model.task.Task supertask,
                           Map<Integer, GanttTask> foreignId2nativeTask, Map<GanttTask, Date> nativeTask2foreignStart) {
     if (t.getNull()) {
       myErrors.add(Pair.create(Level.INFO,
@@ -758,7 +758,7 @@ class ProjectFileImporter {
         continue;
 
       }
-      net.sourceforge.ganttproject.task.ResourceAssignment nativeAssignment = nativeTask.getAssignmentCollection().addAssignment(
+      net.sourceforge.ganttproject.model.task.ResourceAssignment nativeAssignment = nativeTask.getAssignmentCollection().addAssignment(
           nativeResource);
       Preconditions.checkNotNull(nativeAssignment);
       if (ra.getUnits() == null) {

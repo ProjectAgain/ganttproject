@@ -27,12 +27,12 @@ import org.osgi.service.prefs.Preferences;
 
 import com.google.common.base.Objects;
 
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
 import net.sourceforge.ganttproject.filter.ExtensionBasedFileFilter;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.wizard.AbstractFileChooserPage;
-import net.sourceforge.ganttproject.wizard.WizardPage;
+import net.sourceforge.ganttproject.ui.wizard.AbstractFileChooserPage;
+import net.sourceforge.ganttproject.ui.wizard.WizardPage;
 
 /**
  * @author bard

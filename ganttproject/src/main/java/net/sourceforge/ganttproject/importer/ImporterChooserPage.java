@@ -27,12 +27,12 @@ import javax.swing.JComponent;
 
 import org.osgi.service.prefs.Preferences;
 
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.options.GPOptionChoicePanel;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.options.GPOptionChoicePanel;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.wizard.AbstractWizard;
-import net.sourceforge.ganttproject.wizard.WizardPage;
+import net.sourceforge.ganttproject.ui.wizard.AbstractWizard;
+import net.sourceforge.ganttproject.ui.wizard.WizardPage;
 
 /**
  * @author bard

@@ -3,14 +3,13 @@
  */
 package net.sourceforge.ganttproject.test.time;
 
+import junit.framework.TestCase;
+import net.sourceforge.ganttproject.model.time.impl.WeekFramerImpl;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import net.sourceforge.ganttproject.core.time.impl.WeekFramerImpl;
-
-import junit.framework.TestCase;
 
 /**
  * @author bard

@@ -18,19 +18,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package net.sourceforge.ganttproject.test.task.calendar;
 
-import java.util.Calendar;
-
 import com.google.common.collect.ImmutableList;
-
-import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
-import net.sourceforge.ganttproject.core.calendar.GPCalendar;
-import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
-import net.sourceforge.ganttproject.core.calendar.walker.WorkingUnitCounter;
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.core.time.impl.GregorianTimeUnitStack;
 import junit.framework.Assert;
 import net.sourceforge.ganttproject.TestSetupHelper;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.model.calendar.walker.WorkingUnitCounter;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.impl.GregorianTimeUnitStack;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
+
+import java.util.Calendar;
 
 public class TestWorkingUnitCounter extends TaskTestCase {
     public void testWorkingDaysChunk() {

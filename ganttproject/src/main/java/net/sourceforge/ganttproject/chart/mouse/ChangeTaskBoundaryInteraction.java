@@ -21,11 +21,11 @@ package net.sourceforge.ganttproject.chart.mouse;
 
 import net.sourceforge.ganttproject.chart.TaskInteractionHintRenderer;
 import net.sourceforge.ganttproject.chart.mouse.MouseInteraction.TimelineFacade;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskMutator;
-import net.sourceforge.ganttproject.task.algorithm.RecalculateTaskScheduleAlgorithm;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskMutator;
+import net.sourceforge.ganttproject.model.task.algorithm.RecalculateTaskScheduleAlgorithm;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
 import org.slf4j.Logger;
 
 import java.awt.*;

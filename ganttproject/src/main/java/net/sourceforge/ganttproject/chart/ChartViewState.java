@@ -18,18 +18,17 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
+import net.sourceforge.ganttproject.model.Mediator;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeUnit;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.scrolling.ScrollingListener;
+import net.sourceforge.ganttproject.ui.gui.zoom.ZoomEvent;
+import net.sourceforge.ganttproject.ui.gui.zoom.ZoomListener;
+import net.sourceforge.ganttproject.ui.gui.zoom.ZoomManager;
+import net.sourceforge.ganttproject.ui.gui.zoom.ZoomManager.ZoomState;
+
 import java.util.Date;
-
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.core.time.TimeUnit;
-
-import net.sourceforge.ganttproject.Mediator;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.scrolling.ScrollingListener;
-import net.sourceforge.ganttproject.gui.zoom.ZoomEvent;
-import net.sourceforge.ganttproject.gui.zoom.ZoomListener;
-import net.sourceforge.ganttproject.gui.zoom.ZoomManager;
-import net.sourceforge.ganttproject.gui.zoom.ZoomManager.ZoomState;
 
 /**
  * @author bard

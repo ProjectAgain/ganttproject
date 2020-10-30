@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export.htmlpdf.itext;
 
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.export.ExportException;
 import net.sourceforge.ganttproject.export.ExporterBase;
 import net.sourceforge.ganttproject.export.ExporterBase.ExporterJob;
@@ -28,8 +28,8 @@ import net.sourceforge.ganttproject.export.htmlpdf.AbstractEngine;
 import net.sourceforge.ganttproject.export.htmlpdf.ExporterToPDF;
 import net.sourceforge.ganttproject.export.htmlpdf.Stylesheet;
 import net.sourceforge.ganttproject.export.htmlpdf.fonts.TTFontCache;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.options.OptionsPageBuilder;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.options.OptionsPageBuilder;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.osgi.service.prefs.Preferences;

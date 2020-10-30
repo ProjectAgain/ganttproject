@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
-import net.sourceforge.ganttproject.GanttPreviousState;
-import net.sourceforge.ganttproject.GanttPreviousStateTask;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.GanttPreviousState;
+import net.sourceforge.ganttproject.model.GanttPreviousStateTask;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;

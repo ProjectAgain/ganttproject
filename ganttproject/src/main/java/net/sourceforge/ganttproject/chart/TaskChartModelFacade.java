@@ -20,9 +20,9 @@ package net.sourceforge.ganttproject.chart;
 
 import java.util.List;
 
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Rectangle;
 
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 
 public interface TaskChartModelFacade {
   List<Rectangle> getTaskRectangles(Task t);

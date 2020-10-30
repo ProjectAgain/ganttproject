@@ -20,11 +20,11 @@ package net.sourceforge.ganttproject.chart.export;
 
 import java.awt.Dimension;
 
-import net.sourceforge.ganttproject.core.chart.grid.OffsetBuilder;
-import net.sourceforge.ganttproject.core.chart.grid.OffsetList;
+import net.sourceforge.ganttproject.ui.chart.grid.OffsetBuilder;
+import net.sourceforge.ganttproject.ui.chart.grid.OffsetList;
 
-import net.sourceforge.ganttproject.GPTreeTableBase;
-import net.sourceforge.ganttproject.GanttExportSettings;
+import net.sourceforge.ganttproject.ui.chart.GPTreeTableBase;
+import net.sourceforge.ganttproject.ui.GanttExportSettings;
 import net.sourceforge.ganttproject.chart.ChartModelBase;
 
 public class ChartImageBuilder {

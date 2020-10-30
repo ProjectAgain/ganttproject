@@ -19,11 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.test.task.dependency;
 
 
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.constraint.StartFinishConstraintImpl;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.StartFinishConstraintImpl;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 public class TestStartFinishDepedency extends TaskTestCase {

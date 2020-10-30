@@ -18,17 +18,17 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.core.chart.render.ShapePaint;
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.ui.chart.render.ShapePaint;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import com.google.common.base.Charsets;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import net.sourceforge.ganttproject.gui.TaskTreeUIFacade;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.TaskManager.TaskBuilder;
+import net.sourceforge.ganttproject.ui.gui.TaskTreeUIFacade;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManager.TaskBuilder;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 

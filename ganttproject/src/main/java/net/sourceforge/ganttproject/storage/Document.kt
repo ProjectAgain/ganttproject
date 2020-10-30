@@ -24,9 +24,9 @@ import com.google.common.io.ByteStreams
 import javafx.beans.property.ObjectProperty
 import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableObjectValue
-import net.sourceforge.ganttproject.document.Document
-import net.sourceforge.ganttproject.document.FileDocument
-import net.sourceforge.ganttproject.document.ProxyDocument
+import net.sourceforge.ganttproject.model.document.Document
+import net.sourceforge.ganttproject.model.document.FileDocument
+import net.sourceforge.ganttproject.model.document.ProxyDocument
 import org.xml.sax.SAXException
 import java.io.File
 import java.io.FileNotFoundException

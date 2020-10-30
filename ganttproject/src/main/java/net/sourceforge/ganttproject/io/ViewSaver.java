@@ -19,13 +19,13 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.io;
 
-import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
-import net.sourceforge.ganttproject.gui.GPColorChooser;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.ui.gui.GPColorChooser;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.model.task.Task;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 

@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.lib.fx
 
-import net.sourceforge.ganttproject.app.LocalizedString
-import net.sourceforge.ganttproject.app.RootLocalizer
+import net.sourceforge.ganttproject.ui.LocalizedString
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.utils.FontAwesomeIconFactory
 import javafx.event.ActionEvent

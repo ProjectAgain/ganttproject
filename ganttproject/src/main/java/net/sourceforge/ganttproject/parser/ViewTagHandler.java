@@ -4,7 +4,7 @@
 package net.sourceforge.ganttproject.parser;
 
 import com.google.common.base.Objects;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import org.xml.sax.Attributes;
 
 /**

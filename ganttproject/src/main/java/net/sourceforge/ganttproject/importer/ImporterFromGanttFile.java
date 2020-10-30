@@ -18,26 +18,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.importer;
 
-import net.sourceforge.ganttproject.core.calendar.ImportCalendarOption;
-import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
-import net.sourceforge.ganttproject.core.option.ChangeValueListener;
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.table.ColumnList;
+import net.sourceforge.ganttproject.model.calendar.ImportCalendarOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.CustomPropertyManager;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.document.Document;
-import net.sourceforge.ganttproject.document.Document.DocumentException;
-import net.sourceforge.ganttproject.document.FileDocument;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.HumanResourceMerger;
-import net.sourceforge.ganttproject.resource.HumanResourceMerger.MergeResourcesOption;
-import net.sourceforge.ganttproject.resource.OverwritingMerger;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManagerImpl;
-import net.sourceforge.ganttproject.task.algorithm.AlgorithmCollection;
+import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.document.Document;
+import net.sourceforge.ganttproject.model.document.Document.DocumentException;
+import net.sourceforge.ganttproject.model.document.FileDocument;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResourceMerger;
+import net.sourceforge.ganttproject.model.resource.HumanResourceMerger.MergeResourcesOption;
+import net.sourceforge.ganttproject.model.resource.OverwritingMerger;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManagerImpl;
+import net.sourceforge.ganttproject.model.task.algorithm.AlgorithmCollection;
 import org.osgi.service.prefs.Preferences;
 
 import javax.swing.*;

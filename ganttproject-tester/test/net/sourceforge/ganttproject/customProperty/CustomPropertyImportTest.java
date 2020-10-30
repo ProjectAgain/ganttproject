@@ -1,11 +1,11 @@
 package net.sourceforge.ganttproject.customProperty;
 
-import java.util.List;
-
 import junit.framework.TestCase;
 import net.sourceforge.ganttproject.CustomPropertyClass;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.task.CustomColumnsManager;
+import net.sourceforge.ganttproject.model.task.CustomColumnsManager;
+
+import java.util.List;
 
 public class CustomPropertyImportTest extends TestCase {
     public void testImportDuplicatedProperties() {

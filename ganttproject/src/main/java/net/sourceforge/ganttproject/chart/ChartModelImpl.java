@@ -5,24 +5,24 @@
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
-import net.sourceforge.ganttproject.core.chart.scene.SceneBuilder;
-import net.sourceforge.ganttproject.core.option.ColorOption;
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.ui.chart.scene.SceneBuilder;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.GanttPreviousStateTask;
+import net.sourceforge.ganttproject.model.GanttPreviousStateTask;
 import net.sourceforge.ganttproject.chart.item.ChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskBoundaryChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskNotesChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskProgressChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskRegularAreaChartItem;
-import net.sourceforge.ganttproject.gui.UIConfiguration;
-import net.sourceforge.ganttproject.gui.options.OptionsPageBuilder;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskActivity;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.ui.gui.UIConfiguration;
+import net.sourceforge.ganttproject.ui.gui.options.OptionsPageBuilder;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 
 import java.util.Arrays;
 import java.util.Collections;

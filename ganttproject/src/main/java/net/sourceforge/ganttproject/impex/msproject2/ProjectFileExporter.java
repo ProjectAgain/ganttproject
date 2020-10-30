@@ -18,13 +18,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.impex.msproject2;
 
-import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
-import net.sourceforge.ganttproject.core.calendar.GPCalendar;
-import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayType;
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.calendar.GanttDaysOff;
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
-import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayType;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
 import net.sf.mpxj.DateRange;
 import net.sf.mpxj.Day;
 import net.sf.mpxj.Duration;
@@ -41,21 +41,21 @@ import net.sf.mpxj.Resource;
 import net.sf.mpxj.ResourceType;
 import net.sf.mpxj.TaskMode;
 import net.sf.mpxj.TimeUnit;
-import net.sourceforge.ganttproject.CustomProperty;
-import net.sourceforge.ganttproject.CustomPropertyClass;
-import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.CustomPropertyHolder;
+import net.sourceforge.ganttproject.model.CustomProperty;
+import net.sourceforge.ganttproject.model.CustomPropertyClass;
+import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.model.CustomPropertyHolder;
 
-import net.sourceforge.ganttproject.GanttTask;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.task.ResourceAssignment;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskContainmentHierarchyFacade;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencySlice;
+import net.sourceforge.ganttproject.model.GanttTask;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.task.ResourceAssignment;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskContainmentHierarchyFacade;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencySlice;
 import org.slf4j.Logger;
 
 import javax.swing.*;

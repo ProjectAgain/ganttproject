@@ -18,12 +18,12 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.action.CancelAction;
-import net.sourceforge.ganttproject.action.GPAction;
-import net.sourceforge.ganttproject.action.OkAction;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.options.ProjectCalendarOptionPageProvider;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.action.CancelAction;
+import net.sourceforge.ganttproject.ui.action.GPAction;
+import net.sourceforge.ganttproject.ui.action.OkAction;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.options.ProjectCalendarOptionPageProvider;
 
 import javax.swing.*;
 import java.awt.*;

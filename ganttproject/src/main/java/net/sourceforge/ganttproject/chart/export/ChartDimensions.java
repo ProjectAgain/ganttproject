@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.export;
 
-import net.sourceforge.ganttproject.GPTreeTableBase;
-import net.sourceforge.ganttproject.GanttExportSettings;
+import net.sourceforge.ganttproject.ui.chart.GPTreeTableBase;
+import net.sourceforge.ganttproject.ui.GanttExportSettings;
 
 public class ChartDimensions {
   private final int logoHeight;

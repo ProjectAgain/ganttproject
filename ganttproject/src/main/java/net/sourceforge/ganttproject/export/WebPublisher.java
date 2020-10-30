@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import net.sourceforge.ganttproject.document.DocumentManager;
+import net.sourceforge.ganttproject.model.document.DocumentManager;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;

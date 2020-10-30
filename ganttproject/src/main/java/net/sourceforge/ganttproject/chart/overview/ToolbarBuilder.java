@@ -18,19 +18,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.overview;
 
-import net.sourceforge.ganttproject.core.chart.render.TextLengthCalculatorImpl;
-import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
-import net.sourceforge.ganttproject.core.option.ChangeValueListener;
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.ui.chart.render.TextLengthCalculatorImpl;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.IntegerOption;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.gui.ActionUtil;
-import net.sourceforge.ganttproject.gui.TestGanttRolloverButton;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.UIUtil;
+import net.sourceforge.ganttproject.ui.gui.ActionUtil;
+import net.sourceforge.ganttproject.ui.gui.TestGanttRolloverButton;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIUtil;
 
 import javax.swing.*;
 import javax.swing.border.Border;

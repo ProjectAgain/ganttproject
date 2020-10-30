@@ -18,14 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import net.sourceforge.ganttproject.core.option.BooleanOption;
-import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
-import net.sourceforge.ganttproject.core.option.ChangeValueListener;
-import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.BooleanOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultBooleanOption;
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.projectwizard.WizardImpl;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.projectwizard.WizardImpl;
 import org.osgi.service.prefs.Preferences;
 import org.slf4j.Logger;
 

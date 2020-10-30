@@ -18,20 +18,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.io;
 
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
-import net.sourceforge.ganttproject.PrjInfos;
-import net.sourceforge.ganttproject.gui.UIConfiguration;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.model.PrjInfos;
+import net.sourceforge.ganttproject.ui.gui.UIConfiguration;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.parser.AbstractTagHandler;
 import net.sourceforge.ganttproject.parser.GPParser;
 import net.sourceforge.ganttproject.parser.ParsingContext;
 import net.sourceforge.ganttproject.parser.ParsingListener;
 import net.sourceforge.ganttproject.parser.TagHandler;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 

@@ -26,19 +26,19 @@ import javax.swing.Action;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import net.sourceforge.ganttproject.ChartComponentBase;
-import net.sourceforge.ganttproject.GanttTree2;
-import net.sourceforge.ganttproject.action.GPAction;
+import net.sourceforge.ganttproject.ui.chart.ChartComponentBase;
+import net.sourceforge.ganttproject.ui.chart.GanttTree2;
+import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.chart.ChartModelImpl;
 import net.sourceforge.ganttproject.chart.item.ChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskBoundaryChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskProgressChartItem;
 import net.sourceforge.ganttproject.chart.item.TaskRegularAreaChartItem;
 import net.sourceforge.ganttproject.chart.mouse.MouseListenerBase;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskSelectionManager;
-import net.sourceforge.ganttproject.task.algorithm.RetainRootsAlgorithm;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskSelectionManager;
+import net.sourceforge.ganttproject.model.task.algorithm.RetainRootsAlgorithm;
 import net.sourceforge.ganttproject.util.MouseUtil;
 
 class MouseListenerImpl extends MouseListenerBase {

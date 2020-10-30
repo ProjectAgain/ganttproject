@@ -19,9 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.chart.overview;
 
 import com.google.common.base.Function;
-import net.sourceforge.ganttproject.action.zoom.ZoomActionSet;
+import net.sourceforge.ganttproject.ui.action.zoom.ZoomActionSet;
 import net.sourceforge.ganttproject.chart.TimelineChart;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 
 import javax.annotation.Nullable;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package net.sourceforge.ganttproject.test.task.hierarchy;
 
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 import java.util.Arrays;

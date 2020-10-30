@@ -22,10 +22,10 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.core.time.TimeUnit;
-import net.sourceforge.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeUnit;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 import net.sourceforge.ganttproject.chart.ChartModelBase.ScrollingSession;
 
 public interface MouseInteraction {

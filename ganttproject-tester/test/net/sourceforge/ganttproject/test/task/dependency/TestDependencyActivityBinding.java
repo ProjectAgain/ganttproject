@@ -3,20 +3,14 @@
  */
 package net.sourceforge.ganttproject.test.task.dependency;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import net.sourceforge.ganttproject.core.calendar.AlwaysWorkingTimeCalendarImpl;
-import net.sourceforge.ganttproject.core.calendar.CalendarActivityImpl;
-import net.sourceforge.ganttproject.core.calendar.GPCalendar;
-import net.sourceforge.ganttproject.core.calendar.GPCalendarActivity;
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.model.calendar.AlwaysWorkingTimeCalendarImpl;
+import net.sourceforge.ganttproject.model.calendar.CalendarActivityImpl;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarActivity;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 /**

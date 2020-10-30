@@ -19,7 +19,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.search;
 
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.gui.UIUtil;
+import net.sourceforge.ganttproject.ui.gui.UIUtil;
 import org.jdesktop.swingx.JXList;
 
 import javax.swing.*;

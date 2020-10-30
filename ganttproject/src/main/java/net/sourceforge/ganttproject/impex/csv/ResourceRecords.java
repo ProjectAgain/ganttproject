@@ -21,12 +21,12 @@ package net.sourceforge.ganttproject.impex.csv;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import net.sourceforge.ganttproject.ResourceDefaultColumn;
+import net.sourceforge.ganttproject.ui.chart.ResourceDefaultColumn;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.roles.Role;
-import net.sourceforge.ganttproject.roles.RoleManager;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.roles.Role;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
 
 import java.util.List;
 

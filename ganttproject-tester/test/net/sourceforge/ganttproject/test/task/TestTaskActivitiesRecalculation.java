@@ -1,11 +1,11 @@
 package net.sourceforge.ganttproject.test.task;
 
-import java.util.List;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
+import net.sourceforge.ganttproject.model.task.TaskMutator;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
 
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskActivity;
-import net.sourceforge.ganttproject.task.TaskMutator;
+import java.util.List;
 
 /**
  * @author bard

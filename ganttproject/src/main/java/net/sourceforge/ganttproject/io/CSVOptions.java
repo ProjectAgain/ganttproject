@@ -18,14 +18,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.io;
 
-import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
-import net.sourceforge.ganttproject.core.option.BooleanOption;
-import net.sourceforge.ganttproject.core.option.DefaultBooleanOption;
+import net.sourceforge.ganttproject.ui.table.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.ui.viewmodel.option.BooleanOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultBooleanOption;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.sourceforge.ganttproject.ResourceDefaultColumn;
+import net.sourceforge.ganttproject.ui.chart.ResourceDefaultColumn;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;

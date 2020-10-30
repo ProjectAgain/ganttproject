@@ -18,11 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export.htmlpdf;
 
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.GPVersion;
-import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.export.ExportException;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.util.FileUtil;
 import org.xml.sax.SAXException;

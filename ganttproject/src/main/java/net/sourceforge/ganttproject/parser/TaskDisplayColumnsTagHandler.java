@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.core.table.ColumnList;
-import net.sourceforge.ganttproject.core.table.ColumnList.Column;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
+import net.sourceforge.ganttproject.ui.table.ColumnList.Column;
 import org.xml.sax.Attributes;
 
 import java.util.ArrayList;

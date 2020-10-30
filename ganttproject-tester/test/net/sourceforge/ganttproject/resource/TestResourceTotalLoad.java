@@ -16,11 +16,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
-package net.sourceforge.ganttproject.resource;
+package net.sourceforge.ganttproject.model.resource;
 
 import net.sourceforge.ganttproject.TestSetupHelper;
 import net.sourceforge.ganttproject.TestSetupHelper.TaskManagerBuilder;
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 public class TestResourceTotalLoad extends TaskTestCase {

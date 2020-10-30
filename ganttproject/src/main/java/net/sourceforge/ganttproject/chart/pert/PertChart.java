@@ -18,18 +18,18 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart.pert;
 
-import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
-import net.sourceforge.ganttproject.core.option.ChangeValueListener;
-import net.sourceforge.ganttproject.core.option.FontOption;
-import net.sourceforge.ganttproject.core.option.FontSpec;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
+import net.sourceforge.ganttproject.ui.viewmodel.option.FontOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.FontSpec;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.IntegerOption;
 import com.google.common.base.Preconditions;
-import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.chart.ChartSelection;
 import net.sourceforge.ganttproject.chart.ChartSelectionListener;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.pf4j.Extension;
@@ -38,7 +38,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
 
-import static net.sourceforge.ganttproject.gui.UIFacade.DEFAULT_DPI;
+import static net.sourceforge.ganttproject.ui.gui.UIFacade.DEFAULT_DPI;
 
 @Extension
 public abstract class PertChart extends JPanel implements Chart {

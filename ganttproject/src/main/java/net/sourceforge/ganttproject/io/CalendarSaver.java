@@ -26,7 +26,7 @@ import java.util.Locale;
 
 import javax.xml.transform.sax.TransformerHandler;
 
-import net.sourceforge.ganttproject.IGanttProject;
+import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.util.ColorConvertion;
 
 import org.xml.sax.SAXException;
@@ -34,8 +34,8 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import com.google.common.base.Strings;
 
-import net.sourceforge.ganttproject.core.calendar.GPCalendar;
-import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
 
 public class CalendarSaver extends SaverBase {
   private SimpleDateFormat myShortFormat = new SimpleDateFormat("EEE", Locale.ENGLISH);

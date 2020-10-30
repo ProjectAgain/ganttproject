@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage.local
 
-import net.sourceforge.ganttproject.app.RootLocalizer
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import net.sourceforge.ganttproject.storage.BROWSE_PANE_LOCALIZER
 import net.sourceforge.ganttproject.storage.StorageMode
 import org.controlsfx.validation.ValidationResult

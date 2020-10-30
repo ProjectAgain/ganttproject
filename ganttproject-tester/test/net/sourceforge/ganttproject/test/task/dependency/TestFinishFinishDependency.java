@@ -18,12 +18,12 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.test.task.dependency;
 
-import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyConstraint.Collision;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishFinishConstraintImpl;
+import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyConstraint.Collision;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishFinishConstraintImpl;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 /**

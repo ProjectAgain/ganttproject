@@ -20,15 +20,15 @@ package net.sourceforge.ganttproject.chart.mouse;
 
 import java.util.Date;
 
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.calendar.walker.WorkingUnitCounter;
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.core.time.TimeUnit;
-import net.sourceforge.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.calendar.walker.WorkingUnitCounter;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeUnit;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 import net.sourceforge.ganttproject.chart.ChartModelBase;
 import net.sourceforge.ganttproject.chart.ChartModelBase.ScrollingSession;
 import net.sourceforge.ganttproject.chart.TimelineChart.VScrollController;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 
 public class TimelineFacadeImpl implements MouseInteraction.TimelineFacade {
   private final ChartModelBase myChartModel;

@@ -6,9 +6,9 @@
  */
 package net.sourceforge.ganttproject.test.task.dependency;
 
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 public class TestDependencyCycle extends TaskTestCase {

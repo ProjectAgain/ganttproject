@@ -18,9 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage.local
 
-import net.sourceforge.ganttproject.app.RootLocalizer
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import net.sourceforge.ganttproject.lib.fx.buildFontAwesomeButton
-import net.sourceforge.ganttproject.storage.*
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
@@ -30,8 +29,8 @@ import javafx.event.ActionEvent
 import javafx.scene.control.Button
 import javafx.scene.layout.Pane
 import javafx.stage.FileChooser
-import net.sourceforge.ganttproject.document.Document
-import net.sourceforge.ganttproject.document.FileDocument
+import net.sourceforge.ganttproject.model.document.Document
+import net.sourceforge.ganttproject.model.document.FileDocument
 import net.sourceforge.ganttproject.storage.BROWSE_PANE_LOCALIZER
 import net.sourceforge.ganttproject.storage.BrowserPaneBuilder
 import net.sourceforge.ganttproject.storage.BrowserPaneElements

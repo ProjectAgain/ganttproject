@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
 
 public class ParsingContext {
   private final Stack<Task> myStack = new Stack<Task>();

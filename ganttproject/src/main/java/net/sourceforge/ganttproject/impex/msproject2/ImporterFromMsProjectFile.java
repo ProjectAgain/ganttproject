@@ -18,21 +18,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.impex.msproject2;
 
-import net.sourceforge.ganttproject.core.calendar.ImportCalendarOption;
-import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.model.calendar.ImportCalendarOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
 import com.google.common.collect.Lists;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sf.mpxj.MPXJException;
-import net.sourceforge.ganttproject.GanttTask;
+import net.sourceforge.ganttproject.model.GanttTask;
 import net.sourceforge.ganttproject.importer.BufferProject;
 import net.sourceforge.ganttproject.importer.Importer;
 import net.sourceforge.ganttproject.importer.ImporterBase;
 import net.sourceforge.ganttproject.importer.ImporterFromGanttFile;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.resource.HumanResourceMerger;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.resource.HumanResourceMerger;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
 import net.sourceforge.ganttproject.util.collect.Pair;
 
 import java.io.File;

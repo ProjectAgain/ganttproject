@@ -18,7 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.export.htmlpdf;
 
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.export.htmlpdf.itext.ITextEngine;
 import net.sourceforge.ganttproject.export.htmlpdf.itext.ITextStylesheet;

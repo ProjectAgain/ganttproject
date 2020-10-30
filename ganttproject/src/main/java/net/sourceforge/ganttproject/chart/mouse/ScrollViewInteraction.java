@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart.mouse;
 
-import net.sourceforge.ganttproject.ChartComponentBase;
-import net.sourceforge.ganttproject.action.GPAction;
+import net.sourceforge.ganttproject.ui.chart.ChartComponentBase;
+import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.chart.ChartModelBase.ScrollingSession;
 
 import java.awt.*;

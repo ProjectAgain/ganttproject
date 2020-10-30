@@ -23,10 +23,10 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.Action;
 
-import net.sourceforge.ganttproject.AbstractChartImplementation;
-import net.sourceforge.ganttproject.ChartComponentBase;
-import net.sourceforge.ganttproject.action.GPAction;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.chart.AbstractChartImplementation;
+import net.sourceforge.ganttproject.ui.chart.ChartComponentBase;
+import net.sourceforge.ganttproject.ui.action.GPAction;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.util.MouseUtil;
 
 public class MouseListenerBase extends MouseAdapter {

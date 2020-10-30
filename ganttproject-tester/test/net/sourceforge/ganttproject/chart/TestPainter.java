@@ -18,14 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.chart.canvas.Painter;
-import net.sourceforge.ganttproject.core.chart.canvas.TextMetrics;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Label;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Line;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rhombus;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Text;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.TextGroup;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.*;
+import net.sourceforge.ganttproject.ui.chart.canvas.Painter;
+import net.sourceforge.ganttproject.ui.chart.canvas.TextMetrics;
 
 /**
  * Painter for tests

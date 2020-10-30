@@ -1,8 +1,8 @@
-package net.sourceforge.ganttproject.resource;
+package net.sourceforge.ganttproject.model.resource;
 
-import net.sourceforge.ganttproject.resource.HumanResourceMerger.MergeResourcesOption;
-import net.sourceforge.ganttproject.task.CustomColumnsManager;
 import junit.framework.TestCase;
+import net.sourceforge.ganttproject.model.resource.HumanResourceMerger.MergeResourcesOption;
+import net.sourceforge.ganttproject.model.task.CustomColumnsManager;
 
 public class TestImportResources extends TestCase {
 

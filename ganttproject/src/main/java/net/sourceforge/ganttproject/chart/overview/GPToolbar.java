@@ -1,12 +1,12 @@
 // Copyright (C) 2017 BarD Software
 package net.sourceforge.ganttproject.chart.overview;
 
-import net.sourceforge.ganttproject.core.option.ChangeValueEvent;
-import net.sourceforge.ganttproject.core.option.ChangeValueListener;
-import net.sourceforge.ganttproject.core.option.IntegerOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
+import net.sourceforge.ganttproject.ui.viewmodel.option.IntegerOption;
 import com.google.common.base.Preconditions;
-import net.sourceforge.ganttproject.gui.TestGanttRolloverButton;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.TestGanttRolloverButton;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 
 import javax.swing.*;
 import java.awt.*;

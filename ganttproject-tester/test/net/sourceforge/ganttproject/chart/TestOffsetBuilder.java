@@ -18,14 +18,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.core.chart.grid.Offset;
-import net.sourceforge.ganttproject.core.chart.grid.OffsetBuilder;
-import net.sourceforge.ganttproject.core.chart.grid.OffsetBuilderImpl;
-import net.sourceforge.ganttproject.core.chart.grid.OffsetList;
-import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import net.sourceforge.ganttproject.TestSetupHelper;
+import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
+import net.sourceforge.ganttproject.ui.chart.grid.Offset;
+import net.sourceforge.ganttproject.ui.chart.grid.OffsetBuilder;
+import net.sourceforge.ganttproject.ui.chart.grid.OffsetBuilderImpl;
+import net.sourceforge.ganttproject.ui.chart.grid.OffsetList;
 
 import java.util.ArrayList;
 import java.util.Calendar;

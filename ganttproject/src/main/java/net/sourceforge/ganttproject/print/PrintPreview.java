@@ -18,17 +18,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.print;
 
-import net.sourceforge.ganttproject.core.option.DateOption;
-import net.sourceforge.ganttproject.core.option.DefaultDateOption;
-import net.sourceforge.ganttproject.GanttExportSettings;
-import net.sourceforge.ganttproject.GanttProject;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.action.zoom.ZoomActionSet;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DateOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultDateOption;
+import net.sourceforge.ganttproject.ui.GanttExportSettings;
+import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.action.zoom.ZoomActionSet;
 import net.sourceforge.ganttproject.chart.Chart;
-import net.sourceforge.ganttproject.document.Document;
-import net.sourceforge.ganttproject.gui.TestGanttRolloverButton;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.options.OptionsPageBuilder;
+import net.sourceforge.ganttproject.model.document.Document;
+import net.sourceforge.ganttproject.ui.gui.TestGanttRolloverButton;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.options.OptionsPageBuilder;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.slf4j.Logger;
 

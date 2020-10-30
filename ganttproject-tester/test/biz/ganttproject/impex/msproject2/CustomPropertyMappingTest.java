@@ -18,13 +18,13 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.impex.msproject2;
 
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import net.sf.mpxj.FieldType;
 import net.sf.mpxj.MPXJException;
 import net.sf.mpxj.TaskField;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.CustomPropertyManager;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 import java.util.Map;

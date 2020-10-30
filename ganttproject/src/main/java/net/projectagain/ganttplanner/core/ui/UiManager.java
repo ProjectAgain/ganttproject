@@ -12,10 +12,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.projectagain.ganttplanner.core.LogMarker;
-import net.sourceforge.ganttproject.GanttProject;
-import net.sourceforge.ganttproject.document.DocumentCreator;
-import net.sourceforge.ganttproject.gui.UIFacade;
-import net.sourceforge.ganttproject.gui.options.SettingsDialog2Factory;
+import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.model.document.DocumentCreator;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.gui.options.SettingsDialog2Factory;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.search.SearchDialogFactory;
 import org.slf4j.Logger;
@@ -30,8 +30,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import static net.sourceforge.ganttproject.app.SplashKt.SPLASH_HEIGHT;
-import static net.sourceforge.ganttproject.app.SplashKt.SPLASH_WIDTH;
+import static net.sourceforge.ganttproject.ui.SplashKt.SPLASH_HEIGHT;
+import static net.sourceforge.ganttproject.ui.SplashKt.SPLASH_WIDTH;
 
 @Service
 @DependsOn("pluginManager")

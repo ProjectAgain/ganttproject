@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage
 
-import net.sourceforge.ganttproject.app.Localizer
-import net.sourceforge.ganttproject.app.RootLocalizer
+import net.sourceforge.ganttproject.ui.Localizer
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import net.sourceforge.ganttproject.lib.fx.VBoxBuilder
 import net.sourceforge.ganttproject.lib.fx.vbox
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon

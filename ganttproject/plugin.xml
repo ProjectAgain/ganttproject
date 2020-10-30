@@ -66,15 +66,15 @@
     <extension point="net.sourceforge.ganttproject.OptionPageProvider">
         <optionpageprovider class="net.sourceforge.ganttproject.storage.cloud.ProjectPropertiesPageProvider"/>
         <optionpageprovider class="biz.ganttproject.platform.PlatformOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.gui.options.ExportCsvOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.gui.options.GanttChartOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.gui.options.InterfaceOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.gui.options.ProjectBasicOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.gui.options.ProjectCalendarOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.gui.options.ProjectRolesOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.gui.options.ResourceChartOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.document.NetworkOptionPageProvider"/>
-        <optionpageprovider class="net.sourceforge.ganttproject.document.webdav.WebDavOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.ui.gui.options.ExportCsvOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.ui.gui.options.GanttChartOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.ui.gui.options.InterfaceOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.ui.gui.options.ProjectBasicOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.ui.gui.options.ProjectCalendarOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.ui.gui.options.ProjectRolesOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.ui.gui.options.ResourceChartOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.model.document.NetworkOptionPageProvider"/>
+        <optionpageprovider class="net.sourceforge.ganttproject.model.document.webdav.WebDavOptionPageProvider"/>
     </extension>
 
     <extension

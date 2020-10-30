@@ -21,8 +21,8 @@ package net.sourceforge.ganttproject.chart.mouse;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import net.sourceforge.ganttproject.AbstractChartImplementation;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.chart.AbstractChartImplementation;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 
 public class MouseMotionListenerBase extends MouseMotionAdapter {
   private UIFacade myUiFacade;

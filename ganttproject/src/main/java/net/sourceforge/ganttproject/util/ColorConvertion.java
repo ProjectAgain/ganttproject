@@ -19,7 +19,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.util;
 
 import java.awt.Color;
-import net.sourceforge.ganttproject.core.option.ColorOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
 
 public class ColorConvertion {
 

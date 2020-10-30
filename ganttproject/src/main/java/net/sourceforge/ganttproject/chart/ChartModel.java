@@ -18,14 +18,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.chart.grid.Offset;
-import net.sourceforge.ganttproject.core.chart.grid.OffsetList;
-import net.sourceforge.ganttproject.core.chart.scene.SceneBuilder;
-import net.sourceforge.ganttproject.core.time.TimeUnit;
-import net.sourceforge.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.ui.chart.grid.Offset;
+import net.sourceforge.ganttproject.ui.chart.grid.OffsetList;
+import net.sourceforge.ganttproject.ui.chart.scene.SceneBuilder;
+import net.sourceforge.ganttproject.model.time.TimeUnit;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 import net.sourceforge.ganttproject.chart.ChartModelBase.OptionEventDispatcher;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 
 import java.awt.*;
 import java.util.Date;

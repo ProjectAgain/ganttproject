@@ -18,12 +18,11 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage.local
 
-import net.sourceforge.ganttproject.app.RootLocalizer
-import net.sourceforge.ganttproject.storage.*
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
-import net.sourceforge.ganttproject.document.Document
-import net.sourceforge.ganttproject.document.FileDocument
+import net.sourceforge.ganttproject.model.document.Document
+import net.sourceforge.ganttproject.model.document.FileDocument
 import net.sourceforge.ganttproject.storage.BROWSE_PANE_LOCALIZER
 import net.sourceforge.ganttproject.storage.StorageMode
 import net.sourceforge.ganttproject.storage.asLocalDocument

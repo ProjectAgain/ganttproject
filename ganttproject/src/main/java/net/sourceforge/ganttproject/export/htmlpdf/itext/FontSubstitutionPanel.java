@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export.htmlpdf.itext;
 
-import net.sourceforge.ganttproject.gui.UIUtil;
+import net.sourceforge.ganttproject.ui.gui.UIUtil;
 import net.sourceforge.ganttproject.export.htmlpdf.itext.FontSubstitutionModel.FontSubstitution;
 import org.jdesktop.swingx.JXTable;
 

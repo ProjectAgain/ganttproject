@@ -10,14 +10,14 @@
  */
 package net.sourceforge.ganttproject.test.task.event;
 
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependencyException;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.model.task.event.TaskDependencyEvent;
+import net.sourceforge.ganttproject.model.task.event.TaskListenerAdapter;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.dependency.TaskDependencyException;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
-import net.sourceforge.ganttproject.task.event.TaskListenerAdapter;
-import net.sourceforge.ganttproject.task.event.TaskDependencyEvent;
 
 /**
  * Created by IntelliJ IDEA. User: bard

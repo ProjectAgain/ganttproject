@@ -1,8 +1,8 @@
 package net.sourceforge.ganttproject.test.task;
 
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 
 public class TestTaskBounds extends TaskTestCase {
   public void testIssue953() {

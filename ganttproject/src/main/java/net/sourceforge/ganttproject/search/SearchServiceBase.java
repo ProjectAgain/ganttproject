@@ -20,9 +20,9 @@ package net.sourceforge.ganttproject.search;
 
 import java.util.List;
 
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.gui.TreeUiFacade;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.gui.TreeUiFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 
 /**
  * Base class for task and resource search services.

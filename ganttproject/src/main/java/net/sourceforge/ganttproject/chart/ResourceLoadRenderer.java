@@ -19,10 +19,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.chart.grid.Offset;
-import net.sourceforge.ganttproject.core.chart.scene.CapacityHeatmapSceneBuilder;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.LoadDistribution.Load;
+import net.sourceforge.ganttproject.ui.chart.grid.Offset;
+import net.sourceforge.ganttproject.ui.chart.scene.CapacityHeatmapSceneBuilder;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.LoadDistribution.Load;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

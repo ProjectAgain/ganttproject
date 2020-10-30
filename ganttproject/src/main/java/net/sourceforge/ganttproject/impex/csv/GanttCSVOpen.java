@@ -18,20 +18,20 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.impex.csv;
 
-import net.sourceforge.ganttproject.core.time.TimeUnitStack;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.CustomPropertyClass;
-import net.sourceforge.ganttproject.CustomPropertyManager;
+import net.sourceforge.ganttproject.model.CustomPropertyClass;
+import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
 
 import net.sourceforge.ganttproject.io.CSVOptions;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.roles.RoleManager;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 import net.sourceforge.ganttproject.util.collect.Pair;
 import org.apache.commons.csv.CSVFormat;
 import org.slf4j.Logger;

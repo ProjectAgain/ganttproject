@@ -20,10 +20,10 @@ package net.sourceforge.ganttproject.parser;
 
 import java.util.Set;
 
-import net.sourceforge.ganttproject.roles.Role;
-import net.sourceforge.ganttproject.roles.RoleManager;
-import net.sourceforge.ganttproject.roles.RolePersistentID;
-import net.sourceforge.ganttproject.roles.RoleSet;
+import net.sourceforge.ganttproject.model.roles.Role;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.model.roles.RolePersistentID;
+import net.sourceforge.ganttproject.model.roles.RoleSet;
 
 import org.xml.sax.Attributes;
 

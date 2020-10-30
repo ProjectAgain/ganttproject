@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.impex.msproject2;
 
-import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
-import net.sourceforge.ganttproject.core.option.EnumerationOption;
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.EnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sf.mpxj.MPXJException;
 import net.sf.mpxj.ProjectFile;

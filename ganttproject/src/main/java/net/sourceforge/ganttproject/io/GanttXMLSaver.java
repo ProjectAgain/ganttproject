@@ -18,19 +18,19 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.io;
 
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
 
 import net.sourceforge.ganttproject.GPVersion;
-import net.sourceforge.ganttproject.GanttGraphicArea;
-import net.sourceforge.ganttproject.GanttPreviousState;
-import net.sourceforge.ganttproject.GanttResourcePanel;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.gui.TaskTreeUIFacade;
-import net.sourceforge.ganttproject.gui.UIFacade;
+import net.sourceforge.ganttproject.ui.chart.GanttGraphicArea;
+import net.sourceforge.ganttproject.model.GanttPreviousState;
+import net.sourceforge.ganttproject.ui.chart.GanttResourcePanel;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.ui.gui.TaskTreeUIFacade;
+import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.roles.Role;
-import net.sourceforge.ganttproject.roles.RoleManager;
-import net.sourceforge.ganttproject.roles.RoleSet;
+import net.sourceforge.ganttproject.model.roles.Role;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.model.roles.RoleSet;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;

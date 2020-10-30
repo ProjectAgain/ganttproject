@@ -16,23 +16,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
-package net.sourceforge.ganttproject.core.calendar;
-
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayMask;
-import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayType;
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
+package net.sourceforge.ganttproject.model.calendar;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-
 import junit.framework.TestCase;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayMask;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayType;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Tests for {@link WeekendsCalendarImpl} class.

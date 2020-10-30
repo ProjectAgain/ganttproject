@@ -10,12 +10,12 @@
  */
 package net.sourceforge.ganttproject.test.task;
 
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
-import net.sourceforge.ganttproject.task.TaskManager;
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.algorithm.RecalculateTaskCompletionPercentageAlgorithm;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.algorithm.RecalculateTaskCompletionPercentageAlgorithm;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 
 /**
  * Created by IntelliJ IDEA. User: bard

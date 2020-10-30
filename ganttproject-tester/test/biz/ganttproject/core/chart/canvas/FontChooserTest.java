@@ -1,11 +1,9 @@
-package net.sourceforge.ganttproject.core.chart.canvas;
-
-import java.awt.Font;
-import java.util.Properties;
-
-import junit.framework.TestCase;
+package net.sourceforge.ganttproject.ui.chart.canvas;
 
 import com.google.common.base.Suppliers;
+import junit.framework.TestCase;
+
+import java.util.Properties;
 
 public class FontChooserTest extends TestCase {
 

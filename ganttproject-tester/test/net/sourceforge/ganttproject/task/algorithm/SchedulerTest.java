@@ -16,17 +16,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
-package net.sourceforge.ganttproject.task.algorithm;
+package net.sourceforge.ganttproject.model.task.algorithm;
 
 import com.google.common.base.Suppliers;
-
-import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskImpl;
-import net.sourceforge.ganttproject.task.dependency.TaskDependency;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishFinishConstraintImpl;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskImpl;
+import net.sourceforge.ganttproject.model.task.dependency.TaskDependency;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishFinishConstraintImpl;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishStartConstraintImpl;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 /**

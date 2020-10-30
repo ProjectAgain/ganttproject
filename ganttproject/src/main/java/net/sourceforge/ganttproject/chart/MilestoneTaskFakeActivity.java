@@ -20,9 +20,9 @@ package net.sourceforge.ganttproject.chart;
 
 import java.util.Date;
 
-import net.sourceforge.ganttproject.core.time.TimeDuration;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskActivity;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
 
 public class MilestoneTaskFakeActivity implements TaskActivity {
   private final Task myTask;

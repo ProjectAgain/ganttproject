@@ -19,11 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.test.task.dependency;
 
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
-import net.sourceforge.ganttproject.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.task.dependency.constraint.FinishStartConstraintImpl;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
 
 public class TestSupertaskAdjustment extends TaskTestCase {
     public void testSupetaskDurationGrowsWhenNestedTasksGrow() throws Exception {

@@ -3,10 +3,10 @@
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
 import com.google.common.base.Preconditions;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskActivity;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
 
 import java.util.Date;
 import java.util.Objects;

@@ -21,7 +21,7 @@ package net.sourceforge.ganttproject.impex.msproject2;
 import java.util.Arrays;
 import java.util.Locale;
 
-import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
 
 import net.sf.mpxj.mpx.MPXWriter;
 import net.sourceforge.ganttproject.language.GanttLanguage;

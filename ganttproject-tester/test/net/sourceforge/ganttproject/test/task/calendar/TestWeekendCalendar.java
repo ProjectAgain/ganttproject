@@ -3,15 +3,15 @@
  */
 package net.sourceforge.ganttproject.test.task.calendar;
 
-import net.sourceforge.ganttproject.core.calendar.CalendarEvent;
-import net.sourceforge.ganttproject.core.calendar.GPCalendar;
-import net.sourceforge.ganttproject.core.calendar.WeekendCalendarImpl;
-import net.sourceforge.ganttproject.core.time.CalendarFactory;
-import net.sourceforge.ganttproject.core.time.impl.GregorianTimeUnitStack;
 import com.google.common.collect.ImmutableList;
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar;
+import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.time.CalendarFactory;
+import net.sourceforge.ganttproject.model.time.impl.GregorianTimeUnitStack;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
 
 import java.text.DateFormat;

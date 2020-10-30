@@ -19,9 +19,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.update;
 
 import junit.framework.TestCase;
-import net.sourceforge.ganttproject.client.RssFeed;
-import net.sourceforge.ganttproject.client.RssParser;
-import net.sourceforge.ganttproject.client.RssUpdate;
+import net.sourceforge.ganttproject.updater.client.RssFeed;
+import net.sourceforge.ganttproject.updater.client.RssParser;
+import net.sourceforge.ganttproject.updater.client.RssUpdate;
 
 import java.io.InputStream;
 import java.util.List;

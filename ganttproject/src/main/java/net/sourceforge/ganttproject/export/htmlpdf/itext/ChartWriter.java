@@ -22,7 +22,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import net.sourceforge.ganttproject.GanttExportSettings;
+import net.sourceforge.ganttproject.ui.GanttExportSettings;
 import net.sourceforge.ganttproject.chart.ChartModel;
 import net.sourceforge.ganttproject.chart.TimelineChart;
 import net.sourceforge.ganttproject.chart.export.ChartDimensions;

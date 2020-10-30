@@ -18,14 +18,14 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.impex.csv;
 
-import net.sourceforge.ganttproject.core.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
 
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProject;
 import net.sourceforge.ganttproject.importer.BufferProject;
 import net.sourceforge.ganttproject.importer.ImporterBase;
 import net.sourceforge.ganttproject.importer.ImporterFromGanttFile;
-import net.sourceforge.ganttproject.resource.HumanResourceMerger;
+import net.sourceforge.ganttproject.model.resource.HumanResourceMerger;
 import net.sourceforge.ganttproject.util.collect.Pair;
 import org.slf4j.Logger;
 

@@ -19,7 +19,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.storage
 
 import net.sourceforge.ganttproject.FXUtil
-import net.sourceforge.ganttproject.app.RootLocalizer
+import net.sourceforge.ganttproject.ui.RootLocalizer
 import net.sourceforge.ganttproject.lib.fx.ListItemBuilder
 import net.sourceforge.ganttproject.lib.fx.buildFontAwesomeButton
 import net.sourceforge.ganttproject.storage.local.LocalStorage
@@ -34,9 +34,9 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import net.sourceforge.ganttproject.document.Document
-import net.sourceforge.ganttproject.document.DocumentManager
-import net.sourceforge.ganttproject.document.ReadOnlyProxyDocument
+import net.sourceforge.ganttproject.model.document.Document
+import net.sourceforge.ganttproject.model.document.DocumentManager
+import net.sourceforge.ganttproject.model.document.ReadOnlyProxyDocument
 import java.io.File
 import java.util.function.Consumer
 

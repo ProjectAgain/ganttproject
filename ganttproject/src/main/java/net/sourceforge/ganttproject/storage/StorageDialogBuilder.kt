@@ -19,9 +19,9 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 package net.sourceforge.ganttproject.storage
 
 import net.sourceforge.ganttproject.FXUtil
-import net.sourceforge.ganttproject.app.DialogController
-import net.sourceforge.ganttproject.app.RootLocalizer
-import net.sourceforge.ganttproject.app.createAlertBody
+import net.sourceforge.ganttproject.ui.DialogController
+import net.sourceforge.ganttproject.ui.RootLocalizer
+import net.sourceforge.ganttproject.ui.createAlertBody
 import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.control.Button
@@ -33,11 +33,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import net.sourceforge.ganttproject.IGanttProject
-import net.sourceforge.ganttproject.document.Document
-import net.sourceforge.ganttproject.document.DocumentManager
-import net.sourceforge.ganttproject.document.ReadOnlyProxyDocument
-import net.sourceforge.ganttproject.gui.ProjectUIFacade
+import net.sourceforge.ganttproject.model.IGanttProject
+import net.sourceforge.ganttproject.model.document.Document
+import net.sourceforge.ganttproject.model.document.DocumentManager
+import net.sourceforge.ganttproject.model.document.ReadOnlyProxyDocument
+import net.sourceforge.ganttproject.ui.gui.ProjectUIFacade
 import net.sourceforge.ganttproject.language.GanttLanguage
 import org.controlsfx.control.NotificationPane
 import org.slf4j.LoggerFactory
@@ -56,7 +56,8 @@ class StorageDialogBuilder(
     private val myProject: IGanttProject,
     projectUi: ProjectUIFacade,
     documentManager: DocumentManager,
-    private val dialogBuildApi: DialogController) {
+    private val dialogBuildApi: DialogController
+) {
   private val myDocumentReceiver: Consumer<Document>
   private val myDocumentUpdater: Consumer<Document>
   private var myNotificationPane: NotificationPane? = null

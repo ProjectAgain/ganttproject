@@ -18,16 +18,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.document.Document;
-import net.sourceforge.ganttproject.document.FileDocument;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.document.Document;
+import net.sourceforge.ganttproject.model.document.FileDocument;
 import net.sourceforge.ganttproject.export.ExportFileWizardImpl.State;
 import net.sourceforge.ganttproject.filter.ExtensionBasedFileFilter;
-import net.sourceforge.ganttproject.gui.FileChooserPageBase;
-import net.sourceforge.ganttproject.gui.UIUtil;
-import net.sourceforge.ganttproject.gui.projectwizard.WizardImpl;
+import net.sourceforge.ganttproject.ui.gui.FileChooserPageBase;
+import net.sourceforge.ganttproject.ui.gui.UIUtil;
+import net.sourceforge.ganttproject.ui.gui.projectwizard.WizardImpl;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.storage.DocumentKt;
 import net.sourceforge.ganttproject.util.FileUtil;

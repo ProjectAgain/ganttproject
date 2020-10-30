@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Rectangle;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Rectangle;
 
-import net.sourceforge.ganttproject.core.time.TimeDuration;
+import net.sourceforge.ganttproject.model.time.TimeDuration;
 import net.sourceforge.ganttproject.chart.TaskChartModelFacade;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskActivity;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskActivity;
 
 /**
  * Helper class for converting screen pixels into task completion percentage

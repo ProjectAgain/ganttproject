@@ -18,20 +18,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
-import net.sourceforge.ganttproject.core.option.DefaultEnumerationOption;
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.GPOptionGroup;
-import net.sourceforge.ganttproject.core.option.IntegerOption;
-import net.sourceforge.ganttproject.action.zoom.ZoomActionSet;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
+import net.sourceforge.ganttproject.ui.viewmodel.option.IntegerOption;
+import net.sourceforge.ganttproject.ui.action.zoom.ZoomActionSet;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.chart.GanttChart;
 import net.sourceforge.ganttproject.chart.TimelineChart;
-import net.sourceforge.ganttproject.gui.*;
-import net.sourceforge.ganttproject.gui.scrolling.ScrollingManager;
-import net.sourceforge.ganttproject.gui.zoom.ZoomManager;
-import net.sourceforge.ganttproject.task.TaskSelectionManager;
-import net.sourceforge.ganttproject.task.TaskView;
-import net.sourceforge.ganttproject.undo.GPUndoManager;
+import net.sourceforge.ganttproject.ui.gui.*;
+import net.sourceforge.ganttproject.ui.gui.scrolling.ScrollingManager;
+import net.sourceforge.ganttproject.ui.gui.zoom.ZoomManager;
+import net.sourceforge.ganttproject.model.task.TaskSelectionManager;
+import net.sourceforge.ganttproject.model.task.TaskView;
+import net.sourceforge.ganttproject.model.undo.GPUndoManager;
 
 import javax.swing.*;
 import java.awt.*;

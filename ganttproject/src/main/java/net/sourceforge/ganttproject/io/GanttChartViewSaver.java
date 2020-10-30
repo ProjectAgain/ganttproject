@@ -23,9 +23,9 @@ import javax.xml.transform.sax.TransformerHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
-import net.sourceforge.ganttproject.core.table.ColumnList;
-import net.sourceforge.ganttproject.core.table.ColumnList.Column;
+import net.sourceforge.ganttproject.ui.table.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.ui.table.ColumnList;
+import net.sourceforge.ganttproject.ui.table.ColumnList.Column;
 
 
 class GanttChartViewSaver extends SaverBase {

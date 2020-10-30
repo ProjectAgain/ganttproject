@@ -21,7 +21,7 @@ import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.input.KeyCode
 import javafx.util.Callback
-import net.sourceforge.ganttproject.gui.UIUtil
+import net.sourceforge.ganttproject.ui.gui.UIUtil
 import org.controlsfx.control.BreadCrumbBar
 import java.io.File
 import java.util.*

@@ -3,7 +3,7 @@
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
 
 /**
  * @author bard

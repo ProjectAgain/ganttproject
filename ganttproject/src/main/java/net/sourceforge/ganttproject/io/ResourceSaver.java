@@ -18,11 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.io;
 
-import net.sourceforge.ganttproject.CustomProperty;
-import net.sourceforge.ganttproject.CustomPropertyDefinition;
-import net.sourceforge.ganttproject.CustomPropertyManager;
-import net.sourceforge.ganttproject.IGanttProject;
-import net.sourceforge.ganttproject.resource.HumanResource;
+import net.sourceforge.ganttproject.model.CustomProperty;
+import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
+import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
+import net.sourceforge.ganttproject.model.IGanttProject;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 

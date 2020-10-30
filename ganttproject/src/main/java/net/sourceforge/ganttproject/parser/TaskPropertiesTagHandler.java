@@ -6,7 +6,7 @@
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.CustomPropertyManager;
+import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
 
 import org.xml.sax.Attributes;
 

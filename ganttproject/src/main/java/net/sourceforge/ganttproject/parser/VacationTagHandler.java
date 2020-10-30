@@ -18,13 +18,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.parser;
 
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
 
 import org.xml.sax.Attributes;
 
-import net.sourceforge.ganttproject.core.calendar.GanttDaysOff;
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.calendar.GanttDaysOff;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
 
 /**
  * @author nbohn

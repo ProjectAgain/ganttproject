@@ -24,8 +24,8 @@ import java.util.List;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
-import net.sourceforge.ganttproject.TreeUtil;
-import net.sourceforge.ganttproject.task.Task;
+import net.sourceforge.ganttproject.ui.chart.TreeUtil;
+import net.sourceforge.ganttproject.model.task.Task;
 
 /**
  * Created by IntelliJ IDEA. User: bard

@@ -1,8 +1,6 @@
 // Copyright (C) 2017 BarD Software
 package net.sourceforge.ganttproject.impex.csv;
 
-import net.sourceforge.ganttproject.core.model.task.TaskDefaultColumn;
-import net.sourceforge.ganttproject.core.option.BooleanOption;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
 import net.sourceforge.ganttproject.CustomPropertyDefinition;
@@ -10,17 +8,18 @@ import net.sourceforge.ganttproject.CustomPropertyManager;
 import net.sourceforge.ganttproject.GanttTask;
 import net.sourceforge.ganttproject.io.CSVOptions;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.resource.HumanResource;
-import net.sourceforge.ganttproject.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.roles.RoleManager;
-import net.sourceforge.ganttproject.roles.RoleManagerImpl;
-import net.sourceforge.ganttproject.task.CustomColumnsManager;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.resource.HumanResource;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.model.roles.RoleManagerImpl;
+import net.sourceforge.ganttproject.model.task.CustomColumnsManager;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
 import net.sourceforge.ganttproject.test.task.TaskTestCase;
+import net.sourceforge.ganttproject.ui.table.task.TaskDefaultColumn;
+import net.sourceforge.ganttproject.ui.viewmodel.option.BooleanOption;
 import org.apache.commons.csv.CSVFormat;
 
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 import java.util.Set;

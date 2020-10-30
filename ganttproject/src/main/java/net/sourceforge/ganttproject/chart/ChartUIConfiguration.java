@@ -18,12 +18,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.chart.render.AlphaRenderingOption;
-import net.sourceforge.ganttproject.core.option.EnumerationOption;
-import net.sourceforge.ganttproject.core.option.KeyValueOption;
-import net.sourceforge.ganttproject.core.option.ListOption;
-import net.sourceforge.ganttproject.font.Fonts;
-import net.sourceforge.ganttproject.gui.UIConfiguration;
+import net.sourceforge.ganttproject.ui.chart.render.AlphaRenderingOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.EnumerationOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.KeyValueOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ListOption;
+import net.sourceforge.ganttproject.ui.font.Fonts;
+import net.sourceforge.ganttproject.ui.gui.UIConfiguration;
 
 import java.awt.*;
 import java.util.Map;

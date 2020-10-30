@@ -22,8 +22,8 @@ import org.xml.sax.Attributes;
 
 import com.google.common.base.Objects;
 
-import net.sourceforge.ganttproject.core.option.GPOption;
-import net.sourceforge.ganttproject.core.option.ListOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ListOption;
 
 /**
  * Tag handler which writes parsed value to GPOption instance.

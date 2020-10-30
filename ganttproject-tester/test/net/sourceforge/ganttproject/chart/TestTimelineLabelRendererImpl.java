@@ -18,17 +18,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.chart;
 
-import net.sourceforge.ganttproject.core.calendar.GPCalendar.DayMask;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas;
-import net.sourceforge.ganttproject.core.chart.canvas.Canvas.Text;
-import net.sourceforge.ganttproject.core.chart.grid.Offset;
-import net.sourceforge.ganttproject.core.time.GanttCalendar;
-import net.sourceforge.ganttproject.core.time.impl.GPTimeUnitStack;
 import com.google.common.collect.Lists;
 import junit.framework.TestCase;
 import net.sourceforge.ganttproject.TestSetupHelper;
-import net.sourceforge.ganttproject.task.Task;
-import net.sourceforge.ganttproject.task.TaskManager;
+import net.sourceforge.ganttproject.model.calendar.GPCalendar.DayMask;
+import net.sourceforge.ganttproject.model.task.Task;
+import net.sourceforge.ganttproject.model.task.TaskManager;
+import net.sourceforge.ganttproject.model.time.GanttCalendar;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas;
+import net.sourceforge.ganttproject.ui.chart.canvas.Canvas.Text;
+import net.sourceforge.ganttproject.ui.chart.grid.Offset;
 
 import java.util.Collection;
 import java.util.Date;

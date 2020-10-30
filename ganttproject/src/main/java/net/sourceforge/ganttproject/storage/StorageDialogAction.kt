@@ -18,13 +18,13 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.sourceforge.ganttproject.storage
 
-import net.sourceforge.ganttproject.app.RootLocalizer
-import net.sourceforge.ganttproject.app.dialog
-import net.sourceforge.ganttproject.IGanttProject
-import net.sourceforge.ganttproject.action.GPAction
-import net.sourceforge.ganttproject.document.DocumentManager
-import net.sourceforge.ganttproject.gui.ProjectUIFacade
-import net.sourceforge.ganttproject.gui.UIUtil
+import net.sourceforge.ganttproject.ui.RootLocalizer
+import net.sourceforge.ganttproject.ui.dialog
+import net.sourceforge.ganttproject.model.IGanttProject
+import net.sourceforge.ganttproject.ui.action.GPAction
+import net.sourceforge.ganttproject.model.document.DocumentManager
+import net.sourceforge.ganttproject.ui.gui.ProjectUIFacade
+import net.sourceforge.ganttproject.ui.gui.UIUtil
 import java.awt.event.ActionEvent
 
 /**
