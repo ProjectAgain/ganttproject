@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.io;
 
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.model.CustomProperty;
 import net.sourceforge.ganttproject.model.CustomPropertyDefinition;
 import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
@@ -63,7 +64,7 @@ class ResourceSaver extends SaverBase {
     }
   }
 
-  private void saveCustomProperties(IGanttProject project, HumanResource resource, TransformerHandler handler)
+  private void saveCustomProperties(MProjectBase project, HumanResource resource, TransformerHandler handler)
       throws SAXException {
     // CustomPropertyManager customPropsManager =
     // project.getHumanResourceManager().getCustomPropertyManager();

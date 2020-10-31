@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.ui.gui.projectwizard;
 
 import java.awt.Component;
 
-import net.sourceforge.ganttproject.model.IGanttProject;
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.ui.gui.options.ProjectSettingsPanel;
 
 public class ProjectNamePage implements WizardPage {
@@ -28,7 +28,7 @@ public class ProjectNamePage implements WizardPage {
 
   private final ProjectSettingsPanel myProjectSettingsPanel;
 
-  public ProjectNamePage(IGanttProject project, I18N i18n) {
+  public ProjectNamePage(MProjectBase project, I18N i18n) {
     myProjectSettingsPanel = new ProjectSettingsPanel(project);
     myProjectSettingsPanel.initialize();
     myI18N = i18n;

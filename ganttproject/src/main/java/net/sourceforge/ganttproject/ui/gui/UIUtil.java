@@ -18,6 +18,7 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.ui.gui;
 
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
 import net.sourceforge.ganttproject.ui.viewmodel.option.ValidationException;
@@ -33,7 +34,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.ui.gui.options.OptionsPageBuilder;
 import net.sourceforge.ganttproject.ui.gui.options.OptionsPageBuilder.ValueValidator;
@@ -470,7 +470,7 @@ public abstract class UIUtil {
     return htmlPane;
   }
 
-  public static TableCellEditor newDateCellEditor(IGanttProject project, boolean showDatePicker) {
+  public static TableCellEditor newDateCellEditor(MProjectBase project, boolean showDatePicker) {
     Supplier<List<DateFormat>> supplier = new Supplier<List<DateFormat>>() {
       @Override
       public List<DateFormat> get() {
@@ -486,7 +486,7 @@ public abstract class UIUtil {
     private final boolean myShowDatePicker;
     private DatePickerEditCommiter myCommitter;
 
-    public GPDateCellEditor(IGanttProject project, boolean showDatePicker, ValueValidator<Date> parseValidator, Supplier<List<DateFormat>> dateFormats) {
+    public GPDateCellEditor(MProjectBase project, boolean showDatePicker, ValueValidator<Date> parseValidator, Supplier<List<DateFormat>> dateFormats) {
       super(new JTextField());
       myDatePicker = UIUtil.createDatePicker(dateFormats.get().toArray(new DateFormat[0]));
       myShowDatePicker = showDatePicker;

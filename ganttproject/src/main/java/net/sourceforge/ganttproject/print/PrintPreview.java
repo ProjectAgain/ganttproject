@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.print;
 
+import net.projectagain.ganttplanner.core.domain.MProjectRepositoryLegacy;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.ui.GanttExportSettings;
 import net.sourceforge.ganttproject.ui.GanttProject;
@@ -250,7 +250,7 @@ public class PrintPreview extends JDialog {
   private final static MediaSizeName DEFAULT_MEDIA_SIZE_NAME = MediaSizeName.ISO_A4;
   private static final GanttLanguage language = GanttLanguage.getInstance();
   private final Logger log = getLogger(getClass());
-  private final IGanttProject myProject;
+  private final MProjectRepositoryLegacy myProject;
   private final UIFacade myUIFacade;
   private Chart myChart = null;
   private JComboBox myComboMediaSize = null;
@@ -297,7 +297,7 @@ public class PrintPreview extends JDialog {
   private JButton myWholeProjectButton = null;
   private final StatusBar statusBar;
 
-  public PrintPreview(IGanttProject project, UIFacade uifacade, Chart chart, Date start, Date end) {
+  public PrintPreview(MProjectRepositoryLegacy project, UIFacade uifacade, Chart chart, Date start, Date end) {
     super(uifacade.getMainFrame(), language.getText("preview"), false);
     myProject = project;
     myUIFacade = uifacade;

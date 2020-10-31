@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui;
 
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.viewmodel.option.*;
 import net.sourceforge.ganttproject.ui.viewmodel.option.FontSpec.Size;
@@ -125,7 +126,7 @@ public class UIFacadeImpl extends ProgressProvider implements UIFacade {
 
   private ChangeValueListener myAppFontValueListener;
   private final LanguageOption myLanguageOption;
-  private final IGanttProject myProject;
+  private final MProjectBase myProject;
   private FontSpec myLastFontSpec;
 
   UIFacadeImpl(JFrame mainFrame, GanttStatusBar statusBar, NotificationManagerImpl notificationManager,

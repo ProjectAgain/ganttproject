@@ -32,8 +32,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.ui.GanttProject;
-import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.gui.GanttDialogInfo;
 import net.sourceforge.ganttproject.ui.gui.TestGanttRolloverButton;
 import net.sourceforge.ganttproject.language.GanttLanguage;
@@ -54,13 +54,13 @@ public class ProjectSettingsPanel {
 
   private final JTextArea taDescr;
 
-  private final IGanttProject myProject;
+  private final MProjectBase myProject;
 
   private JPanel myComponent;
 
   private static final GanttLanguage language = GanttLanguage.getInstance();
 
-  public ProjectSettingsPanel(IGanttProject project) {
+  public ProjectSettingsPanel(MProjectBase project) {
     myProject = project;
     Box vbproject = Box.createVerticalBox();
 

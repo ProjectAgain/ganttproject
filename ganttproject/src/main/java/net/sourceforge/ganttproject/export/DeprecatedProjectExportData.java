@@ -18,8 +18,8 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.export;
 
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.ui.GanttExportSettings;
-import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.chart.Chart;
 
 /**
@@ -41,10 +41,11 @@ public class DeprecatedProjectExportData {
 
   final String myXslFoScript;
 
-  final IGanttProject myProject;
+  final MProjectBase myProject;
 
-  public DeprecatedProjectExportData(IGanttProject project, final String myFilename, final Chart myGanttChart,
-      final Chart myResourceChart, final GanttExportSettings myExportOptions, final String myXslFoScript) {
+  public DeprecatedProjectExportData(
+    MProjectBase project, final String myFilename, final Chart myGanttChart,
+    final Chart myResourceChart, final GanttExportSettings myExportOptions, final String myXslFoScript) {
     super();
     this.myProject = project;
     this.myFilename = myFilename;

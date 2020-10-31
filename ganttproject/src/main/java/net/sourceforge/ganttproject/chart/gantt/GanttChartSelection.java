@@ -21,7 +21,7 @@ package net.sourceforge.ganttproject.chart.gantt;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import net.projectagain.ganttplanner.core.LogMarker;
-import net.sourceforge.ganttproject.model.IGanttProject;
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.ui.GPTransferable;
 import net.sourceforge.ganttproject.ui.chart.AbstractChartImplementation.ChartSelectionImpl;
 import net.sourceforge.ganttproject.model.task.Task;
@@ -62,7 +62,7 @@ public class GanttChartSelection extends ChartSelectionImpl implements Clipboard
   private final RetainRootsAlgorithm<DefaultMutableTreeTableNode> myRetainRootsAlgorithm = new RetainRootsAlgorithm<DefaultMutableTreeTableNode>();
   private final TreeTableContainer<Task, GanttTreeTable, GanttTreeTableModel> myTree;
   private final TaskManager myTaskManager;
-  private final IGanttProject myProject;
+  private final MProjectBase myProject;
 
   private ClipboardContents myClipboardContents;
 
@@ -74,7 +74,7 @@ public class GanttChartSelection extends ChartSelectionImpl implements Clipboard
     }
   };
 
-  GanttChartSelection(IGanttProject project, TreeTableContainer<Task, GanttTreeTable, GanttTreeTableModel> treeView, TaskManager taskManager) {
+  GanttChartSelection(MProjectBase project, TreeTableContainer<Task, GanttTreeTable, GanttTreeTableModel> treeView, TaskManager taskManager) {
     myTree = treeView;
     myTaskManager = taskManager;
     myProject = project;

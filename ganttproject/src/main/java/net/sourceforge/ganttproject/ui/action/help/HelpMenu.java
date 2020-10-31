@@ -19,18 +19,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.ui.action.help;
 
 
+import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.IGanttProject;
-import net.sourceforge.ganttproject.ui.action.CancelAction;
-import net.sourceforge.ganttproject.ui.action.GPAction;
-import net.sourceforge.ganttproject.ui.action.OkAction;
 import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.model.document.DocumentManager;
 import net.sourceforge.ganttproject.model.document.ReadOnlyProxyDocument;
+import net.sourceforge.ganttproject.ui.action.CancelAction;
+import net.sourceforge.ganttproject.ui.action.GPAction;
+import net.sourceforge.ganttproject.ui.action.OkAction;
 import net.sourceforge.ganttproject.ui.gui.ProjectUIFacade;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.ui.gui.UIUtil;
 import net.sourceforge.ganttproject.ui.gui.ViewLogDialog;
-import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.slf4j.Logger;
 
 import javax.swing.*;
@@ -56,7 +56,7 @@ public class HelpMenu {
   private final RecoverLastProjectAction myRecoverAction;
 
   public HelpMenu(IGanttProject project, UIFacade uiFacade, ProjectUIFacade projectUiFacade) {
-    myAboutAction = new AboutAction(uiFacade);
+    myAboutAction = new AboutAction();
     myViewLogAction = new ViewLogAction(uiFacade);
     myRecoverAction = new RecoverLastProjectAction(project, uiFacade, projectUiFacade);
   }
@@ -70,13 +70,6 @@ public class HelpMenu {
   }
 
   private static class AboutAction extends GPAction {
-    private final UIFacade myUiFacade;
-
-    AboutAction(UIFacade uifacade) {
-      super("about");
-      myUiFacade = uifacade;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
       showAboutDialog();
@@ -134,27 +127,26 @@ public class HelpMenu {
       CancelAction skip = new CancelAction("help.recover.skip") {
         @Override
         public void actionPerformed(ActionEvent arg0) {
-          SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              Document prevAutosaveDocument = null;
-              try {
-                prevAutosaveDocument = myDocumentManager.getLastAutosaveDocument(autosaveDocument);
-              } catch (IOException e) {
-                log.error("Failed to read autosave documents", e);
-              }
-              if (prevAutosaveDocument != null) {
-                runAction(prevAutosaveDocument);
-              }
+          SwingUtilities.invokeLater(() -> {
+            Document prevAutosaveDocument = null;
+            try {
+              prevAutosaveDocument = myDocumentManager.getLastAutosaveDocument(autosaveDocument);
+            } catch (IOException e) {
+              log.error("Failed to read autosave documents", e);
+            }
+            if (prevAutosaveDocument != null) {
+              runAction(prevAutosaveDocument);
             }
           });
         }
       };
       File f = new File(autosaveDocument.getFilePath());
       myUiFacade.showOptionDialog(
-          JOptionPane.INFORMATION_MESSAGE,
-          GanttLanguage.getInstance().formatText("help.recover.autosaveInfo", f.getName(), new Date(f.lastModified()),
-              f.length()), new Action[] { ok, skip, CancelAction.CLOSE });
+        JOptionPane.INFORMATION_MESSAGE,
+        GanttLanguage.getInstance().formatText("help.recover.autosaveInfo", f.getName(), new Date(f.lastModified()),
+                                               f.length()
+        ), new Action[]{ok, skip, CancelAction.CLOSE}
+      );
     }
 
     protected void recover(Document recoverDocument) {

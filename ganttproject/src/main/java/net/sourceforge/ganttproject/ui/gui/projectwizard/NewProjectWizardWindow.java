@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.gui.projectwizard;
 
+import net.projectagain.ganttplanner.core.domain.MProjectBase;
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.calendar.ImportCalendarOption;
 import net.sourceforge.ganttproject.model.IGanttProject;
@@ -40,7 +41,7 @@ public class NewProjectWizardWindow extends WizardImpl {
     addPage(roleSetPage);
   }
 
-  public void addProjectNamePage(IGanttProject project) {
+  public void addProjectNamePage(MProjectBase project) {
     WizardPage projectNamePage = new ProjectNamePage(project, myI18n);
     addPage(projectNamePage);
   }
