@@ -33,7 +33,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import net.projectagain.ganttplanner.core.domain.MProjectBase;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.gui.GanttDialogInfo;
 import net.sourceforge.ganttproject.ui.gui.TestGanttRolloverButton;
 import net.sourceforge.ganttproject.language.GanttLanguage;
@@ -78,7 +78,7 @@ public class ProjectSettingsPanel {
 
     tfWebLink = new JTextField();
     JButton bWeb = new TestGanttRolloverButton(new ImageIcon(getClass().getResource("/icons/web_16.gif")));
-    bWeb.setToolTipText(GanttProject.getToolTip(language.getText("openWebLink")));
+    bWeb.setToolTipText(GanttProjectUI.getToolTip(language.getText("openWebLink")));
     bWeb.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {

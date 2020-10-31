@@ -6,7 +6,7 @@ import net.sourceforge.ganttproject.importer.ImporterFromGanttFile
 import net.sourceforge.ganttproject.model.calendar.CalendarEvent
 import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl
 import net.sourceforge.ganttproject.model.time.CalendarFactory
-import net.sourceforge.ganttproject.ui.GanttProjectImpl
+import net.sourceforge.ganttproject.model.GanttProjectImpl
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.awt.Color

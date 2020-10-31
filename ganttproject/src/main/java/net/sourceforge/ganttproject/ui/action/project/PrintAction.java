@@ -18,16 +18,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.project;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 
 import java.awt.event.ActionEvent;
 
 public class PrintAction extends GPAction {
 
-  private final GanttProject myMainFrame;
+  private final GanttProjectUI myMainFrame;
 
-  PrintAction(GanttProject mainFrame) {
+  PrintAction(GanttProjectUI mainFrame) {
     super("project.print");
     myMainFrame = mainFrame;
   }

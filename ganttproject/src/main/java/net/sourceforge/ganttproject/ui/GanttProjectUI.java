@@ -30,6 +30,7 @@ import net.sourceforge.ganttproject.chart.GanttChart;
 import net.sourceforge.ganttproject.chart.TimelineChart;
 import net.sourceforge.ganttproject.io.GanttOptions;
 import net.sourceforge.ganttproject.model.GanttPreviousState;
+import net.sourceforge.ganttproject.model.GanttProjectImpl;
 import net.sourceforge.ganttproject.model.Mediator;
 import net.sourceforge.ganttproject.model.PrjInfos;
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
@@ -86,7 +87,7 @@ import java.util.regex.Pattern;
 /**
  * Main frame of the project
  */
-public class GanttProject extends GanttProjectBase implements ResourceView, GanttLanguage.Listener {
+public class GanttProjectUI extends GanttProjectBaseUI implements ResourceView, GanttLanguage.Listener {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -161,12 +162,12 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
 
   private FXSearchUi mySearchUi;
 
-  public GanttProject(boolean isOnlyViewer) {
+  public GanttProjectUI(boolean isOnlyViewer) {
     log.debug(LogMarker.APP_LIFECYCLE, "Creating main frame...");
     ToolTipManager.sharedInstance().setInitialDelay(200);
     ToolTipManager.sharedInstance().setDismissDelay(60000);
 
-    myCalendar.addListener(GanttProject.this::setModified);
+    myCalendar.addListener(GanttProjectUI.this::setModified);
     Mediator.registerTaskSelectionManager(getTaskSelectionManager());
 
     this.isOnlyViewer = isOnlyViewer;
@@ -197,17 +198,17 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
 
       @Override
       public GPCalendarCalc getCalendar() {
-        return GanttProject.this.getActiveCalendar();
+        return GanttProjectUI.this.getActiveCalendar();
       }
 
       @Override
       public TimeUnitStack getTimeUnitStack() {
-        return GanttProject.this.getTimeUnitStack();
+        return GanttProjectUI.this.getTimeUnitStack();
       }
 
       @Override
       public HumanResourceManager getResourceManager() {
-        return GanttProject.this.getHumanResourceManager();
+        return GanttProjectUI.this.getHumanResourceManager();
       }
 
       @Override
@@ -227,7 +228,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
 
     }
     TaskManagerConfig taskConfig = new TaskManagerConfigImpl();
-    myTaskManager = TaskManager.Access.newInstance(GanttProject.this::getTaskContainment, taskConfig);
+    myTaskManager = TaskManager.Access.newInstance(GanttProjectUI.this::getTaskContainment, taskConfig);
     addProjectEventListener(myTaskManager.getProjectListener());
     getActiveCalendar().addListener(myTaskManager.getCalendarListener());
     ImageIcon icon = new ImageIcon(getClass().getResource("/icons/ganttproject-logo-512.png"));
@@ -359,7 +360,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
       @Override
       public void windowOpened(WindowEvent e) {
         log.debug(LogMarker.APP_LIFECYCLE, "Resizing window...");
-        log.debug(String.format("Bounds after opening: %s", GanttProject.this.getBounds()));
+        log.debug(String.format("Bounds after opening: %s", GanttProjectUI.this.getBounds()));
         restoreBounds();
         // It is important to run aligners after look and feel is set and font sizes
         // in the UI manager updated.
@@ -600,7 +601,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
   public void doShow() {
     setVisible(true);
     log.debug(String.format("Bounds after setVisible: %s", getBounds()));
-    DesktopIntegration.setup(GanttProject.this);
+    DesktopIntegration.setup(GanttProjectUI.this);
     getActiveChart().reset();
     getRssFeedChecker().setOptionsVersion(getGanttOptions().getVersion());
     getRssFeedChecker().run();
@@ -1099,7 +1100,7 @@ public class GanttProject extends GanttProjectBase implements ResourceView, Gant
 
     @Override
     public GPSaver newSaver() {
-      return new GanttXMLSaver(GanttProject.this, getTree(), getResourcePanel(), getArea(), getUIFacade());
+      return new GanttXMLSaver(GanttProjectUI.this, getTree(), getResourcePanel(), getArea(), getUIFacade());
     }
   }
 

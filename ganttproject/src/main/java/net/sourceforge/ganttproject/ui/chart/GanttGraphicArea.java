@@ -25,7 +25,7 @@ import net.sourceforge.ganttproject.model.ProjectEventListener;
 import net.sourceforge.ganttproject.model.calendar.CalendarEvent;
 import net.sourceforge.ganttproject.model.calendar.GPCalendar;
 import net.sourceforge.ganttproject.ui.GanttExportSettings;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.CalendarEventAction;
 import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
 import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultColorOption;
@@ -106,8 +106,9 @@ public class GanttGraphicArea extends ChartComponentBase implements GanttChart, 
 
   private final ChartOptionGroup myStateDiffOptions;
 
-  public GanttGraphicArea(GanttProject app, GanttTree2 ttree, TaskManager taskManager, ZoomManager zoomManager,
-                          GPUndoManager undoManager) {
+  public GanttGraphicArea(
+          GanttProjectUI app, GanttTree2 ttree, TaskManager taskManager, ZoomManager zoomManager,
+          GPUndoManager undoManager) {
     super(app.getProject(), app.getUIFacade(), zoomManager);
     this.setBackground(Color.WHITE);
     myTaskManager = taskManager;

@@ -19,16 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.ui.action.project;
 
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.ui.gui.options.SettingsDialog2;
 
 import java.awt.event.ActionEvent;
 
 class ProjectPropertiesAction extends GPAction {
-  private final GanttProject myMainFrame;
+  private final GanttProjectUI myMainFrame;
 
-  ProjectPropertiesAction(GanttProject mainFrame) {
+  ProjectPropertiesAction(GanttProjectUI mainFrame) {
     super("project.properties");
     myMainFrame = mainFrame;
   }

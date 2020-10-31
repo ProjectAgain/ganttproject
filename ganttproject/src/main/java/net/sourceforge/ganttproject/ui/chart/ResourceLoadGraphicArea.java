@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.ui.chart;
 
 import net.sourceforge.ganttproject.ui.GPTransferable;
 import net.sourceforge.ganttproject.ui.GanttExportSettings;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.chart.ChartModelBase;
@@ -56,7 +56,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class ResourceLoadGraphicArea extends ChartComponentBase implements ResourceChart {
   /** The main application */
-  private final GanttProject appli;
+  private final GanttProjectUI appli;
 
   private final ChartModelResource myChartModel;
 
@@ -64,7 +64,7 @@ public class ResourceLoadGraphicArea extends ChartComponentBase implements Resou
 
   private final ResourceTreeUIFacade myTreeUi;
 
-  public ResourceLoadGraphicArea(GanttProject app, ZoomManager zoomManager, ResourceTreeUIFacade treeUi) {
+  public ResourceLoadGraphicArea(GanttProjectUI app, ZoomManager zoomManager, ResourceTreeUIFacade treeUi) {
     super(app.getProject(), app.getUIFacade(), zoomManager);
     appli = app;
     myTreeUi = treeUi;

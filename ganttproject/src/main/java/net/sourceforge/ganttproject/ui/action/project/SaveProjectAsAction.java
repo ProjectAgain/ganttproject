@@ -18,15 +18,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.project;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 
 import java.awt.event.ActionEvent;
 
 class SaveProjectAsAction extends GPAction {
-  private GanttProject myMainFrame;
+  private GanttProjectUI myMainFrame;
 
-  SaveProjectAsAction(GanttProject mainFrame) {
+  SaveProjectAsAction(GanttProjectUI mainFrame) {
     super("project.saveas");
     myMainFrame = mainFrame;
   }

@@ -1,7 +1,7 @@
 package net.sourceforge.ganttproject.ui.gui.options;
 
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.gui.options.model.OptionPageProvider;
 import org.apache.commons.collections4.Factory;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class SettingsDialog2Factory implements Factory<SettingsDialog2> {
 
   @Override
   public SettingsDialog2 create() {
-    GanttProject project = app.getMainWindow();
+    GanttProjectUI project = app.getMainWindow();
     return new SettingsDialog2(project, project.getUIFacade(), "settings.app.pageOrder", optionPageProviders);
   }
 }

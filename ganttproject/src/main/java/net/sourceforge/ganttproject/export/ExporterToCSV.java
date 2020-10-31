@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.export;
 
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultEnumerationOption;
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
@@ -25,7 +26,6 @@ import net.sourceforge.ganttproject.impex.csv.GanttCSVExport;
 import net.sourceforge.ganttproject.impex.csv.SpreadsheetFormat;
 import net.sourceforge.ganttproject.impex.csv.SpreadsheetWriter;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.ui.GanttProject;
 import net.sourceforge.ganttproject.io.CSVOptions;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import org.eclipse.core.runtime.IStatus;
@@ -103,7 +103,7 @@ public class ExporterToCSV extends ExporterBase {
         try {
           outputFile.createNewFile();
           outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-          CSVOptions csvOptions = ((GanttProject) getProject()).getGanttOptions().getCSVOptions();
+          CSVOptions csvOptions = ((GanttProjectUI) getProject()).getGanttOptions().getCSVOptions();
 
           // TODO Fix this ugly hack!! Ie make the settings available in a proper way
           GanttCSVExport exporter = new GanttCSVExport(getProject(), csvOptions);

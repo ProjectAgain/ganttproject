@@ -16,28 +16,25 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package net.sourceforge.ganttproject.ui;
+package net.sourceforge.ganttproject.model;
 
-import net.sourceforge.ganttproject.model.GanttPreviousState;
-import net.sourceforge.ganttproject.model.IGanttProject;
-import net.sourceforge.ganttproject.model.ProjectEventListener;
+import com.google.common.base.Strings;
+import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.calendar.GPCalendarListener;
 import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl;
-import net.sourceforge.ganttproject.model.task.*;
-import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
-import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultColorOption;
-import net.sourceforge.ganttproject.model.time.TimeUnitStack;
-import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
-import com.google.common.base.Strings;
 import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.model.document.DocumentManager;
+import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.model.task.*;
+import net.sourceforge.ganttproject.model.time.TimeUnitStack;
+import net.sourceforge.ganttproject.model.time.impl.GPTimeUnitStack;
 import net.sourceforge.ganttproject.ui.gui.NotificationManager;
 import net.sourceforge.ganttproject.ui.gui.UIConfiguration;
 import net.sourceforge.ganttproject.ui.gui.options.model.GP1XOptionConverter;
-import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.model.resource.HumanResourceManager;
-import net.sourceforge.ganttproject.model.roles.RoleManager;
+import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
+import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultColorOption;
 
 import java.awt.*;
 import java.io.IOException;
@@ -286,8 +283,8 @@ public class GanttProjectImpl implements IGanttProject {
   }
 
 
-  static class DefaultTaskColorOption extends DefaultColorOption implements GP1XOptionConverter {
-    DefaultTaskColorOption() {
+  public static class DefaultTaskColorOption extends DefaultColorOption implements GP1XOptionConverter {
+    public DefaultTaskColorOption() {
       this(DEFAULT_TASK_COLOR);
     }
 

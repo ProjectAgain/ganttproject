@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.resource;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.chart.ResourceTreeTable;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.model.resource.AssignmentContext;
@@ -45,7 +45,7 @@ public class ResourceActionSet {
   private AbstractAction[] myActions;
 
   public ResourceActionSet(ResourceContext resourceContext, AssignmentContext assignmentContext,
-      GanttProject projectFrame, UIFacade uiFacade, ResourceTreeTable table) {
+                           GanttProjectUI projectFrame, UIFacade uiFacade, ResourceTreeTable table) {
     HumanResourceManager manager = projectFrame.getHumanResourceManager();
     myResourceNewAction = new ResourceNewAction(manager, projectFrame.getRoleManager(), projectFrame.getTaskManager(), uiFacade);
     myResourceDeleteAction = new ResourceDeleteAction(manager, resourceContext, projectFrame, uiFacade);

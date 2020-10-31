@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.gui;
 
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.chart.render.ShapeConstants;
 import net.sourceforge.ganttproject.ui.chart.render.ShapePaint;
 import net.sourceforge.ganttproject.ui.viewmodel.option.ColorOption;
@@ -26,7 +27,6 @@ import net.sourceforge.ganttproject.model.time.CalendarFactory;
 import net.sourceforge.ganttproject.model.time.GanttCalendar;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import net.sourceforge.ganttproject.ui.GanttProject;
 import net.sourceforge.ganttproject.model.GanttTask;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.action.GPAction;
@@ -236,7 +236,7 @@ public class GanttTaskPropertiesBean extends JPanel {
     weblinkBox.add(tfWebLink);
     weblinkBox.add(Box.createHorizontalStrut(2));
     bWebLink = new TestGanttRolloverButton(new ImageIcon(getClass().getResource("/icons/web_16.gif")));
-    bWebLink.setToolTipText(GanttProject.getToolTip(language.getText("openWebLink")));
+    bWebLink.setToolTipText(GanttProjectUI.getToolTip(language.getText("openWebLink")));
     weblinkBox.add(bWebLink);
 
     bWebLink.addActionListener(new ActionListener() {

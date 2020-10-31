@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.gui.options;
 
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.ui.GanttProject;
 
 import java.awt.*;
 
@@ -47,12 +47,12 @@ public class ExportCsvOptionPageProvider extends OptionPageProviderBase {
 
   @Override
   public boolean hasCustomComponent() {
-    return getProject() instanceof GanttProject;
+    return getProject() instanceof GanttProjectUI;
   }
 
   @Override
   public Component buildPageComponent() {
-    myCsvSettings = new CSVSettingsPanel(getUiFacade(), ((GanttProject) getProject()).getGanttOptions().getCSVOptions());
+    myCsvSettings = new CSVSettingsPanel(getUiFacade(), ((GanttProjectUI) getProject()).getGanttOptions().getCSVOptions());
     myCsvSettings.initialize();
     return OptionPageProviderBase.wrapContentComponent(myCsvSettings, getCanonicalPageTitle(), null);
   }

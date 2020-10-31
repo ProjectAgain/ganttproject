@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import net.sourceforge.ganttproject.chart.gantt.ClipboardContents;
 import net.sourceforge.ganttproject.chart.gantt.ClipboardTaskProcessor;
 import net.sourceforge.ganttproject.io.GanttXMLSaver;
+import net.sourceforge.ganttproject.model.GanttProjectImpl;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.model.resource.HumanResource;
 import net.sourceforge.ganttproject.model.task.Task;

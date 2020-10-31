@@ -22,7 +22,7 @@ package net.sourceforge.ganttproject.ui.action.project
 
 import net.sourceforge.ganttproject.storage.StorageDialogAction
 import net.sourceforge.ganttproject.storage.StorageDialogBuilder
-import net.sourceforge.ganttproject.ui.GanttProject
+import net.sourceforge.ganttproject.ui.GanttProjectUI
 import net.sourceforge.ganttproject.ui.action.GPAction
 import javax.swing.Action
 import javax.swing.JMenu
@@ -31,23 +31,23 @@ import javax.swing.JMenuItem
 /**
  * Collection of actions present in the project menu
  */
-class ProjectMenu(project: GanttProject, key: String) : JMenu(GPAction.createVoidAction(key)) {
+class ProjectMenu(projectUI: GanttProjectUI, key: String) : JMenu(GPAction.createVoidAction(key)) {
 
-  private val newProjectAction = NewProjectAction(project)
-  val openProjectAction = OpenProjectAction(project.project, project.projectUIFacade)
-  val saveProjectAction = SaveProjectAction(project, project.projectUIFacade)
+  private val newProjectAction = NewProjectAction(projectUI)
+  val openProjectAction = OpenProjectAction(projectUI.project, projectUI.projectUIFacade)
+  val saveProjectAction = SaveProjectAction(projectUI, projectUI.projectUIFacade)
 
   private val saveAsProjectAction = StorageDialogAction(
-    project.project, project.projectUIFacade, project.documentManager,
+    projectUI.project, projectUI.projectUIFacade, projectUI.documentManager,
     StorageDialogBuilder.Mode.SAVE, "project.saveas"
   )
 
-  private val projectSettingsAction = ProjectPropertiesAction(project)
-  private val importAction = ProjectImportAction(project.uiFacade, project)
-  private val exportAction = ProjectExportAction(project.uiFacade, project, project.ganttOptions.pluginPreferences)
-  private val printAction = PrintAction(project)
-  private val printPreviewAction = ProjectPreviewAction(project)
-  private val exitAction = ExitAction(project)
+  private val projectSettingsAction = ProjectPropertiesAction(projectUI)
+  private val importAction = ProjectImportAction(projectUI.uiFacade, projectUI)
+  private val exportAction = ProjectExportAction(projectUI.uiFacade, projectUI, projectUI.ganttOptions.pluginPreferences)
+  private val printAction = PrintAction(projectUI)
+  private val printPreviewAction = ProjectPreviewAction(projectUI)
+  private val exitAction = ExitAction(projectUI)
 
   override fun add(a: Action): JMenuItem {
     a.putValue(Action.SHORT_DESCRIPTION, null)

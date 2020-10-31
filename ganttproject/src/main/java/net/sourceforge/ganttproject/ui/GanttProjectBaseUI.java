@@ -78,7 +78,7 @@ import java.util.Locale;
  *
  * @author dbarashev
  */
-public abstract class GanttProjectBase extends JFrame implements IGanttProject, UIFacade {
+public abstract class GanttProjectBaseUI extends JFrame implements IGanttProject, UIFacade {
   protected final static GanttLanguage language = GanttLanguage.getInstance();
   private final ViewManagerImpl myViewManager;
   private final List<ProjectEventListener> myModifiedStateChangeListeners = new ArrayList<ProjectEventListener>();
@@ -97,7 +97,7 @@ public abstract class GanttProjectBase extends JFrame implements IGanttProject, 
   protected final ContentPaneBuilder myContentPaneBuilder;
   private Updater myUpdater;
 
-  protected GanttProjectBase() {
+  protected GanttProjectBaseUI() {
     super("GanttProject");
 
     statusBar = new GanttStatusBar(this);
@@ -110,7 +110,7 @@ public abstract class GanttProjectBase extends JFrame implements IGanttProject, 
     myDocumentManager = new DocumentCreator(this, getUIFacade(), null) {
       @Override
       protected ParserFactory getParserFactory() {
-        return GanttProjectBase.this.getParserFactory();
+        return GanttProjectBaseUI.this.getParserFactory();
       }
 
       @Override
@@ -126,7 +126,7 @@ public abstract class GanttProjectBase extends JFrame implements IGanttProject, 
     myUndoManager = new UndoManagerImpl(this, null, myDocumentManager) {
       @Override
       protected ParserFactory getParserFactory() {
-        return GanttProjectBase.this.getParserFactory();
+        return GanttProjectBaseUI.this.getParserFactory();
       }
     };
     myViewManager = new ViewManagerImpl(getProject(), myUIFacade, myTabPane, getUndoManager());

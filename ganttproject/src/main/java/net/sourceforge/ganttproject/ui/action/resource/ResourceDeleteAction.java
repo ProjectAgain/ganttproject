@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.resource;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.ui.gui.UIUtil;
 import net.sourceforge.ganttproject.model.resource.HumanResource;
@@ -33,14 +33,14 @@ import java.awt.event.ActionEvent;
 public class ResourceDeleteAction extends ResourceAction {
   private final UIFacade myUIFacade;
 
-  private final GanttProject myProject;
+  private final GanttProjectUI myProject;
 
-  public ResourceDeleteAction(HumanResourceManager hrManager, ResourceContext context, GanttProject project,
+  public ResourceDeleteAction(HumanResourceManager hrManager, ResourceContext context, GanttProjectUI project,
                               UIFacade uiFacade) {
     this(hrManager, context, project, uiFacade, IconSize.TOOLBAR_SMALL);
   }
 
-  private ResourceDeleteAction(HumanResourceManager hrManager, ResourceContext context, GanttProject project,
+  private ResourceDeleteAction(HumanResourceManager hrManager, ResourceContext context, GanttProjectUI project,
                                UIFacade uiFacade, IconSize size) {
     super("resource.delete", hrManager, context, size);
     myUIFacade = uiFacade;

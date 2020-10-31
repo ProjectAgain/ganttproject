@@ -21,7 +21,7 @@ public class DesktopIntegration {
     return System.getProperty("os.name").toLowerCase().startsWith("mac os x");
   }
 
-  static void setup(final GanttProject app) {
+  static void setup(final GanttProjectUI app) {
     final IGanttProject project = app.getProject();
     final UIFacade uiFacade = app.getUIFacade();
     final ProjectUIFacade projectUiFacade = app.getProjectUIFacade();

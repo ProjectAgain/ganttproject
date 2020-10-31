@@ -27,10 +27,10 @@ import javax.swing.tree.TreeModel;
 import java.util.List;
 
 class FacadeInvalidator extends ProjectEventListener.Stub implements TreeModelListener {
-  private final List<GanttProjectBase.RowHeightAligner> myRowAligners;
+  private final List<GanttProjectBaseUI.RowHeightAligner> myRowAligners;
   boolean isValid;
 
-  public FacadeInvalidator(TreeModel treeModel, List<GanttProjectBase.RowHeightAligner> rowHeightAligners) {
+  public FacadeInvalidator(TreeModel treeModel, List<GanttProjectBaseUI.RowHeightAligner> rowHeightAligners) {
     isValid = false;
     treeModel.addTreeModelListener(this);
     myRowAligners = Preconditions.checkNotNull(rowHeightAligners);
@@ -71,7 +71,7 @@ class FacadeInvalidator extends ProjectEventListener.Stub implements TreeModelLi
 
   @Override
   public void projectOpened() {
-    for (GanttProjectBase.RowHeightAligner aligner : myRowAligners) {
+    for (GanttProjectBaseUI.RowHeightAligner aligner : myRowAligners) {
       aligner.optionsChanged();
     }
   }

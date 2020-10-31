@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.project;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
@@ -34,9 +34,9 @@ public class ProjectPreviewAction extends GPAction {
 
   private final UIFacade myUIFacade;
 
-  private final GanttProject myProject;
+  private final GanttProjectUI myProject;
 
-  public ProjectPreviewAction(GanttProject project) {
+  public ProjectPreviewAction(GanttProjectUI project) {
     super("project.preview");
     myUIFacade = project.getUIFacade();
     myProject = project;

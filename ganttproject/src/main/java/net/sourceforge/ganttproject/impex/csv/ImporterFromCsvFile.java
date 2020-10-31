@@ -18,10 +18,10 @@ along with GanttProject.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.ganttproject.impex.csv;
 
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOption;
 
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
-import net.sourceforge.ganttproject.ui.GanttProject;
 import net.sourceforge.ganttproject.importer.BufferProject;
 import net.sourceforge.ganttproject.importer.ImporterBase;
 import net.sourceforge.ganttproject.importer.ImporterFromGanttFile;
@@ -75,7 +75,7 @@ public class ImporterFromCsvFile extends ImporterBase {
     GanttCSVOpen opener = new GanttCSVOpen(selectedFile, bufferProject.getTaskManager(),
         bufferProject.getHumanResourceManager(), bufferProject.getRoleManager(),
         bufferProject.getTimeUnitStack());
-    opener.setOptions(((GanttProject)getProject()).getGanttOptions().getCSVOptions());
+    opener.setOptions(((GanttProjectUI)getProject()).getGanttOptions().getCSVOptions());
     try {
       List<Pair<Level, String>> errors = opener.load();
       ImporterFromGanttFile.importBufferProject(getProject(), bufferProject, getUiFacade(), myMergeResourcesOption, null);

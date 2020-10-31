@@ -12,7 +12,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.projectagain.ganttplanner.core.LogMarker;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.model.document.DocumentCreator;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.ui.gui.options.SettingsDialog2Factory;
@@ -36,10 +36,10 @@ import static net.sourceforge.ganttproject.ui.SplashKt.SPLASH_WIDTH;
 @Service
 @DependsOn("pluginManager")
 public class UiManager {
-  final AtomicReference<GanttProject> mainWindow = new AtomicReference<>();
+  final AtomicReference<GanttProjectUI> mainWindow = new AtomicReference<>();
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  public AtomicReference<GanttProject> getMainWindow() {
+  public AtomicReference<GanttProjectUI> getMainWindow() {
     return mainWindow;
   }
 
@@ -61,7 +61,7 @@ public class UiManager {
     this.settingsDialog2Factory = settingsDialog2Factory;
   }
 
-  public void startUiApp(Function<GanttProject, GanttProject> configure) {
+  public void startUiApp(Function<GanttProjectUI, GanttProjectUI> configure) {
     configureApp();
     Runnable autosaveCleanup = DocumentCreator.createAutosaveCleanup();
 
@@ -70,9 +70,9 @@ public class UiManager {
     SwingUtilities.invokeLater(
       () -> {
         try {
-          GanttProject ganttFrame = new GanttProject(false);
+          GanttProjectUI ganttFrame = new GanttProjectUI(false);
           configure.apply(ganttFrame);
-          GanttProject.setApplicationQuitCallback(() -> {
+          GanttProjectUI.setApplicationQuitCallback(() -> {
             log.debug(LogMarker.APP_LIFECYCLE, "Exit GanttProject app.");
             System.exit(0);
           });
@@ -119,7 +119,7 @@ public class UiManager {
     CompletableFuture<Runnable> result = new CompletableFuture<>();
     Platform.runLater(() -> {
       ImageView splash1 =
-        new ImageView(new Image(GanttProject.class.getResourceAsStream("/resources/icons/splash.png")));
+        new ImageView(new Image(GanttProjectUI.class.getResourceAsStream("/resources/icons/splash.png")));
       VBox splashLayout = new VBox();
       splashLayout.getChildren().addAll(splash1);
       splashLayout.setEffect(new DropShadow());

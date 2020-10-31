@@ -21,7 +21,7 @@ package net.sourceforge.ganttproject.export;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
 import net.projectagain.ganttplanner.app.App;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.io.PluginPreferencesImpl;
 import net.sourceforge.ganttproject.model.task.Task;
 import org.eclipse.core.runtime.jobs.Job;
@@ -83,7 +83,7 @@ public class CommandLineExportApplication {
     return myArgs;
   }
 
-  public boolean export(GanttProject.Args mainArgs) {
+  public boolean export(GanttProjectUI.Args mainArgs) {
     if (myArgs.exporter == null || mainArgs.file == null || mainArgs.file.isEmpty()) {
       return false;
     }
@@ -92,7 +92,7 @@ public class CommandLineExportApplication {
     if (exporter == null) {
       return false;
     }
-    GanttProject project = new GanttProject(false);
+    GanttProjectUI project = new GanttProjectUI(false);
     ConsoleUIFacade consoleUI = new ConsoleUIFacade(project.getUIFacade());
     File inputFile = new File(mainArgs.file.get(0));
     if (false == inputFile.exists()) {

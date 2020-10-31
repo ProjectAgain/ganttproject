@@ -4,7 +4,7 @@ import net.projectagain.ganttplanner.core.i18n.I18N;
 import net.projectagain.ganttplanner.core.plugins.PluginManager;
 import net.projectagain.ganttplanner.core.settings.SettingsManager;
 import net.projectagain.ganttplanner.core.ui.UiManager;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -38,7 +38,7 @@ public class App {
   }
 
 
-  public GanttProject getMainWindow() {
+  public GanttProjectUI getMainWindow() {
     return getInstance().uiManager.getMainWindow().get();
   }
 

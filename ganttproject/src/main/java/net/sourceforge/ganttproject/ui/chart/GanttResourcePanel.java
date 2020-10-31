@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.ui.chart;
 
 import com.google.common.collect.Lists;
-import net.sourceforge.ganttproject.ui.GanttProject;
-import net.sourceforge.ganttproject.ui.GanttProjectBase;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
+import net.sourceforge.ganttproject.ui.GanttProjectBaseUI;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.model.ProjectEventListener;
 import net.sourceforge.ganttproject.ui.action.ActiveActionProvider;
@@ -56,10 +56,10 @@ import java.util.List;
 public class GanttResourcePanel extends TreeTableContainer<HumanResource, ResourceTreeTable, ResourceTreeTableModel>
     implements ResourceView, ResourceContext, AssignmentContext, ResourceTreeUIFacade {
 
-  public final GanttProject appli;
+  public final GanttProjectUI appli;
 
   private final ResourceActionSet myResourceActionSet;
-  private final GanttProjectBase.RowHeightAligner myRowHeightAligner;
+  private final GanttProjectBaseUI.RowHeightAligner myRowHeightAligner;
 
   public ResourceLoadGraphicArea area;
 
@@ -74,7 +74,7 @@ public class GanttResourcePanel extends TreeTableContainer<HumanResource, Resour
     return Pair.create(new ResourceTreeTable(project, model, uiFacade), model);
   }
 
-  public GanttResourcePanel(final GanttProject prj, final UIFacade uiFacade) {
+  public GanttResourcePanel(final GanttProjectUI prj, final UIFacade uiFacade) {
     super(createTreeTable(prj.getProject(), uiFacade));
     appli = prj;
     myUIFacade = uiFacade;
@@ -121,7 +121,7 @@ public class GanttResourcePanel extends TreeTableContainer<HumanResource, Resour
     this.setBackground(new Color(0.0f, 0.0f, 0.0f));
     updateContextActions();
     // applyComponentOrientation(lang.getComponentOrientation());
-    myRowHeightAligner = new GanttProjectBase.RowHeightAligner(this, this.area.getChartModel());
+    myRowHeightAligner = new GanttProjectBaseUI.RowHeightAligner(this, this.area.getChartModel());
   }
 
   @Override
@@ -129,7 +129,7 @@ public class GanttResourcePanel extends TreeTableContainer<HumanResource, Resour
     getTreeTable().initTreeTable();
   }
 
-  public GanttProjectBase.RowHeightAligner getRowHeightAligner() {
+  public GanttProjectBaseUI.RowHeightAligner getRowHeightAligner() {
     return myRowHeightAligner;
   }
 

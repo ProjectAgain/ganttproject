@@ -20,13 +20,13 @@ package net.sourceforge.ganttproject.ui.action.project;
 
 import java.awt.event.ActionEvent;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 
 class ExitAction extends GPAction {
-  private final GanttProject myMainFrame;
+  private final GanttProjectUI myMainFrame;
 
-  ExitAction(GanttProject mainFrame) {
+  ExitAction(GanttProjectUI mainFrame) {
     super("quit");
     myMainFrame = mainFrame;
   }

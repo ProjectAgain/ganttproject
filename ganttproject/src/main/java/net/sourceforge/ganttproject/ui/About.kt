@@ -50,7 +50,7 @@ fun showAboutDialog() {
     )
 
     val logo = ImageView(Image(
-        GanttProject::class.java.getResourceAsStream("/icons/ganttproject-logo-512.png"),
+        GanttProjectUI::class.java.getResourceAsStream("/icons/ganttproject-logo-512.png"),
         64.0, 64.0, false, true)
     )
     dialogApi.setHeader(

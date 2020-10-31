@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.chart;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
-import net.sourceforge.ganttproject.ui.GanttProjectBase;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
+import net.sourceforge.ganttproject.ui.GanttProjectBaseUI;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.table.ColumnList;
 import com.google.common.base.Predicate;
@@ -72,7 +72,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTreeTableModel> implements
     /*DragSourceListener, DragGestureListener,*/ TaskTreeUIFacade {
       private final Logger log = getLogger(getClass());
-  private GanttProjectBase.RowHeightAligner myRowHeightAligner;
+  private GanttProjectBaseUI.RowHeightAligner myRowHeightAligner;
   private UIFacade myUIFacade;
 
   /** Pointer on graphic area */
@@ -80,7 +80,7 @@ public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTr
 
   // TODO Replace with IGanttProject and facade classes
   /** Pointer of application */
-  private final GanttProject myProject;
+  private final GanttProjectUI myProject;
 
   private final TaskManager myTaskManager;
   private final TaskSelectionManager mySelectionManager;
@@ -101,7 +101,7 @@ public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTr
 
   private Highlighter myDragHighlighter;
 
-  private static Runnable createDirtyfier(final GanttProjectBase project) {
+  private static Runnable createDirtyfier(final GanttProjectBaseUI project) {
     return new Runnable() {
       @Override
       public void run() {
@@ -117,8 +117,8 @@ public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTr
     return Pair.create(new GanttTreeTable(project, uiFacade, tableModel), tableModel);
   }
 
-  public GanttTree2(final GanttProject project, TaskManager taskManager, TaskSelectionManager selectionManager,
-      final UIFacade uiFacade) {
+  public GanttTree2(final GanttProjectUI project, TaskManager taskManager, TaskSelectionManager selectionManager,
+                    final UIFacade uiFacade) {
     super(createTreeTable(project.getProject(), createDirtyfier(project), uiFacade));
     myUIFacade = uiFacade;
     myProject = project;
@@ -345,7 +345,7 @@ public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTr
   /** Change graphic part */
   public void setGraphicArea(ChartComponentBase area) {
     this.area = area;
-    myRowHeightAligner = new GanttProjectBase.RowHeightAligner(this, this.area.getChartModel());
+    myRowHeightAligner = new GanttProjectBaseUI.RowHeightAligner(this, this.area.getChartModel());
   }
 
   @Override
@@ -466,7 +466,7 @@ public class GanttTree2 extends TreeTableContainer<Task, GanttTreeTable, GanttTr
     }
   }
 
-  public GanttProjectBase.RowHeightAligner getRowHeightAligner() {
+  public GanttProjectBaseUI.RowHeightAligner getRowHeightAligner() {
     return myRowHeightAligner;
   }
 

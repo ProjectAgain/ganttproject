@@ -23,7 +23,7 @@ import net.sourceforge.ganttproject.chart.Chart;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.ui.GanttExportSettings;
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.zoom.ZoomActionSet;
 import net.sourceforge.ganttproject.ui.gui.TestGanttRolloverButton;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
@@ -497,14 +497,14 @@ public class PrintPreview extends JDialog {
     // myComboMediaSize.setMaximumSize(dim);
     // myComboMediaSize.setPreferredSize(dim);
 
-    bPrint.setToolTipText(GanttProject.getToolTip(language.correctLabel(language.getText("project.print"))));
-    bPortrait.setToolTipText(GanttProject.getToolTip(language.correctLabel(language.getText("portrait"))));
-    bLandscape.setToolTipText(GanttProject.getToolTip(language.correctLabel(language.getText("landscape"))));
-    bClose.setToolTipText(GanttProject.getToolTip(language.correctLabel(language.getText("close"))));
+    bPrint.setToolTipText(GanttProjectUI.getToolTip(language.correctLabel(language.getText("project.print"))));
+    bPortrait.setToolTipText(GanttProjectUI.getToolTip(language.correctLabel(language.getText("portrait"))));
+    bLandscape.setToolTipText(GanttProjectUI.getToolTip(language.correctLabel(language.getText("landscape"))));
+    bClose.setToolTipText(GanttProjectUI.getToolTip(language.correctLabel(language.getText("close"))));
     final JButton bZoomOut;
     final JButton bZoomIn;
     if (isDate) {
-      myWholeProjectButton.setToolTipText(GanttProject.getToolTip(language.getCorrectedLabel("displayWholeProject")));
+      myWholeProjectButton.setToolTipText(GanttProjectUI.getToolTip(language.getCorrectedLabel("displayWholeProject")));
       /*
        * myStartDateButton.setToolTipText(GanttProject
        * .getToolTip(GanttProject.correctLabel(language

@@ -22,7 +22,7 @@ import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
 import net.sourceforge.ganttproject.model.calendar.ImportCalendarOption;
 import net.sourceforge.ganttproject.ui.table.ColumnList;
 import net.sourceforge.ganttproject.model.task.CustomPropertyManager;
-import net.sourceforge.ganttproject.ui.GanttProjectImpl;
+import net.sourceforge.ganttproject.model.GanttProjectImpl;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.model.PrjInfos;
 import net.sourceforge.ganttproject.model.document.DocumentCreator;

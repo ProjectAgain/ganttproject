@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.project;
 
-import net.sourceforge.ganttproject.ui.GanttProject;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.importer.ImportFileWizardImpl;
@@ -33,9 +33,9 @@ public class ProjectImportAction extends GPAction {
 
   private final UIFacade myUIFacade;
 
-  private final GanttProject myProject;
+  private final GanttProjectUI myProject;
 
-  public ProjectImportAction(UIFacade uiFacade, GanttProject project) {
+  public ProjectImportAction(UIFacade uiFacade, GanttProjectUI project) {
     super("project.import");
     myUIFacade = uiFacade;
     myProject = project;
