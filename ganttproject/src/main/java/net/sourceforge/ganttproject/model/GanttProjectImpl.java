@@ -21,7 +21,6 @@ package net.sourceforge.ganttproject.model;
 import com.google.common.base.Strings;
 import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.calendar.GPCalendarCalc;
-import net.sourceforge.ganttproject.model.calendar.GPCalendarListener;
 import net.sourceforge.ganttproject.model.calendar.WeekendCalendarImpl;
 import net.sourceforge.ganttproject.model.document.Document;
 import net.sourceforge.ganttproject.model.document.DocumentManager;
@@ -65,12 +64,7 @@ public class GanttProjectImpl implements IGanttProject {
     myTaskManager = TaskManager.Access.newInstance(null, myTaskManagerConfig);
     myUIConfiguration = new UIConfiguration(Color.BLUE, true);
     myTaskCustomColumnManager = new CustomColumnsManager();
-    myCalendar.addListener(new GPCalendarListener() {
-      @Override
-      public void onCalendarChange() {
-        setModified();
-      }
-    });
+    myCalendar.addListener(this::setModified);
   }
 
   @Override
@@ -308,6 +302,5 @@ public class GanttProjectImpl implements IGanttProject {
       commit();
     }
   }
-
 
 }

@@ -1,3 +1,6 @@
 rootProject.name = 'GanttProject'
 include 'ganttproject',
-    'biz.ganttproject.app.localization'
+    'biz.ganttproject.app.localization',
+    'planner-core',
+    'planner-core-ui',
+    'planner-app'

@@ -4,7 +4,8 @@ buildscript {
             kotlin           : "1.4.0",
             kotlin_coroutines: "1.3.9",
             spring           : "5.2.9.RELEASE",
-            javafx           : "11.0.2"
+            springBoot       : "2.3.5.RELEASE",
+            javafx           : "15.0.+"
         ]
     }
 }
@@ -60,6 +61,7 @@ allprojects {
             force "org.jdom:jdom:2.0.2"
             force "org.mnode.ical4j:ical4j:1.+"
             force "org.openjfx:javafx-base:${versions.javafx}"
+            force "org.openjfx:javafx-fxml:${versions.javafx}"
             force "org.openjfx:javafx-graphics:${versions.javafx}"
             force "org.openjfx:javafx-controls:${versions.javafx}"
             force "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
@@ -73,7 +75,6 @@ allprojects {
     configurations {
         all*.exclude module: "commons-logging"
     }
-
 
     configurations {
         direct

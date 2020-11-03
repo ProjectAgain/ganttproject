@@ -1,0 +1,45 @@
+plugins {
+// Apply the application plugin to add support for building a CLI application.
+    id 'org.springframework.boot' version '2.3.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+version = '0.0.1-SNAPSHOT'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+javafx {
+    version = versions.javafx
+    modules = ['javafx.controls']
+}
+
+//application {
+//    // Define the main class for the application.
+//    mainClassName = 'net.projectagain.planner.app.ApplicationLauncher'
+//    //mainClassName = "net.projectagain.ganttplanner.app.ApplicationLauncher"
+//}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation("org.pf4j:pf4j-spring:0.6.0") {
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    }
+
+    implementation project(':planner-core')
+    implementation project(':planner-core-ui')
+    implementation project(':ganttproject')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
