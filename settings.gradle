@@ -1,4 +1,4 @@
-rootProject.name = 'GanttProject'
+rootProject.name = 'project-again-planner'
 include 'ganttproject',
     'biz.ganttproject.app.localization',
     'planner-core',

@@ -19,6 +19,10 @@ javafx {
     modules = ['javafx.controls']
 }
 
+springBoot {
+    mainClassName = 'net.projectagain.planner.app.SpringApplication'
+}
+
 //application {
 //    // Define the main class for the application.
 //    mainClassName = 'net.projectagain.planner.app.ApplicationLauncher'
@@ -36,6 +40,7 @@ dependencies {
 
     implementation project(':planner-core')
     implementation project(':planner-core-ui')
+    implementation project(':planner-legacy-adapter')
     implementation project(':ganttproject')
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-logging'

@@ -23,4 +23,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     api project(':planner-core')
     api project(':planner-core-ui')
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
 }

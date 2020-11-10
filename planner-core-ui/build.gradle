@@ -21,5 +21,17 @@ javafx {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation project(':planner-core')
+    api project(':planner-core')
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
 }
