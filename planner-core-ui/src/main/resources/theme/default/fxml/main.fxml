@@ -5,7 +5,7 @@
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.projectagain.planner.core.ui.controller.MainController">
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane id="main-tabpane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Untitled Tab 1" />
           <Tab text="Untitled Tab 2" />
@@ -15,26 +15,28 @@
    <top>
       <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuBar>
+            <MenuBar id="menu-main-menubar">
               <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu id="menu-main-file" mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem id="menu-main-file-settings" mnemonicParsing="false" text="Settings..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem id="menu-main-file-close" mnemonicParsing="false" text="Close" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu id="menu-main-edit" mnemonicParsing="false" text="Edit">
                   <items>
                     <MenuItem mnemonicParsing="false" text="Delete" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu id="menu-main-help" mnemonicParsing="false" text="Help">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem id="menu-main-help-about" mnemonicParsing="false" text="About" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <ToolBar id="main-toolbar" prefHeight="40.0" prefWidth="200.0">
               <items>
                 <Button mnemonicParsing="false" text="Button" />
               </items>

@@ -5,7 +5,8 @@ buildscript {
             kotlin_coroutines: "1.3.9",
             spring           : "5.2.9.RELEASE",
             springBoot       : "2.3.5.RELEASE",
-            javafx           : "15.0.+"
+            javafx           : "15.0.+",
+            lombok           : "1.18.16"
         ]
     }
 }
@@ -38,6 +39,31 @@ def getBuildNum() {
 // Config for all projects: deps come from Maven repository,
 // compile using Java 8, libs normally sit in lib
 allprojects {
+
+    apply plugin: 'java'
+    ext {
+        libDir = 'lib'
+        mvnDir = 'lib/mvn'
+    }
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    group 'net.projectagain'
+    version = new Date().format("yyyy-MM-dd")
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "http://sandec.bintray.com/repo"
+        }
+        maven {
+            url "https://dl.bintray.com/milton/Milton/"
+        }
+        flatDir {
+            dirs "$rootProject.projectDir/libs"
+        }
+    }
 
     configurations.all {
 
@@ -74,43 +100,27 @@ allprojects {
     }
     configurations {
         all*.exclude module: "commons-logging"
+////    all*.exclude module: "logback-classic"
+//        all*.exclude module: "slf4j-log4j12"
     }
 
     configurations {
         direct
         providedCompile
     }
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url "http://sandec.bintray.com/repo"
-        }
-        maven {
-            url "https://dl.bintray.com/milton/Milton/"
-        }
-        flatDir {
-            dirs "$rootProject.projectDir/libs"
-        }
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok:${versions.lombok}"
+        annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
+        testCompileOnly "org.projectlombok:lombok:${versions.lombok}"
+        testAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
     }
-    apply plugin: 'java'
-    ext {
-        libDir = 'lib'
-        mvnDir = 'lib/mvn'
-    }
-    sourceCompatibility = 11
-    targetCompatibility = 11
 
     clean {
         delete += "dist-bin"
     }
 }
-
-subprojects {
-    group 'biz.ganttproject'
-    version = new Date().format("yyyy-MM-dd")
-}
-
 
 def addPublishing(project) {
     project.publishing {
