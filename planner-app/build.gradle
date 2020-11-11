@@ -6,7 +6,7 @@ plugins {
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
-version = '0.0.1-SNAPSHOT'
+version = app_semversion
 
 configurations {
     compileOnly {
@@ -41,7 +41,6 @@ dependencies {
     implementation project(':planner-core')
     implementation project(':planner-core-ui')
     implementation project(':planner-legacy-adapter')
-    implementation project(':ganttproject')
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-logging'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

@@ -17,24 +17,11 @@ buildscript {
 // Path to launch4j binary
 ext.launch4j = '/opt/launch4j/launch4j'
 // Directories where we build the distro
-ext.semver = '2.99'
-ext.buildNum = getBuildNum()
+ext.semver = app_semversion
+ext.buildNum = app_build_number
 
-version = "${semver}-r${getBuildNum()}"
+version = "${semver}-r${buildNum}"
 
-
-def getBuildNum() {
-    return "2910"
-/*
-  def stdout = new ByteArrayOutputStream()
-    exec {
-        workingDir "ganttproject-builder"
-        commandLine "bash", "-c", " git rev-list --count ganttproject-2.7.. || echo 0"
-        standardOutput = stdout
-    }
-    return String.valueOf(Integer.valueOf("${stdout}".trim()) + 1891)
-*/
-}
 
 // Config for all projects: deps come from Maven repository,
 // compile using Java 8, libs normally sit in lib

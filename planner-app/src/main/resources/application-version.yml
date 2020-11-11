@@ -1,0 +1,5 @@
+planner:
+    version:
+        semversion: '{{SEM_VERSION}}'
+        build-date: '{{BUILD_DATE}}'
+        build-number: '{{BUILD_NUMBER}}'

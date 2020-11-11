@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
+import net.projectagain.planner.core.PaPlannerVersion;
 import net.projectagain.planner.core.ui.event.MainWindowCreated;
 import net.projectagain.planner.core.ui.event.MainWindowShown;
 import net.projectagain.planner.core.ui.event.internal.PrimaryStageReady;
@@ -29,17 +30,20 @@ public class UiCreator {
   private final MenuManager menuManager;
   private final Logger log = getLogger(getClass());
   private final UiTheme theme;
+  private final PaPlannerVersion version;
 
   public UiCreator(
     @Value("${spring.application.name}") String applicationTitle,
     MenuManager menuManager,
     UiTheme currentTheme,
-    ApplicationContext appContext
+    ApplicationContext appContext,
+    PaPlannerVersion version
   ) {
     this.applicationTitle = applicationTitle;
     this.menuManager = menuManager;
     this.appContext = appContext;
     this.theme = currentTheme;
+    this.version = version;
   }
 
   private void createMainScene(Stage primaryStage) {
@@ -51,7 +55,11 @@ public class UiCreator {
       Parent root = fxmlLoader.load();
       Scene scene = new Scene(root, 600, 600);
       primaryStage.setScene(scene);
-      primaryStage.setTitle(applicationTitle);
+      primaryStage.setTitle(
+        applicationTitle
+          + " [" + version.getVersion()
+          + " - " + version.getBuildDate() + "." + version.getBuildNumber() + "]"
+      );
       appContext.publishEvent(new MainWindowCreated(scene));
       MenuBar menuBar = (MenuBar) root.lookup("#" + UiTheme.FxIDSelector.Menu.Main.MENUBAR);
       assert menuBar != null;

@@ -3,3 +3,6 @@ spring:
         web-application-type: none
     application:
         name: "ProjectAgain Planner"
+    profiles:
+        include:
+            - version
