@@ -167,7 +167,7 @@ private fun getResourceBundle(locale: Locale, withFallback: Boolean): ResourceBu
       ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_PROPERTIES)
     else
       ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES)
-    val resourceBundle = ResourceBundle.getBundle("i18n", locale, RootLocalizer::class.java.classLoader, control)
+    val resourceBundle = ResourceBundle.getBundle("language/i18n", locale, RootLocalizer::class.java.classLoader, control)
     if (withFallback || resourceBundle.locale == locale) {
       resourceBundle
     } else {

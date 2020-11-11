@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication(
   scanBasePackages = {
-    "net.projectagain.planner.core"
+    "net.projectagain.planner.core",
+    "net.projectagain.planner.legacy"
   }
 )
 public class SpringApplication {

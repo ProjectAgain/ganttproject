@@ -1,3 +1,0 @@
-files:
-  - source: /translations/i18n.properties
-    translation: /translations/i18n_%locale_with_underscore%.properties
