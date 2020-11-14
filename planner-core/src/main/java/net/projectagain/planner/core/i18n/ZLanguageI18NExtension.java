@@ -9,7 +9,7 @@ import java.util.*;
  * I18NExtension to test if all your strings could be translated. It just replaces every letter through "z" or "Z"
  *
  */
-@Profile("!production")
+@Profile("!release")
 @ExtensionComponent
 public class ZLanguageI18NExtension implements I18NExtension {
   @Override
