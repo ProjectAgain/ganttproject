@@ -6,13 +6,18 @@ import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import net.projectagain.planner.core.annotations.ExtensionComponent;
 import net.projectagain.planner.core.ui.theme.UiTheme;
+import org.slf4j.Logger;
 import org.springframework.lang.NonNull;
 
 import java.util.Collections;
 import java.util.Map;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @ExtensionComponent
 public class CoreUiMenuExtension implements MenuExtension {
+  private static final Logger log = getLogger(CoreUiMenuExtension.class);
+
   @Override
   public boolean hasInterest(@NonNull final String menuId) {
     switch (menuId) {
@@ -33,6 +38,7 @@ public class CoreUiMenuExtension implements MenuExtension {
     switch (menuId) {
       case UiTheme.FxIDSelector.Menu.Main.File.CLOSE:
         return event -> {
+          log.info("Closing action triggered");
           Platform.exit();
         };
     }
