@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.export.htmlpdf.itext;
 
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.export.ExportException;
 import net.sourceforge.ganttproject.export.ExporterBase;
@@ -114,7 +114,7 @@ public class ITextEngine extends AbstractEngine {
   public List<Stylesheet> getStylesheets() {
     List<Stylesheet> result = new ArrayList<>();
     try {
-      URL url = App.getInstance().getResource("html-exporter/itext-export-themes/sortavala.txt").getURL();
+      URL url = LegacyApp.getInstance().getResource("html-exporter/itext-export-themes/sortavala.txt").getURL();
       result.add(new ThemeImpl(url, "Sortavala", getExporter(), myFontCache));
     } catch (IOException e) {
       log.error("Exception", e);
@@ -183,7 +183,7 @@ public class ITextEngine extends AbstractEngine {
       if (x.getValue()) {
         myFontCache.registerDirectory(dirName);
       } else {
-        Resource resource = App.getInstance().applicationContext.getResource(dirName);
+        Resource resource = LegacyApp.getInstance().applicationContext.getResource(dirName);
         if (!resource.exists()) {
           log.warn("Failed to find directory '{}'", dirName);
           continue;

@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.importer;
 
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.io.GanttOptions;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
@@ -51,7 +51,7 @@ public class ImportFileWizardImpl extends AbstractWizard {
   }
 
   private List<Importer> getImporters() {
-    return new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Importer.class));
+    return new ArrayList<>(LegacyApp.getInstance().getPluginManager().getExtensions(Importer.class));
   }
 
 //  @Override

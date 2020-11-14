@@ -9,18 +9,18 @@ import javax.annotation.PostConstruct;
  * @author Christoph Graupner <ch.graupner@workingdeveloper.net>
  */
 @Service
-public class I18N {
-  private static I18N instance;
+public class LegacyI18N {
+  private static LegacyI18N instance;
   private GanttLanguage ganttLanguage;
 
-  I18N() {
+  LegacyI18N() {
   }
 
   public static String __(final String toTranslate) {
     return getInstance().translate(toTranslate);
   }
 
-  public static I18N getInstance() {
+  public static LegacyI18N getInstance() {
     return instance;
   }
 

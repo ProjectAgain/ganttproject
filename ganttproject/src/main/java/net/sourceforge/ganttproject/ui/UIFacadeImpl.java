@@ -26,7 +26,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.ui.action.resource.AssignmentToggleAction;
 import net.sourceforge.ganttproject.ui.action.zoom.ZoomActionSet;
 import net.sourceforge.ganttproject.chart.Chart;
@@ -407,7 +407,7 @@ public class UIFacadeImpl extends ProgressProvider implements UIFacade {
 
   @Override
   public void showSettingsDialog(String pageID) {
-    SettingsDialog2 dialog = App.getInstance().getUiManager().getSettingsDialog2Factory().create();
+    SettingsDialog2 dialog = LegacyApp.getInstance().getUiManager().getSettingsDialog2Factory().create();
     dialog.show(pageID);
   }
 

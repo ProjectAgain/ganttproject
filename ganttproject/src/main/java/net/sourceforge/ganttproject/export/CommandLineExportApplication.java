@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.export;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.io.PluginPreferencesImpl;
 import net.sourceforge.ganttproject.model.task.Task;
@@ -67,7 +67,7 @@ public class CommandLineExportApplication {
   private final Args myArgs = new Args();
 
   public CommandLineExportApplication() {
-    for (Exporter exporter : App.getInstance().getPluginManager().getExtensions(Exporter.class)) {
+    for (Exporter exporter : LegacyApp.getInstance().getPluginManager().getExtensions(Exporter.class)) {
       List<String> keys = Arrays.asList(exporter.getCommandLineKeys());
       for (String key : keys) {
         myFlag2exporter.put(key, exporter);

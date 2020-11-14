@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.edit;
 
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.ui.gui.options.SettingsDialog2;
 
@@ -40,7 +40,7 @@ public class SettingsDialogAction extends GPAction {
       return;
     }
 
-    SettingsDialog2 dialog = App.getInstance().getUiManager().getSettingsDialog2Factory().create();
+    SettingsDialog2 dialog = LegacyApp.getInstance().getUiManager().getSettingsDialog2Factory().create();
     dialog.show();
   }
 }

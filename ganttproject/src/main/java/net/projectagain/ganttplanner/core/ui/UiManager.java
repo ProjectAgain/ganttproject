@@ -12,16 +12,15 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.projectagain.ganttplanner.core.LogMarker;
-import net.sourceforge.ganttproject.ui.GanttProjectUI;
+import net.sourceforge.ganttproject.language.GanttLanguage;
 import net.sourceforge.ganttproject.model.document.DocumentCreator;
+import net.sourceforge.ganttproject.search.SearchDialogFactory;
+import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.ui.gui.options.SettingsDialog2Factory;
-import net.sourceforge.ganttproject.language.GanttLanguage;
-import net.sourceforge.ganttproject.search.SearchDialogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
@@ -34,7 +33,6 @@ import static net.sourceforge.ganttproject.ui.SplashKt.SPLASH_HEIGHT;
 import static net.sourceforge.ganttproject.ui.SplashKt.SPLASH_WIDTH;
 
 @Service
-@DependsOn("pluginManager")
 public class UiManager {
   final AtomicReference<GanttProjectUI> mainWindow = new AtomicReference<>();
   private final Logger log = LoggerFactory.getLogger(getClass());

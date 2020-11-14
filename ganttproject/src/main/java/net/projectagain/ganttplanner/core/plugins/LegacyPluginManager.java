@@ -12,11 +12,11 @@ import java.util.Collection;
  */
 @Service
 @DependsOn("springPluginManager")
-public class PluginManager {
+public class LegacyPluginManager {
   final ApplicationContext applicationContext;
   final SpringPluginManager delegate;
 
-  PluginManager(
+  LegacyPluginManager(
     final SpringPluginManager delegate, final ApplicationContext applicationContext
   ) {
     this.delegate = delegate;

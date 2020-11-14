@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.ui.action.view;
 
 import net.sourceforge.ganttproject.ui.viewmodel.option.FontOption;
 import net.sourceforge.ganttproject.ui.viewmodel.option.IntegerOption;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.ui.action.ViewToggleAction;
@@ -40,7 +40,7 @@ public class ViewMenu extends JMenu {
   public ViewMenu(final IGanttProject project, GPViewManager viewManager, IntegerOption dpiOption, FontOption chartFontOption, String key) {
     super(GPAction.createVoidAction(key));
 
-    List<Chart> charts = new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Chart.class));
+    List<Chart> charts = new ArrayList<>(LegacyApp.getInstance().getPluginManager().getExtensions(Chart.class));
     if (charts.isEmpty()) {
       setEnabled(false);
     }

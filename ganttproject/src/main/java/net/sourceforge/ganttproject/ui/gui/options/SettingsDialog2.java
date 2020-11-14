@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.gui.options;
 
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.gui.AbstractPagesDialog;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
@@ -65,7 +65,7 @@ public class SettingsDialog2 extends AbstractPagesDialog {
       pageId_provider.put(p.getPageID(), p);
     }
     List<ListItem> items = new ArrayList<ListItem>();
-    String[] listConfig = App.getInstance().getSettingsManager().getSetting(pageOrderKey).split(",");
+    String[] listConfig = LegacyApp.getInstance().getSettingsManager().getSetting(pageOrderKey).split(",");
     for (String pageName : listConfig) {
       pageName=pageName.trim();
       ListItem li;

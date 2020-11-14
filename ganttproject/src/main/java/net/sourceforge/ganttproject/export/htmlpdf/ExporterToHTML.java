@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package net.sourceforge.ganttproject.export.htmlpdf;
 
 import net.sourceforge.ganttproject.ui.viewmodel.option.GPOptionGroup;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.projectagain.ganttplanner.core.plugins.ExtensionComponent;
 import net.sourceforge.ganttproject.export.ExportException;
 import net.sourceforge.ganttproject.util.FileUtil;
@@ -257,8 +257,8 @@ public class ExporterToHTML extends StylesheetExporterBase {
         // <theme name="Samara" url="html-export-themes/samara/"/>
         try {
           result1.add(new HTMLStylesheetImpl(
-            App.getInstance().getResource("html-exporter/html-export-themes/samara/").getURL(),
-            "Samara"
+                  LegacyApp.getInstance().getResource("html-exporter/html-export-themes/samara/").getURL(),
+                  "Samara"
           ));
         } catch (IOException e) {
           log.error("Exception ", e);
@@ -266,8 +266,8 @@ public class ExporterToHTML extends StylesheetExporterBase {
         // <theme name="Default theme" url="html-export-themes/default/"/>
         try {
           result1.add(new HTMLStylesheetImpl(
-            App.getInstance().getResource("html-exporter/html-export-themes/default/").getURL(),
-            "Default theme"
+                  LegacyApp.getInstance().getResource("html-exporter/html-export-themes/default/").getURL(),
+                  "Default theme"
           ));
         } catch (IOException e) {
           log.error("Exception ", e);
@@ -275,8 +275,8 @@ public class ExporterToHTML extends StylesheetExporterBase {
         // <theme name="Striped Blue" url="html-export-themes/striped_blue/"/>
         try {
           result1.add(new HTMLStylesheetImpl(
-            App.getInstance().getResource("html-exporter/html-export-themes/striped_blue/").getURL(),
-            "Striped Blue"
+                  LegacyApp.getInstance().getResource("html-exporter/html-export-themes/striped_blue/").getURL(),
+                  "Striped Blue"
           ));
         } catch (IOException e) {
           log.error("Exception ", e);

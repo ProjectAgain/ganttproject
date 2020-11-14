@@ -1,7 +1,7 @@
 package net.projectagain.ganttplanner.app;
 
-import net.projectagain.ganttplanner.core.i18n.I18N;
-import net.projectagain.ganttplanner.core.plugins.PluginManager;
+import net.projectagain.ganttplanner.core.i18n.LegacyI18N;
+import net.projectagain.ganttplanner.core.plugins.LegacyPluginManager;
 import net.projectagain.ganttplanner.core.settings.SettingsManager;
 import net.projectagain.ganttplanner.core.ui.UiManager;
 import net.sourceforge.ganttproject.ui.GanttProjectUI;
@@ -16,20 +16,20 @@ import javax.annotation.PostConstruct;
  * @author Christoph Graupner <ch.graupner@workingdeveloper.net>
  */
 @Component
-public class App {
-  private static App instance;
+public class LegacyApp {
+  private static LegacyApp instance;
   @Autowired
   public ApplicationContext applicationContext;
   @Autowired
-  public I18N i18n;
+  public LegacyI18N legacyI18N;
   @Autowired
-  private PluginManager pluginManager;
+  private LegacyPluginManager legacyPluginManager;
   @Autowired
   private SettingsManager settingsManager;
   @Autowired
   private UiManager uiManager;
 
-  public static App getInstance() {
+  public static LegacyApp getInstance() {
     return instance;
   }
 
@@ -42,8 +42,8 @@ public class App {
     return getInstance().uiManager.getMainWindow().get();
   }
 
-  public PluginManager getPluginManager() {
-    return pluginManager;
+  public LegacyPluginManager getPluginManager() {
+    return legacyPluginManager;
   }
 
   public SettingsManager getSettingsManager() {

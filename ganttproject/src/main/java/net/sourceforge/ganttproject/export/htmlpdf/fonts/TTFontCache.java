@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import com.itextpdf.awt.FontMapper;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.projectagain.ganttplanner.core.LogMarker;
 import net.sourceforge.ganttproject.export.htmlpdf.itext.FontSubstitutionModel;
 import net.sourceforge.ganttproject.export.htmlpdf.itext.FontSubstitutionModel.FontSubstitution;
@@ -320,9 +320,9 @@ public class TTFontCache {
     if (myFallbackFont == null) {
       try {
         myFallbackFont = BaseFont.createFont(
-          App.getInstance().getResource(FALLBACK_FONT_PATH).getFile().getAbsolutePath(),
-          charset,
-          BaseFont.EMBEDDED
+                LegacyApp.getInstance().getResource(FALLBACK_FONT_PATH).getFile().getAbsolutePath(),
+                charset,
+                BaseFont.EMBEDDED
         );
       } catch (DocumentException | IOException e) {
         log.error(LogMarker.FONTS, "Exception FONT", e);

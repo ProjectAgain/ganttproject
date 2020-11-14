@@ -15,7 +15,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 public class PluginManager {
-private static final Logger log = getLogger(PluginManager.class);
+  private static final Logger log = getLogger(PluginManager.class);
 
   final SpringPluginManager springPluginManager;
   final List<Plugin> plugins;

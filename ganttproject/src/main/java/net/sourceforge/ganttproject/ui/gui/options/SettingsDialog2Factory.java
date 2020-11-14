@@ -1,6 +1,6 @@
 package net.sourceforge.ganttproject.ui.gui.options;
 
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.gui.options.model.OptionPageProvider;
 import org.apache.commons.collections4.Factory;
@@ -17,17 +17,17 @@ public class SettingsDialog2Factory implements Factory<SettingsDialog2> {
 
   private final List<OptionPageProvider> optionPageProviders;
 
-  private final App app;
+  private final LegacyApp legacyApp;
 
-  public SettingsDialog2Factory(final App aApp, List<OptionPageProvider> optionPageProviders) {
-    app = aApp;
+  public SettingsDialog2Factory(final LegacyApp aLegacyApp, List<OptionPageProvider> optionPageProviders) {
+    legacyApp = aLegacyApp;
 
     this.optionPageProviders = optionPageProviders;
   }
 
   @Override
   public SettingsDialog2 create() {
-    GanttProjectUI project = app.getMainWindow();
+    GanttProjectUI project = legacyApp.getMainWindow();
     return new SettingsDialog2(project, project.getUIFacade(), "settings.app.pageOrder", optionPageProviders);
   }
 }

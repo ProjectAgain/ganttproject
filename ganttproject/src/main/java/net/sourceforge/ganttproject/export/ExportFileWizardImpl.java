@@ -22,7 +22,7 @@ import net.sourceforge.ganttproject.ui.viewmodel.option.BooleanOption;
 import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueEvent;
 import net.sourceforge.ganttproject.ui.viewmodel.option.ChangeValueListener;
 import net.sourceforge.ganttproject.ui.viewmodel.option.DefaultBooleanOption;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.model.IGanttProject;
 import net.sourceforge.ganttproject.ui.gui.UIFacade;
 import net.sourceforge.ganttproject.ui.gui.projectwizard.WizardImpl;
@@ -62,7 +62,7 @@ public class ExportFileWizardImpl extends WizardImpl {
       }
     });
     if (ourExporters == null) {
-      ourExporters = new ArrayList<>(App.getInstance().getPluginManager().getExtensions(Exporter.class));
+      ourExporters = new ArrayList<>(LegacyApp.getInstance().getPluginManager().getExtensions(Exporter.class));
     }
     myState.setExporter(ourLastSelectedExporter == null ? ourExporters.get(0) : ourLastSelectedExporter);
     for (Exporter e : ourExporters) {

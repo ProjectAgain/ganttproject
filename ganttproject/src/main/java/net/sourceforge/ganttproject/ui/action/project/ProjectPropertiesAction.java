@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package net.sourceforge.ganttproject.ui.action.project;
 
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.ui.GanttProjectUI;
 import net.sourceforge.ganttproject.ui.action.GPAction;
 import net.sourceforge.ganttproject.ui.gui.options.SettingsDialog2;
@@ -46,7 +46,7 @@ class ProjectPropertiesAction extends GPAction {
     myMainFrame.getUIFacade().getUndoManager().undoableEdit(getI18n(getID()), new Runnable() {
       @Override
       public void run() {
-        SettingsDialog2 settingsDialog = App.getInstance().getUiManager().getSettingsDialog2Factory().create();
+        SettingsDialog2 settingsDialog = LegacyApp.getInstance().getUiManager().getSettingsDialog2Factory().create();
         settingsDialog.show();
       }
     });

@@ -20,7 +20,7 @@ package net.sourceforge.ganttproject.model.calendar;
 
 import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
-import net.projectagain.ganttplanner.app.App;
+import net.projectagain.ganttplanner.app.LegacyApp;
 import net.sourceforge.ganttproject.io.XmlParser;
 import net.sourceforge.ganttproject.parser.AbstractTagHandler;
 import net.sourceforge.ganttproject.parser.HolidayTagHandler;
@@ -107,7 +107,7 @@ public class GPCalendarProvider {
 
   private static List<GPCalendar> readCalendars() {
     try {
-      Resource resource = App.getInstance().getResource("/calendar");
+      Resource resource = LegacyApp.getInstance().getResource("/calendar");
       if (!resource.exists()) {
         log.warn("There are no calendars defined.");
         return Collections.emptyList();
