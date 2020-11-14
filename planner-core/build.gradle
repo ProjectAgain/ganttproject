@@ -16,7 +16,7 @@ plugins {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
 
-    implementation("org.pf4j:pf4j-spring:0.6.0") {
+    api("org.pf4j:pf4j-spring:${versions.pf4j}") {
         exclude group: 'org.slf4j', module: 'slf4j-log4j12'
     }
 

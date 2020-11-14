@@ -6,7 +6,8 @@ buildscript {
             spring           : "5.2.9.RELEASE",
             springBoot       : "2.3.5.RELEASE",
             javafx           : "15.0.+",
-            lombok           : "1.18.16"
+            pf4j             : "0.7.0",
+            lombok           : "1.18.+"
         ]
     }
 }
