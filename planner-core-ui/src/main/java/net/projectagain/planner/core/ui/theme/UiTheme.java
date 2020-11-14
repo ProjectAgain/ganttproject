@@ -8,19 +8,6 @@ public interface UiTheme {
   }
 
   interface FxIDSelector {
-    interface Menu {
-      interface Main {
-        String MENUBAR = "menu-main-menubar";
-        String FILE = "menu-main-file";
-        String EDIT = "menu-main-edit";
-        String HELP = "menu-main-help";
-        interface File {
-          String SETTINGS = "menu-main-file-settings";
-          String CLOSE = "menu-main-file-close";
-        }
-
-      }
-    }
   }
 
   String getName();

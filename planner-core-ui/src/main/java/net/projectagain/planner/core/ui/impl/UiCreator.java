@@ -9,6 +9,7 @@ import net.projectagain.planner.core.PaPlannerVersion;
 import net.projectagain.planner.core.ui.event.MainWindowCreated;
 import net.projectagain.planner.core.ui.event.MainWindowShown;
 import net.projectagain.planner.core.ui.event.internal.PrimaryStageReady;
+import net.projectagain.planner.core.ui.menu.MenuExtension;
 import net.projectagain.planner.core.ui.menu.MenuManager;
 import net.projectagain.planner.core.ui.theme.UiTheme;
 import org.slf4j.Logger;
@@ -61,7 +62,7 @@ public class UiCreator {
           + " - " + version.getBuildDate() + "." + version.getBuildNumber() + "]"
       );
       appContext.publishEvent(new MainWindowCreated(scene));
-      MenuBar menuBar = (MenuBar) root.lookup("#" + UiTheme.FxIDSelector.Menu.Main.MENUBAR);
+      MenuBar menuBar = (MenuBar) root.lookup("#" + MenuExtension.Menu.Main.MENUBAR);
       assert menuBar != null;
       menuManager.createMainMenu(menuBar);
 

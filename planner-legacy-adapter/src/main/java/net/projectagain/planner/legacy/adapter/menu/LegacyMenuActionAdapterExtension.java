@@ -6,7 +6,6 @@ import javafx.scene.control.MenuItem;
 import net.projectagain.planner.core.annotations.ExtensionComponent;
 import net.projectagain.planner.core.annotations.LegacyAdapter;
 import net.projectagain.planner.core.ui.menu.MenuExtension;
-import net.projectagain.planner.core.ui.theme.UiTheme;
 import org.springframework.lang.NonNull;
 
 import java.util.Collections;
@@ -20,8 +19,9 @@ public class LegacyMenuActionAdapterExtension implements MenuExtension {
   public boolean hasInterest(@NonNull String menuId) {
 
     switch (menuId) {
-      case UiTheme.FxIDSelector.Menu.Main.FILE:
-      case UiTheme.FxIDSelector.Menu.Main.EDIT:
+      case MenuExtension.Menu.Main.FILE:
+      case MenuExtension.Menu.Main.EDIT:
+      case MenuExtension.Menu.Main.Help.ABOUT:
         return true;
     }
     return false;
@@ -35,6 +35,14 @@ public class LegacyMenuActionAdapterExtension implements MenuExtension {
 
   @Override
   public EventHandler<ActionEvent> getActionEvent(@NonNull String menuId) {
+
+    switch (menuId) {
+      case MenuExtension.Menu.Main.FILE:
+      case MenuExtension.Menu.Main.EDIT:
+      case MenuExtension.Menu.Main.Help.ABOUT:
+        return null;
+    }
     return null;
+
   }
 }

@@ -14,6 +14,24 @@ public interface MenuExtension extends Extension {
     BEFORE, AFTER
   }
 
+  interface Menu {
+    interface Main {
+      interface File {
+        String SETTINGS = "menu-main-file-settings";
+        String CLOSE = "menu-main-file-close";
+      }
+
+      interface Help {
+        String ABOUT = "menu-main-help-about";
+      }
+      String MENUBAR = "menu-main-menubar";
+      String FILE = "menu-main-file";
+      String EDIT = "menu-main-edit";
+      String HELP = "menu-main-help";
+
+    }
+  }
+
   boolean hasInterest(@NonNull final String menuId);
 
   @NonNull
